@@ -70,6 +70,8 @@ public:
 	// Update vertex positions for deformed meshes.
 	void UpdateVertexPosition(const FbxMesh * pMesh, const FbxVector4 * pVertices) const {};
 	int GetSubMeshCount() const { return mSubMeshes.GetCount(); }
+	void UpdateVertexPosition(FbxMesh*pMesh, FbxVector4*pVertexArray);
+
 	FbxArray<FbxFloat>lVertices;	//頂点配列
 	FbxArray<FbxUInt>lIndices;	//インデクス
 	FbxArray<FbxFloat>lNormals;	//法線配列
@@ -154,8 +156,6 @@ public:
 
 	//アニメーションの初期化
 	void LoadAnimationData();
-	//アニメーションデータがあるなら読み込んでおく
-	void SetCurrentAnimStack();
 
 	//頂点を取得する
 	std::vector<std::vector<ModelData>> GetGeometryData();
@@ -178,6 +178,13 @@ public:
 	const FbxArray<FbxString*>&GetAnimStackNameArray()const { return AnimStackNameArray; }
 //	void SetSelectNode(FbxNode*pSelectedNode);
 
+	//デフォーマー＆アニメーション処理関係
+	void ReadVertexCacheData(FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray);
+
+	void ComputeShapeDeformation(FbxMesh*pMesh, FbxTime&pTime, FbxAnimLayer*pAnimLayer, FbxVector4*pVertexArray);
+	void ComputeSkinDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray, FbxPose*pPose);
+	void ComputeLinearDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray, FbxPose*pPose);
+	void ComputeDualQuaternionDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray, FbxPose*pPose);
 
 private:
 

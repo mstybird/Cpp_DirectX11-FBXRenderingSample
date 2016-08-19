@@ -352,7 +352,7 @@ void MYFBX::GetNodeRecursive(FbxNode * pNode, FbxTime & pTime, FbxAnimLayer * pA
 
 }
 
-void MYFBX::GetNode(FbxNode * pNode, FbxTime & pTime, FbxAnimLayer * FbxAnimLayer, FbxAMatrix & pParentGlobalPosition, FbxAMatrix & pGlobalPosition, FbxPose * pPose)
+void MYFBX::GetNode(FbxNode * pNode, FbxTime & pTime, FbxAnimLayer * pAnimLayer, FbxAMatrix & pParentGlobalPosition, FbxAMatrix & pGlobalPosition, FbxPose * pPose)
 {
 	FbxNodeAttribute* lNodeAttribute = pNode->GetNodeAttribute();
 	if (lNodeAttribute && lNodeAttribute->GetAttributeType()==FbxNodeAttribute::eMesh) {
@@ -385,8 +385,37 @@ void MYFBX::GetNode(FbxNode * pNode, FbxTime & pTime, FbxAnimLayer * FbxAnimLaye
 			memcpy(lVertexArray, lMesh->GetControlPoints(), lVertexCount * sizeof(FbxVector4));
 		}
 
+		//アニメーション関係の処理
+		//デフォーマーがあった場合、アニメーション処理
+		if (lHasDeformation) {
+			if (lHasVertexCache) {
+				ReadVertexCacheData(lMesh, pTime, lVertexArray);
+			}
+			else {
+				if (lHasShape)
+				{
+					// Deform the vertex array with the shapes.
+					ComputeShapeDeformation(lMesh, pTime, pAnimLayer, lVertexArray);
+				}
+				//we need to get the number of clusters
+				const int lSkinCount = lMesh->GetDeformerCount(FbxDeformer::eSkin);
+				int lClusterCount = 0;
+				for (int lSkinIndex = 0; lSkinIndex < lSkinCount; ++lSkinIndex)
+				{
+					lClusterCount += ((FbxSkin *)(lMesh->GetDeformer(lSkinIndex, FbxDeformer::eSkin)))->GetClusterCount();
+				}
+				if (lClusterCount)
+				{
+					// Deform the vertex array with the skin deformer.
+					ComputeSkinDeformation(pGlobalPosition, lMesh, pTime, lVertexArray, pPose);
+				}
 
+			}
+			if (lMeshCache)
+				//更新した頂点の反映
+				lMeshCache->UpdateVertexPosition(lMesh, lVertexArray);
 
+		}
 
 
 
