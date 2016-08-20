@@ -305,3 +305,41 @@ bool MYVBO::Initialize(const FbxMesh * pMesh)
 	}
 	return true;
 }
+
+void MYVBO::UpdateVertexPosition(const FbxMesh * pMesh, const FbxVector4 * pVertices)
+{
+	lVertices.Clear();
+	int lVertexCount = 0;
+
+	if (mAllByControlPoint) {
+		lVertexCount = pMesh->GetControlPointsCount();
+		lVertices.Reserve(lVertexCount*VERTEX_STRIDE);
+		for (int lIndex = 0; lIndex < lVertexCount; lIndex++) {
+			lVertices.SetAt(lIndex*VERTEX_STRIDE + 0, static_cast<float>(pVertices[lIndex][0]));
+			lVertices.SetAt(lIndex*VERTEX_STRIDE + 1, static_cast<float>(pVertices[lIndex][1]));
+			lVertices.SetAt(lIndex*VERTEX_STRIDE + 2, static_cast<float>(pVertices[lIndex][2]));
+			lVertices.SetAt(lIndex*VERTEX_STRIDE + 3, 1.0f);
+		}
+	}
+	else {
+		const int lPolygonCount = pMesh->GetPolygonCount();
+		lVertexCount = lPolygonCount*TRIANGLE_VERTEX_COUNT;
+		lVertices.Reserve(lVertexCount*VERTEX_STRIDE);
+
+		lVertexCount = 0;
+		for (int lPolygonIndex = 0; lPolygonIndex < lPolygonCount; lPolygonIndex++) {
+			for (int lVerticeIndex = 0; lVerticeIndex < TRIANGLE_VERTEX_COUNT; lVerticeIndex++) {
+				//指定したポリゴンの指定した頂点を取得
+				const int lControlPointIndex = pMesh->GetPolygonVertex(lPolygonIndex, lVerticeIndex);
+
+				lVertices.SetAt(lVertexCount*VERTEX_STRIDE + 0, static_cast<float>(pVertices[lControlPointIndex][0]));
+				lVertices.SetAt(lVertexCount*VERTEX_STRIDE + 1, static_cast<float>(pVertices[lControlPointIndex][1]));
+				lVertices.SetAt(lVertexCount*VERTEX_STRIDE + 2, static_cast<float>(pVertices[lControlPointIndex][2]));
+				lVertices.SetAt(lVertexCount*VERTEX_STRIDE + 3, 1.0f);
+				lVertexCount++;
+			}
+		}
+
+	}
+
+}

@@ -68,9 +68,8 @@ public:
 	bool Initialize(const FbxMesh * pMesh);
 
 	// Update vertex positions for deformed meshes.
-	void UpdateVertexPosition(const FbxMesh * pMesh, const FbxVector4 * pVertices) const {};
+	void UpdateVertexPosition(const FbxMesh * pMesh, const FbxVector4 * pVertices);
 	int GetSubMeshCount() const { return mSubMeshes.GetCount(); }
-	void UpdateVertexPosition(FbxMesh*pMesh, FbxVector4*pVertexArray);
 
 	FbxArray<FbxFloat>lVertices;	//頂点配列
 	FbxArray<FbxUInt>lIndices;	//インデクス
@@ -185,7 +184,10 @@ public:
 	void ComputeSkinDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray, FbxPose*pPose);
 	void ComputeLinearDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray, FbxPose*pPose);
 	void ComputeDualQuaternionDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray, FbxPose*pPose);
-
+	void ComputeClusterDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh,FbxCluster*pCluster,FbxAMatrix& pVertexTransformMatrix,  FbxTime pTime, FbxPose*pPose);
+	void MatrixScale(FbxAMatrix&pMatrix, double pValue);
+	void MatrixAddToDiagonal(FbxAMatrix&pMatrix, double pValue);
+	void MatrixAdd(FbxAMatrix&pDstMatrix, FbxAMatrix&pSrcMatrix);
 private:
 
 	//メンバ宣言部分

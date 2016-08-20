@@ -307,7 +307,7 @@ HRESULT MAIN::InitShader()
 HRESULT MAIN::InitPolygon()
 {
 
-	fbx.FbxInit("res/Meshes.fbx");
+	fbx.FbxInit("res/humanoid2.fbx");
 	auto start = timeGetTime();
 	vert = fbx.GetGeometryData();
 	auto end = timeGetTime();
@@ -350,6 +350,36 @@ HRESULT MAIN::InitPolygon()
 //シーンを画面にレンダリング
 void MAIN::Render()
 {
+
+	auto start = timeGetTime();
+	vert = fbx.GetGeometryData();
+	auto end = timeGetTime();
+	FBXSDK_printf("Time:%d\n", (int)(end - start));
+
+
+	//上の頂点でバーテックスバッファー作成
+	D3D11_BUFFER_DESC bd;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(SimpleVertex)*vert[0][0].Pos.size();
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+	bd.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	InitData.pSysMem = vert[0][0].Pos.data();
+
+	if (m_pVertexBuffer != nullptr) {
+		m_pVertexBuffer->Release();
+	}
+
+	if (FAILED(m_pDevice->CreateBuffer(&bd, &InitData, &m_pVertexBuffer)))
+	{
+	//	return E_FAIL;
+	}
+
+
+
+
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
 	float ClearColor[4] = {0,0,1,1};// クリア色作成　RGBAの順
 	m_pDeviceContext->ClearRenderTargetView(m_pBackBuffer_TexRTV,ClearColor);//画面クリア
@@ -360,10 +390,10 @@ void MAIN::Render()
 	D3DXMATRIX mProj;
 	//ワールドトランスフォーム（絶対座標変換）
 	D3DXMatrixScaling(&mWorld, 1,1,1);
-	D3DXMatrixRotationY( &mRotate, timeGetTime() / 1000.0f );//単純にyaw回転させる
+	D3DXMatrixRotationY( &mRotate, 0 );//単純にyaw回転させる
 	// ビュートランスフォーム（視点座標変換）
-	D3DXVECTOR3 vEyePt( 0.0f, 1.0f,-2.0f ); //カメラ（視点）位置
-	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );//注視位置
+	D3DXVECTOR3 vEyePt( 0.0f, 20.0f,-120.0f ); //カメラ（視点）位置
+	D3DXVECTOR3 vLookatPt( 0.0f, 20.0f, 0.0f );//注視位置
 	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );//上方位置
 	D3DXMatrixLookAtLH( &mView, &vEyePt, &vLookatPt, &vUpVec );
 	// プロジェクショントランスフォーム（射影変換）
