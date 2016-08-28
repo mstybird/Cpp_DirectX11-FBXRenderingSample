@@ -1,6 +1,19 @@
 #include"MAIN.h"
 #include<Shlwapi.h>
 
+MYFBX::~MYFBX()
+{
+	//ジオメトリの解放
+	ReleaseGeometryData();
+	//アニメーションリスト文字列の解放
+	FbxArrayDelete(AnimStackNameArray);
+	//シーンを読み込んでいた場合シーンを開放する
+	if (Scene) {
+		UnLoadCacheRecursive(Scene);
+	}
+	if (SdkManager)SdkManager->Destroy();
+}
+
 //初期化処理
 void MYFBX::FbxInit(std::string vfileName) {
 	fileName = vfileName;
@@ -38,7 +51,6 @@ void MYFBX::FbxInit(std::string vfileName) {
 		FileFormat = SdkManager->GetIOPluginRegistry()->FindReaderIDByDescription("FBX binary (*.fbx)");;
 	}
 
-	
 
 	//インポータの初期化＆ファイルの設定
 	if (Importer->Initialize(fileName.c_str(), FileFormat) == true) {
@@ -75,6 +87,7 @@ void MYFBX::FbxDestroy() {
 
 void MYFBX::FbxLoadFromFile()
 {
+
 	if (Importer->Import(Scene) == true) {
 		//座標系の変換
 		FbxAxisSystem SceneAxisSystem = Scene->GetGlobalSettings().GetAxisSystem();
@@ -228,10 +241,61 @@ void MYFBX::LoadCacheRecursive(FbxNode * pNode, FbxAnimLayer * pAnimLayer)
 
 void MYFBX::UnLoadCacheRecursive(FbxScene * pScene)
 {
+	const int lTextureCount = pScene->GetTextureCount();
+	for (int lTextureIndex = 0; lTextureIndex < lTextureCount; lTextureIndex++) {
+		FbxTexture * lTexture = pScene->GetTexture(lTextureIndex);
+		FbxFileTexture * lFileTexture = FbxCast<FbxFileTexture>(lTexture);
+		if (lFileTexture && lFileTexture->GetUserDataPtr())
+		{
+			FbxString * lTextureName = static_cast<FbxString *>(lFileTexture->GetUserDataPtr());
+			lFileTexture->SetUserDataPtr(NULL);
+			//テクスチャイメージの解放
+			//glDeleteTextures(1, lTextureName);
+			delete lTextureName;
+		}
+	}
+	UnLoadCacheRecursive(pScene->GetRootNode());
 }
+
+/*
+	ノードの全捜査をなくすために、
+	eNode属性を持つノードのみの配列を作成する。
+	以降はそのノードにのみアクセスする
+*/
+
 
 void MYFBX::UnLoadCacheRecursive(FbxNode * pNode)
 {
+	//マテリアルの解放
+	const int lMaterialCount = pNode->GetMaterialCount();
+	for (int lMaterialIndex = 0; lMaterialIndex < lMaterialCount; ++lMaterialIndex) {
+		FbxSurfaceMaterial*lMaterial = pNode->GetMaterial(lMaterialIndex);
+		if (lMaterial&&lMaterial->GetUserDataPtr()) {
+			MaterialCache*lMaterialCache = static_cast<MaterialCache*>(lMaterial->GetUserDataPtr());
+			lMaterial->SetUserDataPtr(nullptr);
+			delete lMaterialCache;
+		}
+	}
+	//メッシュを解放する
+	FbxNodeAttribute*lNodeAttribute = pNode->GetNodeAttribute();
+	if (lNodeAttribute) {
+		if (lNodeAttribute->GetAttributeType() == FbxNodeAttribute::eMesh) {
+
+			FbxMesh*lMesh = pNode->GetMesh();
+			if (lMesh&&lMesh->GetUserDataPtr()) {
+				MYVBO*lMeshCache = static_cast<MYVBO*>(lMesh->GetUserDataPtr());
+				lMesh->SetUserDataPtr(nullptr);
+				delete lMeshCache;
+			}
+
+		}
+	}
+
+	const int lChildCount = pNode->GetChildCount();
+	for (int lChildIndex = 0; lChildIndex < lChildCount; ++lChildIndex) {
+		UnLoadCacheRecursive(pNode->GetChild(lChildIndex));
+	}
+
 }
 
 void MYFBX::PreparePointCacheData(FbxScene * pScene, FbxTime & pCache_Start, FbxTime & pCache_Stop)
@@ -318,16 +382,10 @@ void MYFBX::LoadAnimationData()
 	SetCurrentAnimStack(lCurrentAnimStackIndex);
 }
 
-std::vector<std::vector<ModelData>> MYFBX::GetGeometryData()
+std::vector<std::vector<FBXModelData*>>* MYFBX::GetGeometryData()
 {
 	//初期化
-	for (int i = 0; i < Geometry.size(); i++) {
-		for (int j = 0; j < Geometry[i].size(); j++) {
-			Geometry[i][j].Index.clear();
-			Geometry[i][j].Pos.clear();
-		}
-	}
-	Geometry.clear();
+	ReleaseGeometryData();
 
 
 	FbxPose*lPose = nullptr;
@@ -342,7 +400,6 @@ std::vector<std::vector<ModelData>> MYFBX::GetGeometryData()
 	{
 		// Set the scene status flag to refresh 
 		// the scene in the next timer callback.
-
 		CurrentTime += FrameTime;
 
 		if (CurrentTime > Stop)
@@ -351,34 +408,49 @@ std::vector<std::vector<ModelData>> MYFBX::GetGeometryData()
 		}
 	}
 	indexCount = 0;
-	GetNodeRecursive(Scene->GetRootNode(), CurrentTime, CurrentAnimLayer, lDummyGlobalPosition, lPose);
 	
-	return Geometry;
+	GetNodeRecursive(Scene->GetRootNode(), CurrentTime, CurrentAnimLayer, lDummyGlobalPosition, lPose);
+
+	return &Geometry;
 }
 
 void MYFBX::GetNodeRecursive(FbxNode * pNode, FbxTime & pTime, FbxAnimLayer * pAnimLayer, FbxAMatrix & pParentGlobalPosition, FbxPose * pPose)
 {
-	FbxAMatrix lGlobalPosition = GetGlobalPosition(pNode, pTime, pPose, &pParentGlobalPosition);
+
+
+
 
 	if (pNode->GetNodeAttribute()) {
+
+
+		GetGlobalPosition(tlGNR.lGlobalPosition,pNode, pTime, pPose, &pParentGlobalPosition);
 		//ジオメトリのオフセットを取得
-		FbxAMatrix lGeometryOffset = GetGeometry(pNode);
-		FbxAMatrix lGlobalOffPosition = lGlobalPosition*lGeometryOffset;
-		GetNode(pNode, pTime, pAnimLayer, pParentGlobalPosition, lGlobalOffPosition, pPose);
+		tlGNR.lGeometryOffset;
+		GetGeometry(tlGNR.lGeometryOffset,pNode);
+		tlGNR.lGlobalOffPosition = tlGNR.lGlobalPosition*tlGNR.lGeometryOffset;
+	
+		GetNode(pNode, pTime, pAnimLayer, pParentGlobalPosition, tlGNR.lGlobalOffPosition, pPose);
+
 	}
 
 	//子ノードの探索
 	const int lChildCount = pNode->GetChildCount();
 	for (int lChildIndex = 0; lChildIndex < lChildCount; lChildIndex++) {
-		GetNodeRecursive(pNode->GetChild(lChildIndex), pTime, pAnimLayer, lGlobalPosition, pPose);
+		
+		GetNodeRecursive(pNode->GetChild(lChildIndex), pTime, pAnimLayer, tlGNR.lGlobalPosition, pPose);
 	}
 
 }
 
 void MYFBX::GetNode(FbxNode * pNode, FbxTime & pTime, FbxAnimLayer * pAnimLayer, FbxAMatrix & pParentGlobalPosition, FbxAMatrix & pGlobalPosition, FbxPose * pPose)
 {
+
 	FbxNodeAttribute* lNodeAttribute = pNode->GetNodeAttribute();
+
+//	start = timeGetTime();
+
 	if (lNodeAttribute && lNodeAttribute->GetAttributeType()==FbxNodeAttribute::eMesh) {
+		start = timeGetTime();
 		//ノードのメッシュを取得
 		FbxMesh* lMesh = pNode->GetMesh();
 		//頂点数を取得
@@ -399,22 +471,31 @@ void MYFBX::GetNode(FbxNode * pNode, FbxTime & pTime, FbxAnimLayer * pAnimLayer,
 
 		//頂点バッファ
 		FbxVector4* lVertexArray = nullptr;
+		//法線バッファ
+		FbxVector4* lNormalArray = nullptr;
 		//VBO未作成 or ボーンがない場合、そのままコピー
 		if (!lMeshCache || lHasDeformation) {
 
 			lVertexArray = new FbxVector4[lVertexCount];
-
+			lNormalArray = new FbxVector4[lVertexCount];
 			//頂点バッファのコピー(取得)
 			memcpy(lVertexArray, lMesh->GetControlPoints(), lVertexCount * sizeof(FbxVector4));
+			memcpy(lNormalArray, lMesh->GetElementNormal(0), lVertexCount * sizeof(FbxVector4));
+			
+
 		}
 
 		//アニメーション関係の処理
 		//デフォーマーがあった場合、アニメーション処理
+
+
+
+
 		if (lHasDeformation) {
+
 			if (lHasVertexCache) {
 				ReadVertexCacheData(lMesh, pTime, lVertexArray);
-			}
-			else {
+			}else {
 				if (lHasShape)
 				{
 					// Deform the vertex array with the shapes.
@@ -431,90 +512,143 @@ void MYFBX::GetNode(FbxNode * pNode, FbxTime & pTime, FbxAnimLayer * pAnimLayer,
 				{
 					// Deform the vertex array with the skin deformer.
 					ComputeSkinDeformation(pGlobalPosition, lMesh, pTime, lVertexArray, pPose);
+
 				}
 
 			}
+
+
+
 			if (lMeshCache)
 				//更新した頂点の反映
 				lMeshCache->UpdateVertexPosition(lMesh, lVertexArray);
 
 		}
 
+		
 
-
-		std::vector<ModelData>mdv;
+		std::vector<FBXModelData*>mdv;
 		//アニメーションなどすべての処理が終わったら戻り値用のジオメトリを作成する
 		if (lMeshCache) {
 			const int lSubMeshCount = lMeshCache->GetSubMeshCount();
+			//サブメッシュの個数分行う
 			for (int lIndex = 0; lIndex < lSubMeshCount; lIndex++) {
 
 				int lOffset = lMeshCache->mSubMeshes[lIndex]->IndexOffset;
 
-				ModelData md;
+				//モデルインスタンス作成
+				FBXModelData* md = new FBXModelData();
+				
+				//マテリアル情報の取得
+				const FbxSurfaceMaterial*lMaterial = pNode->GetMaterial(lIndex);
+				if (lMaterial) {
 
-				std::vector<SimpleVertex>vv;
-				SimpleVertex v;
-				std::vector<unsigned int> idx;
+				}
+
+
 				//ジオメトリバッファ作成
 				auto loopCount = lMeshCache->mSubMeshes[lIndex]->TriangleCount * 3;
-				idx.resize(loopCount);
+				md->IndexLength = loopCount;
 				auto count = lMeshCache->lVertices.Size();
 				indexCount = 0;
 
 				auto vertexCount = lMeshCache->lVertices.Size();
-				for (int i = 0; i < vertexCount/4; i++) {
-					v.Pos.x = lMeshCache->lVertices[i * 4 + 0];
-					v.Pos.y = lMeshCache->lVertices[i * 4 + 1];
-					v.Pos.z = lMeshCache->lVertices[i * 4 + 2];
+				md->PosLength = vertexCount / 4;
+				md->Data.resize(md->PosLength);
+				for (int i = 0; i < vertexCount/4; ++i) {
+					
+					//頂点のコピー
+					memcpy(&md->Data[i].Pos, &lMeshCache->lVertices.GetArray()[i*4],sizeof(SimpleVector4));
 
-					//頂点の追加
-					vv.push_back(v);
+						
+					if(!lHasDeformation)
+					memcpy(&md->Data[i].Normal, &lMeshCache->lNormals.GetArray()[i * 3], sizeof(SimpleVector3));
+
+
+
+
+					if (lMeshCache->lUVs.Size()>0) {
+						memcpy(&md->Data[i].UV, &lMeshCache->lUVs.GetArray()[i * 2], sizeof(SimpleVector2));
+
+					}
 				}
 
+				//インデックス座標を取得
+				md->Index = lMeshCache->lIndices.GetArray() + lOffset;
 
-				for (int i = 0; i < loopCount; i++) {
-					lMeshCache->lIndices.GetAt(i + lOffset);
-					idx[i] = lMeshCache->lIndices[i+lOffset];
+				//頂点座標とインデックス座標をもとに法線の計算
+				if (lHasDeformation) {
+					for (int i = 0; i < lMeshCache->lIndices.Size()/3 - 2; i++) {
+						D3DXVECTOR3 v0;
+						D3DXVECTOR3 v1;
+						D3DXVECTOR3 v2;
+						D3DXVECTOR3 vv, vv1, vv2;
+						v0 = (D3DXVECTOR3)md->Data[md->Index[i * 3 + 0]].Pos;
+						v1 = (D3DXVECTOR3)md->Data[md->Index[i * 3 + 1]].Pos;
+						v2 = (D3DXVECTOR3)md->Data[md->Index[i * 3 + 2]].Pos;
+						vv1 = v1 - v0;
+						vv2 = v2 - v0;
+
+						D3DXVec3Cross(&vv, &vv1, &vv2);
+						D3DXVec3Normalize(&vv, &vv);
+						memcpy(&md->Data[md->Index[i * 3 + 0]].Normal, &vv, sizeof(D3DXVECTOR3));
+						memcpy(&md->Data[md->Index[i * 3 + 1]].Normal, &vv, sizeof(D3DXVECTOR3));
+						memcpy(&md->Data[md->Index[i * 3 + 2]].Normal, &vv, sizeof(D3DXVECTOR3));
 
 
+					}
 				}
 
+			
 
-				md.Index = idx;
-				md.Pos = vv;
+
+				//md.Index = idx;
+				//md.Pos = vv;
 				mdv.push_back(md);
 			}
 		}
 		else {
-			const int lPolygonCount = lMesh->GetPolygonCount();
-			for (int lPolygonIndex = 0; lPolygonIndex < lPolygonCount; lPolygonIndex++) {
-				const int VerticeCount = lMesh->GetPolygonSize(lPolygonIndex);
+			//const int lPolygonCount = lMesh->GetPolygonCount();
+			//for (int lPolygonIndex = 0; lPolygonIndex < lPolygonCount; lPolygonIndex++) {
+			//	const int VerticeCount = lMesh->GetPolygonSize(lPolygonIndex);
 
-				SimpleVertex v;
-				std::vector<SimpleVertex>vv;
-				ModelData md;
+			//	SimpleVertex v;
+			//	std::vector<SimpleVertex>vv;
+			//	ModelData* md=new ModelData();
 
-				for (int lVerticeIndex = 0; lVerticeIndex < lVertexCount; lVerticeIndex++) {
-					auto x=lVertexArray[lMesh->GetPolygonVertex(lPolygonIndex, lVerticeIndex)];
-					v.Pos.x = x[0];
-					v.Pos.y = x[1];
-					v.Pos.z = x[2];
-					
-					vv.push_back(v);
-				}
-				md.Pos = vv;
-				mdv.push_back(md);
+			//	for (int lVerticeIndex = 0; lVerticeIndex < lVertexCount; lVerticeIndex++) {
+			//		auto x = lVertexArray[lMesh->GetPolygonVertex(lPolygonIndex, lVerticeIndex)];
+			//		md->Pos = x[0];
+			//		md->Pos = x[1];
+			//		md->Pos = x[];
+			//		v.Pos.x = x[0];
+			//		v.Pos.y = x[1];
+			//		v.Pos.z = x[2];
+			//		
+			//		vv.push_back(v);
+			//	}
+			//	md.Pos = vv;
+			//	mdv.push_back(md);
 
-			}
+			//}
 		}
+
+
+
 		Geometry.push_back(mdv);
+		end = timeGetTime();
+
+		delete[]lVertexArray;
+
 	}
+
+	++indexCount;
 
 }
 
-FbxAMatrix MYFBX::GetGlobalPosition(FbxNode * pNode, const FbxTime & pTime, FbxPose * pPose, FbxAMatrix * pParentGlobalPosition)
+void MYFBX::GetGlobalPosition(FbxAMatrix&pDstMatrix,FbxNode * pNode, const FbxTime & pTime, FbxPose * pPose, FbxAMatrix * pParentGlobalPosition)
 {
-	FbxAMatrix lGlobalPosition;
+	//FbxAMatrix lGlobalPosition;
 	bool lPositionFound = false;
 
 	if (pPose) {
@@ -522,22 +656,23 @@ FbxAMatrix MYFBX::GetGlobalPosition(FbxNode * pNode, const FbxTime & pTime, FbxP
 
 		if (lNodeIndex > -1) {
 			if (pPose->IsBindPose() || !pPose->IsLocalMatrix(lNodeIndex)) {
-				lGlobalPosition = GetPoseMatrix(pPose, lNodeIndex);
+				pDstMatrix = GetPoseMatrix(pPose, lNodeIndex);
 			}
 			else {
 				//ワールド座標系に変換する
 				FbxAMatrix lParentGlobalPosition;
 				if (pParentGlobalPosition) {
-					lParentGlobalPosition = *pParentGlobalPosition;
+					//lParentGlobalPosition = *pParentGlobalPosition;
+					memcpy(&lParentGlobalPosition, pParentGlobalPosition, sizeof(FbxAMatrix));
 				}
 				else {
 					if (pNode->GetParent()) {
-						lParentGlobalPosition = GetGlobalPosition(pNode->GetParent(), pTime, pPose);
+						 GetGlobalPosition(lParentGlobalPosition,pNode->GetParent(), pTime, pPose);
 					}
 				}
 
 				FbxAMatrix lLocalPosition = GetPoseMatrix(pPose, lNodeIndex);
-				lGlobalPosition = lParentGlobalPosition*lLocalPosition;
+				pDstMatrix = lParentGlobalPosition*lLocalPosition;
 
 			}
 			lPositionFound = true;
@@ -546,28 +681,35 @@ FbxAMatrix MYFBX::GetGlobalPosition(FbxNode * pNode, const FbxTime & pTime, FbxP
 	}
 
 	if (!lPositionFound) {
-		lGlobalPosition = pNode->EvaluateGlobalTransform(pTime);
+		pDstMatrix = pNode->EvaluateGlobalTransform(pTime);
 	}
 
-	return lGlobalPosition;
+	//return lGlobalPosition;
 }
 
 FbxAMatrix MYFBX::GetPoseMatrix(FbxPose * pPose, int pNodeIndex)
 {
-	FbxAMatrix lPoseMatrix;
-	FbxMatrix lMatrix = pPose->GetMatrix(pNodeIndex);
-	memcpy((double*)lPoseMatrix, (double*)lMatrix, sizeof(lMatrix.mData));
+	tlGM.lPoseMatrix;
+	tlGM.lMatrix = pPose->GetMatrix(pNodeIndex);
+	memcpy((double*)tlGM.lPoseMatrix, (double*)tlGM.lMatrix, sizeof(tlGM.lMatrix.mData));
 
-	return lPoseMatrix;
+	return tlGM.lPoseMatrix;
 }
 
-FbxAMatrix MYFBX::GetGeometry(FbxNode * pNode)
+void MYFBX::GetGeometry(FbxAMatrix&pSrcMatrix,FbxNode * pNode)
 {
-	const FbxVector4 lT = pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
-	const FbxVector4 lR = pNode->GetGeometricRotation(FbxNode::eSourcePivot);
-	const FbxVector4 lS = pNode->GetGeometricScaling(FbxNode::eSourcePivot);
+	//const FbxVector4 lT = pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
+	//const FbxVector4 lR = pNode->GetGeometricRotation(FbxNode::eSourcePivot);
+	//const FbxVector4 lS = pNode->GetGeometricScaling(FbxNode::eSourcePivot);
 
-	return FbxAMatrix(lT, lR, lS);
+	pSrcMatrix.SetTRS(
+		pNode->GetGeometricTranslation(FbxNode::eSourcePivot),
+		pNode->GetGeometricRotation(FbxNode::eSourcePivot),
+		pNode->GetGeometricScaling(FbxNode::eSourcePivot)
+		
+		);
+
+//	return FbxAMatrix(lT, lR, lS);
 }
 
 //どのアニメーションを使うか設定する
@@ -643,11 +785,11 @@ void MYFBX::ReadVertexCacheData(FbxMesh * pMesh, FbxTime & pTime, FbxVector4 * p
 
 		while (lReadBufIndex < 3 * lVertexCount) {
 			pVertexArray[lReadBufIndex / 3].mData[0] = lReadBuf[lReadBufIndex];
-			lReadBufIndex++;
+			++lReadBufIndex;
 			pVertexArray[lReadBufIndex / 3].mData[1] = lReadBuf[lReadBufIndex];
-			lReadBufIndex++;
+			++lReadBufIndex;
 			pVertexArray[lReadBufIndex / 3].mData[2] = lReadBuf[lReadBufIndex];
-			lReadBufIndex++;
+			++lReadBufIndex;
 		}
 	}
 
@@ -663,11 +805,11 @@ void MYFBX::ComputeShapeDeformation(FbxMesh * pMesh, FbxTime & pTime, FbxAnimLay
 	memcpy(lDstVertexArray, pVertexArray, lVertexCount * sizeof(FbxVector4));
 
 	int lBlendShapeDeformerCount = pMesh->GetDeformerCount(FbxDeformer::eBlendShape);
-	for (int lBlendShapeIndex = 0; lBlendShapeIndex < lBlendShapeDeformerCount; lBlendShapeIndex++) {
+	for (int lBlendShapeIndex = 0; lBlendShapeIndex < lBlendShapeDeformerCount; ++lBlendShapeIndex) {
 		FbxBlendShape*lBlendShape = (FbxBlendShape*)pMesh->GetDeformer(lBlendShapeIndex, FbxDeformer::eBlendShape);
 
 		int lBlendShapeChannelCount = lBlendShape->GetBlendShapeChannelCount();
-		for (int lChannelIndex = 0; lChannelIndex < lBlendShapeChannelCount; lChannelIndex++) {
+		for (int lChannelIndex = 0; lChannelIndex < lBlendShapeChannelCount; ++lChannelIndex) {
 			FbxBlendShapeChannel*lChannel = lBlendShape->GetBlendShapeChannel(lChannelIndex);
 			if (lChannel) {
 				FbxAnimCurve*lFCurve = pMesh->GetShapeChannel(lBlendShapeIndex, lChannelIndex, pAnimLayer);
@@ -679,7 +821,7 @@ void MYFBX::ComputeShapeDeformation(FbxMesh * pMesh, FbxTime & pTime, FbxAnimLay
 
 				int lStartIndex = -1;
 				int lEndIndex = -1;
-				for (int lShapeIndex = 0; lShapeIndex < lShapeCount; lShapeIndex++) {
+				for (int lShapeIndex = 0; lShapeIndex < lShapeCount; ++lShapeIndex) {
 					if (lWeight > 0 && lWeight <= lFullWeights[0]) {
 						lEndIndex = 0;
 						break;
@@ -706,7 +848,7 @@ void MYFBX::ComputeShapeDeformation(FbxMesh * pMesh, FbxTime & pTime, FbxAnimLay
 					lWeight = (lWeight / lEndWeight) * 100;
 					//出力頂点データを初期化
 					memcpy(lDstVertexArray, lSrcVertexArray, lVertexCount * sizeof(FbxVector4));
-					for (int j = 0; j < lVertexCount; j++) {
+					for (int j = 0; j < lVertexCount; ++j) {
 						FbxVector4 lInfluence = (lEndShape->GetControlPoints()[j] - lSrcVertexArray[j])*lWeight*0.01;
 						lDstVertexArray[j] += lInfluence;
 					}
@@ -719,7 +861,7 @@ void MYFBX::ComputeShapeDeformation(FbxMesh * pMesh, FbxTime & pTime, FbxAnimLay
 					//出力頂点データを初期化
 					memcpy(lDstVertexArray, lStartShape->GetControlPoints(), lVertexCount * sizeof(FbxVector4));
 
-					for (int j = 0; j < lVertexCount; j++) {
+					for (int j = 0; j < lVertexCount; ++j) {
 						FbxVector4 lInfluence = (lEndShape->GetControlPoints()[j] - lStartShape->GetControlPoints()[j])*lWeight*0.01;
 						lDstVertexArray[j] += lInfluence;
 					}
@@ -754,7 +896,7 @@ void MYFBX::ComputeSkinDeformation(FbxAMatrix & pGlobalPosition, FbxMesh * pMesh
 
 		//2つのスキニングのウェイトを合成する
 		int lBlendWeightsCount = lSkinDeformer->GetControlPointIndicesCount();
-		for (int lBWIndex = 0; lBWIndex < lBlendWeightsCount; lBWIndex++) {
+		for (int lBWIndex = 0; lBWIndex < lBlendWeightsCount; ++lBWIndex) {
 			double lBlendWeight = lSkinDeformer->GetControlPointBlendWeights()[lBWIndex];
 			pVertexArray[lBWIndex] = lVertexArrayDQ[lBWIndex] * lBlendWeight + lVertexArrayLinear[lBWIndex] * (1 - lBlendWeight);
 		}
@@ -766,32 +908,49 @@ void MYFBX::ComputeLinearDeformation(FbxAMatrix & pGlobalPosition, FbxMesh * pMe
 {
 	FbxCluster::ELinkMode lClusterMode = ((FbxSkin*)pMesh->GetDeformer(0, FbxDeformer::eSkin))->GetCluster(0)->GetLinkMode();
 	int lVertexCount = pMesh->GetControlPointsCount();
+
+	
+
 	FbxAMatrix*lClusterDeformation = new FbxAMatrix[lVertexCount];
+
 	memset(lClusterDeformation, 0, lVertexCount * sizeof(FbxAMatrix));
 	double*lClusterWeight = new double[lVertexCount];
 	memset(lClusterWeight, 0, lVertexCount * sizeof(double));
 	if (lClusterMode == FbxCluster::eAdditive) {
-		for (int i = 0; i < lVertexCount; i++) {
+		for (int i = 0; i < lVertexCount; ++i) {
 			lClusterDeformation[i].SetIdentity();
 		}
 	}
 
 	int lSkinCount = pMesh->GetDeformerCount(FbxDeformer::eSkin);
-	for (int lSkinIndex = 0; lSkinIndex < lSkinCount; lSkinIndex++) {
+	FbxAMatrix lInfluence;
+	FbxAMatrix lVertexTransformMatrix;
+	for (int lSkinIndex = 0; lSkinIndex < lSkinCount; ++lSkinIndex) {
 
 		FbxSkin*lSkinDeformer = (FbxSkin*)pMesh->GetDeformer(lSkinIndex, FbxDeformer::eSkin);
-		
+
 		int lClusterCount = lSkinDeformer->GetClusterCount();
-		for (int lClusterIndex = 0; lClusterIndex < lClusterCount; lClusterIndex++) {
+		for (int lClusterIndex = 0; lClusterIndex < lClusterCount; ++lClusterIndex) {
+
+
 			FbxCluster*lCluster = lSkinDeformer->GetCluster(lClusterIndex);
 			if (!lCluster->GetLink()) {
 				continue;
 			}
-			FbxAMatrix lVertexTransformMatrix;
+
+
 			ComputeClusterDeformation(pGlobalPosition, pMesh, lCluster, lVertexTransformMatrix, pTime, pPose);
 
+
 			int lVertexIndexCount = lCluster->GetControlPointIndicesCount();
-			for (int k = 0; k < lVertexIndexCount; k++) {
+
+			//やることリスト/////////////////////////////////////////
+			//ローカル変数をメンバ変数化する
+			//FBXAMATRIXの計算を最適化する
+			//解放処理を実装する
+
+
+			for (int k = 0; k < lVertexIndexCount; ++k) {
 				int lIndex = lCluster->GetControlPointIndices()[k];
 
 				//小さなウェイトを無視して正規化する
@@ -802,9 +961,14 @@ void MYFBX::ComputeLinearDeformation(FbxAMatrix & pGlobalPosition, FbxMesh * pMe
 				if (lWeight == 0.0) {
 					continue;
 				}
+				
+//				lInfluence = lVertexTransformMatrix;
 
-				FbxAMatrix lInfluence = lVertexTransformMatrix;
-				MatrixScale(lInfluence, lWeight);
+				
+
+				memcpy(&lInfluence, &lVertexTransformMatrix, sizeof(FbxAMatrix));
+
+				MatrixScale(lInfluence.Buffer()->Buffer(), lWeight);
 
 
 				if (lClusterMode == FbxCluster::eAdditive) {
@@ -815,16 +979,18 @@ void MYFBX::ComputeLinearDeformation(FbxAMatrix & pGlobalPosition, FbxMesh * pMe
 					lClusterWeight[lIndex] = 1.0;
 				}
 				else {
-					MatrixAdd(lClusterDeformation[lIndex], lInfluence);
+					MatrixAdd(lClusterDeformation[lIndex].Buffer()->Buffer(), lInfluence);
 					//正規化したジオメトリかコンピュートジオメトリにウェイトを加算する
 					lClusterWeight[lIndex] += lWeight;
 				}
 			}
+
 		}
+
 	}
 
 	//頂点コピー
-	for (int i = 0; i < lVertexCount; i++)
+	for (int i = 0; i < lVertexCount; ++i)
 	{
 		//コピー元頂点
 		FbxVector4 lSrcVertex = pVertexArray[i];
@@ -854,6 +1020,9 @@ void MYFBX::ComputeLinearDeformation(FbxAMatrix & pGlobalPosition, FbxMesh * pMe
 			}
 		}
 	}
+
+	//法線計算
+	
 
 	delete[] lClusterDeformation;
 	delete[] lClusterWeight;
@@ -953,7 +1122,7 @@ void MYFBX::ComputeDualQuaternionDeformation(FbxAMatrix & pGlobalPosition, FbxMe
 	}
 
 	//頂点数分回す
-	for (int i = 0; i < lVertexCount; i++)
+	for (int i = 0; i < lVertexCount; ++i)
 	{
 		FbxVector4 lSrcVertex = pVertexArray[i];
 		FbxVector4& lDstVertex = pVertexArray[i];
@@ -990,105 +1159,178 @@ void MYFBX::ComputeDualQuaternionDeformation(FbxAMatrix & pGlobalPosition, FbxMe
 void MYFBX::ComputeClusterDeformation(FbxAMatrix& pGlobalPosition,FbxMesh* pMesh,FbxCluster* pCluster,FbxAMatrix& pVertexTransformMatrix,FbxTime pTime,FbxPose* pPose)
 {
 	FbxCluster::ELinkMode lClusterMode = pCluster->GetLinkMode();
-	FbxAMatrix lReferenceGlobalInitPosition;	//初期位置
-	FbxAMatrix lReferenceGlobalCurrentPosition;	//現在位置
-	FbxAMatrix lAssociateGlobalInitPosition;	//初期位置
-	FbxAMatrix lAssociateGlobalCurrentPosition;	//現在位置
-	FbxAMatrix lClusterGlobalInitPosition;		//初期位置
-	FbxAMatrix lClusterGlobalCurrentPosition;	//現在位置
+	//FbxAMatrix lReferenceGlobalInitPosition;	//初期位置
+	//FbxAMatrix lReferenceGlobalCurrentPosition;	//現在位置
+	//FbxAMatrix lAssociateGlobalInitPosition;	//初期位置
+	//FbxAMatrix lAssociateGlobalCurrentPosition;	//現在位置
+	//FbxAMatrix lClusterGlobalInitPosition;		//初期位置
+	//FbxAMatrix lClusterGlobalCurrentPosition;	//現在位置
 
-	FbxAMatrix lReferenceGeometry;
-	FbxAMatrix lAssociateGeometry;
-	FbxAMatrix lClusterGeometry;
+	//FbxAMatrix lReferenceGeometry;
+	//FbxAMatrix lAssociateGeometry;
+	//FbxAMatrix lClusterGeometry;
 
-	FbxAMatrix lClusterRelativeInitPosition;
-	FbxAMatrix lClusterRelativeCurrentPositionInverse;
+	//FbxAMatrix lClusterRelativeInitPosition;
+	//FbxAMatrix lClusterRelativeCurrentPositionInverse;
+
+
 
 	if (lClusterMode == FbxCluster::eAdditive&&pCluster->GetAssociateModel()) {
-		pCluster->GetTransformAssociateModelMatrix(lAssociateGlobalInitPosition);
+		pCluster->GetTransformAssociateModelMatrix(tlCCD.lAssociateGlobalInitPosition);
+
 		//モデルの変換
-		lAssociateGeometry = GetGeometry(pCluster->GetAssociateModel());
-		lAssociateGlobalInitPosition *= lAssociateGeometry;
-		lAssociateGlobalCurrentPosition = GetGlobalPosition(pCluster->GetAssociateModel(), pTime, pPose);
+		{
+			GetGeometry(tlCCD.lAssociateGeometry, pCluster->GetAssociateModel());
+			tlCCD.lAssociateGlobalInitPosition *= tlCCD.lAssociateGeometry;
+			GetGlobalPosition(tlCCD.lAssociateGlobalCurrentPosition, pCluster->GetAssociateModel(), pTime, pPose);
+		}
 
 		//移動行列の取得
-		pCluster->GetTransformMatrix(lReferenceGlobalInitPosition);
-		// Multiply lReferenceGlobalInitPosition by Geometric Transformation
-		//行列の合成
-		lReferenceGeometry = GetGeometry(pMesh->GetNode());
-		lReferenceGlobalInitPosition *= lReferenceGeometry;
+		{
+			pCluster->GetTransformMatrix(tlCCD.lReferenceGlobalInitPosition);
+			// Multiply lReferenceGlobalInitPosition by Geometric Transformation
+			//行列の合成
+			GetGeometry(tlCCD.lReferenceGeometry, pMesh->GetNode());
+			tlCCD.lReferenceGlobalInitPosition *= tlCCD.lReferenceGeometry;
+		}
 		//現在位置をグローバルポジションとして設定
-		lReferenceGlobalCurrentPosition = pGlobalPosition;
+		//tlCCD.lReferenceGlobalCurrentPosition = pGlobalPosition;
 
 		//移動行列の取得
-		pCluster->GetTransformLinkMatrix(lClusterGlobalInitPosition);
-		// 行列合成
-		lClusterGeometry = GetGeometry(pCluster->GetLink());
-		lClusterGlobalInitPosition *= lClusterGeometry;
-		lClusterGlobalCurrentPosition = GetGlobalPosition(pCluster->GetLink(), pTime, pPose);
+		{
+			pCluster->GetTransformLinkMatrix(tlCCD.lClusterGlobalInitPosition);
+			// 行列合成
+			GetGeometry(tlCCD.lClusterGeometry, pCluster->GetLink());
+			tlCCD.lClusterGlobalInitPosition *= tlCCD.lClusterGeometry;
+			GetGlobalPosition(tlCCD.lClusterGlobalCurrentPosition, pCluster->GetLink(), pTime, pPose);
+		}
 
 		// Compute the shift of the link relative to the reference.
 		//ModelM-1 * AssoM * AssoGX-1 * LinkGX * LinkM-1*ModelM
 		//最終的な行列合成
-		pVertexTransformMatrix = lReferenceGlobalInitPosition.Inverse() * lAssociateGlobalInitPosition * lAssociateGlobalCurrentPosition.Inverse() *
-			lClusterGlobalCurrentPosition * lClusterGlobalInitPosition.Inverse() * lReferenceGlobalInitPosition;
+		{
+			pVertexTransformMatrix = tlCCD.lReferenceGlobalInitPosition.Inverse() * tlCCD.lAssociateGlobalInitPosition * tlCCD.lAssociateGlobalCurrentPosition.Inverse() *
+				tlCCD.lClusterGlobalCurrentPosition * tlCCD.lClusterGlobalInitPosition.Inverse() * tlCCD.lReferenceGlobalInitPosition;
+
+		}
 
 
 	}
 	else {
 		
-		pCluster->GetTransformMatrix(lReferenceGlobalInitPosition);
-		lReferenceGlobalCurrentPosition = pGlobalPosition;
-		// Multiply lReferenceGlobalInitPosition by Geometric Transformation
-		lReferenceGeometry = GetGeometry(pMesh->GetNode());
-		lReferenceGlobalInitPosition *= lReferenceGeometry;
+		D3DXMATRIX m;
+		D3DXMATRIX m2;
+		{
+		 GetGeometry(tlCCD.lReferenceGeometry,pMesh->GetNode());
+		pCluster->GetTransformMatrix(tlCCD.lReferenceGlobalInitPosition);
+		tlCCD.lReferenceGlobalInitPosition *= tlCCD.lReferenceGeometry;
+		GetGlobalPosition(tlCCD.lClusterGlobalCurrentPosition,pCluster->GetLink(), pTime, pPose);
+		}
 
-		// Get the link initial global position and the link current global position.
-		pCluster->GetTransformLinkMatrix(lClusterGlobalInitPosition);
-		lClusterGlobalCurrentPosition = GetGlobalPosition(pCluster->GetLink(), pTime, pPose);
+		{
+		memcpy(&tlCCD.lReferenceGlobalCurrentPosition, &pGlobalPosition, sizeof(FbxAMatrix));
+		MatrixInverse(tlCCD.lReferenceGlobalCurrentPosition);
+		pCluster->GetTransformLinkMatrix(tlCCD.lClusterGlobalInitPosition);
+		tlCCD.lClusterRelativeInitPosition = tlCCD.lClusterGlobalInitPosition.Inverse();
+		}
+		
+//		FbxAMatrix v;
+		//memcpy(&tlCCD.lReferenceGlobalCurrentPosition, &pGlobalPosition, sizeof(FbxAMatrix));
+		//MatrixInverse(tlCCD.lReferenceGlobalCurrentPosition.Buffer()->Buffer());
 
-		// Compute the initial position of the link relative to the reference.
-		lClusterRelativeInitPosition = lClusterGlobalInitPosition.Inverse() * lReferenceGlobalInitPosition;
-
-		// Compute the current position of the link relative to the reference.
-		lClusterRelativeCurrentPositionInverse = lReferenceGlobalCurrentPosition.Inverse() * lClusterGlobalCurrentPosition;
-
+		{
+		MatrixFbxToD3DX(&m, tlCCD.lReferenceGlobalCurrentPosition);
+		MatrixFbxToD3DX(&m2, tlCCD.lClusterGlobalCurrentPosition);
+		m = m2*m;
+		MatrixD3DXToFbx(tlCCD.lClusterRelativeCurrentPositionInverse, &m);
 		// Compute the shift of the link relative to the reference.
-		pVertexTransformMatrix = lClusterRelativeCurrentPositionInverse * lClusterRelativeInitPosition;
+		pVertexTransformMatrix = tlCCD.lClusterRelativeCurrentPositionInverse * tlCCD.lClusterRelativeInitPosition * tlCCD.lReferenceGlobalInitPosition;
+		}
 
 	}
 
 
 }
 
-void MYFBX::MatrixScale(FbxAMatrix & pMatrix, double pValue)
+void MYFBX::MatrixScale(FbxDouble* pMatrix, double pValue)
 {
-	int i, j;
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 4; j++) {
-			pMatrix[i][j] *= pValue;
-		}
+	//FbxDouble* v = pMatrix.Buffer()->Buffer();
+	
+	for (int i = 0; i < 16; ++i) {
+		pMatrix[i] *= pValue;
 	}
+
 }
 
 void MYFBX::MatrixAddToDiagonal(FbxAMatrix & pMatrix, double pValue)
 {
+
+
+
 	pMatrix[0][0] += pValue;
 	pMatrix[1][1] += pValue;
 	pMatrix[2][2] += pValue;
 	pMatrix[3][3] += pValue;
 }
 
-void MYFBX::MatrixAdd(FbxAMatrix & pDstMatrix, FbxAMatrix & pSrcMatrix)
+void MYFBX::MatrixAdd(FbxDouble* pDstMatrix, FbxDouble*pSrcMatrix)
 {
 	int i, j;
 
-	for (i = 0; i < 4; i++)
-	{
-		for (j = 0; j < 4; j++)
-		{
-			pDstMatrix[i][j] += pSrcMatrix[i][j];
+	//FbxDouble* lDstMatrix = pDstMatrix.Buffer()->Buffer();
+	//FbxDouble* lSrcMatrix = pSrcMatrix.Buffer()->Buffer();
+
+	for (int i = 0; i < 16; ++i) {
+		pDstMatrix[i] += pSrcMatrix[i];
+	}
+
+	//for (i = 0; i < 4; i++)
+	//{
+	//	for (j = 0; j < 4; j++)
+	//	{
+	//		pDstMatrix[i][j] += pSrcMatrix[i][j];
+	//	}
+	//}
+}
+
+void MYFBX::MatrixInverse(FbxDouble * pDstMatrix)
+{
+	D3DXMATRIX m;
+	MatrixFbxToD3DX(&m, pDstMatrix);
+	D3DXMatrixInverse(&m, nullptr, &m);
+	MatrixD3DXToFbx(pDstMatrix, &m);
+}
+
+void MYFBX::MatrixFbxToD3DX(D3DXMATRIX * pDstMatrix, FbxDouble * pSrcMatrix)
+{
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			pDstMatrix->m[i][j] = pSrcMatrix[i * 4 + j];
 		}
 	}
+
+}
+
+void MYFBX::MatrixD3DXToFbx(FbxDouble * pDstMatrix, D3DXMATRIX * pSrcMatrix)
+{
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			pDstMatrix[i * 4 + j] = pSrcMatrix->m[i][j];
+		}
+	}
+}
+
+void MYFBX::ReleaseGeometryData()
+{
+	for (int i = 0; i < Geometry.size(); i++) {
+		for (int j = 0; j < Geometry[i].size(); j++) {
+			if (Geometry[i][j] != nullptr) {
+				delete Geometry[i][j];
+				Geometry[i][j] = nullptr;
+			}
+		}
+		Geometry[i].clear();
+	}
+	Geometry.clear();
 }
 

@@ -18,7 +18,12 @@
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib,"d3dx11.lib")
 #pragma comment(lib,"d3dCompiler.lib")
+
+#ifdef _DEBUG
 #pragma comment(lib,"libfbxsdk-md.lib")
+#else
+#pragma comment(lib,"libfbxsdk-md.lib")
+#endif
 #pragma comment(lib,"shlwapi.lib")
 //警告非表示
 #pragma warning(disable : 4305)
@@ -29,29 +34,60 @@
 //マクロ
 #define SAFE_RELEASE(x) if(x){x->Release(); x=NULL;}
 
-
+#define _CRTDBG_MAP_ALLOC #include <stdlib.h> #include <crtdbg.h>
 
 typedef std::tr1::unordered_map<std::string, std::vector<std::string>> TextureName_ut;
 //頂点の構造体
+struct SimpleVector4 {
+	float x, y, z, w;
+	SimpleVector4() {
+		w = 1.0f;
+	}
+};
+
+struct SimpleVector3 {
+	float x, y, z;
+
+};
+
+struct SimpleVector2 {
+	float x, y;
+
+};
+
+
 struct SimpleVertex
 {
-	D3DXVECTOR3 Pos; //位置
+	D3DXVECTOR4 Pos;
+	D3DXVECTOR3 Normal;
+	D3DXVECTOR2 UV;
 };
+
 
 struct SimpleIndex {
 	unsigned int x, y, z;
 };
 
-struct ModelData {
-	std::vector<SimpleVertex> Pos;
-	std::vector<unsigned int> Index;
 
+struct FBXModelData {
+
+	std::vector<SimpleVertex> Data;
+
+	//SimpleVector4*Pos;
+
+
+	unsigned int PosLength;
+	unsigned int *Index;
+	unsigned int IndexLength;
 };
 
 
 struct SIMPLESHADER_CONSTANT_BUFFER
 {
+	D3DXMATRIX mW;//ワールド、ビュー、射影の合成変換行列
 	D3DXMATRIX mWVP;//ワールド、ビュー、射影の合成変換行列
+	D3DXVECTOR4 LightDir;
+	D3DXVECTOR4 Diffuse;
 };
 
 class MYVBO {
@@ -132,8 +168,40 @@ private:
 };
 
 class MYFBX {
-public:
+private:
+	//ローカルメンバ関数用
+	struct T_LocalComputeClusterDeformation {
+		FbxAMatrix lReferenceGlobalInitPosition;	//初期位置
+		FbxAMatrix lReferenceGlobalCurrentPosition;	//現在位置
+		FbxAMatrix lAssociateGlobalInitPosition;	//初期位置
+		FbxAMatrix lAssociateGlobalCurrentPosition;	//現在位置
+		FbxAMatrix lClusterGlobalInitPosition;		//初期位置
+		FbxAMatrix lClusterGlobalCurrentPosition;	//現在位置
 
+		FbxAMatrix lReferenceGeometry;
+		FbxAMatrix lAssociateGeometry;
+		FbxAMatrix lClusterGeometry;
+
+		FbxAMatrix lClusterRelativeInitPosition;
+		FbxAMatrix lClusterRelativeCurrentPositionInverse;
+	};
+
+	struct T_LocalGetPoseMatrix {
+		FbxAMatrix lPoseMatrix;
+		FbxMatrix lMatrix;
+	};
+
+	struct T_LocalGetNodeRecursive {
+		FbxAMatrix lGlobalPosition;
+		FbxAMatrix lGeometryOffset;
+		FbxAMatrix lGlobalOffPosition;
+	};
+
+public:
+	//解放処理用
+	~MYFBX();
+
+	DWORD start, end;
 	void FbxInit(std::string vfileName);
 	void FbxProc();
 	void FbxDestroy();
@@ -157,7 +225,7 @@ public:
 	void LoadAnimationData();
 
 	//頂点を取得する
-	std::vector<std::vector<ModelData>> GetGeometryData();
+	std::vector<std::vector<FBXModelData*>>* GetGeometryData();
 
 	void GetNodeRecursive(FbxNode*pNode, FbxTime&pTime, FbxAnimLayer*pAnimLayer, FbxAMatrix&pParentGlobalPosition, FbxPose*pPose);
 
@@ -165,11 +233,11 @@ public:
 	void GetNode(FbxNode*pNode, FbxTime&pTime, FbxAnimLayer*FbxAnimLayer, FbxAMatrix&pParentGlobalPosition, FbxAMatrix& pGlobalPosition, FbxPose*pPose);
 
 	//ワールド座標を取得する
-	FbxAMatrix GetGlobalPosition(FbxNode*pNode, const FbxTime&pTime, FbxPose*pPose, FbxAMatrix*pParentGlobalPosition=(fbxsdk::FbxAMatrix*)0);
+	void GetGlobalPosition(FbxAMatrix&pDstMatrix,FbxNode*pNode, const FbxTime&pTime, FbxPose*pPose, FbxAMatrix*pParentGlobalPosition=(fbxsdk::FbxAMatrix*)0);
 	FbxAMatrix GetPoseMatrix(FbxPose*pPose, int pNodeIndex);
 
 	//ジオメトリのオフセットを取得する
-	FbxAMatrix GetGeometry(FbxNode*pNode);
+	void GetGeometry(FbxAMatrix&pSrcMatrix,FbxNode*pNode);
 
 	//アニメーション関係
 	bool SetCurrentAnimStack(int pIndex);
@@ -181,13 +249,26 @@ public:
 	void ReadVertexCacheData(FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray);
 
 	void ComputeShapeDeformation(FbxMesh*pMesh, FbxTime&pTime, FbxAnimLayer*pAnimLayer, FbxVector4*pVertexArray);
+
 	void ComputeSkinDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray, FbxPose*pPose);
+
 	void ComputeLinearDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray, FbxPose*pPose);
+	
 	void ComputeDualQuaternionDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh, FbxTime&pTime, FbxVector4*pVertexArray, FbxPose*pPose);
+	
 	void ComputeClusterDeformation(FbxAMatrix&pGlobalPosition, FbxMesh*pMesh,FbxCluster*pCluster,FbxAMatrix& pVertexTransformMatrix,  FbxTime pTime, FbxPose*pPose);
-	void MatrixScale(FbxAMatrix&pMatrix, double pValue);
+
+	void MatrixScale(FbxDouble*pMatrix, double pValue);
 	void MatrixAddToDiagonal(FbxAMatrix&pMatrix, double pValue);
-	void MatrixAdd(FbxAMatrix&pDstMatrix, FbxAMatrix&pSrcMatrix);
+	void MatrixAdd(FbxDouble*pDstMatrix, FbxDouble*pSrcMatrix);
+
+private:
+	//メソッド
+	void MatrixInverse(FbxDouble*pDstMatrix);
+	void MatrixFbxToD3DX(D3DXMATRIX*pDstMatrix, FbxDouble*pSrcMatrix);
+	void MatrixD3DXToFbx(FbxDouble*pDstMatrix, D3DXMATRIX*pSrcMatrix);
+	//FBXモデルデータの解放
+	void ReleaseGeometryData();
 private:
 
 	//メンバ宣言部分
@@ -210,8 +291,13 @@ private:
 
 	FbxUInt indexCount;
 
-	std::vector<std::vector<ModelData>> Geometry;
+	std::vector<std::vector<FBXModelData*>> Geometry;
 
+	//メンバ関数用ローカル変数群
+	//T_LocalComputeLinearDeformation tl_CLD;
+	T_LocalComputeClusterDeformation tlCCD;
+	T_LocalGetPoseMatrix tlGM;
+	T_LocalGetNodeRecursive tlGNR;
 };
 
 
@@ -249,5 +335,5 @@ public:
 	ID3D11Buffer* m_pVertexBuffer;
 	ID3D11Buffer*m_pIndexBuffer;
 	MYFBX fbx;
-	std::vector<std::vector<ModelData>>vert;
+	std::vector<std::vector<FBXModelData*>>*vert;
 };

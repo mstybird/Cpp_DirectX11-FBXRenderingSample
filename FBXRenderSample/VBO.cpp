@@ -221,6 +221,10 @@ bool MYVBO::Initialize(const FbxMesh * pMesh)
 			//法線があれば法線取得
 			if (mHasNormal) {
 				int lNormalIndex = lIndex;
+
+				
+
+
 				//法線もインデックスがあればそれを使って法線を取得する
 				if (lNormalElement->GetReferenceMode() == FbxLayerElement::eIndexToDirect) {
 					lNormalIndex = lNormalElement->GetIndexArray().GetAt(lIndex);
@@ -310,7 +314,7 @@ void MYVBO::UpdateVertexPosition(const FbxMesh * pMesh, const FbxVector4 * pVert
 {
 	lVertices.Clear();
 	int lVertexCount = 0;
-
+	
 	if (mAllByControlPoint) {
 		lVertexCount = pMesh->GetControlPointsCount();
 		lVertices.Reserve(lVertexCount*VERTEX_STRIDE);

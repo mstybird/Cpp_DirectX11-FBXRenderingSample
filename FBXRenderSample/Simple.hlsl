@@ -1,22 +1,40 @@
-
 //グローバル
 cbuffer global
 {
-	matrix g_mWVP; //ワールド、ビュー、射影の合成変換行列
+	matrix g_mW;//ワールド行列
+	matrix g_mWVP; //ワールドから射影までの変換行列
+	float4 g_vLightDir;  //ライトの方向ベクトル
+	float4 g_Diffuse = float4(1, 0, 0, 0); //拡散反射(色）
 };
+
+//構造体
+struct VS_OUTPUT
+{
+	float4 Pos : SV_POSITION;
+	float4 Color : COLOR0;
+};
+
 //
 //バーテックスシェーダー
 //
-float4 VS( float4 Pos : POSITION ) : SV_POSITION
+VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL, float2 Tex : TEXCOORD)
 {
-	Pos=mul(Pos,g_mWVP);
-	return Pos;
+	VS_OUTPUT output = (VS_OUTPUT)0;
+
+	output.Pos = mul(Pos, g_mWVP);
+	Normal.w = 0;//w=0で移動成分を反映させない（原理はシェーダーグルが詳しい）
+	Normal = mul(Normal, g_mW);
+	Normal = normalize(Normal);
+
+	output.Color = 1.0 * g_Diffuse * dot(Normal, g_vLightDir);//この式はランバートの余弦則
+
+	return output;
 }
+
 //
 //ピクセルシェーダー
 //
-float4 PS( float4 Pos : SV_POSITION ) : SV_Target
+float4 PS(VS_OUTPUT input) : SV_Target
 {
-	float4 color=float4(0,1,0,0);
-	return color;
+	return input.Color;
 }
