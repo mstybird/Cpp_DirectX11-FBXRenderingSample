@@ -55,7 +55,10 @@ MYVBO::MYVBO()
 
 MYVBO::~MYVBO()
 {
-
+	auto subMeshes = mSubMeshes.GetArray();
+	for (int i = 0; i < mSubMeshes.Size(); i++) {
+		delete subMeshes[i];
+	}
 }
 
 bool MYVBO::Initialize(const FbxMesh * pMesh)

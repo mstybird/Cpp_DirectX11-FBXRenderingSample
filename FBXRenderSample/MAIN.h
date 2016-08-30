@@ -68,17 +68,35 @@ struct SimpleIndex {
 	unsigned int x, y, z;
 };
 
+struct ColorChannel {
+	ColorChannel() {
+		Color[0] = 0.0f;
+		Color[1] = 0.0f;
+		Color[2] = 0.0f;
+		Color[3] = 1.0f;
+	}
+	FbxUInt TextureName;
+	FbxFloat Color[4];
+};
 
 struct FBXModelData {
 
-	std::vector<SimpleVertex> Data;
+	std::vector<SimpleVertex> Data;	//ジオメトリデータ
 
 	//SimpleVector4*Pos;
 
 
 	unsigned int PosLength;
-	unsigned int *Index;
-	unsigned int IndexLength;
+	unsigned int *Index;		//インデックスバッファ生成用
+	unsigned int IndexLength;	//インデックス数
+
+	ColorChannel *Emissive;		//エミッシブ
+	ColorChannel *Ambient;		//アンビエント
+	ColorChannel *Diffuse;		//ディフューズ
+	ColorChannel *Specular;		//スペキュラ
+
+
+
 };
 
 
@@ -144,27 +162,25 @@ public:
 		FbxString pFactorPropertyName,
 		FbxUInt&pTextureName
 	);
-	void SetCurrentMaterial()const {}
+	void SetCurrentMaterial(FBXModelData* pModelData);
 	bool HasTexture()const{}
 
 	//初期色
-	static void SetDefaultMaterial();
+	static void SetDefaultMaterial(FBXModelData* pModelData);
 private:
-	struct ColorChannel {
-		ColorChannel() {
-			Color[0] = 0.0f;
-			Color[1] = 0.0f;
-			Color[2] = 0.0f;
-			Color[3] = 1.0f;
-		}
-		FbxUInt TextureName;
-		FbxFloat Color[4];
-	};
+
 	ColorChannel Emissive;
 	ColorChannel Ambient;
 	ColorChannel Diffuse;
 	ColorChannel Specular;
 	FbxFloat Shinness;
+
+	static ColorChannel sEmissive;
+	static ColorChannel sAmbient;
+	static ColorChannel sDiffuse;
+	static ColorChannel sSpecular;
+
+
 };
 
 class MYFBX {
@@ -225,7 +241,8 @@ public:
 	void LoadAnimationData();
 
 	//頂点を取得する
-	std::vector<std::vector<FBXModelData*>>* GetGeometryData();
+	std::vector<std::vector<FBXModelData*>>* GetGeometryData(D3DXVECTOR3 *transPos);
+	std::vector<std::vector<FBXModelData*>>* GetGeometryData2(D3DXVECTOR3 *transPos);
 
 	void GetNodeRecursive(FbxNode*pNode, FbxTime&pTime, FbxAnimLayer*pAnimLayer, FbxAMatrix&pParentGlobalPosition, FbxPose*pPose);
 
@@ -292,12 +309,12 @@ private:
 	FbxUInt indexCount;
 
 	std::vector<std::vector<FBXModelData*>> Geometry;
-
+	std::vector<FbxNode*>nodemeshes;
 	//メンバ関数用ローカル変数群
 	//T_LocalComputeLinearDeformation tl_CLD;
-	T_LocalComputeClusterDeformation tlCCD;
-	T_LocalGetPoseMatrix tlGM;
-	T_LocalGetNodeRecursive tlGNR;
+	//T_LocalComputeClusterDeformation tlCCD;
+	//T_LocalGetPoseMatrix tlGM;
+	//T_LocalGetNodeRecursive tlGNR;
 };
 
 

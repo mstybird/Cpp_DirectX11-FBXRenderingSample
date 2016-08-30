@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="MAIN.cpp" />
+    <ClCompile Include="fbxProc.cpp">
+      <Filter>FbxParser</Filter>
+    </ClCompile>
+    <ClCompile Include="VBO.cpp">
+      <Filter>FbxParser</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MAIN.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Simple.hlsl" />
+    <None Include="hand_tex.fbx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="FbxParser">
+      <UniqueIdentifier>{be0449cb-e4e1-42cd-b924-a8c644f2088d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

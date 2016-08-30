@@ -20,12 +20,15 @@ INT WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR,INT)
 {
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	AllocConsole();
 	FILE *fp;
 	AllocConsole();
 	freopen_s(&fp, "CON", "w", stdout);
-#endif
+//#endif
+
+	clock_t start, end;
+	start = clock();
 	g_pMain=new MAIN;
 	if(g_pMain != NULL)
 	{
@@ -33,7 +36,12 @@ INT WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR,INT)
 		if(SUCCEEDED(g_pMain->InitWindow(hInstance,0,0,WINDOW_WIDTH,
 			WINDOW_HEIGHT,APP_NAME)))
 		{
-			if(SUCCEEDED(g_pMain->InitD3D()))
+
+
+			auto succeeded = g_pMain->InitD3D();
+			end = clock();
+			printf("Initialize:%dms\n", end - start);
+			if(SUCCEEDED(succeeded))
 			{
 				g_pMain->Loop();
 			}
@@ -42,10 +50,10 @@ INT WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR,INT)
 		//アプリ終了
 		delete g_pMain;
 	}
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	fclose(fp);
 	FreeConsole();
-#endif
+//#endif
 	int a = 0;
 
 	return 0;
@@ -312,7 +320,7 @@ HRESULT MAIN::InitShader()
 //
 //バーテックスバッファー作成
 
-
+D3DXVECTOR3 pos;
 
 HRESULT MAIN::InitPolygon()
 {
@@ -339,8 +347,12 @@ HRESULT MAIN::InitPolygon()
 	auto sv1 = vv;
 	auto sv2 = fvv;
 
-	fbx.FbxInit("res/humanoid2.fbx");
-	vert = fbx.GetGeometryData();
+	fbx.FbxInit("res/FuseModel.fbx");
+
+
+
+	vert = fbx.GetGeometryData2(&pos);
+	//auto vert2 = fbx.GetGeometryData2(&pos);
 
 
 	//上の頂点でバーテックスバッファー作成
@@ -381,27 +393,40 @@ void MAIN::Render()
 {
 
 	auto start = timeGetTime();
-	vert = fbx.GetGeometryData();
+	vert = fbx.GetGeometryData2(&pos);
 	auto end = timeGetTime();
-	FBXSDK_printf("Time:%2d\n", (int)(end - start));
+	//FBXSDK_printf("Time:%2d\n", (int)(end - start));
 
 	
 
 	//上の頂点でバーテックスバッファー作成
-	D3D11_BUFFER_DESC bd;
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex)*vert->at(0).at(0)->PosLength;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	bd.MiscFlags = 0;
+	ID3D11Buffer**pVertexBuffer = new ID3D11Buffer*[vert->size()];
+	ID3D11Buffer**pIndexBuffer = new ID3D11Buffer*[vert->size()];
 
-	D3D11_SUBRESOURCE_DATA InitData;
-	InitData.pSysMem = vert->at(0).at(0)->Data.data();;
-	if (FAILED(m_pDevice->CreateBuffer(&bd, &InitData, &m_pVertexBuffer)))
-	{
-	//	return E_FAIL;
+	for (int i = 0; i < vert->size(); i++) {
+		D3D11_BUFFER_DESC bd;
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(SimpleVertex)*vert->at(i).at(0)->PosLength;
+		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+		bd.MiscFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA InitData;
+		InitData.pSysMem = vert->at(i).at(0)->Data.data();;
+		m_pDevice->CreateBuffer(&bd, &InitData, &pVertexBuffer[i]);
+
+		//インデックスバッファーを作成
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(int) * vert->at(i).at(0)->IndexLength;
+		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+		bd.MiscFlags = 0;
+		InitData.pSysMem = vert->at(i).at(0)->Index;
+		InitData.SysMemPitch = 0;
+		InitData.SysMemSlicePitch = 0;
+		m_pDevice->CreateBuffer(&bd, &InitData, &pIndexBuffer[i]);
+
 	}
-
 
 
 
@@ -416,11 +441,11 @@ void MAIN::Render()
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
 	//ワールドトランスフォーム（絶対座標変換）
-	D3DXMatrixScaling(&mWorld, 1,1,1);
-	D3DXMatrixRotationY( &mRotate, /*timeGetTime()/1000.0f*/0 );//単純にyaw回転させる
+	D3DXMatrixTranslation(&mWorld, pos.x,pos.y,pos.z);
+	D3DXMatrixRotationY( &mRotate, timeGetTime()/1000.0f );//単純にyaw回転させる
 	// ビュートランスフォーム（視点座標変換）
-	D3DXVECTOR3 vEyePt( 0.0f, 20.0f,-120.0f ); //カメラ（視点）位置
-	D3DXVECTOR3 vLookatPt( 0.0f, 20.0f, 0.0f );//注視位置
+	D3DXVECTOR3 vEyePt( 0.0f, 100.0f,-300.0f ); //カメラ（視点）位置
+	D3DXVECTOR3 vLookatPt( 0.0f, 60.0f, 0.0f );//注視位置
 	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );//上方位置
 	D3DXMatrixLookAtLH( &mView, &vEyePt, &vLookatPt, &vUpVec );
 	// プロジェクショントランスフォーム（射影変換）
@@ -434,10 +459,10 @@ void MAIN::Render()
 	if( SUCCEEDED( m_pDeviceContext->Map( m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData ) ) )
 	{
 		//ワールド、カメラ、射影行列を渡す
-		D3DXMATRIX m=(mRotate*mWorld)*mView*mProj;
+		D3DXMATRIX m=(mWorld)*mView*mProj;
 		D3DXMatrixTranspose( &m, &m );
 		cb.mWVP=m;
-		cb.mW = mRotate*mWorld;
+		cb.mW = mWorld;
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		cb.LightDir = D3DXVECTOR4(1, 0, -1, 0);
 		cb.Diffuse = D3DXVECTOR4(1, 0, 0, 0);
@@ -450,24 +475,35 @@ void MAIN::Render()
 	m_pDeviceContext->VSSetConstantBuffers(0,1,&m_pConstantBuffer );//バーテックスバッファーで使う
 	m_pDeviceContext->PSSetConstantBuffers(0,1,&m_pConstantBuffer );//ピクセルシェーダーでの使う
 	//バーテックスバッファーをセット
-	UINT stride = sizeof(SimpleVertex);
-	UINT offset = 0;
-	m_pDeviceContext->IASetVertexBuffers( 0, 1, &m_pVertexBuffer, &stride, &offset );
-
-
-	stride = sizeof(int);
-	offset = 0;
-	m_pDeviceContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 
 	//頂点インプットレイアウトをセット
 	m_pDeviceContext->IASetInputLayout( m_pVertexLayout );
 	//プリミティブ・トポロジーをセット
-	m_pDeviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-	//プリミティブをレンダリング
-	//m_pDeviceContext->Draw(vert[0][0].Pos.size(),3);
-	m_pDeviceContext->DrawIndexed(vert->at(0).at(0)->IndexLength, 0, 0);
-	m_pSwapChain->Present(1,0);//画面更新（バックバッファをフロントバッファに）	
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+
+	for (int i = 0; i < vert->size(); i++) {
+
+		UINT stride = sizeof(SimpleVertex);
+		UINT offset = 0;
+		m_pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer[i], &stride, &offset);
+		stride = sizeof(int);
+		offset = 0;
+		m_pDeviceContext->IASetIndexBuffer(pIndexBuffer[i], DXGI_FORMAT_R32_UINT, 0);
+		m_pDeviceContext->DrawIndexed(vert->at(i).at(0)->IndexLength, 0, 0);
+	}
+
+	for (int i = 0; i < vert->size(); i++) {
+		pVertexBuffer[i]->Release();
+		pIndexBuffer[i]->Release();
+	}
+
+	delete[] pVertexBuffer;
+	delete[] pIndexBuffer;
+
+
+	m_pSwapChain->Present(0,0);//画面更新（バックバッファをフロントバッファに）	
 }
 
 //
@@ -488,6 +524,13 @@ void MAIN::DestroyD3D()
 	SAFE_RELEASE(m_pDeviceContext);
 	SAFE_RELEASE(m_pDevice);
 }
+
+
+ColorChannel MaterialCache::sEmissive;
+ColorChannel MaterialCache::sAmbient;
+ColorChannel MaterialCache::sDiffuse;
+ColorChannel MaterialCache::sSpecular;
+
 
 MaterialCache::MaterialCache():
 	Shinness(0)
@@ -566,6 +609,24 @@ FbxDouble3 MaterialCache::GetMaterialProperty(const FbxSurfaceMaterial * pMateri
 	}
 
 	return lResult;
+}
+
+void MaterialCache::SetCurrentMaterial(FBXModelData* pModelData)
+{
+	pModelData->Emissive = &Emissive;
+	pModelData->Ambient = &Ambient;
+	pModelData->Diffuse = &Diffuse;
+	pModelData->Specular = &Specular;
+	return;
+}
+
+void MaterialCache::SetDefaultMaterial(FBXModelData * pModelData)
+{
+	pModelData->Emissive = &sEmissive;
+	pModelData->Ambient = &sAmbient;
+	pModelData->Diffuse = &sDiffuse;
+	pModelData->Specular = &sSpecular;
+
 }
 
 
