@@ -301,16 +301,29 @@ HRESULT MAIN::InitShader()
 	//コンスタントバッファー作成　ここでは変換行列渡し用
 	D3D11_BUFFER_DESC cb;
 	cb.BindFlags= D3D11_BIND_CONSTANT_BUFFER;
-	cb.ByteWidth= sizeof( SIMPLESHADER_CONSTANT_BUFFER );
+	cb.ByteWidth= sizeof( SIMPLESHADER_CONSTANT_BUFFER1 );
 	cb.CPUAccessFlags=D3D11_CPU_ACCESS_WRITE;
 	cb.MiscFlags	=0;
 	cb.StructureByteStride=0;
 	cb.Usage=D3D11_USAGE_DYNAMIC;
 
-	if( FAILED(m_pDevice->CreateBuffer( &cb,NULL,&m_pConstantBuffer)))
+	if( FAILED(m_pDevice->CreateBuffer( &cb,NULL,&m_pConstantBuffer1)))
 	{
 		return E_FAIL;
 	}
+
+	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cb.ByteWidth = sizeof(SIMPLESHADER_CONSTANT_BUFFER2);
+	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cb.MiscFlags = 0;
+	cb.StructureByteStride = 0;
+	cb.Usage = D3D11_USAGE_DYNAMIC;
+
+	if (FAILED(m_pDevice->CreateBuffer(&cb, NULL, &m_pConstantBuffer2)))
+	{
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 //
@@ -425,9 +438,6 @@ void MAIN::Render()
 			InitData.SysMemSlicePitch = 0;
 			m_pDevice->CreateBuffer(&bd, &InitData, &pIndexBuffer[i][j]);
 		}
-
-		
-
 	}
 
 
@@ -457,8 +467,8 @@ void MAIN::Render()
 	m_pDeviceContext->PSSetShader(m_pPixelShader,NULL,0);
 	//シェーダーのコンスタントバッファーに各種データを渡す
 	D3D11_MAPPED_SUBRESOURCE pData;
-	SIMPLESHADER_CONSTANT_BUFFER cb;
-	if( SUCCEEDED( m_pDeviceContext->Map( m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData ) ) )
+	SIMPLESHADER_CONSTANT_BUFFER1 cb;
+	if( SUCCEEDED( m_pDeviceContext->Map( m_pConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData ) ) )
 	{
 		//ワールド、カメラ、射影行列を渡す
 		D3DXMATRIX m=(mRotate*mWorld)*mView*mProj;
@@ -467,18 +477,18 @@ void MAIN::Render()
 		cb.mW = mRotate*mWorld;
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		cb.LightDir = D3DXVECTOR4(1, 0, -1, 0);
-		cb.Diffuse = vert->at(0).at(0)->Diffuse->Color;
+		//cb.Diffuse = vert->at(0).at(0)->Diffuse->Color;
 
 		memcpy_s( pData.pData, pData.RowPitch, (void*)( &cb), sizeof( cb ) );
-		m_pDeviceContext->Unmap( m_pConstantBuffer, 0 );
+		m_pDeviceContext->Unmap( m_pConstantBuffer1, 0 );
 	}
 
 	//このコンスタントバッファーを、どのシェーダーで使うかを指定
-	m_pDeviceContext->VSSetConstantBuffers(0,1,&m_pConstantBuffer );//バーテックスバッファーで使う
-	m_pDeviceContext->PSSetConstantBuffers(0,1,&m_pConstantBuffer );//ピクセルシェーダーでの使う
+	m_pDeviceContext->VSSetConstantBuffers(0,1,&m_pConstantBuffer1 );//バーテックスバッファーで使う
+	m_pDeviceContext->PSSetConstantBuffers(0,1,&m_pConstantBuffer1 );//ピクセルシェーダーでの使う
 	//バーテックスバッファーをセット
 
-
+	
 	//頂点インプットレイアウトをセット
 	m_pDeviceContext->IASetInputLayout( m_pVertexLayout );
 	//プリミティブ・トポロジーをセット
@@ -487,6 +497,22 @@ void MAIN::Render()
 
 	for (int i = 0; i < vert->size(); i++) {
 		for (int j = 0; j < vert->at(i).size(); j++) {
+
+			SIMPLESHADER_CONSTANT_BUFFER2 cb;
+			if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer2, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
+			{
+				cb.Diffuse = vert->at(0).at(0)->Diffuse->Color;
+				memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
+				m_pDeviceContext->Unmap(m_pConstantBuffer2, 0);
+			}
+
+			//このコンスタントバッファーを、どのシェーダーで使うかを指定
+			m_pDeviceContext->VSSetConstantBuffers(1, 1, &m_pConstantBuffer2);//バーテックスバッファーで使う
+			m_pDeviceContext->PSSetConstantBuffers(1, 1, &m_pConstantBuffer2);//ピクセルシェーダーでの使う
+
+
+
+
 			UINT stride = sizeof(SimpleVertex);
 			UINT offset = 0;
 			m_pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer[i][j], &stride, &offset);
@@ -523,7 +549,8 @@ void MAIN::Render()
 void MAIN::DestroyD3D()
 {
 	SAFE_RELEASE(m_pRasterizerState);
-	SAFE_RELEASE(m_pConstantBuffer);
+	SAFE_RELEASE(m_pConstantBuffer1);
+	SAFE_RELEASE(m_pConstantBuffer2);
 	SAFE_RELEASE(m_pVertexShader);
 	SAFE_RELEASE(m_pPixelShader);
 	SAFE_RELEASE(m_pVertexBuffer);

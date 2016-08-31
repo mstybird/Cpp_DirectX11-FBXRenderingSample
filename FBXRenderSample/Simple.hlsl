@@ -1,11 +1,14 @@
 //グローバル
-cbuffer global
+cbuffer global:register(b0)
 {
 	matrix g_mW;//ワールド行列
 	matrix g_mWVP; //ワールドから射影までの変換行列
 	float4 g_vLightDir;  //ライトの方向ベクトル
-	float4 g_Diffuse = float4(1, 0, 0, 0); //拡散反射(色）
 };
+
+cbuffer global:register(b1) {
+	float4 g_Diffuse = float4(1, 0, 0, 0); //拡散反射(色）
+}
 
 //構造体
 struct VS_OUTPUT

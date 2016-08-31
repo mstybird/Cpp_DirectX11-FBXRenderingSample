@@ -41,13 +41,18 @@
 #include"DX11FbxLoader.h"
 
 
-struct SIMPLESHADER_CONSTANT_BUFFER
+struct SIMPLESHADER_CONSTANT_BUFFER1
 {
 	D3DXMATRIX mW;//ワールド、ビュー、射影の合成変換行列
 	D3DXMATRIX mWVP;//ワールド、ビュー、射影の合成変換行列
 	D3DXVECTOR4 LightDir;
+};
+
+struct SIMPLESHADER_CONSTANT_BUFFER2
+{
 	D3DXVECTOR4 Diffuse;
 };
+
 //MAINクラス　定義
 class MAIN
 {
@@ -77,7 +82,9 @@ public:
 	ID3D11InputLayout* m_pVertexLayout;
 	ID3D11VertexShader* m_pVertexShader;
 	ID3D11PixelShader* m_pPixelShader;
-	ID3D11Buffer* m_pConstantBuffer;
+
+	ID3D11Buffer* m_pConstantBuffer1;
+	ID3D11Buffer* m_pConstantBuffer2;
 	//↓モデルごと
 	ID3D11Buffer* m_pVertexBuffer;
 	ID3D11Buffer*m_pIndexBuffer;

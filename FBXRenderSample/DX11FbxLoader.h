@@ -32,7 +32,7 @@ struct SimpleVertex
 	D3DXVECTOR3 Normal;
 	D3DXVECTOR2 UV;
 };
-
+constexpr int GEOMETRYSIZE = sizeof(SimpleVertex);
 
 struct FBXModelData {
 
