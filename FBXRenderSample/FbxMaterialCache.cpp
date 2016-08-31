@@ -53,33 +53,14 @@ bool FbxMaterialCache::Initialize(const FbxSurfaceMaterial * pMaterial)
 	return true;
 }
 
-FbxDouble3 FbxMaterialCache::GetMaterialProperty(const FbxSurfaceMaterial * pMaterial, FbxString pPropertyName, FbxString pFactorPropertyName, FbxString & pTextureName)
+FbxDouble3 FbxMaterialCache::GetMaterialProperty(const FbxSurfaceMaterial * pMaterial, std::string pPropertyName, std::string pFactorPropertyName, std::string & pTextureName)
 {
 
 
 
 	FbxDouble3 lResult(0, 0, 0);
-	const FbxProperty lProperty = pMaterial->FindProperty(pPropertyName);
-	const FbxProperty lFactorProperty = pMaterial->FindProperty(pFactorPropertyName);
-
-	int layerNum = lProperty.GetSrcObjectCount();
-	if (layerNum == 0) {
-		//テクスチャ枚数チェック
-		int numGeneralTexture = lProperty.GetSrcObjectCount(FbxTexture::ClassId);
-		//各テクスチャをチェック
-		std::vector<std::string>textureNames;
-		for (int i = 0; i < numGeneralTexture; i++) {
-			FbxTexture* lTexture = FbxCast<FbxTexture>(lProperty.GetSrcObject(FbxTexture::ClassId, i));
-			auto lFileTexture = FbxCast<FbxFileTexture>(lTexture);
-
-			textureNames.push_back(lFileTexture->GetFileName());
-		}
-
-		if (textureNames.size() != 0) {
-			auto i = 10;
-		}
-
-	}
+	const FbxProperty lProperty = pMaterial->FindProperty(pPropertyName.c_str());
+	const FbxProperty lFactorProperty = pMaterial->FindProperty(pFactorPropertyName.c_str());
 
 
 

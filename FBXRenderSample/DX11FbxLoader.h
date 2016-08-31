@@ -1,10 +1,10 @@
 #pragma once
 //警告非表示
-#pragma warning(disable : 4005)
+
 #include<fbxsdk.h>
 #include<string>
 #include<vector>
-#include<D3DX10.h>
+#include<D3DX9.h>
 #ifdef _DEBUG
 #pragma comment(lib,"libfbxsdk-md.lib")
 #else
@@ -13,43 +13,7 @@
 #include<unordered_map>
 typedef std::tr1::unordered_map<std::string, std::vector<std::string>> TextureName_ut;
 
-
-
-struct ColorChannel {
-	ColorChannel() {
-		Color[0] = 0.0f;
-		Color[1] = 0.0f;
-		Color[2] = 0.0f;
-		Color[3] = 1.0f;
-	}
-	FbxString TextureName;
-	FbxFloat Color[4];
-};
-
-struct SimpleVertex
-{
-	D3DXVECTOR4 Pos;
-	D3DXVECTOR3 Normal;
-	D3DXVECTOR2 UV;
-};
-constexpr int GEOMETRYSIZE = sizeof(SimpleVertex);
-
-struct FBXModelData {
-
-	std::vector<SimpleVertex> Data;	//ジオメトリデータ
-
-	unsigned int PosLength;
-	unsigned int *Index;		//インデックスバッファ生成用
-	unsigned int IndexLength;	//インデックス数
-
-	ColorChannel *Emissive;		//エミッシブ
-	ColorChannel *Ambient;		//アンビエント
-	ColorChannel *Diffuse;		//ディフューズ
-	ColorChannel *Specular;		//スペキュラ
-
-
-
-};
+#include"DX11FbxResource.h"
 
 
 #include"FbxVBO.h"
@@ -61,11 +25,20 @@ class DX11FbxLoader {
 public:
 	//解放処理用
 	~DX11FbxLoader();
-	void FbxInit(std::string vfileName);
+	void FbxInit(std::string vfileName, bool animationLoad = true);
+	//アニメーションデータのみ別で読み込む
+	//作成途中
+	void FbxLoadAnimationFromFile(std::string vfileName);
+	void LoadAnimationRecursive(FbxScene* pScene, FbxAnimLayer* pAnimLayer);
+	void LoadAnimationRecursive(FbxNode*pNode, FbxAnimLayer*pAnimLayer);
 	//FBXクラス解放
 	void FbxDestroy();
 	//モデルデータを取得する
 	std::vector<std::vector<FBXModelData*>>* GetGeometryData2(D3DXVECTOR3 *transPos);
+	//アニメーションの切り替え
+	void SetAnimation(std::string pName);
+	void SetAnimation(int pIndex);
+
 private:
 	//FBXファイル読み込み
 	void FbxLoadFromFile();	
@@ -89,8 +62,8 @@ private:
 
 
 
-
 	//アニメーション関係
+	//アニメーションのセット
 	bool SetCurrentAnimStack(int pIndex);
 	bool SetCurrentPoseIndex(int pPoseIndex);
 	const FbxArray<FbxString*>&GetAnimStackNameArray()const { return AnimStackNameArray; }
@@ -104,21 +77,24 @@ private:
 	FbxString WindowMessage;	//ウィンドウメッセージ用
 	FbxManager * SdkManager;			//FBXマネージャ
 	FbxScene * Scene;					//FBXシーン
+	FbxScene * SceneAnim;				//FBXシーン(アニメーション用)
 	FbxImporter * Importer;			//FBXインポータ
-	FbxAnimLayer * CurrentAnimLayer;	//FBXアニメーション
 	FbxNode * SelectedNode;			//FBXノード
 
-	TextureName_ut TextureFileName;
+	//TextureName_ut TextureFileName;
 
 	int PoseIndex;								//ポーズのインデクス
 	FbxArray<FbxString*> AnimStackNameArray;	//アニメーション名リスト
 	FbxArray<FbxPose*> PoseArray;				//ポーズのリスト
-
-	FbxTime FrameTime, Start, Stop, CurrentTime;
 	FbxTime Cache_Start, Cache_Stop;
 
-	FbxUInt indexCount;
+	//アニメーション情報
+	FbxAnimLayer * CurrentAnimLayer;	//FBXアニメーション
+	FbxTime FrameTime, Start, Stop, CurrentTime;
 
-	std::vector<std::vector<FBXModelData*>> Geometry;
-	std::vector<FbxNode*>nodemeshes;
+
+	std::unordered_map<std::string, int>AnimData;		//アニメーションスタック
+	std::vector<std::vector<FBXModelData*>> Geometry;	//メッシュデータ
+	std::vector<FbxNode*>nodemeshes;	//メッシュ情報を持つノードリスト
+	std::vector<FbxNode*>nodeAnimeMeshes;	//メッシュ情報を持つノードリスト(アニメーション)
 };

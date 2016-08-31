@@ -39,5 +39,6 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL, float2 Tex : TEXCOOR
 //
 float4 PS(VS_OUTPUT input) : SV_Target
 {
+	
 	return input.Color;
 }

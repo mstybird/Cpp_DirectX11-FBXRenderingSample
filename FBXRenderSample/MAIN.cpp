@@ -236,11 +236,7 @@ HRESULT MAIN::InitD3D()
 	
 	m_pDevice->CreateRasterizerState(&rdc,&m_pRasterizerState);
 	m_pDeviceContext->RSSetState(m_pRasterizerState);	
-	//シェーダー初期化
-	if(FAILED(InitShader()))
-	{
-		return E_FAIL;
-	}
+
 	//ポリゴン作成
 	if(FAILED(InitPolygon()))
 	{
@@ -249,149 +245,25 @@ HRESULT MAIN::InitD3D()
 
 	return S_OK;
 }
-//
-//
-//シェーダーを作成　頂点レイアウトを定義
-HRESULT MAIN::InitShader()
-{
-	//hlslファイル読み込み ブロブ作成　ブロブとはシェーダーの塊みたいなもの。XXシェーダーとして特徴を持たない。後で各種シェーダーに成り得る。
-	ID3DBlob *pCompiledShader=NULL;
-	ID3DBlob *pErrors=NULL;
-	//ブロブからバーテックスシェーダー作成
-	if(FAILED(D3DX11CompileFromFile("Simple.hlsl",NULL,NULL,"VS","vs_5_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
-	{
-		MessageBox(0,"hlsl読み込み失敗",NULL,MB_OK);
-		return E_FAIL;
-	}
-	SAFE_RELEASE(pErrors);
 
-	if(FAILED(m_pDevice->CreateVertexShader(pCompiledShader->GetBufferPointer(),pCompiledShader->GetBufferSize(),NULL,&m_pVertexShader)))
-	{
-		SAFE_RELEASE(pCompiledShader);
-		MessageBox(0,"バーテックスシェーダー作成失敗",NULL,MB_OK);
-		return E_FAIL;
-	}
-	//頂点インプットレイアウトを定義	
-	D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }, 
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-	UINT numElements = sizeof(layout)/sizeof(layout[0]);
-	//頂点インプットレイアウトを作成
-	if( FAILED( m_pDevice->CreateInputLayout( layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), &m_pVertexLayout ) ) )
-	{
-		return FALSE;
-	}
-	//ブロブからピクセルシェーダー作成
-	if(FAILED(D3DX11CompileFromFile("Simple.hlsl",NULL,NULL,"PS","ps_5_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
-	{
-		MessageBox(0,"hlsl読み込み失敗",NULL,MB_OK);
-		return E_FAIL;
-	}
-	SAFE_RELEASE(pErrors);
-	if(FAILED(m_pDevice->CreatePixelShader(pCompiledShader->GetBufferPointer(),pCompiledShader->GetBufferSize(),NULL,&m_pPixelShader)))
-	{
-		SAFE_RELEASE(pCompiledShader);
-		MessageBox(0,"ピクセルシェーダー作成失敗",NULL,MB_OK);
-		return E_FAIL;
-	}
-	SAFE_RELEASE(pCompiledShader);		
-	//コンスタントバッファー作成　ここでは変換行列渡し用
-	D3D11_BUFFER_DESC cb;
-	cb.BindFlags= D3D11_BIND_CONSTANT_BUFFER;
-	cb.ByteWidth= sizeof( SIMPLESHADER_CONSTANT_BUFFER1 );
-	cb.CPUAccessFlags=D3D11_CPU_ACCESS_WRITE;
-	cb.MiscFlags	=0;
-	cb.StructureByteStride=0;
-	cb.Usage=D3D11_USAGE_DYNAMIC;
-
-	if( FAILED(m_pDevice->CreateBuffer( &cb,NULL,&m_pConstantBuffer1)))
-	{
-		return E_FAIL;
-	}
-
-	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cb.ByteWidth = sizeof(SIMPLESHADER_CONSTANT_BUFFER2);
-	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	cb.MiscFlags = 0;
-	cb.StructureByteStride = 0;
-	cb.Usage = D3D11_USAGE_DYNAMIC;
-
-	if (FAILED(m_pDevice->CreateBuffer(&cb, NULL, &m_pConstantBuffer2)))
-	{
-		return E_FAIL;
-	}
-
-	return S_OK;
-}
-//
-//
 //バーテックスバッファー作成
 
 D3DXVECTOR3 pos;
 
 HRESULT MAIN::InitPolygon()
 {
-	D3DXVECTOR3 v0(1,0,0);
-	D3DXVECTOR3 v1(0,2,0);
-	D3DXVECTOR3 v2(1,1,1);
-	D3DXVECTOR3 vv,vv1, vv2;
+	DX11BaseShader::Init(m_pDevice, m_pDeviceContext);
+	shader.Init();
+	shader.InitVertex("Simple.hlsl");
+	shader.InitPixel("Simple.hlsl");
 
-	vv1 = v1 - v0;
-	vv2 = v2 - v1;
-	D3DXVec3Cross(&vv, &vv1, &vv2);
-	D3DXVec3Normalize(&vv, &vv);
-
-
-	FbxVector4 fv0(1, 0, 0);
-	FbxVector4 fv1(0, 2, 0);
-	FbxVector4 fv2(1, 1, 1);
-	FbxVector4 fvv, fvv1, fvv2;
-	fvv1 = fv1 - fv0;
-	fvv2 = fv2 - fv1;
-	fvv = fvv1.CrossProduct(fvv2);
-	fvv.Normalize();
-
-	auto sv1 = vv;
-	auto sv2 = fvv;
-
-	fbx.FbxInit("res/Chips.fbx");
-
-
-
-	vert = fbx.GetGeometryData2(&pos);
-
-
-	//上の頂点でバーテックスバッファー作成
-	D3D11_BUFFER_DESC bd;
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex)*vert->at(0).at(0)->PosLength;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	bd.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA InitData;
-	InitData.pSysMem = vert->at(0).at(0)->Data.data();
-	if( FAILED( m_pDevice->CreateBuffer( &bd, &InitData, &m_pVertexBuffer ) ) )
-	{
-		return E_FAIL;
-	}
-
-
-	//インデックスバッファーを作成
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(int) * vert->at(0).at(0)->IndexLength;
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	bd.MiscFlags = 0;
-	InitData.pSysMem = vert->at(0).at(0)->Index;
-	InitData.SysMemPitch = 0;
-	InitData.SysMemSlicePitch = 0;
-	if (FAILED(m_pDevice->CreateBuffer(&bd, &InitData, &m_pIndexBuffer)))
-		return E_FAIL;
-
+	DX11FbxManager::InitDevice(m_pDevice, m_pDeviceContext);
+	fbx.Initialize();
+	fbx.LoadFile("res/humanoid2.fbx",true);
+	
+	//どのシェーダーでレンダリングするか登録
+	DX11Render::Initialize(m_pDevice, m_pDeviceContext);
+	render.shader = &shader;
 
 	return S_OK;
 }
@@ -400,48 +272,6 @@ HRESULT MAIN::InitPolygon()
 //シーンを画面にレンダリング
 void MAIN::Render()
 {
-
-	auto start = timeGetTime();
-	vert = fbx.GetGeometryData2(&pos);
-	auto end = timeGetTime();
-	//FBXSDK_printf("Time:%2d\n", (int)(end - start));
-
-	
-
-	//上の頂点でバーテックスバッファー作成
-	ID3D11Buffer***pVertexBuffer = new ID3D11Buffer**[vert->size()];
-	ID3D11Buffer***pIndexBuffer = new ID3D11Buffer**[vert->size()];
-
-	for (int i = 0; i < vert->size(); i++) {
-		pVertexBuffer[i] = new ID3D11Buffer*[vert->at(i).size()];
-		pIndexBuffer[i] = new ID3D11Buffer*[vert->at(i).size()];
-		for (int j = 0; j < vert->at(i).size(); j++) {
-			D3D11_BUFFER_DESC bd;
-			bd.Usage = D3D11_USAGE_DEFAULT;
-			bd.ByteWidth = sizeof(SimpleVertex)*vert->at(i).at(j)->PosLength;
-			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-			bd.CPUAccessFlags = 0;
-			bd.MiscFlags = 0;
-
-			D3D11_SUBRESOURCE_DATA InitData;
-			InitData.pSysMem = vert->at(i).at(j)->Data.data();;
-			m_pDevice->CreateBuffer(&bd, &InitData, &pVertexBuffer[i][j]);
-
-			//インデックスバッファーを作成
-			bd.Usage = D3D11_USAGE_DEFAULT;
-			bd.ByteWidth = sizeof(int) * vert->at(i).at(j)->IndexLength;
-			bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-			bd.CPUAccessFlags = 0;
-			bd.MiscFlags = 0;
-			InitData.pSysMem = vert->at(i).at(j)->Index;
-			InitData.SysMemPitch = 0;
-			InitData.SysMemSlicePitch = 0;
-			m_pDevice->CreateBuffer(&bd, &InitData, &pIndexBuffer[i][j]);
-		}
-	}
-
-
-
 
 
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
@@ -453,92 +283,28 @@ void MAIN::Render()
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
 	//ワールドトランスフォーム（絶対座標変換）
-	D3DXMatrixTranslation(&mWorld, pos.x,pos.y,pos.z);
-	D3DXMatrixRotationY( &mRotate, timeGetTime()/1000.0f );//単純にyaw回転させる
+	D3DXMatrixTranslation(&mWorld, 0, 0, 0);
+	D3DXMatrixRotationY( &mRotate, /*timeGetTime()/1000.0f*/0 );//単純にyaw回転させる
 	// ビュートランスフォーム（視点座標変換）
-	D3DXVECTOR3 vEyePt( 0.0f, 0,-2.0f ); //カメラ（視点）位置
+	D3DXVECTOR3 vEyePt( 0.0f, 0,-100.0f ); //カメラ（視点）位置
 	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );//注視位置
 	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );//上方位置
 	D3DXMatrixLookAtLH( &mView, &vEyePt, &vLookatPt, &vUpVec );
 	// プロジェクショントランスフォーム（射影変換）
 	D3DXMatrixPerspectiveFovLH( &mProj, D3DX_PI/4, (FLOAT)WINDOW_WIDTH/(FLOAT)WINDOW_HEIGHT, 0.1f, 2000.0f );
-	//使用するシェーダーの登録
-	m_pDeviceContext->VSSetShader(m_pVertexShader,NULL,0);
-	m_pDeviceContext->PSSetShader(m_pPixelShader,NULL,0);
-	//シェーダーのコンスタントバッファーに各種データを渡す
-	D3D11_MAPPED_SUBRESOURCE pData;
-	SIMPLESHADER_CONSTANT_BUFFER1 cb;
-	if( SUCCEEDED( m_pDeviceContext->Map( m_pConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData ) ) )
-	{
-		//ワールド、カメラ、射影行列を渡す
-		D3DXMATRIX m=(mRotate*mWorld)*mView*mProj;
-		D3DXMatrixTranspose( &m, &m );
-		cb.mWVP=m;
-		cb.mW = mRotate*mWorld;
-		D3DXMatrixTranspose(&cb.mW, &cb.mW);
-		cb.LightDir = D3DXVECTOR4(1, 0, -1, 0);
-		//cb.Diffuse = vert->at(0).at(0)->Diffuse->Color;
 
-		memcpy_s( pData.pData, pData.RowPitch, (void*)( &cb), sizeof( cb ) );
-		m_pDeviceContext->Unmap( m_pConstantBuffer1, 0 );
-	}
-
-	//このコンスタントバッファーを、どのシェーダーで使うかを指定
-	m_pDeviceContext->VSSetConstantBuffers(0,1,&m_pConstantBuffer1 );//バーテックスバッファーで使う
-	m_pDeviceContext->PSSetConstantBuffers(0,1,&m_pConstantBuffer1 );//ピクセルシェーダーでの使う
-	//バーテックスバッファーをセット
-
-	
-	//頂点インプットレイアウトをセット
-	m_pDeviceContext->IASetInputLayout( m_pVertexLayout );
-	//プリミティブ・トポロジーをセット
-	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-
-	for (int i = 0; i < vert->size(); i++) {
-		for (int j = 0; j < vert->at(i).size(); j++) {
-
-			SIMPLESHADER_CONSTANT_BUFFER2 cb;
-			if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer2, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
-			{
-				cb.Diffuse = vert->at(0).at(0)->Diffuse->Color;
-				memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-				m_pDeviceContext->Unmap(m_pConstantBuffer2, 0);
-			}
-
-			//このコンスタントバッファーを、どのシェーダーで使うかを指定
-			m_pDeviceContext->VSSetConstantBuffers(1, 1, &m_pConstantBuffer2);//バーテックスバッファーで使う
-			m_pDeviceContext->PSSetConstantBuffers(1, 1, &m_pConstantBuffer2);//ピクセルシェーダーでの使う
+	fbx.Update();
+	//fbx.SetMatrix(mRotate*mWorld, mView, mProj);
+	resource.mWorld = mRotate;
+	resource.mView = mView;
+	resource.mProj = mProj;
 
 
 
-
-			UINT stride = sizeof(SimpleVertex);
-			UINT offset = 0;
-			m_pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer[i][j], &stride, &offset);
-			stride = sizeof(int);
-			offset = 0;
-			m_pDeviceContext->IASetIndexBuffer(pIndexBuffer[i][j], DXGI_FORMAT_R32_UINT, 0);
-			m_pDeviceContext->DrawIndexed(vert->at(i).at(j)->IndexLength, 0, 0);
-
-		}
-
-	}
-
-	for (int i = 0; i < vert->size(); i++) {
-		for (int j = 0; j < vert->at(i).size(); j++) {
-			pVertexBuffer[i][j]->Release();
-			pIndexBuffer[i][j]->Release();
-		}
-		delete[] pVertexBuffer[i];
-		delete[] pIndexBuffer[i];
-		pVertexBuffer[i] = nullptr;
-		pIndexBuffer[i] = nullptr;
-	}
-
-	delete[] pVertexBuffer;
-	delete[] pIndexBuffer;
-
+	render.Render(&fbx, &resource);
+	D3DXMatrixTranslation(&mWorld, 30.5, 0, 0);
+	resource.mWorld = mRotate*mWorld;
+	render.Render(&fbx, &resource);
 
 	m_pSwapChain->Present(1,0);//画面更新（バックバッファをフロントバッファに）	
 }
@@ -549,12 +315,6 @@ void MAIN::Render()
 void MAIN::DestroyD3D()
 {
 	SAFE_RELEASE(m_pRasterizerState);
-	SAFE_RELEASE(m_pConstantBuffer1);
-	SAFE_RELEASE(m_pConstantBuffer2);
-	SAFE_RELEASE(m_pVertexShader);
-	SAFE_RELEASE(m_pPixelShader);
-	SAFE_RELEASE(m_pVertexBuffer);
-	SAFE_RELEASE(m_pVertexLayout);
 	SAFE_RELEASE(m_pSwapChain);
 	SAFE_RELEASE(m_pBackBuffer_TexRTV);
 	SAFE_RELEASE(m_pBackBuffer_DSTexDSV);

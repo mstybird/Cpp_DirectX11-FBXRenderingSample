@@ -63,6 +63,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2016.1\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -80,6 +81,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -91,6 +93,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DX11BaseShader.cpp" />
+    <ClCompile Include="DX11CustomShader.cpp" />
+    <ClCompile Include="Dx11FbxManager.cpp" />
+    <ClCompile Include="DX11Render.cpp" />
     <ClCompile Include="FbxComputeDeformer.cpp" />
     <ClCompile Include="FbxMaterialCache.cpp" />
     <ClCompile Include="fbxProc.cpp" />
@@ -98,8 +104,15 @@
     <ClCompile Include="MAIN.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DX11BaseShader.h" />
+    <ClInclude Include="DX11CustomShader.h" />
     <ClInclude Include="DX11FbxLoader.h" />
-    <ClInclude Include="Dx11FbxRender.h" />
+    <ClInclude Include="DX11FbxManager.h" />
+    <ClInclude Include="DX11FbxResource.h" />
+    <ClInclude Include="Dx11RenderManager.h" />
+    <ClInclude Include="DX11Render.h" />
+    <ClInclude Include="DX11RenderResource.h" />
+    <ClInclude Include="DX11Resrouce.h" />
     <ClInclude Include="FbxComputeDeformer.h" />
     <ClInclude Include="FbxMaterialCache.h" />
     <ClInclude Include="FbxVBO.h" />

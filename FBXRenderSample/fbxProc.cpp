@@ -1,6 +1,7 @@
 #include"DX11FbxLoader.h"
 #include<Shlwapi.h>
 #pragma comment(lib,"shlwapi.lib")
+#pragma warning(disable : 4800)
 
 DX11FbxLoader::~DX11FbxLoader()
 {
@@ -8,7 +9,7 @@ DX11FbxLoader::~DX11FbxLoader()
 }
 
 //初期化処理
-void DX11FbxLoader::FbxInit(std::string vfileName) {
+void DX11FbxLoader::FbxInit(std::string vfileName, bool animationLoad) {
 	fileName = vfileName;
 	PoseIndex = -1;
 	
@@ -65,6 +66,49 @@ void DX11FbxLoader::FbxInit(std::string vfileName) {
 	//ファイルのインポート
 	FbxLoadFromFile();
 	//アニメーションの初期化
+	if (animationLoad == true) {
+		SceneAnim = Scene;
+		LoadAnimationData();
+
+	}
+}
+
+void DX11FbxLoader::FbxLoadAnimationFromFile(std::string vfileName)
+{
+	//シーンの作成(アニメーションオンリー)
+	SceneAnim = FbxScene::Create(SdkManager, "Animation");
+
+	if (!SdkManager) {
+		FBXSDK_printf("FBX Initialize Error\n");
+	}
+
+	//ファイルのインポート
+	auto FileFormat = -1;
+	Importer = FbxImporter::Create(SdkManager, "");
+	if (!SdkManager->GetIOPluginRegistry()->DetectReaderFileFormat(fileName.c_str(), FileFormat)) {
+		//バイナリファイルだった場合、バイナリデータを読み込むための設定
+		FileFormat = SdkManager->GetIOPluginRegistry()->FindReaderIDByDescription("FBX binary (*.fbx)");;
+	}
+
+
+	//インポータの初期化＆ファイルの設定
+	if (Importer->Initialize(fileName.c_str(), FileFormat) == true) {
+		WindowMessage = "Importing file ";
+		WindowMessage += fileName.c_str();
+		WindowMessage += "\nPlease wait!";
+
+	}
+	else
+	{
+		WindowMessage = "Unable to open file ";
+		WindowMessage += fileName.c_str();
+		WindowMessage += "\nError reported: ";
+		WindowMessage += Importer->GetStatus().GetErrorString();
+		WindowMessage += "\nEsc to exit";
+	}
+	FBXSDK_printf("%s\n", WindowMessage.Buffer());
+	SceneAnim->FillAnimStackNameArray(AnimStackNameArray);
+
 	LoadAnimationData();
 }
 
@@ -133,7 +177,7 @@ void DX11FbxLoader::LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLa
 	const auto lTextureCount = Scene->GetTextureCount();
 	FbxString filePath;
 	
-	this->TextureFileName.clear();
+	//this->TextureFileName.clear();
 	std::vector<FbxTexture::EMappingType> m;
 
 	for (auto lTextureIndex = 0; lTextureIndex < lTextureCount; lTextureIndex++) {
@@ -148,7 +192,7 @@ void DX11FbxLoader::LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLa
 			//FBXファイルパスを取得
 			const FbxString lFileName = lFileTexture->GetFileName();
 			//printf("%s\n", lFileName.Buffer());
-			bool lStatus = PathFileExists(lFileName.Buffer());
+			bool lStatus = (bool)PathFileExists(lFileName.Buffer());
 			if (lStatus)filePath = lFileName;
 
 			const FbxString lAbsFbxFileName = FbxPathUtils::Resolve(pFbxFileName.c_str());
@@ -159,7 +203,7 @@ void DX11FbxLoader::LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLa
 				//相対パスで読み込み
 				const FbxString lResolvedFileName = FbxPathUtils::Bind(lAbsFolderName, lFileTexture->GetRelativeFileName());
 				//printf("%s\n", lResolvedFileName.Buffer());
-				lStatus = PathFileExists(lResolvedFileName.Buffer());
+				lStatus = (bool)PathFileExists(lResolvedFileName.Buffer());
 				if (lStatus)filePath = lResolvedFileName;
 			}
 
@@ -170,7 +214,7 @@ void DX11FbxLoader::LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLa
 				// Load texture from file name only (relative to FBX file)
 				const FbxString lTextureFileName = FbxPathUtils::GetFileName(lFileName);
 				const FbxString lResolvedFileName = FbxPathUtils::Bind(lAbsFolderName, lTextureFileName);
-				lStatus = PathFileExists(lResolvedFileName.Buffer());
+				lStatus = (bool)PathFileExistsA(lResolvedFileName.Buffer());
 				//printf("%s\n", lResolvedFileName.Buffer());
 				if (lStatus)filePath = lResolvedFileName;
 
@@ -181,7 +225,7 @@ void DX11FbxLoader::LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLa
 			//どこのテクスチャなのか記憶する
 			const FbxString uvName = lFileTexture->UVSet.Get();
 			//一つのUVに複数のテクスチャが存在する可能性がある
-			this->TextureFileName[uvName.Buffer()].push_back(filePath.Buffer());
+			//this->TextureFileName[uvName.Buffer()].push_back(filePath.Buffer());
 
 			//読み込めたらファイルテクスチャのアドレスを渡す
 			if (lStatus) {
@@ -379,14 +423,25 @@ void DX11FbxLoader::LoadAnimationData()
 	const FbxArray<FbxString*>&lAnimStackNameArray = GetAnimStackNameArray();
 	auto lPoseCount = lAnimStackNameArray.GetCount();
 	for (int lPoseIndex = 0; lPoseIndex < lPoseCount; lPoseIndex++) {
+		AnimData[lAnimStackNameArray[lPoseIndex]->Buffer()] = lPoseIndex;
 		//現在のアニメーションスタックが現在適用されているアニメーションかどうか
-		if (lAnimStackNameArray[lPoseIndex]->Compare(Scene->ActiveAnimStackName.Get()) == 0) {
+		if (lAnimStackNameArray[lPoseIndex]->Compare(SceneAnim->ActiveAnimStackName.Get()) == 0) {
 			//適用されているならそのアニメーションを現在のアニメーションとする
 			lCurrentAnimStackIndex = lPoseIndex;
 		}
 	}
 	//設定されたアニメーションをセットする
 	SetCurrentAnimStack(lCurrentAnimStackIndex);
+}
+
+void DX11FbxLoader::SetAnimation(std::string pName)
+{
+	SetCurrentAnimStack(AnimData[pName]);
+}
+
+void DX11FbxLoader::SetAnimation(int pIndex)
+{
+	SetCurrentAnimStack(pIndex);
 }
 
 
@@ -412,7 +467,7 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2(D3DXVEC
 		}
 	}
 
-	for (int i = 0; i < nodemeshes.size();i++) {
+	for (unsigned int i = 0; i < nodemeshes.size();i++) {
 
 		FbxNode* node = nodemeshes[i];
 		FbxAMatrix lGlobalPosition;
@@ -462,6 +517,7 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2(D3DXVEC
 
 		//アニメーション関係の処理
 		//デフォーマーがあった場合、アニメーション処理
+
 		if (lHasDeformation) {
 
 			if (lHasVertexCache) {
@@ -529,8 +585,6 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2(D3DXVEC
 				//ジオメトリバッファ作成
 				auto loopCount = lMeshCache->mSubMeshes[lIndex]->TriangleCount * 3;
 				md->IndexLength = loopCount;
-				//auto count = lMeshCache->lVertices.Size();
-				indexCount = 0;
 
 				auto vertexCount = lMeshCache->lVertices.Size();
 				md->PosLength = vertexCount / 4;
@@ -638,7 +692,7 @@ bool DX11FbxLoader::SetCurrentAnimStack(int pIndex)
 		return false;
 	}
 
-	FbxAnimStack*lCurrentAnimationStack = Scene->FindMember<FbxAnimStack>(AnimStackNameArray[pIndex]->Buffer());
+	FbxAnimStack*lCurrentAnimationStack = SceneAnim->FindMember<FbxAnimStack>(AnimStackNameArray[pIndex]->Buffer());
 	if (lCurrentAnimationStack == nullptr) {
 		//シーンにアニメーションスタックがない場合は設定できない
 		return false;
@@ -647,9 +701,9 @@ bool DX11FbxLoader::SetCurrentAnimStack(int pIndex)
 	//アニメーションのレイヤーを取得
 	CurrentAnimLayer = lCurrentAnimationStack->GetMember<FbxAnimLayer>();
 	//シーンにアニメーションレイヤーを設定する
-	Scene->SetCurrentAnimationStack(lCurrentAnimationStack);
+	SceneAnim->SetCurrentAnimationStack(lCurrentAnimationStack);
 
-	FbxTakeInfo*lCurrentTakeInfo = Scene->GetTakeInfo(*(AnimStackNameArray[pIndex]));
+	FbxTakeInfo*lCurrentTakeInfo = SceneAnim->GetTakeInfo(*(AnimStackNameArray[pIndex]));
 	//アニメーション開始時間と終了時間を取得する
 	if (lCurrentTakeInfo) {
 		Start = lCurrentTakeInfo->mLocalTimeSpan.GetStart();
@@ -657,7 +711,7 @@ bool DX11FbxLoader::SetCurrentAnimStack(int pIndex)
 	}
 	else {
 		FbxTimeSpan lTimeLineTimeSpan;
-		Scene->GetGlobalSettings().GetTimelineDefaultTimeSpan(lTimeLineTimeSpan);
+		SceneAnim->GetGlobalSettings().GetTimelineDefaultTimeSpan(lTimeLineTimeSpan);
 		Start = lTimeLineTimeSpan.GetStart();
 		Stop = lTimeLineTimeSpan.GetStop();
 	}
@@ -674,40 +728,18 @@ bool DX11FbxLoader::SetCurrentAnimStack(int pIndex)
 	return true;
 }
 
+bool DX11FbxLoader::SetCurrentPoseIndex(int pPoseIndex)
+{
+	SetCurrentAnimStack(pPoseIndex);
+	return false;
+}
 
 
-
-//void DX11FbxLoader::MatrixInverse(FbxDouble * pDstMatrix)
-//{
-//	D3DXMATRIX m;
-//	MatrixFbxToD3DX(&m, pDstMatrix);
-//	D3DXMatrixInverse(&m, nullptr, &m);
-//	MatrixD3DXToFbx(pDstMatrix, &m);
-//}
-//
-//void DX11FbxLoader::MatrixFbxToD3DX(D3DXMATRIX * pDstMatrix, FbxDouble * pSrcMatrix)
-//{
-//	for (int i = 0; i < 4; ++i) {
-//		for (int j = 0; j < 4; ++j) {
-//			pDstMatrix->m[i][j] = pSrcMatrix[i * 4 + j];
-//		}
-//	}
-//
-//}
-//
-//void DX11FbxLoader::MatrixD3DXToFbx(FbxDouble * pDstMatrix, D3DXMATRIX * pSrcMatrix)
-//{
-//	for (int i = 0; i < 4; ++i) {
-//		for (int j = 0; j < 4; ++j) {
-//			pDstMatrix[i * 4 + j] = pSrcMatrix->m[i][j];
-//		}
-//	}
-//}
 
 void DX11FbxLoader::ReleaseGeometryData()
 {
-	for (int i = 0; i < Geometry.size(); i++) {
-		for (int j = 0; j < Geometry[i].size(); j++) {
+	for (unsigned int i = 0; i < Geometry.size(); i++) {
+		for (unsigned int j = 0; j < Geometry[i].size(); j++) {
 			if (Geometry[i][j] != nullptr) {
 				delete Geometry[i][j];
 				Geometry[i][j] = nullptr;

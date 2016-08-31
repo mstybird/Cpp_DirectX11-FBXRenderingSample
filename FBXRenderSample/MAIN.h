@@ -1,14 +1,14 @@
 //警告非表示
-#pragma warning(disable : 4005)
+
 //ヘッダーファイルのインクルード
+#pragma once
 #include<stdio.h>
 #include <windows.h>
 #include<string>
 //#include<map>
 #include<vector>
 #include<array>
-#include <d3d11.h>
-#include <d3dx10.h>
+#include <d3dx9.h>
 #include <d3dx11.h>
 #include <d3dCompiler.h>
 
@@ -38,7 +38,7 @@
 
 
 
-#include"DX11FbxLoader.h"
+#include"Dx11RenderManager.h"
 
 
 struct SIMPLESHADER_CONSTANT_BUFFER1
@@ -64,7 +64,6 @@ public:
 	LRESULT MsgProc(HWND,UINT,WPARAM,LPARAM);
 	HRESULT InitD3D();
 	HRESULT InitPolygon();
-	HRESULT InitShader();
 	void Loop();
 	void App();
 	void Render();
@@ -78,16 +77,10 @@ public:
 	ID3D11DepthStencilView* m_pBackBuffer_DSTexDSV;
 	ID3D11Texture2D* m_pBackBuffer_DSTex;
 	ID3D11RasterizerState* m_pRasterizerState;
-	//↓モデルの種類ごと(モデルの構造が全て同一ならアプリにひとつ）
-	ID3D11InputLayout* m_pVertexLayout;
-	ID3D11VertexShader* m_pVertexShader;
-	ID3D11PixelShader* m_pPixelShader;
 
-	ID3D11Buffer* m_pConstantBuffer1;
-	ID3D11Buffer* m_pConstantBuffer2;
-	//↓モデルごと
-	ID3D11Buffer* m_pVertexBuffer;
-	ID3D11Buffer*m_pIndexBuffer;
-	DX11FbxLoader fbx;
-	std::vector<std::vector<FBXModelData*>>*vert;
+	DX11FbxManager fbx;				//モデルデータ
+	DX11RenderResource resource;	//描画に使うリソース
+	MyDX11Shader shader;				//描画に使うシェーダ
+	//シーンに一つ
+	DX11Render render;				//描画モデル
 };

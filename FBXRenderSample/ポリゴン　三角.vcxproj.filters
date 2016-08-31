@@ -12,6 +12,18 @@
       <Filter>DX11FbxLoader</Filter>
     </ClCompile>
     <ClCompile Include="FbxComputeDeformer.cpp" />
+    <ClCompile Include="DX11BaseShader.cpp">
+      <Filter>DX11Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11Render.cpp">
+      <Filter>DX11Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11CustomShader.cpp">
+      <Filter>DX11Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Dx11FbxManager.cpp">
+      <Filter>DX11Render\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -25,8 +37,29 @@
       <Filter>DX11FbxLoader</Filter>
     </ClInclude>
     <ClInclude Include="FbxComputeDeformer.h" />
-    <ClInclude Include="Dx11FbxRender.h">
+    <ClInclude Include="DX11Render.h">
+      <Filter>DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11FbxManager.h">
+      <Filter>DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11BaseShader.h">
+      <Filter>DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11CustomShader.h">
+      <Filter>DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11RenderResource.h">
+      <Filter>DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Dx11RenderManager.h">
       <Filter>DX11FbxLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11FbxResource.h">
+      <Filter>DX11FbxLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11Resrouce.h">
+      <Filter>DX11Render\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +69,15 @@
   <ItemGroup>
     <Filter Include="DX11FbxLoader">
       <UniqueIdentifier>{be0449cb-e4e1-42cd-b924-a8c644f2088d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11Render">
+      <UniqueIdentifier>{525a8f17-1b67-45c5-b451-6a4b51158593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11Render\Header">
+      <UniqueIdentifier>{450593b3-d878-4ddb-8691-c3e49df7dc31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11Render\Source">
+      <UniqueIdentifier>{6f3242ee-6351-4d36-9ccb-94df8c450e32}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -6,9 +6,9 @@ public:
 	bool Initialize(const FbxSurfaceMaterial*pMaterial);
 	static FbxDouble3 GetMaterialProperty(
 		const FbxSurfaceMaterial*pMaterial,
-		FbxString pPropertyName,
-		FbxString pFactorPropertyName,
-		FbxString&pTextureName
+		std::string pPropertyName,
+		std::string pFactorPropertyName,
+		std::string&pTextureName
 	);
 	void SetCurrentMaterial(FBXModelData* pModelData);
 	bool HasTexture()const {}

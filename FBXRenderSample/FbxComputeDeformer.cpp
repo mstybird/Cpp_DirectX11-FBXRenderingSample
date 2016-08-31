@@ -505,22 +505,9 @@ namespace FbxComputeDeformer {
 
 	void MatrixAdd(FbxDouble* pDstMatrix, FbxDouble*pSrcMatrix)
 	{
-		int i, j;
-
-		//FbxDouble* lDstMatrix = pDstMatrix.Buffer()->Buffer();
-		//FbxDouble* lSrcMatrix = pSrcMatrix.Buffer()->Buffer();
-
 		for (int i = 0; i < 16; ++i) {
 			pDstMatrix[i] += pSrcMatrix[i];
 		}
-
-		//for (i = 0; i < 4; i++)
-		//{
-		//	for (j = 0; j < 4; j++)
-		//	{
-		//		pDstMatrix[i][j] += pSrcMatrix[i][j];
-		//	}
-		//}
 	}
 
 	void GetGlobalPosition(FbxAMatrix&pDstMatrix, FbxNode * pNode, const FbxTime & pTime, FbxPose * pPose, FbxAMatrix * pParentGlobalPosition)
