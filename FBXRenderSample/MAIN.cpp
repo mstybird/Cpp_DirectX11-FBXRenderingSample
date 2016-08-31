@@ -77,7 +77,6 @@ MAIN::MAIN()
 //クラスデストラクター
 MAIN::~MAIN()
 {
-	fbx.FbxDestroy();
 	DestroyD3D();
 }
 //
@@ -150,8 +149,6 @@ void MAIN::Loop()
 		}
 		else
 		{
-			//FBXループ処理
-			fbx.FbxProc();
 			//アプリケーションの処理はここから飛ぶ。
 			App();
 		}
@@ -347,12 +344,11 @@ HRESULT MAIN::InitPolygon()
 	auto sv1 = vv;
 	auto sv2 = fvv;
 
-	fbx.FbxInit("res/FuseModel.fbx");
+	fbx.FbxInit("res/Chips.fbx");
 
 
 
 	vert = fbx.GetGeometryData2(&pos);
-	//auto vert2 = fbx.GetGeometryData2(&pos);
 
 
 	//上の頂点でバーテックスバッファー作成
@@ -400,31 +396,37 @@ void MAIN::Render()
 	
 
 	//上の頂点でバーテックスバッファー作成
-	ID3D11Buffer**pVertexBuffer = new ID3D11Buffer*[vert->size()];
-	ID3D11Buffer**pIndexBuffer = new ID3D11Buffer*[vert->size()];
+	ID3D11Buffer***pVertexBuffer = new ID3D11Buffer**[vert->size()];
+	ID3D11Buffer***pIndexBuffer = new ID3D11Buffer**[vert->size()];
 
 	for (int i = 0; i < vert->size(); i++) {
-		D3D11_BUFFER_DESC bd;
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(SimpleVertex)*vert->at(i).at(0)->PosLength;
-		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bd.CPUAccessFlags = 0;
-		bd.MiscFlags = 0;
+		pVertexBuffer[i] = new ID3D11Buffer*[vert->at(i).size()];
+		pIndexBuffer[i] = new ID3D11Buffer*[vert->at(i).size()];
+		for (int j = 0; j < vert->at(i).size(); j++) {
+			D3D11_BUFFER_DESC bd;
+			bd.Usage = D3D11_USAGE_DEFAULT;
+			bd.ByteWidth = sizeof(SimpleVertex)*vert->at(i).at(j)->PosLength;
+			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+			bd.CPUAccessFlags = 0;
+			bd.MiscFlags = 0;
 
-		D3D11_SUBRESOURCE_DATA InitData;
-		InitData.pSysMem = vert->at(i).at(0)->Data.data();;
-		m_pDevice->CreateBuffer(&bd, &InitData, &pVertexBuffer[i]);
+			D3D11_SUBRESOURCE_DATA InitData;
+			InitData.pSysMem = vert->at(i).at(j)->Data.data();;
+			m_pDevice->CreateBuffer(&bd, &InitData, &pVertexBuffer[i][j]);
 
-		//インデックスバッファーを作成
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(int) * vert->at(i).at(0)->IndexLength;
-		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		bd.CPUAccessFlags = 0;
-		bd.MiscFlags = 0;
-		InitData.pSysMem = vert->at(i).at(0)->Index;
-		InitData.SysMemPitch = 0;
-		InitData.SysMemSlicePitch = 0;
-		m_pDevice->CreateBuffer(&bd, &InitData, &pIndexBuffer[i]);
+			//インデックスバッファーを作成
+			bd.Usage = D3D11_USAGE_DEFAULT;
+			bd.ByteWidth = sizeof(int) * vert->at(i).at(j)->IndexLength;
+			bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+			bd.CPUAccessFlags = 0;
+			bd.MiscFlags = 0;
+			InitData.pSysMem = vert->at(i).at(j)->Index;
+			InitData.SysMemPitch = 0;
+			InitData.SysMemSlicePitch = 0;
+			m_pDevice->CreateBuffer(&bd, &InitData, &pIndexBuffer[i][j]);
+		}
+
+		
 
 	}
 
@@ -444,8 +446,8 @@ void MAIN::Render()
 	D3DXMatrixTranslation(&mWorld, pos.x,pos.y,pos.z);
 	D3DXMatrixRotationY( &mRotate, timeGetTime()/1000.0f );//単純にyaw回転させる
 	// ビュートランスフォーム（視点座標変換）
-	D3DXVECTOR3 vEyePt( 0.0f, 100.0f,-300.0f ); //カメラ（視点）位置
-	D3DXVECTOR3 vLookatPt( 0.0f, 60.0f, 0.0f );//注視位置
+	D3DXVECTOR3 vEyePt( 0.0f, 0,-2.0f ); //カメラ（視点）位置
+	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );//注視位置
 	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );//上方位置
 	D3DXMatrixLookAtLH( &mView, &vEyePt, &vLookatPt, &vUpVec );
 	// プロジェクショントランスフォーム（射影変換）
@@ -459,13 +461,13 @@ void MAIN::Render()
 	if( SUCCEEDED( m_pDeviceContext->Map( m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData ) ) )
 	{
 		//ワールド、カメラ、射影行列を渡す
-		D3DXMATRIX m=(mWorld)*mView*mProj;
+		D3DXMATRIX m=(mRotate*mWorld)*mView*mProj;
 		D3DXMatrixTranspose( &m, &m );
 		cb.mWVP=m;
-		cb.mW = mWorld;
+		cb.mW = mRotate*mWorld;
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		cb.LightDir = D3DXVECTOR4(1, 0, -1, 0);
-		cb.Diffuse = D3DXVECTOR4(1, 0, 0, 0);
+		cb.Diffuse = vert->at(0).at(0)->Diffuse->Color;
 
 		memcpy_s( pData.pData, pData.RowPitch, (void*)( &cb), sizeof( cb ) );
 		m_pDeviceContext->Unmap( m_pConstantBuffer, 0 );
@@ -484,26 +486,35 @@ void MAIN::Render()
 
 
 	for (int i = 0; i < vert->size(); i++) {
+		for (int j = 0; j < vert->at(i).size(); j++) {
+			UINT stride = sizeof(SimpleVertex);
+			UINT offset = 0;
+			m_pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer[i][j], &stride, &offset);
+			stride = sizeof(int);
+			offset = 0;
+			m_pDeviceContext->IASetIndexBuffer(pIndexBuffer[i][j], DXGI_FORMAT_R32_UINT, 0);
+			m_pDeviceContext->DrawIndexed(vert->at(i).at(j)->IndexLength, 0, 0);
 
-		UINT stride = sizeof(SimpleVertex);
-		UINT offset = 0;
-		m_pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer[i], &stride, &offset);
-		stride = sizeof(int);
-		offset = 0;
-		m_pDeviceContext->IASetIndexBuffer(pIndexBuffer[i], DXGI_FORMAT_R32_UINT, 0);
-		m_pDeviceContext->DrawIndexed(vert->at(i).at(0)->IndexLength, 0, 0);
+		}
+
 	}
 
 	for (int i = 0; i < vert->size(); i++) {
-		pVertexBuffer[i]->Release();
-		pIndexBuffer[i]->Release();
+		for (int j = 0; j < vert->at(i).size(); j++) {
+			pVertexBuffer[i][j]->Release();
+			pIndexBuffer[i][j]->Release();
+		}
+		delete[] pVertexBuffer[i];
+		delete[] pIndexBuffer[i];
+		pVertexBuffer[i] = nullptr;
+		pIndexBuffer[i] = nullptr;
 	}
 
 	delete[] pVertexBuffer;
 	delete[] pIndexBuffer;
 
 
-	m_pSwapChain->Present(0,0);//画面更新（バックバッファをフロントバッファに）	
+	m_pSwapChain->Present(1,0);//画面更新（バックバッファをフロントバッファに）	
 }
 
 //
@@ -525,108 +536,5 @@ void MAIN::DestroyD3D()
 	SAFE_RELEASE(m_pDevice);
 }
 
-
-ColorChannel MaterialCache::sEmissive;
-ColorChannel MaterialCache::sAmbient;
-ColorChannel MaterialCache::sDiffuse;
-ColorChannel MaterialCache::sSpecular;
-
-
-MaterialCache::MaterialCache():
-	Shinness(0)
-{
-
-}
-
-MaterialCache::~MaterialCache()
-{
-}
-
-//取得済みのマテリアルから色を取得
-bool MaterialCache::Initialize(const FbxSurfaceMaterial * pMaterial)
-{
-	//エミッシブの取得
-	const auto lEmissive = GetMaterialProperty(pMaterial, FbxSurfaceMaterial::sEmissive, FbxSurfaceMaterial::sEmissiveFactor, Emissive.TextureName);
-	Emissive.Color[0] = static_cast<FbxFloat>(lEmissive[0]);
-	Emissive.Color[1] = static_cast<FbxFloat>(lEmissive[1]);
-	Emissive.Color[2] = static_cast<FbxFloat>(lEmissive[2]);
-
-
-	const FbxDouble3 lAmbient = GetMaterialProperty(pMaterial,
-		FbxSurfaceMaterial::sAmbient, FbxSurfaceMaterial::sAmbientFactor, Ambient.TextureName);
-	Ambient.Color[0] = static_cast<FbxFloat>(lAmbient[0]);
-	Ambient.Color[1] = static_cast<FbxFloat>(lAmbient[1]);
-	Ambient.Color[2] = static_cast<FbxFloat>(lAmbient[2]);
-
-	const FbxDouble3 lDiffuse = GetMaterialProperty(pMaterial,
-		FbxSurfaceMaterial::sDiffuse, FbxSurfaceMaterial::sDiffuseFactor, Diffuse.TextureName);
-	Diffuse.Color[0] = static_cast<FbxFloat>(lDiffuse[0]);
-	Diffuse.Color[1] = static_cast<FbxFloat>(lDiffuse[1]);
-	Diffuse.Color[2] = static_cast<FbxFloat>(lDiffuse[2]);
-
-	const FbxDouble3 lSpecular = GetMaterialProperty(pMaterial,
-		FbxSurfaceMaterial::sSpecular, FbxSurfaceMaterial::sSpecularFactor, Specular.TextureName);
-	Specular.Color[0] = static_cast<FbxFloat>(lSpecular[0]);
-	Specular.Color[1] = static_cast<FbxFloat>(lSpecular[1]);
-	Specular.Color[2] = static_cast<FbxFloat>(lSpecular[2]);
-
-	auto lShininessProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sShininess);
-	if (lShininessProperty.IsValid()) {
-		auto lShininess = lShininessProperty.Get<FbxDouble>();
-		Shinness = static_cast<FbxFloat>(lShininess);
-	}
-
-	return true;
-}
-
-FbxDouble3 MaterialCache::GetMaterialProperty(const FbxSurfaceMaterial * pMaterial, FbxString pPropertyName, FbxString pFactorPropertyName, FbxUInt & pTextureName)
-{
-	FbxDouble3 lResult(0, 0, 0);
-	const auto lProperty = pMaterial->FindProperty(pPropertyName);
-	const auto lFactorProperty = pMaterial->FindProperty(pFactorPropertyName);
-
-	if (lProperty.IsValid()&lFactorProperty.IsValid()) {
-		lResult = lProperty.Get<FbxDouble3>();
-		auto lFactor = lFactorProperty.Get<FbxDouble>();
-		if (lFactor != 1) {
-			lResult[0] *= lFactor;
-			lResult[1] *= lFactor;
-			lResult[2] *= lFactor;
-
-		}
-	}
-
-	if (lProperty.IsValid()) {
-		const auto lTextureCount = lProperty.GetSrcObjectCount<FbxFileTexture>();
-		if (lTextureCount) {
-			const auto lTexture = lProperty.GetSrcObject<FbxFileTexture>();
-			if (lTexture&&lTexture->GetUserDataPtr()) {
-
-				auto lTextureName = *(static_cast<FbxString*>(lTexture->GetUserDataPtr()));
-				pTextureName = *(static_cast<FbxUInt*>(lTexture->GetUserDataPtr()));
-			}
-		}
-	}
-
-	return lResult;
-}
-
-void MaterialCache::SetCurrentMaterial(FBXModelData* pModelData)
-{
-	pModelData->Emissive = &Emissive;
-	pModelData->Ambient = &Ambient;
-	pModelData->Diffuse = &Diffuse;
-	pModelData->Specular = &Specular;
-	return;
-}
-
-void MaterialCache::SetDefaultMaterial(FBXModelData * pModelData)
-{
-	pModelData->Emissive = &sEmissive;
-	pModelData->Ambient = &sAmbient;
-	pModelData->Diffuse = &sDiffuse;
-	pModelData->Specular = &sSpecular;
-
-}
 
 
