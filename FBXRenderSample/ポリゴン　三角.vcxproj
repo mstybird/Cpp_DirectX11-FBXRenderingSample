@@ -91,11 +91,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FbxComputeDeformer.cpp" />
+    <ClCompile Include="FbxMaterialCache.cpp" />
     <ClCompile Include="fbxProc.cpp" />
+    <ClCompile Include="FbxVBO.cpp" />
     <ClCompile Include="MAIN.cpp" />
-    <ClCompile Include="VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DX11FbxLoader.h" />
+    <ClInclude Include="Dx11FbxRender.h" />
+    <ClInclude Include="FbxComputeDeformer.h" />
+    <ClInclude Include="FbxMaterialCache.h" />
+    <ClInclude Include="FbxVBO.h" />
     <ClInclude Include="MAIN.h" />
   </ItemGroup>
   <ItemGroup>

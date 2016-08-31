@@ -3,21 +3,38 @@
   <ItemGroup>
     <ClCompile Include="MAIN.cpp" />
     <ClCompile Include="fbxProc.cpp">
-      <Filter>FbxParser</Filter>
+      <Filter>DX11FbxLoader</Filter>
     </ClCompile>
-    <ClCompile Include="VBO.cpp">
-      <Filter>FbxParser</Filter>
+    <ClCompile Include="FbxVBO.cpp">
+      <Filter>DX11FbxLoader</Filter>
     </ClCompile>
+    <ClCompile Include="FbxMaterialCache.cpp">
+      <Filter>DX11FbxLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxComputeDeformer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
+    <ClInclude Include="DX11FbxLoader.h">
+      <Filter>DX11FbxLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxVBO.h">
+      <Filter>DX11FbxLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxMaterialCache.h">
+      <Filter>DX11FbxLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxComputeDeformer.h" />
+    <ClInclude Include="Dx11FbxRender.h">
+      <Filter>DX11FbxLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Simple.hlsl" />
     <None Include="hand_tex.fbx" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="FbxParser">
+    <Filter Include="DX11FbxLoader">
       <UniqueIdentifier>{be0449cb-e4e1-42cd-b924-a8c644f2088d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
