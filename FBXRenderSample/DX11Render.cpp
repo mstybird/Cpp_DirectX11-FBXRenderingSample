@@ -2,16 +2,27 @@
 
 ID3D11Device*DX11Render::sDevice;				//DirectX11デバイス
 ID3D11DeviceContext*DX11Render::sDeviceContext;	//DirectX11デバイスコンテキスト
+ID3D11RenderTargetView*DX11Render::sRenderTargetView;
+ID3D11DepthStencilView*DX11Render::sDepthStencilView;
 
-void DX11Render::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
+void DX11Render::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, ID3D11RenderTargetView*pRenderTargetView,
+	ID3D11DepthStencilView*pDepthStencilView)
 {
 	sDevice = pDevice;
 	sDeviceContext = pDeviceContext;
+	sRenderTargetView = pRenderTargetView;
+	sDepthStencilView = pDepthStencilView;
+}
+
+void DX11Render::Clear(D3DXVECTOR4 pColor)
+{
+	sDeviceContext->ClearRenderTargetView(sRenderTargetView, pColor);
+	sDeviceContext->ClearDepthStencilView(sDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resource)
 {
-	shader->SetConstantBuffer1(resource);
+	shader->SetConstantBuffer1(resource,&display);
 	//シェーダの設定
 	sDeviceContext->VSSetShader(shader->mVertexShader, NULL, 0);
 	sDeviceContext->PSSetShader(shader->mPixelShader, NULL, 0);
@@ -44,4 +55,15 @@ void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resour
 		}
 	}
 
+}
+
+void DX11Render::SetRenderTarget(DX11RenderResource * resource)
+{
+	display.mUseCameraPtr = resource->smView;
+	display.mUseProjectionPtr = resource->smProj;
+}
+
+void DX11Render::SetShader(DX11BaseShader * pShader)
+{
+	shader = pShader;
 }

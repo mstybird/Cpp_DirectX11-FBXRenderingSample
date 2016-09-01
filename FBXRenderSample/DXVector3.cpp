@@ -80,10 +80,4 @@ void DXVector3::AddZ(float pZ)
 //	return *this;
 //}
 
-DXVector3 & DXVector3::operator=(const DXVector3 & pValue)
-{
-	// TODO: return ステートメントをここに挿入します
-	*this = pValue;
-	return *this;
-}
 

@@ -172,7 +172,6 @@ namespace FbxComputeDeformer {
 		for (int lSkinIndex = 0; lSkinIndex < lSkinCount; ++lSkinIndex) {
 
 			FbxSkin*lSkinDeformer = (FbxSkin*)pMesh->GetDeformer(lSkinIndex, FbxDeformer::eSkin);
-
 			int lClusterCount = lSkinDeformer->GetClusterCount();
 			for (int lClusterIndex = 0; lClusterIndex < lClusterCount; ++lClusterIndex) {
 
@@ -187,11 +186,6 @@ namespace FbxComputeDeformer {
 
 
 				int lVertexIndexCount = lCluster->GetControlPointIndicesCount();
-
-				//やることリスト/////////////////////////////////////////
-				//ローカル変数をメンバ変数化する
-				//FBXAMATRIXの計算を最適化する
-				//解放処理を実装する
 
 
 				for (int k = 0; k < lVertexIndexCount; ++k) {
@@ -471,7 +465,6 @@ namespace FbxComputeDeformer {
 			// Get the link initial global position and the link current global position.
 			pCluster->GetTransformLinkMatrix(lClusterGlobalInitPosition);
 			GetGlobalPosition(lClusterGlobalCurrentPosition, pCluster->GetLink(), pTime, pPose);
-
 			// Compute the initial position of the link relative to the reference.
 			lClusterRelativeInitPosition = lClusterGlobalInitPosition.Inverse() * lReferenceGlobalInitPosition;
 

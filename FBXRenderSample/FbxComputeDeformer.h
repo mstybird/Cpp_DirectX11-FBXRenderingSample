@@ -3,7 +3,7 @@
 namespace FbxComputeDeformer
 {
 	//ワールド座標を取得する
-	void GetGlobalPosition(FbxAMatrix&pDstMatrix, FbxNode*pNode, const FbxTime&pTime, FbxPose*pPose, FbxAMatrix*pParentGlobalPosition = (fbxsdk::FbxAMatrix*)0);
+	void GetGlobalPosition(FbxAMatrix&pDstMatrix, FbxNode*pNode, const FbxTime&pTime, FbxPose*pPose=nullptr, FbxAMatrix*pParentGlobalPosition = (fbxsdk::FbxAMatrix*)0);
 	//ジオメトリのオフセットを取得する
 	void GetGeometry(FbxAMatrix&pSrcMatrix, FbxNode*pNode);
 	//ポーズ取得

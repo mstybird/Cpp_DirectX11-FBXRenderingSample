@@ -1,18 +1,20 @@
 #include"DX11CustomShader.h"
 #include"DX11Resrouce.h"
 #include<vector>
+#include<iostream>
 MyDX11Shader::MyDX11Shader() :
 	DX11BaseShader(sizeof(MyFBXCONSTANTBUFFER1), sizeof(MyFBXCONSTANTBUFFER2))
 {
 }
 
-void MyDX11Shader::SetConstantBuffer1(DX11RenderResource * resource)
+void MyDX11Shader::SetConstantBuffer1(DX11RenderResource * resource, DXDisplay*pDisplay)
 {
+	
 	D3D11_MAPPED_SUBRESOURCE pData;
 	MyFBXCONSTANTBUFFER1 cb;
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-		cb.mW = resource->mWorld;
-		cb.mWVP = resource->mWorld*resource->mView*resource->mProj;
+		cb.mW = *resource->GetMatrixWorld();
+		cb.mWVP = resource->GetMatrixWVP(pDisplay);
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		D3DXMatrixTranspose(&cb.mWVP, &cb.mWVP);
 		cb.LightDir = D3DXVECTOR4(1, 0, -1, 0);

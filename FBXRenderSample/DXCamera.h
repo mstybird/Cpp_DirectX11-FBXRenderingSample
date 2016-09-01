@@ -9,18 +9,16 @@ public:
 	void SetUpV(float pX, float pY, float pZ);
 	void SetUpV(D3DXVECTOR3 pVector);
 
-	void AddEyeT(float pX, float pY, float pZ);
-	void AddEyeT(D3DXVECTOR3 pPosition);
-	void AddLookT(float pX, float pY, float pZ);
-	void AddLookT(D3DXVECTOR3 pLookAt);
-	void AddUpV(float pX, float pY, float pZ);
-	void AddUpV(D3DXVECTOR3 pVector);
-
 	D3DXMATRIX*GetMatrix();
 
 	DXVector3 mEyePosition;	//ƒJƒƒ‰‚ÌˆÊ’u
 	DXVector3 mLookPosition;//’‹“_
 	DXVector3 mUpVector;	//“ªã•ûŒü
+	D3DXMATRIX mMatrix;
+
+	D3DXMATRIX* operator*() {
+		return GetMatrix();
+	}
 private:
 	
 };

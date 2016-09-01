@@ -16,6 +16,14 @@ D3DXMATRIX * DXWorld::GetMatrix()
 	return &mMatrix;
 }
 
+DXWorld::DXWorld():
+	mPosition{0.0f,0.0f,0.0f},
+	mRotationCenter{0.0f,0.0f,0.0f},
+	mRotationTransed{0.0f,0.0f,0.0f},
+	mScale{1.0f,1.0f,1.0f}
+{
+}
+
 void DXWorld::SetT(float pX, float pY, float pZ)
 {
 	mPosition.x = pX;
@@ -25,29 +33,41 @@ void DXWorld::SetT(float pX, float pY, float pZ)
 
 void DXWorld::SetT(D3DXVECTOR3 pPosition)
 {
-	
+	mPosition = pPosition;
 }
 
-void DXWorld::SetRCenter(float pX, float pY, float pZ)
+void DXWorld::SetRC(float pX, float pY, float pZ)
 {
+	mRotationCenter.x = pX;
+	mRotationCenter.y = pY;
+	mRotationCenter.z = pZ;
 }
 
-void DXWorld::SetRCenter(D3DXVECTOR3 pPosition)
+void DXWorld::SetRC(D3DXVECTOR3 pRotation)
 {
+	mRotationCenter = pRotation;
 }
 
 void DXWorld::SetRT(float pX, float pY, float pZ)
 {
+	mRotationTransed.x = pX;
+	mRotationTransed.y = pY;
+	mRotationTransed.z = pZ;
 }
 
-void DXWorld::SetRT(D3DXVECTOR3 pPosition)
+void DXWorld::SetRT(D3DXVECTOR3 pRotation)
 {
+	mRotationTransed = pRotation;
 }
 
 void DXWorld::SetS(float pX, float pY, float pZ)
 {
+	mScale.x = pX;
+	mScale.y = pY;
+	mScale.z = pZ;
 }
 
-void DXWorld::SetS(D3DXVECTOR3 pPosition)
+void DXWorld::SetS(D3DXVECTOR3 pScaling)
 {
+	mScale = pScaling;
 }

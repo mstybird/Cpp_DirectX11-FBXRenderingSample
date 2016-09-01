@@ -161,7 +161,6 @@ void DX11FbxLoader::FbxLoadFromFile()
 		//ポーズのリストを作成する
 		this->FillPoseArray(Scene, PoseArray);
 
-
 		FrameTime.SetTime(0, 0, 0, 1, 0, Scene->GetGlobalSettings().GetTimeMode());
 
 		//インポータはこれ以上不要なので解放する
@@ -473,7 +472,8 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2(D3DXVEC
 		FbxAMatrix lGlobalPosition;
 
 		FbxComputeDeformer::GetGlobalPosition(lGlobalPosition, node, CurrentTime, lPose, &lDummyGlobalPosition);
-
+		
+		//FbxComputeDeformer::GetGlobalPosition(lGlobalPosition, node->GetTarget(), CurrentTime,nullptr, &lDummyGlobalPosition);
 		FbxAMatrix lGeometryOffset;
 		FbxAMatrix lGlobalOffPosition;
 
@@ -481,7 +481,6 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2(D3DXVEC
 		//ジオメトリのオフセットを取得
 		FbxComputeDeformer::GetGeometry(lGeometryOffset, node);
 		lGlobalOffPosition = lGlobalPosition*lGeometryOffset;
-
 		//ノードのメッシュを取得
 		FbxMesh* lMesh = node->GetMesh();
 

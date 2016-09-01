@@ -6,7 +6,7 @@
 #include"DX11RenderResource.h"
 #include"DX11FbxResource.h"
 #include"DX11Render.h"
-
+#include"DXDisplay.h"
 class DX11BaseShader {
 protected:
 	DX11BaseShader(int constBufferSize1, int constBufferSize2);
@@ -25,7 +25,7 @@ public:
 		const std::string&Version = "ps_5_0"
 	);
 
-	virtual void SetConstantBuffer1(DX11RenderResource * resource) = 0;
+	virtual void SetConstantBuffer1(DX11RenderResource * resource,DXDisplay*pDisplay) = 0;
 	virtual void SetConstantBuffer2(FBXModelData*modelData) = 0;
 
 	friend void DX11Render::Render(DX11FbxManager*fbxManager, DX11RenderResource*resource);

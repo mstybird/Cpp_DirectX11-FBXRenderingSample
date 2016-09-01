@@ -3,11 +3,12 @@
 //ワールド空間座標系クラス
 class DXWorld {
 public:
+	DXWorld();
 	void SetT(float pX, float pY, float pZ);
 	void SetT(D3DXVECTOR3 pPosition);
 
-	void SetRCenter(float pX, float pY, float pZ);
-	void SetRCenter(D3DXVECTOR3 pPosition);
+	void SetRC(float pX, float pY, float pZ);
+	void SetRC(D3DXVECTOR3 pPosition);
 	
 	void SetRT(float pX, float pY, float pZ);
 	void SetRT(D3DXVECTOR3 pPosition);
@@ -22,5 +23,9 @@ public:
 	DXVector3 mScale;				//拡大率
 
 	D3DXMATRIX mMatrix;			//計算用
+
+	D3DXMATRIX* operator*() {
+		return GetMatrix();
+	}
 
 };

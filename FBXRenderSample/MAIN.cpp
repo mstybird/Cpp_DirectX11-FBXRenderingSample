@@ -237,12 +237,20 @@ HRESULT MAIN::InitD3D()
 	m_pDevice->CreateRasterizerState(&rdc,&m_pRasterizerState);
 	m_pDeviceContext->RSSetState(m_pRasterizerState);	
 
+	
+
+	//各ラッパーにDirectX11デバイス等を登録
+	DX11BaseShader::Init(m_pDevice, m_pDeviceContext);
+	DX11FbxManager::InitDevice(m_pDevice, m_pDeviceContext);
+
+	DX11Render::Initialize(m_pDevice, m_pDeviceContext,m_pBackBuffer_TexRTV,m_pBackBuffer_DSTexDSV);
+	DXProjection::SetAspect((FLOAT)WINDOW_WIDTH, (FLOAT)WINDOW_HEIGHT);
+
 	//ポリゴン作成
 	if(FAILED(InitPolygon()))
 	{
 		return E_FAIL;
 	}
-
 	return S_OK;
 }
 
@@ -252,18 +260,27 @@ D3DXVECTOR3 pos;
 
 HRESULT MAIN::InitPolygon()
 {
-	DX11BaseShader::Init(m_pDevice, m_pDeviceContext);
 	shader.Init();
 	shader.InitVertex("Simple.hlsl");
 	shader.InitPixel("Simple.hlsl");
 
-	DX11FbxManager::InitDevice(m_pDevice, m_pDeviceContext);
 	fbx.Initialize();
 	fbx.LoadFile("res/humanoid2.fbx",true);
 	
 	//どのシェーダーでレンダリングするか登録
-	DX11Render::Initialize(m_pDevice, m_pDeviceContext);
-	render.shader = &shader;
+	render.SetShader(&shader);
+	//このリソースをレンダリング用に使う
+	resource.InitRenderMatrix();
+	//レンダーに行列を登録
+	render.SetRenderTarget(&resource);
+
+	resource.smView->SetEyeT(0.0f, 0.0f, -100.0f);
+	resource.smView->SetLookT(0.0f, 0.0f, 0.0f);
+	resource.smView->SetUpV(0.0f, 1.0f, 0.0f);
+	
+	resource.smProj->SetViewAngle(45);
+	resource.smProj->SetPlaneNear(0.1f);
+	resource.smProj->SetPlaneFar(2000.0f);
 
 	return S_OK;
 }
@@ -274,41 +291,15 @@ void MAIN::Render()
 {
 
 
-	//画面クリア（実際は単色で画面を塗りつぶす処理）
-	float ClearColor[4] = { 0,0,1,1 };// クリア色作成　RGBAの順
-	m_pDeviceContext->ClearRenderTargetView(m_pBackBuffer_TexRTV, ClearColor);//画面クリア
-	m_pDeviceContext->ClearDepthStencilView(m_pBackBuffer_DSTexDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
-
-	//D3DXMATRIX mWorld, mRotate;
-	//D3DXMATRIX mView;
-	//D3DXMATRIX mProj;
-	////ワールドトランスフォーム（絶対座標変換）
-	//D3DXMatrixTranslation(&mWorld, 0, 0, 0);
-	//D3DXMatrixRotationY(&mRotate, /*timeGetTime()/1000.0f*/0);//単純にyaw回転させる
-	//// ビュートランスフォーム（視点座標変換）
-	//D3DXVECTOR3 vEyePt(0.0f, 0, -100.0f); //カメラ（視点）位置
-	//D3DXVECTOR3 vLookatPt(0.0f, 0.0f, 0.0f);//注視位置
-	//D3DXVECTOR3 vUpVec(0.0f, 1.0f, 0.0f);//上方位置
-
-	//D3DXMatrixLookAtLH(&mView, &vEyePt, &vLookatPt, &vUpVec);
-	//// プロジェクショントランスフォーム（射影変換）
-	//D3DXMatrixPerspectiveFovLH(&mProj, D3DX_PI / 4, (FLOAT)WINDOW_WIDTH / (FLOAT)WINDOW_HEIGHT, 0.1f, 2000.0f);
-
-	//fbx.Update();
-	////fbx.SetMatrix(mRotate*mWorld, mView, mProj);
-	//resource.mWorld = mRotate;
-	//resource.mView = mView;
-	//resource.mProj = mProj;
+	////画面クリア
+	DX11Render::Clear({ 0,0,1,1 });
+	fbx.Update();
 
 	resource.smWorld.SetT(30, 0, 0);
-	resource.smWorld.SetRT(0, 0, 90);
-	resource.mWorld = *resource.smWorld.GetMatrix();
-	resource.mView = *resource.smView.GetMatrix();
-	resource.mProj = *resource.smProj.GetMatrix();
+	resource.smWorld.SetS(1, 1, 1);
+
 	render.Render(&fbx, &resource);
-	//D3DXMatrixTranslation(&mWorld, 30.5, 0, 0);
-	//resource.mWorld = mRotate*mWorld;
-	//render.Render(&fbx, &resource);
+
 
 	m_pSwapChain->Present(0, 0);//画面更新（バックバッファをフロントバッファに）	
 

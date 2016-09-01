@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="MAIN.cpp" />
     <ClCompile Include="fbxProc.cpp">
       <Filter>DX11FbxLoader</Filter>
     </ClCompile>
@@ -11,7 +10,6 @@
     <ClCompile Include="FbxMaterialCache.cpp">
       <Filter>DX11FbxLoader</Filter>
     </ClCompile>
-    <ClCompile Include="FbxComputeDeformer.cpp" />
     <ClCompile Include="DX11BaseShader.cpp">
       <Filter>DX11Render\Source</Filter>
     </ClCompile>
@@ -24,12 +22,29 @@
     <ClCompile Include="Dx11FbxManager.cpp">
       <Filter>DX11Render\Source</Filter>
     </ClCompile>
-    <ClCompile Include="DX11RenderResource.cpp" />
-    <ClCompile Include="DXTranslation.cpp" />
-    <ClCompile Include="DXVector3.cpp" />
+    <ClCompile Include="DX11RenderResource.cpp">
+      <Filter>DX11Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MAIN.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxComputeDeformer.cpp">
+      <Filter>DX11FbxLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="DXCamera.cpp">
+      <Filter>DX11Helper\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DXTranslation.cpp">
+      <Filter>DX11Helper\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DXVector3.cpp">
+      <Filter>DX11Helper\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DXProjection.cpp">
+      <Filter>DX11Helper\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MAIN.h" />
     <ClInclude Include="DX11FbxLoader.h">
       <Filter>DX11FbxLoader</Filter>
     </ClInclude>
@@ -39,7 +54,6 @@
     <ClInclude Include="FbxMaterialCache.h">
       <Filter>DX11FbxLoader</Filter>
     </ClInclude>
-    <ClInclude Include="FbxComputeDeformer.h" />
     <ClInclude Include="DX11Render.h">
       <Filter>DX11Render\Header</Filter>
     </ClInclude>
@@ -62,24 +76,37 @@
       <Filter>DX11FbxLoader</Filter>
     </ClInclude>
     <ClInclude Include="DX11Resrouce.h">
-      <Filter>DX11Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DXTranslation.h">
-      <Filter>DX11Render\Header</Filter>
+      <Filter>DX11Helper\Header</Filter>
     </ClInclude>
     <ClInclude Include="DXCamera.h">
-      <Filter>DX11Render\Header</Filter>
+      <Filter>DX11Helper\Header</Filter>
     </ClInclude>
     <ClInclude Include="DXProjection.h">
-      <Filter>DX11Render\Header</Filter>
+      <Filter>DX11Helper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DXTranslation.h">
+      <Filter>DX11Helper\Header</Filter>
     </ClInclude>
     <ClInclude Include="DXVector3.h">
-      <Filter>DX11Helper</Filter>
+      <Filter>DX11Helper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MAIN.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxComputeDeformer.h">
+      <Filter>DX11FbxLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="DXDisplay.h">
+      <Filter>DX11Render\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Simple.hlsl" />
-    <None Include="hand_tex.fbx" />
+    <None Include="hand_tex.fbx">
+      <Filter>Resource</Filter>
+    </None>
+    <None Include="Simple.hlsl">
+      <Filter>HLSL</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DX11FbxLoader">
@@ -96,6 +123,21 @@
     </Filter>
     <Filter Include="DX11Helper">
       <UniqueIdentifier>{8ff38007-295f-4ff5-927e-7fa91685fcfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11Helper\Header">
+      <UniqueIdentifier>{3562b482-68e3-4118-93b3-7ee2d4460bb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11Helper\Source">
+      <UniqueIdentifier>{c30e4d31-2ba1-4657-bdbc-00000abb7f53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL">
+      <UniqueIdentifier>{130b753a-1bb0-43cb-8f24-36bd7c93b8ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{a2bd5129-71a6-434e-864d-33a027547224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{13ffb461-1f42-4b80-aa0a-2cdd3807b349}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

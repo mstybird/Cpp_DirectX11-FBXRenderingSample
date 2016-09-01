@@ -21,7 +21,7 @@ public:
 
 
 
-	void SetConstantBuffer1(DX11RenderResource * resource);
+	void SetConstantBuffer1(DX11RenderResource * resource, DXDisplay*pDisplay);
 	void SetConstantBuffer2(FBXModelData*modelData);
 
 private:
