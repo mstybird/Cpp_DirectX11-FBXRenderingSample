@@ -97,6 +97,9 @@
     <ClCompile Include="DX11CustomShader.cpp" />
     <ClCompile Include="Dx11FbxManager.cpp" />
     <ClCompile Include="DX11Render.cpp" />
+    <ClCompile Include="DX11RenderResource.cpp" />
+    <ClCompile Include="DXTranslation.cpp" />
+    <ClCompile Include="DXVector3.cpp" />
     <ClCompile Include="FbxComputeDeformer.cpp" />
     <ClCompile Include="FbxMaterialCache.cpp" />
     <ClCompile Include="fbxProc.cpp" />
@@ -113,6 +116,10 @@
     <ClInclude Include="DX11Render.h" />
     <ClInclude Include="DX11RenderResource.h" />
     <ClInclude Include="DX11Resrouce.h" />
+    <ClInclude Include="DXCamera.h" />
+    <ClInclude Include="DXProjection.h" />
+    <ClInclude Include="DXTranslation.h" />
+    <ClInclude Include="DXVector3.h" />
     <ClInclude Include="FbxComputeDeformer.h" />
     <ClInclude Include="FbxMaterialCache.h" />
     <ClInclude Include="FbxVBO.h" />

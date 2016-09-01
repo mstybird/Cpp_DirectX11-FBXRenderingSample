@@ -24,6 +24,9 @@
     <ClCompile Include="Dx11FbxManager.cpp">
       <Filter>DX11Render\Source</Filter>
     </ClCompile>
+    <ClCompile Include="DX11RenderResource.cpp" />
+    <ClCompile Include="DXTranslation.cpp" />
+    <ClCompile Include="DXVector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -61,6 +64,18 @@
     <ClInclude Include="DX11Resrouce.h">
       <Filter>DX11Render\Header</Filter>
     </ClInclude>
+    <ClInclude Include="DXTranslation.h">
+      <Filter>DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DXCamera.h">
+      <Filter>DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DXProjection.h">
+      <Filter>DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DXVector3.h">
+      <Filter>DX11Helper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Simple.hlsl" />
@@ -78,6 +93,9 @@
     </Filter>
     <Filter Include="DX11Render\Source">
       <UniqueIdentifier>{6f3242ee-6351-4d36-9ccb-94df8c450e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11Helper">
+      <UniqueIdentifier>{8ff38007-295f-4ff5-927e-7fa91685fcfe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
