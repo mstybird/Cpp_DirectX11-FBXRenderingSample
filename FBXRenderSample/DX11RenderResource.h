@@ -1,6 +1,6 @@
 #pragma once
 #include<d3dx9.h>
-#include"DXTranslation.h"
+#include"DXWorld.h"
 #include"DXCamera.h"
 #include"DXProjection.h"
 #include"DXDisplay.h"
@@ -15,8 +15,13 @@ public:
 	D3DXMATRIX*GetMatrixProjection();
 	D3DXMATRIX GetMatrixWVP(DXDisplay*pDisplay);
 
-	DXWorld smWorld;
-	DXCamera *smView;
-	DXProjection *smProj;
+	DXWorld*GetWorld();
+	DXCamera*GetCamera();
+	DXProjection*GetProjection();
+
+private:
+	DXWorld mWorld;
+	DXCamera *mView;
+	DXProjection *mProj;
 
 };

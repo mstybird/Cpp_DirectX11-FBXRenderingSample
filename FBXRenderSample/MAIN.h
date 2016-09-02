@@ -38,7 +38,7 @@
 
 
 
-#include"Dx11RenderManager.h"
+#include"Dx11Manager.h"
 
 
 struct SIMPLESHADER_CONSTANT_BUFFER1

@@ -1,4 +1,10 @@
 //グローバル
+/*
+	FBXレンダリング用
+*/
+
+
+//アプリケーションごとに適用
 cbuffer global:register(b0)
 {
 	matrix g_mW;//ワールド行列
@@ -6,6 +12,7 @@ cbuffer global:register(b0)
 	float4 g_vLightDir;  //ライトの方向ベクトル
 };
 
+//サブメッシュごとに適用
 cbuffer global:register(b1) {
 	float4 g_Diffuse = float4(1, 0, 0, 0); //拡散反射(色）
 }

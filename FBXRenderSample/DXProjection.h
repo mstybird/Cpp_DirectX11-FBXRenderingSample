@@ -6,18 +6,19 @@ public:
 	DXProjection();
 	static void SetAspect(float pWidth, float pHeight);
 
+	///視野角
 	void SetViewAngle(float pAngle);
-	void SetPlaneNear(float pNearPlane);
-	void SetPlaneFar(float pFarPlane);
 	void AddViewAngle(float pAngle);
+
+	///視野(ビュープレーン手前)
+	void SetPlaneNear(float pNearPlane);
 	void AddPlaneNear(float pNearPlane);
+
+	///視野(ビュープレーン奥)
+	void SetPlaneFar(float pFarPlane);
 	void AddPlaneFar(float pFarPlane);
 
 	D3DXMATRIX*GetMatrix();
-	D3DXMATRIX* operator*() {
-		return GetMatrix();
-	}
-
 
 	float mAngle;//視野角
 	float mNear;	//視推台の手前

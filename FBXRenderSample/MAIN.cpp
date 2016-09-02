@@ -260,12 +260,15 @@ D3DXVECTOR3 pos;
 
 HRESULT MAIN::InitPolygon()
 {
+
+	DXVector3 v{ 1,1,1 };
+	v = v * 2;
 	shader.Init();
 	shader.InitVertex("Simple.hlsl");
 	shader.InitPixel("Simple.hlsl");
 
 	fbx.Initialize();
-	fbx.LoadFile("res/humanoid2.fbx",true);
+	fbx.LoadFile("res/meshes.fbx",true);
 	
 	//どのシェーダーでレンダリングするか登録
 	render.SetShader(&shader);
@@ -274,13 +277,17 @@ HRESULT MAIN::InitPolygon()
 	//レンダーに行列を登録
 	render.SetRenderTarget(&resource);
 
-	resource.smView->SetEyeT(0.0f, 0.0f, -100.0f);
-	resource.smView->SetLookT(0.0f, 0.0f, 0.0f);
-	resource.smView->SetUpV(0.0f, 1.0f, 0.0f);
+	auto lWorld = resource.GetWorld();
+	auto lView= resource.GetCamera();
+	auto lProjection = resource.GetProjection();
+
+	lView->SetEyeT(0, 0, -25);
+	lView->SetLookT(0.0f, 0.0f, 0.0f);
+	lView->SetUpV(0.0f, 1.0f, 0.0f);
 	
-	resource.smProj->SetViewAngle(45);
-	resource.smProj->SetPlaneNear(0.1f);
-	resource.smProj->SetPlaneFar(2000.0f);
+	lProjection->SetViewAngle(45);
+	lProjection->SetPlaneNear(0.1f);
+	lProjection->SetPlaneFar(2000.0f);
 
 	return S_OK;
 }
@@ -294,9 +301,13 @@ void MAIN::Render()
 	////画面クリア
 	DX11Render::Clear({ 0,0,1,1 });
 	fbx.Update();
+	auto world = resource.GetWorld();
+	world->SetT(0, 0, 0);
+	world->AddRC(0, 1, 0);
+	//world->AddRT(0, 1, 0);
+	auto lView = resource.GetCamera();
+	
 
-	resource.smWorld.SetT(30, 0, 0);
-	resource.smWorld.SetS(1, 1, 1);
 
 	render.Render(&fbx, &resource);
 

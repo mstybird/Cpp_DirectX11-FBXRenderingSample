@@ -22,9 +22,13 @@ constexpr int GEOMETRYSIZE = sizeof(SimpleVertex);
 
 struct FBXModelData {
 
+	FBXModelData();
+	~FBXModelData();
 	std::vector<SimpleVertex> Data;	//ジオメトリデータ
 
-	unsigned int PosLength;
+	D3DXMATRIX *GlobalPosition;
+
+	unsigned int PosLength;		//頂点数
 	unsigned int *Index;		//インデックスバッファ生成用
 	unsigned int IndexLength;	//インデックス数
 
@@ -36,3 +40,29 @@ struct FBXModelData {
 
 
 };
+/*
+	mesh:
+		sub
+		sub
+	mesh:
+		sub
+	vector<FBXMesh>data;
+	data[0].modeldata[0]
+
+*/
+//メッシュ一つの情報
+struct FBXMesh {
+	//FBXMesh();
+	~FBXMesh();
+	//メッシュ一つに含まれるサブメッシュの配列
+	std::vector<FBXModelData*>subMesh;
+
+};
+/*
+	タスク：
+	メッシュとサブメッシュの区別
+	メッシュのグローバルポジションの適用
+	HLSLにギュローバルポジションを適用する
+	メモリ最適化
+	外部からアニメーションの設定
+*/

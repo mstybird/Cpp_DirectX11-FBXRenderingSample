@@ -43,13 +43,15 @@ void DX11FbxManager::LoadFile(std::string pFileName, bool animationLoad)
 		mLoader->FbxDestroy();
 	}
 	mLoader->FbxInit(pFileName,animationLoad);
+	D3DXVECTOR3 transPos;
+	mLoader->GetGeometryData2();
 }
 
 void DX11FbxManager::Update()
 {
 
 	D3DXVECTOR3 transPos;
-	mMeshData = mLoader->GetGeometryData2(&transPos);
+	mMeshData = mLoader->GetGeometryData2();
 	//バッファが存在した場合一旦解放
 	if (mVertexBuffer != nullptr) {
 		for (unsigned int i = 0; i < mMeshData->size(); i++) {

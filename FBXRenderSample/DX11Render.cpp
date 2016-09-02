@@ -59,8 +59,8 @@ void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resour
 
 void DX11Render::SetRenderTarget(DX11RenderResource * resource)
 {
-	display.mUseCameraPtr = resource->smView;
-	display.mUseProjectionPtr = resource->smProj;
+	display.mUseCameraPtr = resource->GetCamera();
+	display.mUseProjectionPtr = resource->GetProjection();
 }
 
 void DX11Render::SetShader(DX11BaseShader * pShader)

@@ -66,11 +66,8 @@ void DX11FbxLoader::FbxInit(std::string vfileName, bool animationLoad) {
 	//ファイルのインポート
 	FbxLoadFromFile();
 	//アニメーションの初期化
-	if (animationLoad == true) {
-		SceneAnim = Scene;
-		LoadAnimationData();
-
-	}
+	SceneAnim = Scene;
+	LoadAnimationData();
 }
 
 void DX11FbxLoader::FbxLoadAnimationFromFile(std::string vfileName)
@@ -146,7 +143,7 @@ void DX11FbxLoader::FbxLoadFromFile()
 		}
 
 		Scene->FillAnimStackNameArray(AnimStackNameArray);
-
+		
 		//ポリゴンを全て三角形に変換
 		FbxGeometryConverter geometryConverter(SdkManager);
 		//trueにすると直接書き換える
@@ -161,6 +158,7 @@ void DX11FbxLoader::FbxLoadFromFile()
 		//ポーズのリストを作成する
 		this->FillPoseArray(Scene, PoseArray);
 
+		Scene->GetGlobalSettings().SetTimeMode(FbxTime::EMode::eFrames60);
 		FrameTime.SetTime(0, 0, 0, 1, 0, Scene->GetGlobalSettings().GetTimeMode());
 
 		//インポータはこれ以上不要なので解放する
@@ -418,7 +416,7 @@ void DX11FbxLoader::FillPoseArray(FbxScene * pScene, FbxArray<FbxPose*> pPoseArr
 //アニメーションの読み込み
 void DX11FbxLoader::LoadAnimationData()
 {
-	int lCurrentAnimStackIndex = 0;	//現在のアニメーション
+	int lCurrentAnimStackIndex = -1;	//現在のアニメーション
 	const FbxArray<FbxString*>&lAnimStackNameArray = GetAnimStackNameArray();
 	auto lPoseCount = lAnimStackNameArray.GetCount();
 	for (int lPoseIndex = 0; lPoseIndex < lPoseCount; lPoseIndex++) {
@@ -430,6 +428,7 @@ void DX11FbxLoader::LoadAnimationData()
 		}
 	}
 	//設定されたアニメーションをセットする
+	EnableAnimation = lCurrentAnimStackIndex != -1 ? true : false;
 	SetCurrentAnimStack(lCurrentAnimStackIndex);
 }
 
@@ -444,8 +443,9 @@ void DX11FbxLoader::SetAnimation(int pIndex)
 }
 
 
-std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2(D3DXVECTOR3 * transPos)
+std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2()
 {
+	//メッシュデータの解放
 	ReleaseGeometryData();
 
 	FbxPose*lPose{ nullptr };
@@ -466,14 +466,16 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2(D3DXVEC
 		}
 	}
 
+
 	for (unsigned int i = 0; i < nodemeshes.size();i++) {
+
+		FBXMesh*lMeshData = new FBXMesh;
 
 		FbxNode* node = nodemeshes[i];
 		FbxAMatrix lGlobalPosition;
 
 		FbxComputeDeformer::GetGlobalPosition(lGlobalPosition, node, CurrentTime, lPose, &lDummyGlobalPosition);
 		
-		//FbxComputeDeformer::GetGlobalPosition(lGlobalPosition, node->GetTarget(), CurrentTime,nullptr, &lDummyGlobalPosition);
 		FbxAMatrix lGeometryOffset;
 		FbxAMatrix lGlobalOffPosition;
 
@@ -481,6 +483,15 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2(D3DXVEC
 		//ジオメトリのオフセットを取得
 		FbxComputeDeformer::GetGeometry(lGeometryOffset, node);
 		lGlobalOffPosition = lGlobalPosition*lGeometryOffset;
+
+		//モデルデータに格納する行列を作成
+		D3DXMATRIX*lDXGlobalPostion = new D3DXMATRIX;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				lDXGlobalPostion->m[i][j] = lGlobalOffPosition.Buffer()->Buffer()[i * 4 + j];
+			}
+		}
+
 		//ノードのメッシュを取得
 		FbxMesh* lMesh = node->GetMesh();
 
@@ -565,7 +576,7 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2(D3DXVEC
 
 				//モデルインスタンス作成
 				FBXModelData* md = new FBXModelData();
-
+				md->GlobalPosition = lDXGlobalPostion;
 				//マテリアル情報の取得
 				const FbxSurfaceMaterial*lMaterial = node->GetMaterial(lIndex);
 
@@ -747,5 +758,12 @@ void DX11FbxLoader::ReleaseGeometryData()
 		Geometry[i].clear();
 	}
 	Geometry.clear();
+
+	for (unsigned int i = 0; i < mMesh.size(); i++) {
+		if (mMesh[i] != nullptr) {
+			delete mMesh[i];
+		}
+	}
+
 }
 

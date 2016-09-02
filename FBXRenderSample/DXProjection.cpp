@@ -29,14 +29,17 @@ void DXProjection::SetPlaneFar(float pFarPlane)
 
 void DXProjection::AddViewAngle(float pAngle)
 {
+	mAngle += pAngle;
 }
 
 void DXProjection::AddPlaneNear(float pNearPlane)
 {
+	mNear += pNearPlane;
 }
 
 void DXProjection::AddPlaneFar(float pFarPlane)
 {
+	mFar = pFarPlane;
 }
 
 D3DXMATRIX * DXProjection::GetMatrix()

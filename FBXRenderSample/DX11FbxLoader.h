@@ -34,7 +34,7 @@ public:
 	//FBXクラス解放
 	void FbxDestroy();
 	//モデルデータを取得する
-	std::vector<std::vector<FBXModelData*>>* GetGeometryData2(D3DXVECTOR3 *transPos);
+	std::vector<std::vector<FBXModelData*>>* GetGeometryData2();
 	//アニメーションの切り替え
 	void SetAnimation(std::string pName);
 	void SetAnimation(int pIndex);
@@ -89,12 +89,14 @@ private:
 	FbxTime Cache_Start, Cache_Stop;
 
 	//アニメーション情報
+	bool EnableAnimation;	//アニメーションが有効かどうか
 	FbxAnimLayer * CurrentAnimLayer;	//FBXアニメーション
 	FbxTime FrameTime, Start, Stop, CurrentTime;
 
 
 	std::unordered_map<std::string, int>AnimData;		//アニメーションスタック
 	std::vector<std::vector<FBXModelData*>> Geometry;	//メッシュデータ
+	std::vector<FBXMesh*>mMesh;	//サブメッシュを含むメッシュデータ
 	std::vector<FbxNode*>nodemeshes;	//メッシュ情報を持つノードリスト
 	std::vector<FbxNode*>nodeAnimeMeshes;	//メッシュ情報を持つノードリスト(アニメーション)
 };

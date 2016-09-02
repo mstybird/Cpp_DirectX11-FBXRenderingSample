@@ -22,26 +22,11 @@ void DXVector3::Set(float pX, float pY, float pZ)
 	z = pZ;
 }
 
-void DXVector3::Set(D3DXVECTOR3 p)
+void DXVector3::Set(float pXYZ)
 {
-	x = p.x;
-	y = p.y;
-	z = p.z;
-}
-
-void DXVector3::SetX(float pX)
-{
-	x = pX;
-}
-
-void DXVector3::SetY(float pY)
-{
-	y = pY;
-}
-
-void DXVector3::SetZ(float pZ)
-{
-	z = pZ;
+	x = pXYZ;
+	y = pXYZ;
+	z = pXYZ;
 }
 
 void DXVector3::Add(float pX, float pY, float pZ)
@@ -51,33 +36,179 @@ void DXVector3::Add(float pX, float pY, float pZ)
 	z += pZ;
 }
 
-void DXVector3::Add(D3DXVECTOR3 p)
+void DXVector3::Add(float pXYZ)
 {
-	(*this) += p;
+	x += pXYZ;
+	y += pXYZ;
+	z += pXYZ;
 }
 
-void DXVector3::AddX(float pX)
+void DXVector3::Sub(float pX, float pY, float pZ)
 {
-	x += pX;
+	x -= pX;
+	y -= pY;
+	z -= pZ;
 }
 
-void DXVector3::AddY(float pY)
+void DXVector3::Sub(float pXYZ)
 {
-	y += pY;
+	x -= pXYZ;
+	y -= pXYZ;
+	z -= pXYZ;
 }
 
-void DXVector3::AddZ(float pZ)
+void DXVector3::Mul(float pX, float pY, float pZ)
 {
-	z = pZ;
+	x *= pX;
+	y *= pY;
+	z *= pZ;
 }
 
-//DXVector3 & DXVector3::operator=(const D3DXVECTOR3 & pValue)
-//{
-//	// TODO: return ステートメントをここに挿入します
-//	x = pValue.x;
-//	y = pValue.y;
-//	z = pValue.z;
-//	return *this;
-//}
+void DXVector3::Mul(float pXYZ)
+{
+	x *= pXYZ;
+	y *= pXYZ;
+	z *= pXYZ;
+}
 
+void DXVector3::Div(float pX, float pY, float pZ)
+{
+	x /= pX;
+	y /= pY;
+	z /= pZ;
+}
 
+void DXVector3::Div(float pXYZ)
+{
+	x /= pXYZ;
+	y /= pXYZ;
+	z /= pXYZ;
+}
+
+DXVector3 & DXVector3::operator+(float pXYZ)
+{
+	x += pXYZ;
+	y += pXYZ;
+	z += pXYZ;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator+=(float pXYZ)
+{
+	x += pXYZ;
+	y += pXYZ;
+	z += pXYZ;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator+(D3DXVECTOR3 & pAddVector)
+{
+	x += pAddVector.x;
+	y += pAddVector.y;
+	z += pAddVector.z;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator+=(D3DXVECTOR3 & pAddVector)
+{
+	x += pAddVector.x;
+	y += pAddVector.y;
+	z += pAddVector.z;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator-(float pXYZ)
+{
+	x -= pXYZ;
+	y -= pXYZ;
+	z -= pXYZ;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator-=(float pXYZ)
+{
+	x -= pXYZ;
+	y -= pXYZ;
+	z -= pXYZ;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator-(D3DXVECTOR3 & pSubVector)
+{
+	x -= pSubVector.x;
+	y -= pSubVector.y;
+	z -= pSubVector.z;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator-=(D3DXVECTOR3 & pSubVector)
+{
+	x -= pSubVector.x;
+	y -= pSubVector.y;
+	z -= pSubVector.z;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator*(float pXYZ)
+{
+	x *= pXYZ;
+	y *= pXYZ;
+	z *= pXYZ;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator*=(float pXYZ)
+{
+	x *= pXYZ;
+	y *= pXYZ;
+	z *= pXYZ;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator*(D3DXVECTOR3 & pMulVector)
+{
+	x *= pMulVector.x;
+	y *= pMulVector.y;
+	z *= pMulVector.z;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator*=(D3DXVECTOR3 & pMulVector)
+{
+	x *= pMulVector.x;
+	y *= pMulVector.y;
+	z *= pMulVector.z;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator/(float pXYZ)
+{
+	x /= pXYZ;
+	y /= pXYZ;
+	z /= pXYZ;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator/=(float pXYZ)
+{
+	x /= pXYZ;
+	y /= pXYZ;
+	z /= pXYZ;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator/(D3DXVECTOR3 & pMulVector)
+{
+	x /= pMulVector.x;
+	y /= pMulVector.y;
+	z /= pMulVector.z;
+	return *this;
+}
+
+DXVector3 & DXVector3::operator/=(D3DXVECTOR3 & pMulVector)
+{
+	x /= pMulVector.x;
+	y /= pMulVector.y;
+	z /= pMulVector.z;
+	return *this;
+}

@@ -2,42 +2,57 @@
 
 DX11RenderResource::DX11RenderResource()
 {
-	smView = nullptr;
-	smProj = nullptr;
+	mView = nullptr;
+	mProj = nullptr;
 }
 
 DX11RenderResource::~DX11RenderResource()
 {
-	if (smView) {
-		delete smView;
+	if (mView) {
+		delete mView;
 	}
-	if (smProj) {
-		delete smProj;
+	if (mProj) {
+		delete mProj;
 	}
 }
 
 void DX11RenderResource::InitRenderMatrix()
 {
-	smView = new DXCamera;
-	smProj = new DXProjection;
+	mView = new DXCamera;
+	mProj = new DXProjection;
 }
 
 D3DXMATRIX * DX11RenderResource::GetMatrixWorld()
 {
-	return smWorld.GetMatrix();
+	return mWorld.GetMatrix();
 }
 
 D3DXMATRIX * DX11RenderResource::GetMatrixView()
 {
-	return smView->GetMatrix();
+	return mView->GetMatrix();
 }
 
 D3DXMATRIX * DX11RenderResource::GetMatrixProjection()
 {
-	return smProj->GetMatrix();
+	return mProj->GetMatrix();
 }
 
 D3DXMATRIX DX11RenderResource::GetMatrixWVP(DXDisplay*pDisplay)
 {
-	return *smWorld.GetMatrix() * *pDisplay->mUseCameraPtr->GetMatrix() * *pDisplay->mUseProjectionPtr->GetMatrix();
+	return *mWorld.GetMatrix() * *pDisplay->mUseCameraPtr->GetMatrix() * *pDisplay->mUseProjectionPtr->GetMatrix();
+}
+
+DXWorld * DX11RenderResource::GetWorld()
+{
+	return &mWorld;
+}
+
+DXCamera * DX11RenderResource::GetCamera()
+{
+	return mView;
+}
+
+DXProjection * DX11RenderResource::GetProjection()
+{
+	return mProj;
 }
