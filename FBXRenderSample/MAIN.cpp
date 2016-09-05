@@ -159,8 +159,12 @@ void MAIN::Loop()
 //アプリケーション処理。アプリのメイン関数。
 void MAIN::App()
 {
+	Update();
 	Render();
+	m_pSwapChain->Present(1, 0);//画面更新（バックバッファをフロントバッファに）	
+
 }
+
 //
 //
 //Direct3D初期化
@@ -261,27 +265,37 @@ D3DXVECTOR3 pos;
 HRESULT MAIN::InitPolygon()
 {
 
-	DXVector3 v{ 1,1,1 };
-	v = v * 2;
+	DXVector3 v1 = {0,0,0};
+	DXVector3 v2 = {1,1,1};
+
+	float x, y, z;
+	x = DXVector3::GetAngleX(DXVector3::TYPE_DEGREE, v1, v2);
+	y = DXVector3::GetAngleY(DXVector3::TYPE_DEGREE, v1, v2);
+	z = DXVector3::GetAngleZ(DXVector3::TYPE_DEGREE, v1, v2);
+
+
 	shader.Init();
 	shader.InitVertex("Simple.hlsl");
 	shader.InitPixel("Simple.hlsl");
 
 	fbx.Initialize();
-	fbx.LoadFile("res/meshes.fbx",true);
+	fbx.LoadFile("res/meshes.fbx", true);
+	mbox.LoadFile("res/box.fbx",true);
 	
 	//どのシェーダーでレンダリングするか登録
 	render.SetShader(&shader);
 	//このリソースをレンダリング用に使う
-	resource.InitRenderMatrix();
-	//レンダーに行列を登録
-	render.SetRenderTarget(&resource);
+	me.InitRenderMatrix();
+	//レンダーにカメラを登録
+	render.SetRenderTarget(&me);
 
-	auto lWorld = resource.GetWorld();
-	auto lView= resource.GetCamera();
-	auto lProjection = resource.GetProjection();
+	auto lWorld = me.GetWorld();
+	auto lView= me.GetCamera();
+	auto lProjection = me.GetProjection();
 
-	lView->SetEyeT(0, 0, -25);
+	auto world = me.GetWorld();
+	world->SetT(0, 0, 0);
+	lView->SetEyeT(0, 0, 10);
 	lView->SetLookT(0.0f, 0.0f, 0.0f);
 	lView->SetUpV(0.0f, 1.0f, 0.0f);
 	
@@ -289,30 +303,78 @@ HRESULT MAIN::InitPolygon()
 	lProjection->SetPlaneNear(0.1f);
 	lProjection->SetPlaneFar(2000.0f);
 
+	box.GetWorld()->SetT(0, 0, 0);
+	//box.GetWorld()->SetRC(45, 45, 0);
+
+	ground.GetWorld()->SetS(1, 0.001, 1);
+
 	return S_OK;
 }
+
+void MAIN::Update()
+{
+	auto world = box.GetWorld();
+	auto camera = me.GetCamera();
+
+	//ボックスの平行移動
+	if (GetAsyncKeyState('W')) {
+		world->AddT(DXWorld::TYPE_ROTATE, 0.25);
+	}
+	if (GetAsyncKeyState('S')) {
+		world->AddT(DXWorld::TYPE_ROTATE, -0.25);
+	}
+	//カメラの回転
+	if (GetAsyncKeyState('A')) {
+		world->AddRC(0, 1, 0);
+	}
+	if (GetAsyncKeyState('D')) {
+		world->AddRC(0, -1, 0);
+	}
+
+
+
+	//カメラの平行移動
+	if (GetAsyncKeyState(VK_LEFT)) {
+		camera->AddTranslation(DXCamera::TYPE_ROTATE, -0.25, { 1,0,0 });
+	}
+	if (GetAsyncKeyState(VK_RIGHT)) {
+		camera->AddTranslation(DXCamera::TYPE_ROTATE, 0.25, { 1,0,0 });
+	}
+
+	//ボックスの回転
+	if (GetAsyncKeyState(VK_UP)) {
+		if (GetAsyncKeyState(VK_SHIFT)) {
+			camera->AddTranslation(DXCamera::TYPE_ROTATE, 0.25, { 0,1,0 });
+		}
+		else {
+			camera->AddTranslation(DXCamera::TYPE_ROTATE, 0.25);
+		}
+	}
+	if (GetAsyncKeyState(VK_DOWN)) {
+		if (GetAsyncKeyState(VK_SHIFT)) {
+			camera->AddTranslation(DXCamera::TYPE_ROTATE, -0.25, { 0,1,0 });
+		}
+		else {
+			camera->AddTranslation(DXCamera::TYPE_ROTATE, -0.25);
+		}
+	}
+
+}
+
 //
 //
 //シーンを画面にレンダリング
 void MAIN::Render()
 {
-
-
 	////画面クリア
 	DX11Render::Clear({ 0,0,1,1 });
+
 	fbx.Update();
-	auto world = resource.GetWorld();
-	world->SetT(0, 0, 0);
-	world->AddRC(0, 1, 0);
-	//world->AddRT(0, 1, 0);
-	auto lView = resource.GetCamera();
-	
+	mbox.Update();
+	render.Render(&fbx, &box);
+	//render.Render(&mbox, &ground);
 
 
-	render.Render(&fbx, &resource);
-
-
-	m_pSwapChain->Present(0, 0);//画面更新（バックバッファをフロントバッファに）	
 
 }
 

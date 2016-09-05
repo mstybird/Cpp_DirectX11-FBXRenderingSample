@@ -26,6 +26,7 @@ public:
 	);
 
 	virtual void SetConstantBuffer1(DX11RenderResource * resource,DXDisplay*pDisplay) = 0;
+	virtual void SetConstantBuffer1_1(FBXMesh * fbxMesh, DX11RenderResource * resource, DXDisplay*pDisplay) = 0;
 	virtual void SetConstantBuffer2(FBXModelData*modelData) = 0;
 
 	friend void DX11Render::Render(DX11FbxManager*fbxManager, DX11RenderResource*resource);

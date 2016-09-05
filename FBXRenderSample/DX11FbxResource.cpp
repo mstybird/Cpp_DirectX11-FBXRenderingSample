@@ -1,7 +1,6 @@
 #include "DX11FbxResource.h"
 
 FBXModelData::FBXModelData():
-	GlobalPosition{nullptr},
 	Index{ nullptr },
 	Emissive{ nullptr },
 	Ambient{ nullptr },
@@ -13,18 +12,29 @@ FBXModelData::FBXModelData():
 
 FBXModelData::~FBXModelData()
 {
-	if (GlobalPosition != nullptr) {
-		delete GlobalPosition;
-	}
+
+}
+
+FBXMesh::FBXMesh()
+{
+	mWorld = nullptr;
 }
 
 FBXMesh::~FBXMesh()
 {
-	for (unsigned int i = 0; subMesh.size(); i++) {
+	if (mWorld != nullptr) {
+		delete mWorld;
+	}
+	for (unsigned int i = 0; i<subMesh.size(); i++) {
 		if (subMesh[i] != nullptr) {
 			delete subMesh[i];
 			subMesh[i] = nullptr;
 		}
 	}
 	subMesh.clear();
+}
+
+ColorChannel::~ColorChannel()
+{
+	TextureName.clear();
 }

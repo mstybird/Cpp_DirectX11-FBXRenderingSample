@@ -3,6 +3,12 @@
 //ワールド空間座標系クラス
 class DXWorld {
 public:
+	//座標移動パターン
+	enum TYPEMOVE {
+		TYPE_PARALLEL=0,	//平行移動
+		TYPE_ROTATE=1	//回転移動
+	};
+
 	DXWorld();
 
 	///移動行列操作
@@ -10,6 +16,10 @@ public:
 	void SetT(D3DXVECTOR3 pPosition);
 	void AddT(float pX, float pY, float pZ);
 	void AddT(D3DXVECTOR3 pPosition);
+	void AddT(TYPEMOVE pType, float pSpeed, DXVector3 pDirection = { 0,0,1 });
+	void AddTRotated(float pSpeed, DXVector3 pDirection = { 0,0,1 });
+
+
 	void SubT(float pX, float pY, float pZ);
 	void SubT(D3DXVECTOR3 pPosition);
 	void MulT(float pX, float pY, float pZ);

@@ -36,7 +36,7 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL, float2 Tex : TEXCOOR
 	Normal = mul(Normal, g_mW);
 	Normal = normalize(Normal);
 
-	output.Color = 1.0 * g_Diffuse * dot(Normal, g_vLightDir);//この式はランバートの余弦則
+	output.Color = 0.3*g_Diffuse +1.0 * g_Diffuse * dot(Normal, g_vLightDir);//この式はランバートの余弦則
 
 	return output;
 }

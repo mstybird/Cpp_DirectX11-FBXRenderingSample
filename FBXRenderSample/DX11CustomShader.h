@@ -22,6 +22,8 @@ public:
 
 
 	void SetConstantBuffer1(DX11RenderResource * resource, DXDisplay*pDisplay);
+	//s—ñİ’è—p
+	virtual void SetConstantBuffer1_1(FBXMesh * fbxMesh, DX11RenderResource * resource, DXDisplay*pDisplay);
 	void SetConstantBuffer2(FBXModelData*modelData);
 
 private:

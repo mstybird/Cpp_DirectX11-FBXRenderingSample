@@ -66,6 +66,7 @@ public:
 	HRESULT InitPolygon();
 	void Loop();
 	void App();
+	void Update();
 	void Render();
 	void DestroyD3D();
 	//↓アプリにひとつ
@@ -79,7 +80,11 @@ public:
 	ID3D11RasterizerState* m_pRasterizerState;
 
 	DX11FbxManager fbx;				//モデルデータ
-	DX11RenderResource resource;	//描画に使うリソース
+	DX11FbxManager mbox;				//モデルデータ
+	DX11RenderResource box;	//ボックス移動
+	DX11RenderResource ground;
+	DX11RenderResource me;	//ボックス移動
+
 	MyDX11Shader shader;				//描画に使うシェーダ
 	//シーンに一つ
 	DX11Render render;				//描画モデル

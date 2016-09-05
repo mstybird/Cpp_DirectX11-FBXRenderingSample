@@ -44,6 +44,37 @@ void DXWorld::AddT(D3DXVECTOR3 pPosition)
 	mPosition += pPosition;
 }
 
+void DXWorld::AddT(TYPEMOVE pType, float pSpeed, DXVector3 pDirection)
+{
+	D3DXMATRIX lRotation;
+	switch (pType)
+	{
+	case DXWorld::TYPE_PARALLEL:
+		pDirection *= pSpeed;
+		mPosition += pDirection;
+		break;
+	case DXWorld::TYPE_ROTATE:
+		D3DXMatrixRotationYawPitchRoll(
+			&lRotation,
+			D3DXToRadian(mRotationCenter.y),
+			D3DXToRadian(mRotationCenter.x),
+			D3DXToRadian(mRotationCenter.z)
+			);
+		//ˆÚ“®—ÊŒvŽZ
+		D3DXVec3TransformCoord(&pDirection, &pDirection, &lRotation);
+		pDirection *= pSpeed;
+		mPosition += pDirection;
+		break;
+	default:
+		break;
+	}
+}
+
+void DXWorld::AddTRotated(float pSpeed, DXVector3 pDirection)
+{
+
+}
+
 void DXWorld::SubT(float pX, float pY, float pZ)
 {
 	mPosition.Sub(pX, pY, pZ);

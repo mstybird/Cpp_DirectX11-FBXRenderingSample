@@ -22,7 +22,7 @@ void DX11Render::Clear(D3DXVECTOR4 pColor)
 
 void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resource)
 {
-	shader->SetConstantBuffer1(resource,&display);
+	//shader->SetConstantBuffer1(resource,&display);
 	//シェーダの設定
 	sDeviceContext->VSSetShader(shader->mVertexShader, NULL, 0);
 	sDeviceContext->PSSetShader(shader->mPixelShader, NULL, 0);
@@ -36,9 +36,13 @@ void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resour
 	sDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	auto meshData = fbxManager->GetMeshData();
+	//メッシュの個数分
 	for (unsigned int i = 0; i < meshData->size(); i++) {
-		for (unsigned int j = 0; j < meshData->at(i).size(); j++) {
-			shader->SetConstantBuffer2(meshData->at(i).at(j));
+		//行列の設定
+		shader->SetConstantBuffer1_1(meshData->at(i), resource, &display);
+		//サブメッシュの個数分
+		for (unsigned int j = 0; j < meshData->at(i)->subMesh.size(); j++) {
+			shader->SetConstantBuffer2(meshData->at(i)->subMesh.at(j));
 			sDeviceContext->VSSetConstantBuffers(1, 1, &shader->mConstantBuffer2);
 			sDeviceContext->PSSetConstantBuffers(1, 1, &shader->mConstantBuffer2);
 			UINT stride = sizeof(SimpleVertex);

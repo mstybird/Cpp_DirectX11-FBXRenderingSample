@@ -42,6 +42,13 @@ D3DXMATRIX DX11RenderResource::GetMatrixWVP(DXDisplay*pDisplay)
 	return *mWorld.GetMatrix() * *pDisplay->mUseCameraPtr->GetMatrix() * *pDisplay->mUseProjectionPtr->GetMatrix();
 }
 
+D3DXMATRIX DX11RenderResource::GetMatrixWVP(D3DXMATRIX * pAddWorldMatrix, DXDisplay * pDisplay)
+{
+	return *pAddWorldMatrix * *mWorld.GetMatrix() * 
+		*pDisplay->mUseCameraPtr->GetMatrix() * 
+		*pDisplay->mUseProjectionPtr->GetMatrix();
+}
+
 DXWorld * DX11RenderResource::GetWorld()
 {
 	return &mWorld;

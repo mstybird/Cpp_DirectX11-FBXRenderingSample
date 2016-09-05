@@ -29,7 +29,7 @@ public:
 
 	//解放処理
 	void Release();
-	std::vector<std::vector<FBXModelData*>>* GetMeshData();
+	std::vector<FBXMesh*>* GetMeshData();
 	ID3D11Buffer*GetVertexBuffer(int i, int j);
 	ID3D11Buffer*GetIndexBuffer(int i, int j);
 	unsigned int*GetIndexBufferCount(int i,int j);
@@ -40,7 +40,7 @@ private:
 	DX11FbxLoader*mLoader;				//FBX読み込み用
 	ID3D11Buffer***mVertexBuffer;		//頂点バッファ
 	ID3D11Buffer***mIndexBuffer;		//インデックスバッファ
-	std::vector<std::vector<FBXModelData*>>*mMeshData;//メッシュデータ
+	std::vector<FBXMesh*>*mMeshData;//メッシュデータ
 private:
 	//static変数
 	//アプリに一つ

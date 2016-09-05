@@ -8,6 +8,7 @@ struct ColorChannel {
 		Color[2] = 0.0f;
 		Color[3] = 1.0f;
 	}
+	~ColorChannel();
 	std::string TextureName;
 	float Color[4];
 };
@@ -25,8 +26,6 @@ struct FBXModelData {
 	FBXModelData();
 	~FBXModelData();
 	std::vector<SimpleVertex> Data;	//ジオメトリデータ
-
-	D3DXMATRIX *GlobalPosition;
 
 	unsigned int PosLength;		//頂点数
 	unsigned int *Index;		//インデックスバッファ生成用
@@ -52,11 +51,12 @@ struct FBXModelData {
 */
 //メッシュ一つの情報
 struct FBXMesh {
-	//FBXMesh();
+	FBXMesh();
 	~FBXMesh();
 	//メッシュ一つに含まれるサブメッシュの配列
 	std::vector<FBXModelData*>subMesh;
-
+	//メッシュの行列
+	D3DXMATRIX *mWorld;
 };
 /*
 	タスク：

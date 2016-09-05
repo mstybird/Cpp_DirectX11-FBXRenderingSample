@@ -33,8 +33,8 @@ public:
 	void LoadAnimationRecursive(FbxNode*pNode, FbxAnimLayer*pAnimLayer);
 	//FBXクラス解放
 	void FbxDestroy();
-	//モデルデータを取得する
-	std::vector<std::vector<FBXModelData*>>* GetGeometryData2();
+	//メッシュデータを取得する
+	std::vector<FBXMesh*>* GetGeometryData2();
 	//アニメーションの切り替え
 	void SetAnimation(std::string pName);
 	void SetAnimation(int pIndex);
@@ -95,7 +95,7 @@ private:
 
 
 	std::unordered_map<std::string, int>AnimData;		//アニメーションスタック
-	std::vector<std::vector<FBXModelData*>> Geometry;	//メッシュデータ
+	//std::vector<std::vector<FBXModelData*>> Geometry;	//メッシュデータ
 	std::vector<FBXMesh*>mMesh;	//サブメッシュを含むメッシュデータ
 	std::vector<FbxNode*>nodemeshes;	//メッシュ情報を持つノードリスト
 	std::vector<FbxNode*>nodeAnimeMeshes;	//メッシュ情報を持つノードリスト(アニメーション)

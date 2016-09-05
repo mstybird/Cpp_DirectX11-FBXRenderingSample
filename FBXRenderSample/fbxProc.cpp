@@ -443,7 +443,7 @@ void DX11FbxLoader::SetAnimation(int pIndex)
 }
 
 
-std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2()
+std::vector<FBXMesh*>* DX11FbxLoader::GetGeometryData2()
 {
 	//メッシュデータの解放
 	ReleaseGeometryData();
@@ -466,9 +466,11 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2()
 		}
 	}
 
+	//メッシュの数だけ配列作成
+	mMesh.reserve(nodemeshes.size());
 
 	for (unsigned int i = 0; i < nodemeshes.size();i++) {
-
+		//メッシュ作成
 		FBXMesh*lMeshData = new FBXMesh;
 
 		FbxNode* node = nodemeshes[i];
@@ -491,6 +493,9 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2()
 				lDXGlobalPostion->m[i][j] = lGlobalOffPosition.Buffer()->Buffer()[i * 4 + j];
 			}
 		}
+		//行列を設定
+		lMeshData->mWorld = lDXGlobalPostion;
+
 
 		//ノードのメッシュを取得
 		FbxMesh* lMesh = node->GetMesh();
@@ -569,6 +574,8 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2()
 		//アニメーションなどすべての処理が終わったら戻り値用のジオメトリを作成する
 		if (lMeshCache) {
 			const int lSubMeshCount = lMeshCache->GetSubMeshCount();
+			//サブメッシュの作成
+			lMeshData->subMesh.reserve(lSubMeshCount);
 			//サブメッシュの個数分行う
 			for (int lIndex = 0; lIndex < lSubMeshCount; lIndex++) {
 
@@ -576,7 +583,6 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2()
 
 				//モデルインスタンス作成
 				FBXModelData* md = new FBXModelData();
-				md->GlobalPosition = lDXGlobalPostion;
 				//マテリアル情報の取得
 				const FbxSurfaceMaterial*lMaterial = node->GetMaterial(lIndex);
 
@@ -648,7 +654,10 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2()
 
 				//md.Index = idx;
 				//md.Pos = vv;
-				mdv.push_back(md);
+				//サブメッシュの登録
+				lMeshData->subMesh.push_back(md);
+
+//				mdv.push_back(md);
 			}
 		}
 		else {
@@ -677,7 +686,10 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2()
 
 			//}
 		}
-		Geometry.push_back(mdv);
+		//サブメッシュの登録
+		mMesh.push_back(lMeshData);
+
+		//Geometry.push_back(mdv);
 
 		delete[]lVertexArray;
 
@@ -687,7 +699,7 @@ std::vector<std::vector<FBXModelData*>>* DX11FbxLoader::GetGeometryData2()
 
 
 
-	return &Geometry;
+	return &mMesh;
 }
 
 
@@ -748,22 +760,30 @@ bool DX11FbxLoader::SetCurrentPoseIndex(int pPoseIndex)
 
 void DX11FbxLoader::ReleaseGeometryData()
 {
-	for (unsigned int i = 0; i < Geometry.size(); i++) {
-		for (unsigned int j = 0; j < Geometry[i].size(); j++) {
-			if (Geometry[i][j] != nullptr) {
-				delete Geometry[i][j];
-				Geometry[i][j] = nullptr;
-			}
-		}
-		Geometry[i].clear();
-	}
-	Geometry.clear();
+	//メッシュの解放
+	//for (unsigned int i = 0; i < mMesh.size(); i++) {
+	//	//サブメッシュの解放
+	//	for (unsigned int j = 0; j < mMesh[i]->subMesh.size(); j++) {
+	//		if (mMesh[i]->subMesh[j] != nullptr) {
+	//			delete mMesh[i]->subMesh[j];
+	//			mMesh[i]->subMesh[j] = nullptr;
+	//		}
+	//	}
+	//	mMesh[i]->subMesh.clear();
+	//	if (mMesh[i] != nullptr) {
+	//		delete mMesh[i]->mWorld;
+	//		delete mMesh[i];
+	//		mMesh[i]->mWorld = nullptr;
+	//		mMesh[i] = nullptr;
+	//	}
+	//}
 
 	for (unsigned int i = 0; i < mMesh.size(); i++) {
-		if (mMesh[i] != nullptr) {
-			delete mMesh[i];
-		}
+		delete mMesh[i];
 	}
+	mMesh.clear();
+
+
 
 }
 

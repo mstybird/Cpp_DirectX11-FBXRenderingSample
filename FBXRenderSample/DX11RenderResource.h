@@ -4,6 +4,7 @@
 #include"DXCamera.h"
 #include"DXProjection.h"
 #include"DXDisplay.h"
+struct D3DXMATRIX;
 class DX11RenderResource {
 public:
 	DX11RenderResource();
@@ -14,6 +15,7 @@ public:
 	D3DXMATRIX*GetMatrixView();
 	D3DXMATRIX*GetMatrixProjection();
 	D3DXMATRIX GetMatrixWVP(DXDisplay*pDisplay);
+	D3DXMATRIX GetMatrixWVP(D3DXMATRIX*pAddWorldMatrix, DXDisplay*pDisplay);
 
 	DXWorld*GetWorld();
 	DXCamera*GetCamera();
