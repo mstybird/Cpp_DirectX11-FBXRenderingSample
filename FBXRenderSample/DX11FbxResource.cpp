@@ -34,7 +34,24 @@ FBXMesh::~FBXMesh()
 	subMesh.clear();
 }
 
+ColorChannel::ColorChannel():
+	mTexture{nullptr},
+	Color{0.0f,0.0f,0.0f,1.0f}
+{
+}
+
 ColorChannel::~ColorChannel()
 {
 	TextureName.clear();
+	if (mTexture != nullptr) {
+		delete mTexture;
+	}
+}
+
+void ColorChannel::CreateTexture()
+{
+	if (!TextureName.empty() == true) {
+		mTexture = new DXTexture;
+		mTexture->Create(TextureName);
+	}
 }

@@ -1,4 +1,5 @@
 #include"DX11FbxLoader.h"
+#include"Helper.h"
 #include<Shlwapi.h>
 #pragma comment(lib,"shlwapi.lib")
 #pragma warning(disable : 4800)
@@ -11,6 +12,7 @@ DX11FbxLoader::~DX11FbxLoader()
 //初期化処理
 void DX11FbxLoader::FbxInit(std::string vfileName, bool animationLoad) {
 	fileName = vfileName;
+	MSString::GetFolderPath(fileRelativePath, fileName);
 	PoseIndex = -1;
 	
 	Cache_Start = FBXSDK_TIME_INFINITE;
@@ -44,7 +46,7 @@ void DX11FbxLoader::FbxInit(std::string vfileName, bool animationLoad) {
 		//バイナリファイルだった場合、バイナリデータを読み込むための設定
 		FileFormat = SdkManager->GetIOPluginRegistry()->FindReaderIDByDescription("FBX binary (*.fbx)");;
 	}
-
+	
 
 	//インポータの初期化＆ファイルの設定
 	if (Importer->Initialize(fileName.c_str(), FileFormat) == true) {
@@ -137,9 +139,11 @@ void DX11FbxLoader::FbxLoadFromFile()
 			FbxAxisSystem::eParityOdd,
 			FbxAxisSystem::eRightHanded
 		);
+
+
 		//読み込んだファイルと座標系が異なる場合はシーンの座標系を変換
-		if (SceneAxisSystem != OurAxisSystem) {
-			OurAxisSystem.ConvertScene(Scene);
+		if (SceneAxisSystem != FbxAxisSystem::DirectX) {
+			FbxAxisSystem::DirectX.ConvertScene(Scene);
 		}
 
 		Scene->FillAnimStackNameArray(AnimStackNameArray);
@@ -226,7 +230,7 @@ void DX11FbxLoader::LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLa
 
 			//読み込めたらファイルテクスチャのアドレスを渡す
 			if (lStatus) {
-				FbxString*lTextureName = new FbxString(filePath);
+				std::string*lTextureName = new std::string(filePath);
 				lFileTexture->SetUserDataPtr(lTextureName);
 			}
 			
@@ -251,7 +255,7 @@ void DX11FbxLoader::LoadCacheRecursive(FbxNode * pNode, FbxAnimLayer * pAnimLaye
 			//マテリアルキャッシュ作成
 			FbxAutoPtr<FbxMaterialCache> lMaterialCache(new FbxMaterialCache);
 			//マテリアルキャッシュの初期化
-			if (lMaterialCache->Initialize(lMaterial)) {
+			if (lMaterialCache->Initialize(lMaterial,fileRelativePath)) {
 				//キャッシュのポインタをマテリアルに渡す
 				lMaterial->SetUserDataPtr(lMaterialCache.Release());
 			}
@@ -605,27 +609,36 @@ std::vector<FBXMesh*>* DX11FbxLoader::GetGeometryData2()
 				auto vertexCount = lMeshCache->lVertices.Size();
 				md->PosLength = vertexCount / 4;
 				md->Data.resize(md->PosLength);
+				
+				//インデックス座標を取得
+				md->Index = lMeshCache->lIndices.GetArray() + lOffset;
+				auto count = lMeshCache->lIndices.GetCount();
+
 				for (int i = 0; i < vertexCount / 4; ++i) {
 
 					//頂点のコピー
 					memcpy(&md->Data[i].Pos, &lMeshCache->lVertices.GetArray()[i * 4], sizeof(D3DXVECTOR4));
 
 
-					if (!lHasDeformation)
-						memcpy(&md->Data[i].Normal, &lMeshCache->lNormals.GetArray()[i * 3], sizeof(D3DXVECTOR3));
+					if (!lHasDeformation) {
+						if (lMeshCache->lNormals.Size() > 0) {
+							memcpy(&md->Data[i].Normal, &lMeshCache->lNormals.GetArray()[i * 3], sizeof(D3DXVECTOR3));
+						}
+					}
 
 
 
 
 					if (lMeshCache->lUVs.Size()>0) {
 						memcpy(&md->Data[i].UV, &lMeshCache->lUVs.GetArray()[i * 2], sizeof(D3DXVECTOR2));
-
 					}
 				}
 
-				//インデックス座標を取得
-				md->Index = lMeshCache->lIndices.GetArray() + lOffset;
-				auto count = lMeshCache->lIndices.GetCount();
+				for (int i = 0; i < count; i++) {
+					int idx = lMeshCache->lIndices.GetArray()[i];
+					int a = idx;
+				}
+
 				//頂点座標とインデックス座標をもとに法線の計算
 				if (lHasDeformation) {
 					for (int i = 0; i < lMeshCache->lIndices.Size() / 3 - 2; i++) {
@@ -710,7 +723,7 @@ bool DX11FbxLoader::SetCurrentAnimStack(int pIndex)
 	const int lAnimStackCount = AnimStackNameArray.GetCount();
 
 	//アニメーションがない or 存在しないアニメーションの指定をした場合はエラー
-	if (lAnimStackCount == 0 || pIndex >= lAnimStackCount) {
+	if (lAnimStackCount == 0 || pIndex >= lAnimStackCount||pIndex<0) {
 		return false;
 	}
 

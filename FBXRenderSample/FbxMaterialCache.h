@@ -1,14 +1,18 @@
 #pragma once
+#include<D3DX11.h>
+
+
 class FbxMaterialCache {
 public:
 	FbxMaterialCache();
 	~FbxMaterialCache();
-	bool Initialize(const FbxSurfaceMaterial*pMaterial);
+	bool Initialize(const FbxSurfaceMaterial*pMaterial, const std::string& pTextureRelativePathName = { "" });
 	static FbxDouble3 GetMaterialProperty(
 		const FbxSurfaceMaterial*pMaterial,
 		std::string pPropertyName,
 		std::string pFactorPropertyName,
-		std::string&pTextureName
+		std::string&pTextureName,
+		const std::string& pTextureRelativePathName = {""}
 	);
 	void SetCurrentMaterial(FBXModelData* pModelData);
 	bool HasTexture()const {}

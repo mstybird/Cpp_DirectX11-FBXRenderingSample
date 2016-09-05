@@ -57,6 +57,7 @@ namespace FbxComputeDeformer {
 				FbxBlendShapeChannel*lChannel = lBlendShape->GetBlendShapeChannel(lChannelIndex);
 				if (lChannel) {
 					FbxAnimCurve*lFCurve = pMesh->GetShapeChannel(lBlendShapeIndex, lChannelIndex, pAnimLayer);
+					
 					if (!lFCurve)continue;
 					double lWeight = lFCurve->Evaluate(pTime);
 

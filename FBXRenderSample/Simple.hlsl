@@ -2,7 +2,8 @@
 /*
 	FBXレンダリング用
 */
-
+Texture2D gTexture:register(t0);
+SamplerState gSampler:register(s0);
 
 //アプリケーションごとに適用
 cbuffer global:register(b0)
@@ -21,7 +22,7 @@ cbuffer global:register(b1) {
 struct VS_OUTPUT
 {
 	float4 Pos : SV_POSITION;
-	float4 Color : COLOR0;
+	float2 UV:TEXCOORD;
 };
 
 //
@@ -30,14 +31,8 @@ struct VS_OUTPUT
 VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL, float2 Tex : TEXCOORD)
 {
 	VS_OUTPUT output = (VS_OUTPUT)0;
-
 	output.Pos = mul(Pos, g_mWVP);
-	Normal.w = 0;//w=0で移動成分を反映させない（原理はシェーダーグルが詳しい）
-	Normal = mul(Normal, g_mW);
-	Normal = normalize(Normal);
-
-	output.Color = 0.3*g_Diffuse +1.0 * g_Diffuse * dot(Normal, g_vLightDir);//この式はランバートの余弦則
-
+	output.UV = Tex;
 	return output;
 }
 
@@ -47,5 +42,5 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL, float2 Tex : TEXCOOR
 float4 PS(VS_OUTPUT input) : SV_Target
 {
 	
-	return input.Color;
+	return gTexture.Sample(gSampler,input.UV);
 }

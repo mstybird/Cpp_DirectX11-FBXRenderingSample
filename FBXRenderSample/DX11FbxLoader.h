@@ -74,6 +74,8 @@ private:
 
 	//メンバ宣言部分
 	std::string fileName;				//fbxファイル名
+	std::string fileRelativePath;		//FBXファイルのあるフォルダへの相対パス
+
 	FbxString WindowMessage;	//ウィンドウメッセージ用
 	FbxManager * SdkManager;			//FBXマネージャ
 	FbxScene * Scene;					//FBXシーン

@@ -44,6 +44,10 @@ void MyDX11Shader::SetConstantBuffer2(FBXModelData * modelData)
 {
 	D3D11_MAPPED_SUBRESOURCE pData;
 	MyFBXCONSTANTBUFFER2 cb;
+	auto lSampler = modelData->Diffuse->mTexture->GetSampler();
+	auto lTexture = modelData->Diffuse->mTexture->GetTexture();
+	sDeviceContext->PSSetSamplers(0, 1, &lSampler);
+	sDeviceContext->PSSetShaderResources(0, 1, &lTexture);
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer2, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
 		cb.Diffuse = modelData->Diffuse->Color;
 		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
@@ -57,7 +61,7 @@ void MyDX11Shader::InitLayout()
 	std::vector<D3D11_INPUT_ELEMENT_DESC>layout;
 
 	layout.push_back(INPUTLAYOUT_POSITION(0));
-	layout.push_back(INPUTLAYOUT_NORMAL(16));
+	layout.push_back(INPUTLAYOUT_NORMAL(12));
 	layout.push_back(INPUTLAYOUT_TEXCOORD(28));
 
 	//インプットレイアウトの作成

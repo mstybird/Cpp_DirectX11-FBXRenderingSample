@@ -44,6 +44,10 @@
       <Filter>DX11Helper\Source</Filter>
     </ClCompile>
     <ClCompile Include="DX11FbxResource.cpp" />
+    <ClCompile Include="DX11Texture.cpp">
+      <Filter>DX11Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Helper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11FbxLoader.h">
@@ -100,6 +104,12 @@
     <ClInclude Include="Dx11Manager.h">
       <Filter>DX11Render\Header</Filter>
     </ClInclude>
+    <ClInclude Include="DX11Texture.h">
+      <Filter>DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -139,6 +149,9 @@
     </Filter>
     <Filter Include="Resource">
       <UniqueIdentifier>{13ffb461-1f42-4b80-aa0a-2cdd3807b349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper">
+      <UniqueIdentifier>{f28ec3ca-4e06-46f9-989d-47c88f7869eb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

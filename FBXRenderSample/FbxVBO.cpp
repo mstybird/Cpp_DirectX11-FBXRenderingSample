@@ -128,6 +128,7 @@ bool FbxVBO::Initialize(const FbxMesh * pMesh)
 
 	FbxGeometryElement::EMappingMode lNormalMappingMode = FbxGeometryElement::eNone;
 	FbxGeometryElement::EMappingMode lUVMappingMode = FbxGeometryElement::eNone;
+	FbxGeometryElement::EReferenceMode refMode;
 
 	//法線があった場合
 	if (mHasNormal) {
@@ -143,6 +144,7 @@ bool FbxVBO::Initialize(const FbxMesh * pMesh)
 	//UV座標があった場合
 	if (mHasUV) {
 		lUVMappingMode = pMesh->GetElementUV(0)->GetMappingMode();
+		refMode = pMesh->GetElementUV(0)->GetReferenceMode();
 		if (lUVMappingMode == FbxGeometryElement::eNone) {
 			mHasUV = false;
 		}
@@ -175,7 +177,9 @@ bool FbxVBO::Initialize(const FbxMesh * pMesh)
 		lUVName = lUVNames[0];
 	}
 
-
+	////int UVNum = elem->GetDirectArray().GetCount();
+	//int indexNum = elem->GetIndexArray().GetCount();
+	//int size = UVNum > indexNum ? UVNum : indexNum;
 
 
 
@@ -258,6 +262,8 @@ bool FbxVBO::Initialize(const FbxMesh * pMesh)
 	}
 
 	int lVertexCount = 0;
+
+
 	for (int lPolygonIndex = 0; lPolygonIndex < lPolygonCount; lPolygonIndex++) {
 		//マテリアルフェイスを取得
 		int lMaterialIndex = 0;
@@ -297,6 +303,7 @@ bool FbxVBO::Initialize(const FbxMesh * pMesh)
 
 				if (mHasUV)
 				{
+
 					bool lUnmappedUV;
 					pMesh->GetPolygonVertexUV(lPolygonIndex, lVerticeIndex, lUVName, lCurrentUV, lUnmappedUV);
 					lUVs.SetAt(lVertexCount * UV_STRIDE + 0, static_cast<float>(lCurrentUV[0]));
@@ -308,6 +315,24 @@ bool FbxVBO::Initialize(const FbxMesh * pMesh)
 		mSubMeshes[lMaterialIndex]->TriangleCount += 1;
 	}
 	return true;
+}
+
+bool FbxVBO::Initialize2(const FbxMesh * pMesh)
+{
+	
+	int PolygonNum = pMesh->GetPolygonCount();
+	int PolygonVertexNum = pMesh->GetPolygonVertexCount();
+	int *IndexAry = pMesh->GetPolygonVertices();
+
+	for (int p = 0; p < PolygonNum; p++) {
+		int IndexNumInPolygon = pMesh->GetPolygonSize(p);  // p番目のポリゴンの頂点数
+		for (int n = 0; n < IndexNumInPolygon; n++) {
+			// ポリゴンpを構成するn番目の頂点のインデックス番号
+			int IndexNumber = pMesh->GetPolygonVertex(p, n);
+		}
+	}
+
+	return false;
 }
 
 void FbxVBO::UpdateVertexPosition(const FbxMesh * pMesh, const FbxVector4 * pVertices)

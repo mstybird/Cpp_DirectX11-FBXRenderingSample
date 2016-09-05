@@ -11,6 +11,7 @@ public:
 	FbxVBO();
 	~FbxVBO();
 	bool Initialize(const FbxMesh * pMesh);
+	bool Initialize2(const FbxMesh * pMesh);
 
 	// Update vertex positions for deformed meshes.
 	void UpdateVertexPosition(const FbxMesh * pMesh, const FbxVector4 * pVertices);

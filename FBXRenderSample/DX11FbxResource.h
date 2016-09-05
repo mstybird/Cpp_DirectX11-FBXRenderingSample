@@ -1,16 +1,14 @@
 #pragma once
 #include<d3dx9.h>
 #include<vector>
+#include"DX11Texture.h"
 struct ColorChannel {
-	ColorChannel() {
-		Color[0] = 0.0f;
-		Color[1] = 0.0f;
-		Color[2] = 0.0f;
-		Color[3] = 1.0f;
-	}
+	ColorChannel();
 	~ColorChannel();
-	std::string TextureName;
-	float Color[4];
+	void CreateTexture();
+	std::string TextureName;	//テクスチャファイルパス
+	DXTexture*mTexture;			//テクスチャリソース
+	float Color[4];				//マテリアルカラー
 };
 
 struct SimpleVertex

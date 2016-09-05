@@ -1,6 +1,6 @@
 #include "MAIN.h"
 
-
+#include"Helper.h"
 /*
 	メモ：
 	次の作業
@@ -246,10 +246,9 @@ HRESULT MAIN::InitD3D()
 	//各ラッパーにDirectX11デバイス等を登録
 	DX11BaseShader::Init(m_pDevice, m_pDeviceContext);
 	DX11FbxManager::InitDevice(m_pDevice, m_pDeviceContext);
-
 	DX11Render::Initialize(m_pDevice, m_pDeviceContext,m_pBackBuffer_TexRTV,m_pBackBuffer_DSTexDSV);
 	DXProjection::SetAspect((FLOAT)WINDOW_WIDTH, (FLOAT)WINDOW_HEIGHT);
-
+	DXTexture::Initialize(m_pDevice);
 	//ポリゴン作成
 	if(FAILED(InitPolygon()))
 	{
@@ -265,13 +264,9 @@ D3DXVECTOR3 pos;
 HRESULT MAIN::InitPolygon()
 {
 
-	DXVector3 v1 = {0,0,0};
-	DXVector3 v2 = {1,1,1};
-
-	float x, y, z;
-	x = DXVector3::GetAngleX(DXVector3::TYPE_DEGREE, v1, v2);
-	y = DXVector3::GetAngleY(DXVector3::TYPE_DEGREE, v1, v2);
-	z = DXVector3::GetAngleZ(DXVector3::TYPE_DEGREE, v1, v2);
+	std::string str{ "path\\data.txt" };
+	std::string path;
+	MSString::GetFolderPath(path, str);
 
 
 	shader.Init();
@@ -279,8 +274,8 @@ HRESULT MAIN::InitPolygon()
 	shader.InitPixel("Simple.hlsl");
 
 	fbx.Initialize();
-	fbx.LoadFile("res/meshes.fbx", true);
-	mbox.LoadFile("res/box.fbx",true);
+	mbox.LoadFile("res/Chips.fbx",true);
+	//fbx.LoadFile("res/meshes.fbx", true);
 	
 	//どのシェーダーでレンダリングするか登録
 	render.SetShader(&shader);
@@ -295,7 +290,7 @@ HRESULT MAIN::InitPolygon()
 
 	auto world = me.GetWorld();
 	world->SetT(0, 0, 0);
-	lView->SetEyeT(0, 0, 10);
+	lView->SetEyeT(0, 1, 10);
 	lView->SetLookT(0.0f, 0.0f, 0.0f);
 	lView->SetUpV(0.0f, 1.0f, 0.0f);
 	
@@ -369,10 +364,12 @@ void MAIN::Render()
 	////画面クリア
 	DX11Render::Clear({ 0,0,1,1 });
 
-	fbx.Update();
+	//fbx.Update();
 	mbox.Update();
-	render.Render(&fbx, &box);
-	//render.Render(&mbox, &ground);
+	ground.GetWorld()->SetS(1, 1, 1);
+	ground.GetWorld()->AddRC(0, 1, 0);
+	//render.Render(&fbx, &box);
+	render.Render(&mbox, &ground);
 
 
 

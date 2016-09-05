@@ -27,9 +27,6 @@ void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resour
 	sDeviceContext->VSSetShader(shader->mVertexShader, NULL, 0);
 	sDeviceContext->PSSetShader(shader->mPixelShader, NULL, 0);
 
-	//全てのメッシュに対して共通のデータを登録
-	sDeviceContext->VSSetConstantBuffers(0, 1, &shader->mConstantBuffer1);
-	sDeviceContext->PSSetConstantBuffers(0, 1, &shader->mConstantBuffer1);
 	//頂点インプットレイアウトを登録
 	sDeviceContext->IASetInputLayout(shader->mVertexLayout);
 	//プリミティブトポロジーの登録
@@ -40,6 +37,9 @@ void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resour
 	for (unsigned int i = 0; i < meshData->size(); i++) {
 		//行列の設定
 		shader->SetConstantBuffer1_1(meshData->at(i), resource, &display);
+		//全てのメッシュに対して共通のデータを登録
+		sDeviceContext->VSSetConstantBuffers(0, 1, &shader->mConstantBuffer1);
+		sDeviceContext->PSSetConstantBuffers(0, 1, &shader->mConstantBuffer1);
 		//サブメッシュの個数分
 		for (unsigned int j = 0; j < meshData->at(i)->subMesh.size(); j++) {
 			shader->SetConstantBuffer2(meshData->at(i)->subMesh.at(j));
@@ -54,6 +54,7 @@ void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resour
 			stride = sizeof(int);
 			offset = 0;
 			sDeviceContext->IASetIndexBuffer(lIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+//			sDeviceContext->Draw(*indexLength, 0);
 			sDeviceContext->DrawIndexed(*indexLength, 0, 0);
 
 		}
