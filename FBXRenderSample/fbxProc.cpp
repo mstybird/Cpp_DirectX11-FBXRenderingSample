@@ -4,6 +4,11 @@
 #pragma comment(lib,"shlwapi.lib")
 #pragma warning(disable : 4800)
 
+DX11FbxLoader::DX11FbxLoader():
+	mMesh{std::make_shared<std::vector<std::shared_ptr<FBXMesh>>>()}
+{
+}
+
 DX11FbxLoader::~DX11FbxLoader()
 {
 	FbxDestroy();
@@ -230,8 +235,8 @@ void DX11FbxLoader::LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLa
 
 			//読み込めたらファイルテクスチャのアドレスを渡す
 			if (lStatus) {
-				std::string*lTextureName = new std::string(filePath);
-				lFileTexture->SetUserDataPtr(lTextureName);
+				//std::string*lTextureName = new std::string(filePath);
+				//lFileTexture->SetUserDataPtr(lTextureName);
 			}
 			
 		}
@@ -447,7 +452,7 @@ void DX11FbxLoader::SetAnimation(int pIndex)
 }
 
 
-std::vector<FBXMesh*>* DX11FbxLoader::GetGeometryData2()
+std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometryData2()
 {
 	//メッシュデータの解放
 	ReleaseGeometryData();
@@ -471,11 +476,13 @@ std::vector<FBXMesh*>* DX11FbxLoader::GetGeometryData2()
 	}
 
 	//メッシュの数だけ配列作成
-	mMesh.reserve(nodemeshes.size());
-
+	mMesh = std::make_shared<std::vector<std::shared_ptr<FBXMesh>>>();
+	mMesh->reserve(nodemeshes.size());
+	std::shared_ptr<FBXMesh>lMeshData;
 	for (unsigned int i = 0; i < nodemeshes.size();i++) {
 		//メッシュ作成
-		FBXMesh*lMeshData = new FBXMesh;
+		lMeshData = std::make_shared<FBXMesh>();
+//		FBXMesh*lMeshData = new FBXMesh;
 
 		FbxNode* node = nodemeshes[i];
 		FbxAMatrix lGlobalPosition;
@@ -491,14 +498,12 @@ std::vector<FBXMesh*>* DX11FbxLoader::GetGeometryData2()
 		lGlobalOffPosition = lGlobalPosition*lGeometryOffset;
 
 		//モデルデータに格納する行列を作成
-		D3DXMATRIX*lDXGlobalPostion = new D3DXMATRIX;
+		lMeshData->mWorld = std::make_unique<D3DXMATRIX>();
 		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				lDXGlobalPostion->m[i][j] = lGlobalOffPosition.Buffer()->Buffer()[i * 4 + j];
+			for (int j = 0; j < 4; j++) {			
+				lMeshData->mWorld->m[i][j] = (float)lGlobalOffPosition.Buffer()->Buffer()[i * 4 + j];
 			}
 		}
-		//行列を設定
-		lMeshData->mWorld = lDXGlobalPostion;
 
 
 		//ノードのメッシュを取得
@@ -581,12 +586,13 @@ std::vector<FBXMesh*>* DX11FbxLoader::GetGeometryData2()
 			//サブメッシュの作成
 			lMeshData->subMesh.reserve(lSubMeshCount);
 			//サブメッシュの個数分行う
+			std::shared_ptr<FBXModelData>md;
 			for (int lIndex = 0; lIndex < lSubMeshCount; lIndex++) {
 
 				int lOffset = lMeshCache->mSubMeshes[lIndex]->IndexOffset;
 
 				//モデルインスタンス作成
-				FBXModelData* md = new FBXModelData();
+				md = std::make_shared<FBXModelData>();
 				//マテリアル情報の取得
 				const FbxSurfaceMaterial*lMaterial = node->GetMaterial(lIndex);
 
@@ -611,7 +617,8 @@ std::vector<FBXMesh*>* DX11FbxLoader::GetGeometryData2()
 				md->Data.resize(md->PosLength);
 				
 				//インデックス座標を取得
-				md->Index = lMeshCache->lIndices.GetArray() + lOffset;
+				md->Index= lMeshCache->lIndices.GetArray() + lOffset;
+//				md->Index = lMeshCache->lIndices.GetArray() + lOffset;
 				auto count = lMeshCache->lIndices.GetCount();
 
 				for (int i = 0; i < vertexCount / 4; ++i) {
@@ -700,7 +707,7 @@ std::vector<FBXMesh*>* DX11FbxLoader::GetGeometryData2()
 			//}
 		}
 		//サブメッシュの登録
-		mMesh.push_back(lMeshData);
+		mMesh->push_back(lMeshData);
 
 		//Geometry.push_back(mdv);
 
@@ -712,7 +719,7 @@ std::vector<FBXMesh*>* DX11FbxLoader::GetGeometryData2()
 
 
 
-	return &mMesh;
+	return mMesh;
 }
 
 
@@ -773,28 +780,8 @@ bool DX11FbxLoader::SetCurrentPoseIndex(int pPoseIndex)
 
 void DX11FbxLoader::ReleaseGeometryData()
 {
-	//メッシュの解放
-	//for (unsigned int i = 0; i < mMesh.size(); i++) {
-	//	//サブメッシュの解放
-	//	for (unsigned int j = 0; j < mMesh[i]->subMesh.size(); j++) {
-	//		if (mMesh[i]->subMesh[j] != nullptr) {
-	//			delete mMesh[i]->subMesh[j];
-	//			mMesh[i]->subMesh[j] = nullptr;
-	//		}
-	//	}
-	//	mMesh[i]->subMesh.clear();
-	//	if (mMesh[i] != nullptr) {
-	//		delete mMesh[i]->mWorld;
-	//		delete mMesh[i];
-	//		mMesh[i]->mWorld = nullptr;
-	//		mMesh[i] = nullptr;
-	//	}
-	//}
 
-	for (unsigned int i = 0; i < mMesh.size(); i++) {
-		delete mMesh[i];
-	}
-	mMesh.clear();
+	mMesh->clear();
 
 
 

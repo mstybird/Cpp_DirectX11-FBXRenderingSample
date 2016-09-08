@@ -11,7 +11,7 @@
       <Filter>MSDirect\DX11\DX11Render\Source</Filter>
     </ClCompile>
     <ClCompile Include="MAIN.cpp">
-      <Filter>Main</Filter>
+      <Filter>MSDirect\System</Filter>
     </ClCompile>
     <ClCompile Include="DXCamera.cpp">
       <Filter>MSDirect\DX11\DXHelper\Source</Filter>
@@ -52,13 +52,21 @@
     <ClCompile Include="DX11CustomShader.cpp">
       <Filter>MSDirect\DX11\Shader\Source</Filter>
     </ClCompile>
-    <ClCompile Include="DX11TextureManager.cpp" />
-    <ClCompile Include="DX11Sprite2D.cpp" />
     <ClCompile Include="DXVector2.cpp">
       <Filter>MSDirect\DX11\DXHelper\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite2DShader.cpp" />
-    <ClCompile Include="DXDisplay.cpp" />
+    <ClCompile Include="DXDisplay.cpp">
+      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11Sprite2D.cpp">
+      <Filter>MSDirect\DX11\DX11Sprite\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite2DShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11TextureManager.cpp">
+      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -80,7 +88,7 @@
       <Filter>MSDirect\DX11\DXHelper\Header</Filter>
     </ClInclude>
     <ClInclude Include="MAIN.h">
-      <Filter>Main</Filter>
+      <Filter>MSDirect\System</Filter>
     </ClInclude>
     <ClInclude Include="DXWorld.h">
       <Filter>MSDirect\DX11\DXHelper\Header</Filter>
@@ -133,7 +141,9 @@
     <ClInclude Include="DXVector2.h">
       <Filter>MSDirect\DX11\DXHelper\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite2DShader.h" />
+    <ClInclude Include="Sprite2DShader.h">
+      <Filter>MSDirect\DX11\Shader\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -146,9 +156,6 @@
   <ItemGroup>
     <Filter Include="HLSL">
       <UniqueIdentifier>{130b753a-1bb0-43cb-8f24-36bd7c93b8ad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Main">
-      <UniqueIdentifier>{a2bd5129-71a6-434e-864d-33a027547224}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource">
       <UniqueIdentifier>{13ffb461-1f42-4b80-aa0a-2cdd3807b349}</UniqueIdentifier>
@@ -206,6 +213,12 @@
     </Filter>
     <Filter Include="MSDirect\DX11\DX11Sprite\Source">
       <UniqueIdentifier>{51ace513-df14-47f8-b738-baceacc585f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\System">
+      <UniqueIdentifier>{a2bd5129-71a6-434e-864d-33a027547224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{07b8b7b6-9fbd-41b5-a46e-cb8f8b6a1ca0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

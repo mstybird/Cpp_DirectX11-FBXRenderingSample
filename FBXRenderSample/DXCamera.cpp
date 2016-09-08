@@ -1,31 +1,44 @@
 #include "DXCamera.h"
+#include"DXVector3.h"
+#include"DXWorld.h"
+#include"DX11Resrouce.h"
 
-const D3DXVECTOR3 DXCamera::sUpVector{ 0.0f,1.0f,0.0f };
-const D3DXVECTOR3 DXCamera::DIRECTION_TYPE::LEFTRIGHT{ 1.0f,0.0f,0.0f };
-const D3DXVECTOR3 DXCamera::DIRECTION_TYPE::UPDOWN{ 0.0f,1.0f,0.0f };
-const D3DXVECTOR3 DXCamera::DIRECTION_TYPE::FRONTBACK{ 0.0f,0.0f,1.0f };
+const DXVector3 DXCamera::sUpVector{ 0.0f,1.0f,0.0f };
+const DXVector3 DXCamera::DIRECTION_TYPE::LEFTRIGHT{ 1.0f,0.0f,0.0f };
+const DXVector3 DXCamera::DIRECTION_TYPE::UPDOWN{ 0.0f,1.0f,0.0f };
+const DXVector3 DXCamera::DIRECTION_TYPE::FRONTBACK{ 0.0f,0.0f,1.0f };
 
 
 DXCamera::DXCamera() :
-	mEyePosition{ 0.0f,0.0f,0.0f },
-	mLookPosition{0.0f,0.0f,0.0f},
-	mUpVector{sUpVector},
-	mRotate{0.0f,0.0f,0.0f}
+	mEyePosition{ new DXVector3 },
+	mLookPosition{ new DXVector3 },
+	mUpVector{ new DXVector3(sUpVector)},
+	mRotate{ new DXVector3 },
+	mMatrix{new D3DXMATRIX }
 {
-	D3DXMatrixIdentity(&mMatrix);
+	D3DXMatrixIdentity(mMatrix);
+}
+
+DXCamera::~DXCamera()
+{
+	SAFE_DELETE(mEyePosition);
+	SAFE_DELETE(mLookPosition);
+	SAFE_DELETE(mUpVector);
+	SAFE_DELETE(mRotate);
+	SAFE_DELETE(mMatrix);
 }
 
 void DXCamera::SetCamera(const DXWorld & pEyePosition, const DXWorld & pLookAtPosition)
 {
 	D3DXMATRIX mUp, mView;
 	//éãì_ÇÃê›íË
-	mEyePosition = pEyePosition.mPosition;
+	*mEyePosition = *pEyePosition.mPosition;
 	//íçéãì_ÇÃê›íË
-	mLookPosition = pLookAtPosition.mPosition;
+	*mLookPosition = *pLookAtPosition.mPosition;
 	//ì™è„ï˚å¸ÇÃåvéZ
-	D3DXMatrixLookAtLH(&mMatrix, &mEyePosition, &mLookPosition, &mUpVector);
-	D3DXMatrixInverse(&mView, NULL, &mMatrix);
-	D3DXVec3TransformNormal(&mUpVector, &sUpVector, &mView);
+	D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);
+	D3DXMatrixInverse(&mView, NULL, mMatrix);
+	D3DXVec3TransformNormal(mUpVector, &sUpVector, &mView);
 }
 
 void DXCamera::Translation(TYPEMOVE pType, float pSpeed,const D3DXVECTOR3&pDirection,bool pLockoned)
@@ -37,17 +50,17 @@ void DXCamera::Translation(TYPEMOVE pType, float pSpeed,const D3DXVECTOR3&pDirec
 	{
 	case DXCamera::TYPE_NORMAL:
 		lDirection *= pSpeed;
-		mEyePosition += lDirection;
-		mLookPosition += pLockoned ? DXVector3::sZeroVector : lDirection;
+		*mEyePosition += lDirection;
+		*mLookPosition += pLockoned ? DXVector3::sZeroVector : lDirection;
 		break;
 	case DXCamera::TYPE_PARALLEL:
-		D3DXMatrixLookAtLH(&mMatrix, &mEyePosition, &mLookPosition, &mUpVector);
-		D3DXMatrixInverse(&mMatrix, nullptr, &mMatrix);
-		D3DXVec3TransformNormal(&lDirection, &lDirection, &mMatrix);
-		D3DXVec3TransformNormal(&mUpVector, &sUpVector, &mMatrix);
+		D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);
+		D3DXMatrixInverse(mMatrix, nullptr, mMatrix);
+		D3DXVec3TransformNormal(&lDirection, &lDirection, mMatrix);
+		D3DXVec3TransformNormal(mUpVector, &sUpVector, mMatrix);
 		lDirection *= pSpeed;
-		mEyePosition += lDirection;
-		mLookPosition += pLockoned ? DXVector3::sZeroVector : lDirection;
+		*mEyePosition += lDirection;
+		*mLookPosition += pLockoned ? DXVector3::sZeroVector : lDirection;
 		break;
 	default:
 		break;
@@ -65,6 +78,6 @@ void DXCamera::Rotate(float pX, float pY, float pZ)
 
 D3DXMATRIX * DXCamera::GetMatrix()
 {
-	D3DXMatrixLookAtLH(&mMatrix, &mEyePosition, &mLookPosition, &mUpVector);
-	return &mMatrix;
+	D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);
+	return mMatrix;
 }

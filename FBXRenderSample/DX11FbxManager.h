@@ -3,6 +3,7 @@
 #include<D3DX11.h>
 #include<string>
 #include<vector>
+#include<memory>
 /*
 	モデルデータとしての機能のみ
 	描画に必要な座標などの行列は一切残さない
@@ -30,17 +31,18 @@ public:
 
 	//解放処理
 	void Release();
-	std::vector<FBXMesh*>* GetMeshData();
+	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> GetMeshData();
 	ID3D11Buffer*GetVertexBuffer(int i, int j);
 	ID3D11Buffer*GetIndexBuffer(int i, int j);
 	unsigned int*GetIndexBufferCount(int i,int j);
 
 private:
+	std::string mFileName;
 	//モデルごとに記憶
 	DX11FbxLoader*mLoader;				//FBX読み込み用
 	ID3D11Buffer***mVertexBuffer;		//頂点バッファ
 	ID3D11Buffer***mIndexBuffer;		//インデックスバッファ
-	std::vector<FBXMesh*>*mMeshData;//メッシュデータ
+	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>>mMeshData;//メッシュデータ
 private:
 	//static変数
 	//アプリに一つ

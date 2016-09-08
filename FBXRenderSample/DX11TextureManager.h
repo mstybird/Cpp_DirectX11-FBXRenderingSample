@@ -8,7 +8,7 @@ class DXTexture;
 class DX11TextureManager {
 public:
 
-
+	~DX11TextureManager();
 
 	//テクスチャの一括登録用
 	//テクスチャID、相対ファイルパス

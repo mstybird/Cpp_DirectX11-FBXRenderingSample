@@ -3,6 +3,11 @@
 #include<cassert>
 using std::shared_ptr;
 using std::string;
+DX11TextureManager::~DX11TextureManager()
+{
+	UnRegisterFileAll();
+	mTextureMap.clear();
+}
 bool DX11TextureManager::RegisterFile(const string & pFileName, const int pID)
 {
 	bool lResult = true;
@@ -14,7 +19,8 @@ bool DX11TextureManager::RegisterFile(const string & pFileName, const int pID)
 	else {
 		shared_ptr<DXTexture>texture;
 		//指定したIDにテクスチャがなければ読み込み
-		texture.reset(new DXTexture);
+//		texture.reset(new DXTexture);
+		texture = std::make_shared<DXTexture>();
 		//読み込めたら登録
 		if (texture->Create(pFileName)) {
 			mTextureMap[pID] = texture;

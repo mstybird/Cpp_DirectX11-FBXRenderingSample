@@ -1,15 +1,18 @@
 #include"DX11FbxLoader.h"
 
-ColorChannel FbxMaterialCache::sEmissive;
-ColorChannel FbxMaterialCache::sAmbient;
-ColorChannel FbxMaterialCache::sDiffuse;
-ColorChannel FbxMaterialCache::sSpecular;
+std::shared_ptr<ColorChannel> FbxMaterialCache::sEmissive;
+std::shared_ptr<ColorChannel> FbxMaterialCache::sAmbient;
+std::shared_ptr<ColorChannel> FbxMaterialCache::sDiffuse;
+std::shared_ptr<ColorChannel> FbxMaterialCache::sSpecular;
 
 
 FbxMaterialCache::FbxMaterialCache() :
 	Shinness(0)
 {
-
+	Emissive = std::make_shared<ColorChannel>();
+	Ambient = std::make_shared<ColorChannel>();
+	Diffuse = std::make_shared<ColorChannel>();
+	Specular = std::make_shared<ColorChannel>();
 }
 
 FbxMaterialCache::~FbxMaterialCache()
@@ -20,33 +23,33 @@ FbxMaterialCache::~FbxMaterialCache()
 bool FbxMaterialCache::Initialize(const FbxSurfaceMaterial * pMaterial, const std::string& pTextureRelativePathName)
 {
 	//エミッシブの取得
-	const auto lEmissive = GetMaterialProperty(pMaterial, FbxSurfaceMaterial::sEmissive, FbxSurfaceMaterial::sEmissiveFactor, Emissive.TextureName, pTextureRelativePathName);
+	const auto lEmissive = GetMaterialProperty(pMaterial, FbxSurfaceMaterial::sEmissive, FbxSurfaceMaterial::sEmissiveFactor, Emissive->TextureName, pTextureRelativePathName);
 	
-	Emissive.Color[0] = static_cast<FbxFloat>(lEmissive[0]);
-	Emissive.Color[1] = static_cast<FbxFloat>(lEmissive[1]);
-	Emissive.Color[2] = static_cast<FbxFloat>(lEmissive[2]);
-	Emissive.CreateTexture();
+	Emissive->Color[0] = static_cast<FbxFloat>(lEmissive[0]);
+	Emissive->Color[1] = static_cast<FbxFloat>(lEmissive[1]);
+	Emissive->Color[2] = static_cast<FbxFloat>(lEmissive[2]);
+	Emissive->CreateTexture();
 
 	const FbxDouble3 lAmbient = GetMaterialProperty(pMaterial,
-		FbxSurfaceMaterial::sAmbient, FbxSurfaceMaterial::sAmbientFactor, Ambient.TextureName, pTextureRelativePathName);
-	Ambient.Color[0] = static_cast<FbxFloat>(lAmbient[0]);
-	Ambient.Color[1] = static_cast<FbxFloat>(lAmbient[1]);
-	Ambient.Color[2] = static_cast<FbxFloat>(lAmbient[2]);
-	Ambient.CreateTexture();
+		FbxSurfaceMaterial::sAmbient, FbxSurfaceMaterial::sAmbientFactor, Ambient->TextureName, pTextureRelativePathName);
+	Ambient->Color[0] = static_cast<FbxFloat>(lAmbient[0]);
+	Ambient->Color[1] = static_cast<FbxFloat>(lAmbient[1]);
+	Ambient->Color[2] = static_cast<FbxFloat>(lAmbient[2]);
+	Ambient->CreateTexture();
 
 	const FbxDouble3 lDiffuse = GetMaterialProperty(pMaterial,
-		FbxSurfaceMaterial::sDiffuse, FbxSurfaceMaterial::sDiffuseFactor, Diffuse.TextureName, pTextureRelativePathName);
-	Diffuse.Color[0] = static_cast<FbxFloat>(lDiffuse[0]);
-	Diffuse.Color[1] = static_cast<FbxFloat>(lDiffuse[1]);
-	Diffuse.Color[2] = static_cast<FbxFloat>(lDiffuse[2]);
-	Diffuse.CreateTexture();
+		FbxSurfaceMaterial::sDiffuse, FbxSurfaceMaterial::sDiffuseFactor, Diffuse->TextureName, pTextureRelativePathName);
+	Diffuse->Color[0] = static_cast<FbxFloat>(lDiffuse[0]);
+	Diffuse->Color[1] = static_cast<FbxFloat>(lDiffuse[1]);
+	Diffuse->Color[2] = static_cast<FbxFloat>(lDiffuse[2]);
+	Diffuse->CreateTexture();
 
 	const FbxDouble3 lSpecular = GetMaterialProperty(pMaterial,
-		FbxSurfaceMaterial::sSpecular, FbxSurfaceMaterial::sSpecularFactor, Specular.TextureName, pTextureRelativePathName);
-	Specular.Color[0] = static_cast<FbxFloat>(lSpecular[0]);
-	Specular.Color[1] = static_cast<FbxFloat>(lSpecular[1]);
-	Specular.Color[2] = static_cast<FbxFloat>(lSpecular[2]);
-	Specular.CreateTexture();
+		FbxSurfaceMaterial::sSpecular, FbxSurfaceMaterial::sSpecularFactor, Specular->TextureName, pTextureRelativePathName);
+	Specular->Color[0] = static_cast<FbxFloat>(lSpecular[0]);
+	Specular->Color[1] = static_cast<FbxFloat>(lSpecular[1]);
+	Specular->Color[2] = static_cast<FbxFloat>(lSpecular[2]);
+	Specular->CreateTexture();
 
 	auto lShininessProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sShininess);
 	if (lShininessProperty.IsValid()) {
@@ -101,20 +104,20 @@ FbxDouble3 FbxMaterialCache::GetMaterialProperty(const FbxSurfaceMaterial * pMat
 	return lResult;
 }
 
-void FbxMaterialCache::SetCurrentMaterial(FBXModelData* pModelData)
+void FbxMaterialCache::SetCurrentMaterial(const std::weak_ptr<FBXModelData>&pModelData)
 {
-	pModelData->Emissive = &Emissive;
-	pModelData->Ambient = &Ambient;
-	pModelData->Diffuse = &Diffuse;
-	pModelData->Specular = &Specular;
+	pModelData.lock()->Emissive = Emissive;
+	pModelData.lock()->Ambient = Ambient;
+	pModelData.lock()->Diffuse = Diffuse;
+	pModelData.lock()->Specular = Specular;
 	return;
 }
 
-void FbxMaterialCache::SetDefaultMaterial(FBXModelData * pModelData)
+void FbxMaterialCache::SetDefaultMaterial(const std::weak_ptr<FBXModelData>&pModelData)
 {
-	pModelData->Emissive = &sEmissive;
-	pModelData->Ambient = &sAmbient;
-	pModelData->Diffuse = &sDiffuse;
-	pModelData->Specular = &sSpecular;
+	pModelData.lock()->Emissive = sEmissive;
+	pModelData.lock()->Ambient = sAmbient;
+	pModelData.lock()->Diffuse = sDiffuse;
+	pModelData.lock()->Specular = sSpecular;
 
 }

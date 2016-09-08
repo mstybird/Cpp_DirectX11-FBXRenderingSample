@@ -1,6 +1,8 @@
 #include "MAIN.h"
 
 #include"Helper.h"
+#include<cassert>
+#include<memory>
 /*
 	メモ：
 	次の作業
@@ -10,7 +12,7 @@
 
 
 //グローバル変数
-MAIN* g_pMain=NULL;
+MSWindow* g_pMain=NULL;
 //関数プロトタイプの宣言
 LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 //
@@ -26,30 +28,11 @@ INT WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR,INT)
 	AllocConsole();
 	freopen_s(&fp, "CON", "w", stdout);
 //#endif
+	g_pMain=new MSWindow;
+	g_pMain->_Run(hInstance, 0, 0, WINDOW_WIDTH,
+		WINDOW_HEIGHT, APP_NAME);
+	delete g_pMain;
 
-	clock_t start, end;
-	start = clock();
-	g_pMain=new MAIN;
-	if(g_pMain != NULL)
-	{
-		//FBX初期化
-		if(SUCCEEDED(g_pMain->InitWindow(hInstance,0,0,WINDOW_WIDTH,
-			WINDOW_HEIGHT,APP_NAME)))
-		{
-
-
-			auto succeeded = g_pMain->InitD3D();
-			end = clock();
-			printf("Initialize:%dms\n", end - start);
-			if(SUCCEEDED(succeeded))
-			{
-				g_pMain->Loop();
-			}
-		}
-
-		//アプリ終了
-		delete g_pMain;
-	}
 //#ifdef _DEBUG
 	fclose(fp);
 	FreeConsole();
@@ -68,21 +51,70 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 //
 //
 //クラスコンストラクター
-MAIN::MAIN()
+MSWindow::MSWindow()
 {
 	//ZeroMemory(this,sizeof(MAIN));
 }
 //
 //
 //クラスデストラクター
-MAIN::~MAIN()
+MSWindow::~MSWindow()
 {
-	DestroyD3D();
+	
+}
+void MSWindow::_Run(HINSTANCE hInstance,
+	INT iX, INT iY, INT iWidth, INT iHeight, LPSTR WindowName)
+{
+	if (FAILED(g_pMain->InitWindow(hInstance, iX, iY, iWidth,
+		iHeight, WindowName)))
+	{
+		assert(0);
+		return;
+	}
+	
+	std::unique_ptr<MSSceneBase> lScene = std::make_unique<MSSceneBase>();
+	
+	
+	//mDirectX.lock()->InitD3D(m_hWnd);
+
+
+	mDirectX = MSDirect::GetInstance();
+	if (FAILED(mDirectX.lock()->InitD3D(m_hWnd))) {
+		assert(0);
+		return;
+	}
+	
+	MSDirect::SetScene(std::make_unique<MyMSScene>());
+	_Loop();
+
+
+}
+HRESULT MSWindow::_Loop()
+{
+	// メッセージループ
+	MSG msg = { 0 };
+	ZeroMemory(&msg, sizeof(msg));
+	while (msg.message != WM_QUIT)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			//アプリケーションの処理はここから飛ぶ。
+			//App();
+			mDirectX.lock()->Loop();
+
+		}
+	}
+	return S_OK;
 }
 //
 //
 //ウィンドウ作成
-HRESULT MAIN::InitWindow(HINSTANCE hInstance,
+HRESULT MSWindow::InitWindow(HINSTANCE hInstance,
 		INT iX,INT iY,INT iWidth,INT iHeight,LPSTR WindowName)
 {
 	// ウィンドウの定義
@@ -114,7 +146,7 @@ HRESULT MAIN::InitWindow(HINSTANCE hInstance,
 //
 //
 //ウィンドウプロシージャー
-LRESULT MAIN::MsgProc(HWND hWnd,UINT iMsg,WPARAM wParam,LPARAM lParam)
+LRESULT MSWindow::MsgProc(HWND hWnd,UINT iMsg,WPARAM wParam,LPARAM lParam)
 {
 	switch(iMsg)
 	{
@@ -132,76 +164,67 @@ LRESULT MAIN::MsgProc(HWND hWnd,UINT iMsg,WPARAM wParam,LPARAM lParam)
 	}
 	return DefWindowProc (hWnd, iMsg, wParam, lParam);
 }
-//
-//
-//メッセージループとアプリケーション処理の入り口
-void MAIN::Loop()
+
+std::shared_ptr<MSDirect> MSDirect::sMSDirect{std::make_shared<MSDirect>()};
+
+MSDirect::MSDirect():
+	m_pDevice{ nullptr },
+	m_pDeviceContext{ nullptr },
+	m_pSwapChain{ nullptr },
+	m_pBackBuffer_TexRTV{ nullptr },
+	m_pBackBuffer_DSTexDSV{ nullptr },
+	m_pBackBuffer_DSTex{ nullptr },
+	m_pRasterizerState{ nullptr }
 {
-	// メッセージループ
-	MSG msg={0};
-	ZeroMemory(&msg,sizeof(msg));
-	while(msg.message!=WM_QUIT)
-	{
-		if( PeekMessage(&msg,NULL,0,0,PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			//アプリケーションの処理はここから飛ぶ。
-			App();
-		}
-	}
-}
-//
-//
-//アプリケーション処理。アプリのメイン関数。
-void MAIN::App()
-{
-	Update();
-	Render();
-	m_pSwapChain->Present(1, 0);//画面更新（バックバッファをフロントバッファに）	
 
 }
 
-//
-//
-//Direct3D初期化
-HRESULT MAIN::InitD3D()
+MSDirect::~MSDirect() {
+	SAFE_RELEASE(m_pDevice);
+	SAFE_RELEASE(m_pDeviceContext);
+	SAFE_RELEASE(m_pSwapChain);
+	SAFE_RELEASE(m_pBackBuffer_TexRTV);
+	SAFE_RELEASE(m_pBackBuffer_DSTexDSV);
+	SAFE_RELEASE(m_pBackBuffer_DSTex);
+	SAFE_RELEASE(m_pRasterizerState);
+}
+
+HRESULT MSDirect::InitD3D(HWND pHwnd)
 {
+	mHwnd = pHwnd;
 	// デバイスとスワップチェーンの作成
 	DXGI_SWAP_CHAIN_DESC sd;
-	ZeroMemory( &sd, sizeof(sd) );
+	ZeroMemory(&sd, sizeof(sd));
 	sd.BufferCount = 1;
-	sd.BufferDesc.Width=WINDOW_WIDTH;
-	sd.BufferDesc.Height=WINDOW_HEIGHT;
-	sd.BufferDesc.Format=DXGI_FORMAT_R8G8B8A8_UNORM;
-	sd.BufferDesc.RefreshRate.Numerator=60;
-	sd.BufferDesc.RefreshRate.Denominator=1;
-	sd.BufferUsage=DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.OutputWindow=m_hWnd;
-	sd.SampleDesc.Count=1;
-	sd.SampleDesc.Quality=0;
-	sd.Windowed=TRUE;
+	sd.BufferDesc.Width = WINDOW_WIDTH;
+	sd.BufferDesc.Height = WINDOW_HEIGHT;
+	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	sd.BufferDesc.RefreshRate.Numerator = 60;
+	sd.BufferDesc.RefreshRate.Denominator = 1;
+	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.OutputWindow = mHwnd;
+	sd.SampleDesc.Count = 1;
+	sd.SampleDesc.Quality = 0;
+	sd.Windowed = TRUE;
 
 	D3D_FEATURE_LEVEL pFeatureLevels = D3D_FEATURE_LEVEL_11_0;
 	D3D_FEATURE_LEVEL* pFeatureLevel = NULL;
-	
-	if( FAILED( D3D11CreateDeviceAndSwapChain(NULL,D3D_DRIVER_TYPE_HARDWARE,NULL,
-		0,&pFeatureLevels,1,D3D11_SDK_VERSION,&sd,&m_pSwapChain,&m_pDevice,
-		pFeatureLevel,&m_pDeviceContext )))
+
+	if (FAILED(D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL,
+		0, &pFeatureLevels, 1, D3D11_SDK_VERSION, &sd, &m_pSwapChain, &m_pDevice,
+		pFeatureLevel, &m_pDeviceContext)))
 	{
 		return FALSE;
 	}
-	//各種テクスチャーと、それに付帯する各種ビューを作成
 
+
+	//各種テクスチャーと、それに付帯する各種ビューを作成
 	//バックバッファーテクスチャーを取得（既にあるので作成ではない）
 	ID3D11Texture2D *pBackBuffer_Tex;
-	m_pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ),(LPVOID*)&pBackBuffer_Tex);
+	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer_Tex);
 	//そのテクスチャーに対しレンダーターゲットビュー(RTV)を作成
-	m_pDevice->CreateRenderTargetView( pBackBuffer_Tex, NULL, &m_pBackBuffer_TexRTV );
-	SAFE_RELEASE(pBackBuffer_Tex);	
+	m_pDevice->CreateRenderTargetView(pBackBuffer_Tex, NULL, &m_pBackBuffer_TexRTV);
+	SAFE_RELEASE(pBackBuffer_Tex);
 
 	//デプスステンシルビュー用のテクスチャーを作成
 	D3D11_TEXTURE2D_DESC descDepth;
@@ -216,32 +239,30 @@ HRESULT MAIN::InitD3D()
 	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	descDepth.CPUAccessFlags = 0;
 	descDepth.MiscFlags = 0;
-	m_pDevice->CreateTexture2D( &descDepth, NULL, &m_pBackBuffer_DSTex );
+	m_pDevice->CreateTexture2D(&descDepth, NULL, &m_pBackBuffer_DSTex);
 	//そのテクスチャーに対しデプスステンシルビュー(DSV)を作成
-	m_pDevice->CreateDepthStencilView( m_pBackBuffer_DSTex, NULL, &m_pBackBuffer_DSTexDSV);
+	m_pDevice->CreateDepthStencilView(m_pBackBuffer_DSTex, NULL, &m_pBackBuffer_DSTexDSV);
 
 	//レンダーターゲットビューと深度ステンシルビューをパイプラインにバインド
-	m_pDeviceContext->OMSetRenderTargets(1, &m_pBackBuffer_TexRTV,m_pBackBuffer_DSTexDSV);
+	m_pDeviceContext->OMSetRenderTargets(1, &m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV);
 	//ビューポートの設定
 	D3D11_VIEWPORT vp;
-	vp.Width = WINDOW_WIDTH/2;
-	vp.Height = WINDOW_HEIGHT/2;
+	vp.Width = WINDOW_WIDTH / 2;
+	vp.Height = WINDOW_HEIGHT / 2;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
-	m_pDeviceContext->RSSetViewports( 1, &vp );
+	m_pDeviceContext->RSSetViewports(1, &vp);
 	//ラスタライズ設定
 	D3D11_RASTERIZER_DESC rdc;
-	ZeroMemory(&rdc,sizeof(rdc));
-	rdc.CullMode=D3D11_CULL_NONE;
-	rdc.FillMode=D3D11_FILL_SOLID;
+	ZeroMemory(&rdc, sizeof(rdc));
+	rdc.CullMode = D3D11_CULL_NONE;
+	rdc.FillMode = D3D11_FILL_SOLID;
 	rdc.FrontCounterClockwise = TRUE;
-	
-	m_pDevice->CreateRasterizerState(&rdc,&m_pRasterizerState);
-	m_pDeviceContext->RSSetState(m_pRasterizerState);	
 
-	
+	m_pDevice->CreateRasterizerState(&rdc, &m_pRasterizerState);
+	m_pDeviceContext->RSSetState(m_pRasterizerState);
 
 	//各ラッパーにDirectX11デバイス等を登録
 	MSVertexShader::sInitialize(m_pDevice, m_pDeviceContext);
@@ -249,41 +270,44 @@ HRESULT MAIN::InitD3D()
 	DX11BaseShader::Init(m_pDevice, m_pDeviceContext);
 	DX11BaseSprite::Init(m_pDevice, m_pDeviceContext);
 	DX11Sprite2D::Initialize(m_pDevice, m_pDeviceContext, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV);
-	DX11Render::Initialize(m_pDevice, m_pDeviceContext,m_pBackBuffer_TexRTV,m_pBackBuffer_DSTexDSV);
+	DX11Render::Initialize(m_pDevice, m_pDeviceContext, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV);
 
 	DX11FbxManager::InitDevice(m_pDevice, m_pDeviceContext);
 	DXProjection::SetAspect((FLOAT)WINDOW_WIDTH, (FLOAT)WINDOW_HEIGHT);
 	DXTexture::Initialize(m_pDevice);
-	//ポリゴン作成
-	if(FAILED(InitPolygon()))
-	{
-		return E_FAIL;
-	}
+
+
 	return S_OK;
 }
 
-//バーテックスバッファー作成
 
-D3DXVECTOR3 pos;
+void MSDirect::Loop()
+{
+	
+	scene->Update();
+	scene->Render();
+	m_pSwapChain->Present(1, 0);
+}
 
-HRESULT MAIN::InitPolygon()
+void MSDirect::SetScene(std::unique_ptr<MSSceneBase>&& pScene)
+{
+	pScene->Initialize();
+	std::unique_ptr<MSSceneBase> lBufferPtr = std::move(sMSDirect->scene);
+	sMSDirect->scene= std::move(pScene);
+	lBufferPtr.reset();
+}
+
+void MyMSScene::Initialize()
 {
 	//テクスチャ登録
 	textureManager.RegisterFile("res/Chips_Cover.jpg", 0);
-
-	std::string str{ "path\\data.txt" };
-	std::string path;
-	MSString::GetFolderPath(path, str);
-
 
 	shader.Init();
 	shader.InitVertex("Simple.hlsl");
 	shader.InitPixel("Simple.hlsl");
 
-	fbx.Initialize();
-	mbox.LoadFile("res/Chips.fbx",true);
-	//fbx.LoadFile("res/meshes.fbx", true);
-	
+	mbox.LoadFile("res/Chips.fbx", true);
+
 	//どのシェーダーでレンダリングするか登録
 	render.SetShader(&shader);
 	//このリソースをレンダリング用に使う
@@ -292,13 +316,13 @@ HRESULT MAIN::InitPolygon()
 	render.SetRenderTarget(&me);
 
 	auto lWorld = me.GetWorld();
-	auto lView= me.GetCamera();
+	auto lView = me.GetCamera();
 	auto lProjection = me.GetProjection();
 
 	auto world = me.GetWorld();
 	world->SetT(70, 20, -80);
 	lView->SetCamera(*me.GetWorld(), *box.GetWorld());
-	
+
 	lProjection->SetViewAngle(45);
 	lProjection->SetPlaneNear(0.1f);
 	lProjection->SetPlaneFar(2000.0f);
@@ -308,88 +332,14 @@ HRESULT MAIN::InitPolygon()
 
 	ground.GetWorld()->SetS(1.0f, 0.001f, 1.0f);
 
-	return S_OK;
 }
 
-void MAIN::Update()
-{
-	auto world = box.GetWorld();
-	auto camera = me.GetCamera();
-
-	//ボックスの平行移動
-	if (GetAsyncKeyState('W')) {
-		world->AddT(DXWorld::TYPE_ROTATE, 0.25);
-	}
-	if (GetAsyncKeyState('S')) {
-		world->AddT(DXWorld::TYPE_ROTATE, -0.25);
-	}
-	//カメラの回転
-	if (GetAsyncKeyState('A')) {
-		world->AddRC(0, 1, 0);
-	}
-	if (GetAsyncKeyState('D')) {
-		world->AddRC(0, -1, 0);
-	}
-
-
-	const float speed = 10.0f;
-	//カメラの平行移動
-	if (GetAsyncKeyState(VK_LEFT)) {
-		camera->Translation(DXCamera::TYPE_NORMAL, -speed, DXCamera::DIRECTION_TYPE::LEFTRIGHT, false);
-	}
-	if (GetAsyncKeyState(VK_RIGHT)) {
-		camera->Translation(DXCamera::TYPE_NORMAL, speed, DXCamera::DIRECTION_TYPE::LEFTRIGHT, false);
-	}
-
-	//ボックスの回転
-	if (GetAsyncKeyState(VK_UP)) {
-		if (GetAsyncKeyState(VK_SHIFT)) {
-			camera->Translation(DXCamera::TYPE_PARALLEL, speed, DXCamera::DIRECTION_TYPE::UPDOWN, true);
-		}
-		else {
-			camera->Translation(DXCamera::TYPE_PARALLEL, speed, DXCamera::DIRECTION_TYPE::FRONTBACK, false);
-		}
-	}
-	if (GetAsyncKeyState(VK_DOWN)) {
-		if (GetAsyncKeyState(VK_SHIFT)) {
-			camera->Translation(DXCamera::TYPE_PARALLEL, -speed, DXCamera::DIRECTION_TYPE::UPDOWN, true);
-		}
-		else {
-			camera->Translation(DXCamera::TYPE_PARALLEL, -speed, DXCamera::DIRECTION_TYPE::FRONTBACK, false);
-		}
-	}
-
-}
-
-//
-//
-//シーンを画面にレンダリング
-void MAIN::Render()
+void MyMSScene::Render()
 {
 	////画面クリア
-	DX11Render::Clear({ 0,0,1,1 });
+	DX11Render::Clear({ 1,0,0,1 });
 	mbox.Update();
 	ground.GetWorld()->SetS(1, 1, 1);
 	render.Render(&mbox, &ground);
 
-
-
 }
-
-//
-//
-//全てのインターフェイスをリリース
-void MAIN::DestroyD3D()
-{
-
-	SAFE_RELEASE(m_pRasterizerState);
-	SAFE_RELEASE(m_pSwapChain);
-	SAFE_RELEASE(m_pBackBuffer_TexRTV);
-	SAFE_RELEASE(m_pBackBuffer_DSTexDSV);
-	SAFE_RELEASE(m_pBackBuffer_DSTex);
-	SAFE_RELEASE(m_pDeviceContext);
-	SAFE_RELEASE(m_pDevice);
-}
-
-
-

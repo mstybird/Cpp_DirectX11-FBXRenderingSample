@@ -1,10 +1,5 @@
 #pragma once
 #include<d3dx9.h>
-
-//struct D3DXMATRIX;
-class DXDisplay;
-#include"DXWorld.h"
-
 /*
 	ÉÅÉÇ
 	Sprite2D
@@ -15,7 +10,8 @@ class DXDisplay;
 
 */
 
-
+class DXDisplay;
+class DXWorld;
 class DXCamera;
 class DXProjection;
 class DX11RenderResource {
@@ -36,7 +32,7 @@ public:
 	DXProjection*GetProjection();
 
 private:
-	DXWorld mWorld;
+	DXWorld *mWorld;
 	DXCamera *mView;
 	DXProjection *mProj;
 

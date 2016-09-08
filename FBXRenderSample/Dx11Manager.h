@@ -25,4 +25,9 @@
 //2Dスプライト基底クラス
 #include"DX11Sprite2D.h"
 
+//三次元ベクトル
+#include"DXVector3.h"
+
+//マクロリソース
+#include"DX11Resrouce.h"
 

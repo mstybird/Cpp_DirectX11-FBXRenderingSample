@@ -1,10 +1,11 @@
 #pragma once
-#include"DXVector3.h"
-#include"DXWorld.h"
-//class DX11RenderResource;
+
+#include<d3dx9.h>
+class DXVector3;
+class DXWorld;
 class DXCamera {
 public:
-	static const D3DXVECTOR3 sUpVector;
+	static const DXVector3 sUpVector;
 	//カメラの移動タイプ
 	enum TYPEMOVE {
 		TYPE_NORMAL = 0,	//向きに関係なくXYZ値で直接移動
@@ -13,18 +14,19 @@ public:
 	//移動方向
 	class DIRECTION_TYPE {
 	public:
-		static const D3DXVECTOR3 LEFTRIGHT;	//左右
-		static const D3DXVECTOR3 UPDOWN;		//上下
-		static const D3DXVECTOR3 FRONTBACK;	//手前奥
+		static const DXVector3 LEFTRIGHT;	//左右
+		static const DXVector3 UPDOWN;		//上下
+		static const DXVector3 FRONTBACK;	//手前奥
 	};
 
 	//コンストラクタ
 	DXCamera();
+	~DXCamera();
 
 	//視点とターゲット(注視点)の設定
 	void SetCamera(const DXWorld&pEyePosition, const DXWorld&pLookAtPosition);
 
-	void Translation(TYPEMOVE pType, float pSpeed, const D3DXVECTOR3&pDirection = DIRECTION_TYPE::FRONTBACK, bool pLockoned = false);
+	void Translation(TYPEMOVE pType, float pSpeed, const D3DXVECTOR3&pDirection, bool pLockoned = false);
 
 
 	//カメラの回転
@@ -32,11 +34,11 @@ public:
 
 	D3DXMATRIX*GetMatrix();
 
-	DXVector3 mEyePosition;	//カメラの位置
-	DXVector3 mLookPosition;//注視点
-	DXVector3 mUpVector;	//頭上方向
-	DXVector3 mRotate;		//カメラの角度
-	D3DXMATRIX mMatrix;
+	DXVector3 *mEyePosition;	//カメラの位置
+	DXVector3 *mLookPosition;//注視点
+	DXVector3 *mUpVector;	//頭上方向
+	DXVector3 *mRotate;		//カメラの角度
+	D3DXMATRIX *mMatrix;
 	
 
 	D3DXMATRIX* operator*() {

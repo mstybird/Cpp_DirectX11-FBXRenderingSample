@@ -1,7 +1,7 @@
 #pragma once
 #include<D3DX11.h>
-
-
+#include<fbxsdk.h>
+class DX11TextureManager;
 class FbxMaterialCache {
 public:
 	FbxMaterialCache();
@@ -14,23 +14,23 @@ public:
 		std::string&pTextureName,
 		const std::string& pTextureRelativePathName = {""}
 	);
-	void SetCurrentMaterial(FBXModelData* pModelData);
+	void SetCurrentMaterial(const std::weak_ptr<FBXModelData>&pModelData);
 	bool HasTexture()const {}
 
 	//èâä˙êF
-	static void SetDefaultMaterial(FBXModelData* pModelData);
+	static void SetDefaultMaterial(const std::weak_ptr<FBXModelData>&pModelData);
 private:
 
-	ColorChannel Emissive;
-	ColorChannel Ambient;
-	ColorChannel Diffuse;
-	ColorChannel Specular;
+	std::shared_ptr<ColorChannel> Emissive;
+	std::shared_ptr<ColorChannel> Ambient;
+	std::shared_ptr<ColorChannel> Diffuse;
+	std::shared_ptr<ColorChannel> Specular;
 	FbxFloat Shinness;
 
-	static ColorChannel sEmissive;
-	static ColorChannel sAmbient;
-	static ColorChannel sDiffuse;
-	static ColorChannel sSpecular;
+	static std::shared_ptr<ColorChannel> sEmissive;
+	static std::shared_ptr<ColorChannel> sAmbient;
+	static std::shared_ptr<ColorChannel> sDiffuse;
+	static std::shared_ptr<ColorChannel> sSpecular;
 
 
 };

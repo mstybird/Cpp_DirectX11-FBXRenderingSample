@@ -7,7 +7,7 @@
 #include"DXCamera.h"
 #include"DXProjection.h"
 #include"DX11BaseShader.h"
-
+#include<vector>
 ID3D11Device*DX11Render::sDevice;				//DirectX11デバイス
 ID3D11DeviceContext*DX11Render::sDeviceContext;	//DirectX11デバイスコンテキスト
 ID3D11RenderTargetView*DX11Render::sRenderTargetView;
@@ -45,13 +45,13 @@ void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resour
 	//メッシュの個数分
 	for (unsigned int i = 0; i < meshData->size(); i++) {
 		//メッシュ単位の設定
-		shader->SetConstantBuffer1(meshData->at(i), resource, display);
+		shader->SetConstantBuffer1(meshData->at(i).get(), resource, display);
 		//全てのメッシュに対して共通のデータを登録
 		sDeviceContext->VSSetConstantBuffers(0, 1, shader->GetCB1());
 		sDeviceContext->PSSetConstantBuffers(0, 1, shader->GetCB1());
 		//サブメッシュの個数分
 		for (unsigned int j = 0; j < meshData->at(i)->subMesh.size(); j++) {
-			shader->SetConstantBuffer2(meshData->at(i)->subMesh.at(j));
+			shader->SetConstantBuffer2(meshData->at(i)->subMesh.at(j).get());
 			sDeviceContext->VSSetConstantBuffers(1, 1, shader->GetCB1());
 			sDeviceContext->PSSetConstantBuffers(1, 1, shader->GetCB1());
 			UINT stride = shader->GetVertexSize();

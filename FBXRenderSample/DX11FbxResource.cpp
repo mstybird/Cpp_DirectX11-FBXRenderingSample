@@ -1,19 +1,16 @@
 #include "DX11FbxResource.h"
 #include"DX11Texture.h"
-
+#include"DX11TextureManager.h"
+#include"FbxMaterialCache.h"
 FBXModelData::FBXModelData():
-	Index{ nullptr },
-	Emissive{ nullptr },
-	Ambient{ nullptr },
-	Diffuse{ nullptr },
-	Specular{ nullptr }
+	Index{ nullptr }
 {
 
 }
 
 FBXModelData::~FBXModelData()
 {
-
+	//delete Index;
 }
 
 FBXMesh::FBXMesh()
@@ -23,36 +20,36 @@ FBXMesh::FBXMesh()
 
 FBXMesh::~FBXMesh()
 {
-	if (mWorld != nullptr) {
-		delete mWorld;
-	}
-	for (unsigned int i = 0; i<subMesh.size(); i++) {
-		if (subMesh[i] != nullptr) {
-			delete subMesh[i];
-			subMesh[i] = nullptr;
-		}
-	}
 	subMesh.clear();
 }
 
-ColorChannel::ColorChannel():
-	mTexture{nullptr},
-	Color{0.0f,0.0f,0.0f,1.0f}
+std::unique_ptr<DX11TextureManager>ColorChannel::sTextureManager{ std::make_unique<DX11TextureManager>() };
+int ColorChannel::sTextureCounter{ 0 };
+
+ColorChannel::ColorChannel() :
+	Color{ 0.0f,0.0f,0.0f,1.0f },
+	mTextureID{ -1 }
 {
 }
 
 ColorChannel::~ColorChannel()
 {
 	TextureName.clear();
-	if (mTexture != nullptr) {
-		delete mTexture;
+	if (mTextureID != -1) {
+		sTextureManager->UnRegisterFile(mTextureID);
 	}
 }
 
 void ColorChannel::CreateTexture()
 {
 	if (!TextureName.empty() == true) {
-		mTexture = new DXTexture;
-		mTexture->Create(TextureName);
+		if (sTextureManager->RegisterFile(TextureName, sTextureCounter)==true) {
+			//テクスチャIDを記憶
+			mTextureID = sTextureCounter;
+			//テクスチャカウンタが重複しないようにインクリメント
+			sTextureCounter++;
+			//テクスチャを設定
+			sTextureManager->Load(mTexture, mTextureID);
+		}
 	}
 }

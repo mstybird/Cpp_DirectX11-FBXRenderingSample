@@ -8,7 +8,6 @@
 #include"DX11Sprite2D.h"
 #include<vector>
 #include<cassert>
-#define SAFE_RELEASE(x) if(x){x->Release(); x=NULL;}
 
 ID3D11Device*DX11BaseShader::sDevice;				//DirectX11デバイス
 ID3D11DeviceContext*DX11BaseShader::sDeviceContext;	//DirectX11デバイスコンテキスト
@@ -114,7 +113,9 @@ void MSVertexShader::sInitialize(ID3D11Device * pDevice, ID3D11DeviceContext*pDe
 }
 MSVertexShader::MSVertexShader():
 	mVertexShader{nullptr},
-	mVertexLayout{nullptr}
+	mVertexLayout{nullptr},
+	mCompiledShader{nullptr},
+	mErrors{nullptr}
 {
 
 }
@@ -187,7 +188,10 @@ void MSPixelShader::sInitialize(ID3D11Device * pDevice, ID3D11DeviceContext*pDev
 	sDeviceContext = pDeviceContext;
 }
 
-MSPixelShader::MSPixelShader()
+MSPixelShader::MSPixelShader() :
+	mPixelShader{ nullptr },
+	mCompiledShader{ nullptr },
+	mErrors{ nullptr }
 {
 }
 
@@ -233,7 +237,8 @@ void MSPixelShader::SetShader()
 ID3D11Device*DX11BaseSprite::sDevice{ nullptr };
 ID3D11DeviceContext*DX11BaseSprite::sDeviceContext{ nullptr };
 DX11BaseSprite::DX11BaseSprite():
-	CONSTANTBUFFERSIZE1{sizeof(CONSTANTDATA)}
+	CONSTANTBUFFERSIZE1{sizeof(CONSTANTDATA)},
+	mConstantBuffer{nullptr}
 {
 }
 

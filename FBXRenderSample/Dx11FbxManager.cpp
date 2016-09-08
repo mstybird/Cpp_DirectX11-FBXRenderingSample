@@ -1,7 +1,7 @@
 #include "DX11FbxManager.h"
 #include"DX11FbxResource.h"
 #include"DX11FbxLoader.h"
-#include<vector>
+#include"DX11Resrouce.h"
 #define SAFE_RELEASE(x) if(x){x->Release(); x=NULL;}
 
 ID3D11Device*DX11FbxManager::sDevice{ nullptr };				//DirectX11デバイス
@@ -10,13 +10,14 @@ ID3D11DeviceContext*DX11FbxManager::sDeviceContext{ nullptr };	//DirectX11デバイ
 DX11FbxManager::DX11FbxManager() :
 	mLoader{ nullptr },
 	mVertexBuffer{ nullptr },
-	mIndexBuffer{ nullptr },
-	mMeshData{ nullptr } {
+	mIndexBuffer{ nullptr }
+{
 }
 
 DX11FbxManager::~DX11FbxManager()
 {
 	Release();
+	FBX_SAFE_DELETE(mLoader);
 }
 
 void DX11FbxManager::InitDevice(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
@@ -33,6 +34,7 @@ void DX11FbxManager::Initialize()
 
 void DX11FbxManager::LoadFile(std::string pFileName, bool animationLoad)
 {
+	mFileName = pFileName;
 	if (mLoader == nullptr) {
 		mLoader = new DX11FbxLoader();
 	}
@@ -50,6 +52,9 @@ void DX11FbxManager::Update()
 	D3DXVECTOR3 transPos;
 	mMeshData = mLoader->GetGeometryData2();
 	//バッファが存在した場合一旦解放
+
+
+
 	if (mVertexBuffer != nullptr) {
 		//メッシュの解放
 		for (unsigned int i = 0; i < mMeshData->size(); i++) {
@@ -110,31 +115,21 @@ void DX11FbxManager::Update()
 
 void DX11FbxManager::Release()
 {
-	
-	if (mVertexBuffer != nullptr) {
-		for (unsigned int i = 0; i < mMeshData->size(); i++) {
-			for (unsigned int j = 0; j < mMeshData->at(i)->subMesh.size(); j++) {
-				mVertexBuffer[i][j]->Release();
-				mIndexBuffer[i][j]->Release();
-			}
-			delete[] mVertexBuffer[i];
-			delete[] mIndexBuffer[i];
-			mVertexBuffer[i] = nullptr;
-			mIndexBuffer[i] = nullptr;
+	for (unsigned int i = 0; i < mMeshData->size(); i++) {
+		for (unsigned int j = 0; j < mMeshData->at(i)->subMesh.size(); j++) {
+			SAFE_RELEASE(mVertexBuffer[i][j]);
+			SAFE_RELEASE(mIndexBuffer[i][j]);
 		}
+		SAFE_DELETE_ARRAY(mVertexBuffer[i]);
+		SAFE_DELETE_ARRAY(mVertexBuffer[i]);
 
-		delete[] mVertexBuffer;
-		delete[] mIndexBuffer;
-		mVertexBuffer = nullptr;
-		mIndexBuffer = nullptr;
 	}
-	if (mLoader != nullptr) {
-		delete mLoader;
-		mLoader = nullptr;
-	}
+	SAFE_DELETE_ARRAY(mVertexBuffer);
+	SAFE_DELETE_ARRAY(mVertexBuffer);
+
 }
 
-std::vector<FBXMesh*>* DX11FbxManager::GetMeshData()
+std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxManager::GetMeshData()
 {
 	return mMeshData;
 }
@@ -151,6 +146,7 @@ ID3D11Buffer * DX11FbxManager::GetIndexBuffer(int i, int j)
 
 unsigned int * DX11FbxManager::GetIndexBufferCount(int i,int j)
 {
+	
 	return &mMeshData->at(i)->subMesh.at(j)->IndexLength;
 }
 

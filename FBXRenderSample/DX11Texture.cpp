@@ -1,4 +1,5 @@
 #include"DX11Texture.h"
+#include"DX11Resrouce.h"
 ID3D11Device * DXTexture::mDevice{ nullptr };
 DXTexture::DXTexture() :
 	mSampleLinear{ nullptr },
@@ -47,6 +48,8 @@ void DXTexture::Release()
 		mTexture = nullptr;
 		mIsTexture = false;
 	}
+	SAFE_RELEASE(mSampleLinear);
+	SAFE_RELEASE(mTexture);
 }
 
 ID3D11SamplerState * DXTexture::GetSampler()

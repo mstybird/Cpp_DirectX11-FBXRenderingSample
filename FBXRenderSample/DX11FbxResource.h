@@ -1,14 +1,22 @@
 #pragma once
 #include<d3dx9.h>
 #include<vector>
+#include<memory>
 class DXTexture;
+class DX11TextureManager;
 struct ColorChannel {
 	ColorChannel();
 	~ColorChannel();
 	void CreateTexture();
 	std::string TextureName;	//テクスチャファイルパス
-	DXTexture*mTexture;			//テクスチャリソース
+//	DXTexture*mTexture;			//テクスチャリソース
+	std::weak_ptr<DXTexture>mTexture;
+	int mTextureID;
 	float Color[4];				//マテリアルカラー
+
+
+	static std::unique_ptr<DX11TextureManager>sTextureManager;
+	static int sTextureCounter;
 };
 
 struct FbxVertex
@@ -29,10 +37,11 @@ struct FBXModelData {
 	unsigned int *Index;		//インデックスバッファ生成用
 	unsigned int IndexLength;	//インデックス数
 
-	ColorChannel *Emissive;		//エミッシブ
-	ColorChannel *Ambient;		//アンビエント
-	ColorChannel *Diffuse;		//ディフューズ
-	ColorChannel *Specular;		//スペキュラ
+	
+	std::weak_ptr<ColorChannel> Emissive;		//エミッシブ
+	std::weak_ptr<ColorChannel> Ambient;		//アンビエント
+	std::weak_ptr<ColorChannel> Diffuse;		//ディフューズ
+	std::weak_ptr<ColorChannel> Specular;		//スペキュラ
 
 
 
@@ -52,9 +61,10 @@ struct FBXMesh {
 	FBXMesh();
 	~FBXMesh();
 	//メッシュ一つに含まれるサブメッシュの配列
-	std::vector<FBXModelData*>subMesh;
+	std::vector<std::shared_ptr<FBXModelData>>subMesh;
 	//メッシュの行列
-	D3DXMATRIX *mWorld;
+	std::unique_ptr<D3DXMATRIX>mWorld;
+//	D3DXMATRIX *mWorld;
 };
 /*
 	タスク：
