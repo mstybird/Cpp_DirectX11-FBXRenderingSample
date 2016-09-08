@@ -1,87 +1,6 @@
 #include "DXVector3.h"
 
-float DXVector3::GetAngleX(TYPE_ANGLE pType, DXVector3 & pPosition1, DXVector3 & pPosition2)
-{
-	float radian = atan2f(
-		pPosition2.y - pPosition1.y,
-		pPosition2.z - pPosition1.z
-		);
-
-	if (pType == TYPE_ANGLE::TYPE_DEGREE) {
-		return D3DXToDegree(radian);
-	}
-	else {
-		return radian;
-
-	}
-}
-
-float DXVector3::GetAngleY(TYPE_ANGLE pType, DXVector3 & pPosition1, DXVector3 & pPosition2)
-{
-	float radian = atan2f(
-		pPosition2.x - pPosition1.x,
-		pPosition2.z - pPosition1.z
-		);
-
-	if (pType == TYPE_ANGLE::TYPE_DEGREE) {
-		return D3DXToDegree(radian);
-	}
-	else {
-		return radian;
-
-	}
-}
-
-float DXVector3::GetAngleZ(TYPE_ANGLE pType, DXVector3 & pPosition1, DXVector3 & pPosition2)
-{
-	float radian = atan2f(
-		pPosition2.y - pPosition1.y,
-		pPosition2.x - pPosition1.x
-		);
-
-	if (pType == TYPE_ANGLE::TYPE_DEGREE) {
-		return D3DXToDegree(radian);
-	}
-	else {
-		return radian;
-
-	}
-
-}
-
-float DXVector3::GetVertical(TYPE_ANGLE pType, DXVector3 & pPosition1, DXVector3 & pPosition2)
-{
-	//XŠp“x
-	float lVertical = atan2f(
-		pPosition2.y - pPosition1.y,
-		pPosition2.z - pPosition1.z
-		);
-
-	if (pType == TYPE_ANGLE::TYPE_DEGREE) {
-		return D3DXToDegree(lVertical);
-	}
-	else {
-		return lVertical;
-
-	}
-}
-
-float DXVector3::GetHolizontal(TYPE_ANGLE pType, DXVector3 & pPosition1, DXVector3 & pPosition2)
-{
-	//YŠp“x
-	float lHolizuntal = atan2f(
-		pPosition2.x - pPosition1.x,
-		pPosition2.z - pPosition1.z
-		);
-
-	if (pType == TYPE_ANGLE::TYPE_DEGREE) {
-		return D3DXToDegree(lHolizuntal);
-	}
-	else {
-		return lHolizuntal;
-
-	}
-}
+const DXVector3 DXVector3::sZeroVector{};
 
 DXVector3::DXVector3()
 {
@@ -233,7 +152,7 @@ DXVector3 & DXVector3::operator+=(float pXYZ)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator+(D3DXVECTOR3 & pAddVector)
+DXVector3 & DXVector3::operator+(const D3DXVECTOR3 & pAddVector)
 {
 	x += pAddVector.x;
 	y += pAddVector.y;
@@ -241,13 +160,15 @@ DXVector3 & DXVector3::operator+(D3DXVECTOR3 & pAddVector)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator+=(D3DXVECTOR3 & pAddVector)
+DXVector3 & DXVector3::operator+=(const D3DXVECTOR3 & pAddVector)
 {
 	x += pAddVector.x;
 	y += pAddVector.y;
 	z += pAddVector.z;
 	return *this;
 }
+
+
 
 DXVector3 & DXVector3::operator-(float pXYZ)
 {
@@ -265,7 +186,7 @@ DXVector3 & DXVector3::operator-=(float pXYZ)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator-(D3DXVECTOR3 & pSubVector)
+DXVector3 & DXVector3::operator-(const D3DXVECTOR3 & pSubVector)
 {
 	x -= pSubVector.x;
 	y -= pSubVector.y;
@@ -273,7 +194,7 @@ DXVector3 & DXVector3::operator-(D3DXVECTOR3 & pSubVector)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator-=(D3DXVECTOR3 & pSubVector)
+DXVector3 & DXVector3::operator-=(const D3DXVECTOR3 & pSubVector)
 {
 	x -= pSubVector.x;
 	y -= pSubVector.y;
@@ -297,7 +218,7 @@ DXVector3 & DXVector3::operator*=(float pXYZ)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator*(D3DXVECTOR3 & pMulVector)
+DXVector3 & DXVector3::operator*(const D3DXVECTOR3 & pMulVector)
 {
 	x *= pMulVector.x;
 	y *= pMulVector.y;
@@ -305,7 +226,7 @@ DXVector3 & DXVector3::operator*(D3DXVECTOR3 & pMulVector)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator*=(D3DXVECTOR3 & pMulVector)
+DXVector3 & DXVector3::operator*=(const D3DXVECTOR3 & pMulVector)
 {
 	x *= pMulVector.x;
 	y *= pMulVector.y;
@@ -329,7 +250,7 @@ DXVector3 & DXVector3::operator/=(float pXYZ)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator/(D3DXVECTOR3 & pMulVector)
+DXVector3 & DXVector3::operator/(const D3DXVECTOR3 & pMulVector)
 {
 	x /= pMulVector.x;
 	y /= pMulVector.y;
@@ -337,7 +258,7 @@ DXVector3 & DXVector3::operator/(D3DXVECTOR3 & pMulVector)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator/=(D3DXVECTOR3 & pMulVector)
+DXVector3 & DXVector3::operator/=(const D3DXVECTOR3 & pMulVector)
 {
 	x /= pMulVector.x;
 	y /= pMulVector.y;

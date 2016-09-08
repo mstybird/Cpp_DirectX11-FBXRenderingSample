@@ -1,4 +1,5 @@
 #include "DX11FbxResource.h"
+#include"DX11Texture.h"
 
 FBXModelData::FBXModelData():
 	Index{ nullptr },

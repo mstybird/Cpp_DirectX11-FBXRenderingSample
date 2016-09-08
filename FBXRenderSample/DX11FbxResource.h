@@ -1,7 +1,7 @@
 #pragma once
 #include<d3dx9.h>
 #include<vector>
-#include"DX11Texture.h"
+class DXTexture;
 struct ColorChannel {
 	ColorChannel();
 	~ColorChannel();
@@ -11,19 +11,19 @@ struct ColorChannel {
 	float Color[4];				//マテリアルカラー
 };
 
-struct SimpleVertex
+struct FbxVertex
 {
 	D3DXVECTOR4 Pos;
 	D3DXVECTOR3 Normal;
 	D3DXVECTOR2 UV;
 };
-constexpr int GEOMETRYSIZE = sizeof(SimpleVertex);
+constexpr int GEOMETRYSIZE = sizeof(FbxVertex);
 
 struct FBXModelData {
 
 	FBXModelData();
 	~FBXModelData();
-	std::vector<SimpleVertex> Data;	//ジオメトリデータ
+	std::vector<FbxVertex> Data;	//ジオメトリデータ
 
 	unsigned int PosLength;		//頂点数
 	unsigned int *Index;		//インデックスバッファ生成用

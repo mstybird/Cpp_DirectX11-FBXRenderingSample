@@ -1,4 +1,12 @@
 #include"DX11Render.h"
+#include"DX11Texture.h"
+#include"DX11RenderResource.h"
+#include"DX11FbxManager.h"
+#include"DX11FbxResource.h"
+#include"DXDisplay.h"
+#include"DXCamera.h"
+#include"DXProjection.h"
+#include"DX11BaseShader.h"
 
 ID3D11Device*DX11Render::sDevice;				//DirectX11デバイス
 ID3D11DeviceContext*DX11Render::sDeviceContext;	//DirectX11デバイスコンテキスト
@@ -20,32 +28,33 @@ void DX11Render::Clear(D3DXVECTOR4 pColor)
 	sDeviceContext->ClearDepthStencilView(sDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
+
+
+
+
 void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resource)
 {
 	//shader->SetConstantBuffer1(resource,&display);
 	//シェーダの設定
-	sDeviceContext->VSSetShader(shader->mVertexShader, NULL, 0);
-	sDeviceContext->PSSetShader(shader->mPixelShader, NULL, 0);
-
-	//頂点インプットレイアウトを登録
-	sDeviceContext->IASetInputLayout(shader->mVertexLayout);
+	shader->GetVS()->SetShader();
+	shader->GetPS()->SetShader();
 	//プリミティブトポロジーの登録
-	sDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	sDeviceContext->IASetPrimitiveTopology(mPrimitiveTopology);
 
 	auto meshData = fbxManager->GetMeshData();
 	//メッシュの個数分
 	for (unsigned int i = 0; i < meshData->size(); i++) {
-		//行列の設定
-		shader->SetConstantBuffer1_1(meshData->at(i), resource, &display);
+		//メッシュ単位の設定
+		shader->SetConstantBuffer1(meshData->at(i), resource, display);
 		//全てのメッシュに対して共通のデータを登録
-		sDeviceContext->VSSetConstantBuffers(0, 1, &shader->mConstantBuffer1);
-		sDeviceContext->PSSetConstantBuffers(0, 1, &shader->mConstantBuffer1);
+		sDeviceContext->VSSetConstantBuffers(0, 1, shader->GetCB1());
+		sDeviceContext->PSSetConstantBuffers(0, 1, shader->GetCB1());
 		//サブメッシュの個数分
 		for (unsigned int j = 0; j < meshData->at(i)->subMesh.size(); j++) {
 			shader->SetConstantBuffer2(meshData->at(i)->subMesh.at(j));
-			sDeviceContext->VSSetConstantBuffers(1, 1, &shader->mConstantBuffer2);
-			sDeviceContext->PSSetConstantBuffers(1, 1, &shader->mConstantBuffer2);
-			UINT stride = sizeof(SimpleVertex);
+			sDeviceContext->VSSetConstantBuffers(1, 1, shader->GetCB1());
+			sDeviceContext->PSSetConstantBuffers(1, 1, shader->GetCB1());
+			UINT stride = shader->GetVertexSize();
 			UINT offset = 0;
 			ID3D11Buffer* lVertexBuffer = fbxManager->GetVertexBuffer(i, j);
 			ID3D11Buffer* lIndexBuffer = fbxManager->GetIndexBuffer(i, j);
@@ -54,7 +63,6 @@ void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resour
 			stride = sizeof(int);
 			offset = 0;
 			sDeviceContext->IASetIndexBuffer(lIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-//			sDeviceContext->Draw(*indexLength, 0);
 			sDeviceContext->DrawIndexed(*indexLength, 0, 0);
 
 		}
@@ -64,11 +72,23 @@ void DX11Render::Render(DX11FbxManager * fbxManager, DX11RenderResource * resour
 
 void DX11Render::SetRenderTarget(DX11RenderResource * resource)
 {
-	display.mUseCameraPtr = resource->GetCamera();
-	display.mUseProjectionPtr = resource->GetProjection();
+	display->SetRenderTarget(
+		resource->GetCamera(),
+		resource->GetProjection()
+		);
 }
 
 void DX11Render::SetShader(DX11BaseShader * pShader)
 {
 	shader = pShader;
+}
+
+DX11Render::DX11Render():
+	mPrimitiveTopology{ D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST }
+{
+	display = new DXDisplay;
+}
+
+DX11Render::~DX11Render()
+{
 }

@@ -79,13 +79,20 @@ public:
 	ID3D11Texture2D* m_pBackBuffer_DSTex;
 	ID3D11RasterizerState* m_pRasterizerState;
 
+	DX11TextureManager textureManager;
+
 	DX11FbxManager fbx;				//モデルデータ
 	DX11FbxManager mbox;				//モデルデータ
 	DX11RenderResource box;	//ボックス移動
 	DX11RenderResource ground;
-	DX11RenderResource me;	//ボックス移動
+	DX11RenderResource me;	//自身
+
+	DX11SpriteResource spRes;	//スプライトリソース
+	DX11BaseSprite sprite;	//スプライトシェーダ
+	DX11Sprite2D render2D;//スプライトレンダラー
 
 	MyDX11Shader shader;				//描画に使うシェーダ
 	//シーンに一つ
-	DX11Render render;				//描画モデル
+	DX11Render render;
+//	DX11BaseRender render;				//描画モデル
 };

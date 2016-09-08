@@ -1,11 +1,17 @@
 #pragma once
-#include"DXCamera.h"
-#include"DXProjection.h"
+#include<memory>
 
-//実際のレンダリングに使うビュー行列と射影行列は一つでいい
+//レンダーマネージャに登録するディスプレイ情報
+class DXCamera;
+class DXProjection;
 class DXDisplay {
 public:
-	void SetRenderTarget();
+	void SetRenderTarget(DXCamera*pCamera, DXProjection*pProjection);
+	DXCamera* GetCamera()const;
+	DXProjection*GetProjection()const;
+private:
+	//std::weak_ptr<DXCamera>mUseCameraPtr;
+	//std::weak_ptr<DXCamera>mUseProjectoPtr;
 	DXCamera*mUseCameraPtr;
 	DXProjection*mUseProjectionPtr;
 };

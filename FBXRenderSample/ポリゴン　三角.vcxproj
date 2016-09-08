@@ -99,9 +99,13 @@
     <ClCompile Include="DX11FbxResource.cpp" />
     <ClCompile Include="DX11Render.cpp" />
     <ClCompile Include="DX11RenderResource.cpp" />
+    <ClCompile Include="DX11Sprite2D.cpp" />
     <ClCompile Include="DX11Texture.cpp" />
+    <ClCompile Include="DX11TextureManager.cpp" />
     <ClCompile Include="DXCamera.cpp" />
+    <ClCompile Include="DXDisplay.cpp" />
     <ClCompile Include="DXProjection.cpp" />
+    <ClCompile Include="DXVector2.cpp" />
     <ClCompile Include="DXWorld.cpp" />
     <ClCompile Include="DXVector3.cpp" />
     <ClCompile Include="FbxComputeDeformer.cpp" />
@@ -110,11 +114,15 @@
     <ClCompile Include="FbxVBO.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="MAIN.cpp" />
+    <ClCompile Include="Sprite2DShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11BaseShader.h" />
     <ClInclude Include="DX11CustomShader.h" />
+    <ClInclude Include="DX11Sprite2D.h" />
+    <ClInclude Include="DX11Sprite3D.h" />
     <ClInclude Include="DX11Texture.h" />
+    <ClInclude Include="DX11TextureManager.h" />
     <ClInclude Include="DXDisplay.h" />
     <ClInclude Include="DX11FbxLoader.h" />
     <ClInclude Include="DX11FbxManager.h" />
@@ -125,6 +133,7 @@
     <ClInclude Include="DX11Resrouce.h" />
     <ClInclude Include="DXCamera.h" />
     <ClInclude Include="DXProjection.h" />
+    <ClInclude Include="DXVector2.h" />
     <ClInclude Include="DXWorld.h" />
     <ClInclude Include="DXVector3.h" />
     <ClInclude Include="FbxComputeDeformer.h" />
@@ -132,6 +141,7 @@
     <ClInclude Include="FbxVBO.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="MAIN.h" />
+    <ClInclude Include="Sprite2DShader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Simple.hlsl">

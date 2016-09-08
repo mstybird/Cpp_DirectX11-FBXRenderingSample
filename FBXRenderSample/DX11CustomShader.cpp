@@ -1,44 +1,37 @@
 #include"DX11CustomShader.h"
 #include"DX11Resrouce.h"
+#include"DX11RenderResource.h"
+#include"DX11FbxResource.h"
+#include"DX11Texture.h"
 #include<vector>
 #include<iostream>
 MyDX11Shader::MyDX11Shader() :
-	DX11BaseShader(sizeof(MyFBXCONSTANTBUFFER1), sizeof(MyFBXCONSTANTBUFFER2))
+	DX11BaseShader(
+		sizeof(MyFBXCONSTANTBUFFER1),
+		sizeof(MyFBXCONSTANTBUFFER2),
+		sizeof(FbxVertex))
 {
 }
 
-void MyDX11Shader::SetConstantBuffer1(DX11RenderResource * resource, DXDisplay*pDisplay)
-{
-	
-	D3D11_MAPPED_SUBRESOURCE pData;
-	MyFBXCONSTANTBUFFER1 cb;
-	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-		cb.mW = *resource->GetMatrixWorld();
 
-		cb.mWVP = resource->GetMatrixWVP(pDisplay);
-		D3DXMatrixTranspose(&cb.mW, &cb.mW);
-		D3DXMatrixTranspose(&cb.mWVP, &cb.mWVP);
-		cb.LightDir = D3DXVECTOR4(1, 0, -1, 0);
-		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-		sDeviceContext->Unmap(mConstantBuffer1, 0);
-	}
-}
-
-void MyDX11Shader::SetConstantBuffer1_1(FBXMesh * fbxMesh, DX11RenderResource * resource, DXDisplay * pDisplay)
+void MyDX11Shader::SetConstantBuffer1(FBXMesh * fbxMesh, DX11RenderResource * resource, DXDisplay * pDisplay)
 {
-	D3D11_MAPPED_SUBRESOURCE pData;
 	MyFBXCONSTANTBUFFER1 cb;
+	D3D11_MAPPED_SUBRESOURCE pData;
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+
 		cb.mW = *fbxMesh->mWorld * *resource->GetMatrixWorld();
 
 		cb.mWVP = resource->GetMatrixWVP(fbxMesh->mWorld,pDisplay);
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		D3DXMatrixTranspose(&cb.mWVP, &cb.mWVP);
 		cb.LightDir = D3DXVECTOR4(1, 0, -1, 0);
+
 		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
 		sDeviceContext->Unmap(mConstantBuffer1, 0);
 	}
 }
+
 
 void MyDX11Shader::SetConstantBuffer2(FBXModelData * modelData)
 {
@@ -56,17 +49,9 @@ void MyDX11Shader::SetConstantBuffer2(FBXModelData * modelData)
 	}
 }
 
-void MyDX11Shader::InitLayout()
+void MyDX11Shader::SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>&pLayout)
 {
-	std::vector<D3D11_INPUT_ELEMENT_DESC>layout;
-
-	layout.push_back(INPUTLAYOUT_POSITION(0));
-	layout.push_back(INPUTLAYOUT_NORMAL(12));
-	layout.push_back(INPUTLAYOUT_TEXCOORD(28));
-
-	//インプットレイアウトの作成
-	if (FAILED(sDevice->CreateInputLayout(layout.data(), layout.size(), mCompiledShader->GetBufferPointer(), mCompiledShader->GetBufferSize(), &mVertexLayout)))
-	{
-		return;
-	}
+	pLayout.push_back(INPUTLAYOUT_POSITION4D(0));
+	pLayout.push_back(INPUTLAYOUT_NORMAL(12));
+	pLayout.push_back(INPUTLAYOUT_TEXCOORD2D(28));
 }

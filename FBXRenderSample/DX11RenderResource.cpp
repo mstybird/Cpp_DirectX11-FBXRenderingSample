@@ -1,5 +1,7 @@
 #include "DX11RenderResource.h"
-
+#include"DXCamera.h"
+#include"DXProjection.h"
+#include"DXDisplay.h"
 DX11RenderResource::DX11RenderResource()
 {
 	mView = nullptr;
@@ -39,14 +41,14 @@ D3DXMATRIX * DX11RenderResource::GetMatrixProjection()
 
 D3DXMATRIX DX11RenderResource::GetMatrixWVP(DXDisplay*pDisplay)
 {
-	return *mWorld.GetMatrix() * *pDisplay->mUseCameraPtr->GetMatrix() * *pDisplay->mUseProjectionPtr->GetMatrix();
+	return *mWorld.GetMatrix() * *pDisplay->GetCamera()->GetMatrix() * *pDisplay->GetProjection()->GetMatrix();
 }
 
 D3DXMATRIX DX11RenderResource::GetMatrixWVP(D3DXMATRIX * pAddWorldMatrix, DXDisplay * pDisplay)
 {
 	return *pAddWorldMatrix * *mWorld.GetMatrix() * 
-		*pDisplay->mUseCameraPtr->GetMatrix() * 
-		*pDisplay->mUseProjectionPtr->GetMatrix();
+		*pDisplay->GetCamera()->GetMatrix() * 
+		*pDisplay->GetProjection()->GetMatrix();
 }
 
 DXWorld * DX11RenderResource::GetWorld()

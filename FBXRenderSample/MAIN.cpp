@@ -224,8 +224,8 @@ HRESULT MAIN::InitD3D()
 	m_pDeviceContext->OMSetRenderTargets(1, &m_pBackBuffer_TexRTV,m_pBackBuffer_DSTexDSV);
 	//ビューポートの設定
 	D3D11_VIEWPORT vp;
-	vp.Width = WINDOW_WIDTH;
-	vp.Height = WINDOW_HEIGHT;
+	vp.Width = WINDOW_WIDTH/2;
+	vp.Height = WINDOW_HEIGHT/2;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
@@ -244,9 +244,14 @@ HRESULT MAIN::InitD3D()
 	
 
 	//各ラッパーにDirectX11デバイス等を登録
+	MSVertexShader::sInitialize(m_pDevice, m_pDeviceContext);
+	MSPixelShader::sInitialize(m_pDevice, m_pDeviceContext);
 	DX11BaseShader::Init(m_pDevice, m_pDeviceContext);
-	DX11FbxManager::InitDevice(m_pDevice, m_pDeviceContext);
+	DX11BaseSprite::Init(m_pDevice, m_pDeviceContext);
+	DX11Sprite2D::Initialize(m_pDevice, m_pDeviceContext, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV);
 	DX11Render::Initialize(m_pDevice, m_pDeviceContext,m_pBackBuffer_TexRTV,m_pBackBuffer_DSTexDSV);
+
+	DX11FbxManager::InitDevice(m_pDevice, m_pDeviceContext);
 	DXProjection::SetAspect((FLOAT)WINDOW_WIDTH, (FLOAT)WINDOW_HEIGHT);
 	DXTexture::Initialize(m_pDevice);
 	//ポリゴン作成
@@ -263,6 +268,8 @@ D3DXVECTOR3 pos;
 
 HRESULT MAIN::InitPolygon()
 {
+	//テクスチャ登録
+	textureManager.RegisterFile("res/Chips_Cover.jpg", 0);
 
 	std::string str{ "path\\data.txt" };
 	std::string path;
@@ -289,10 +296,8 @@ HRESULT MAIN::InitPolygon()
 	auto lProjection = me.GetProjection();
 
 	auto world = me.GetWorld();
-	world->SetT(0, 0, 0);
-	lView->SetEyeT(0, 1, 10);
-	lView->SetLookT(0.0f, 0.0f, 0.0f);
-	lView->SetUpV(0.0f, 1.0f, 0.0f);
+	world->SetT(70, 20, -80);
+	lView->SetCamera(*me.GetWorld(), *box.GetWorld());
 	
 	lProjection->SetViewAngle(45);
 	lProjection->SetPlaneNear(0.1f);
@@ -301,7 +306,7 @@ HRESULT MAIN::InitPolygon()
 	box.GetWorld()->SetT(0, 0, 0);
 	//box.GetWorld()->SetRC(45, 45, 0);
 
-	ground.GetWorld()->SetS(1, 0.001, 1);
+	ground.GetWorld()->SetS(1.0f, 0.001f, 1.0f);
 
 	return S_OK;
 }
@@ -327,30 +332,30 @@ void MAIN::Update()
 	}
 
 
-
+	const float speed = 10.0f;
 	//カメラの平行移動
 	if (GetAsyncKeyState(VK_LEFT)) {
-		camera->AddTranslation(DXCamera::TYPE_ROTATE, -0.25, { 1,0,0 });
+		camera->Translation(DXCamera::TYPE_NORMAL, -speed, DXCamera::DIRECTION_TYPE::LEFTRIGHT, false);
 	}
 	if (GetAsyncKeyState(VK_RIGHT)) {
-		camera->AddTranslation(DXCamera::TYPE_ROTATE, 0.25, { 1,0,0 });
+		camera->Translation(DXCamera::TYPE_NORMAL, speed, DXCamera::DIRECTION_TYPE::LEFTRIGHT, false);
 	}
 
 	//ボックスの回転
 	if (GetAsyncKeyState(VK_UP)) {
 		if (GetAsyncKeyState(VK_SHIFT)) {
-			camera->AddTranslation(DXCamera::TYPE_ROTATE, 0.25, { 0,1,0 });
+			camera->Translation(DXCamera::TYPE_PARALLEL, speed, DXCamera::DIRECTION_TYPE::UPDOWN, true);
 		}
 		else {
-			camera->AddTranslation(DXCamera::TYPE_ROTATE, 0.25);
+			camera->Translation(DXCamera::TYPE_PARALLEL, speed, DXCamera::DIRECTION_TYPE::FRONTBACK, false);
 		}
 	}
 	if (GetAsyncKeyState(VK_DOWN)) {
 		if (GetAsyncKeyState(VK_SHIFT)) {
-			camera->AddTranslation(DXCamera::TYPE_ROTATE, -0.25, { 0,1,0 });
+			camera->Translation(DXCamera::TYPE_PARALLEL, -speed, DXCamera::DIRECTION_TYPE::UPDOWN, true);
 		}
 		else {
-			camera->AddTranslation(DXCamera::TYPE_ROTATE, -0.25);
+			camera->Translation(DXCamera::TYPE_PARALLEL, -speed, DXCamera::DIRECTION_TYPE::FRONTBACK, false);
 		}
 	}
 
@@ -363,12 +368,8 @@ void MAIN::Render()
 {
 	////画面クリア
 	DX11Render::Clear({ 0,0,1,1 });
-
-	//fbx.Update();
 	mbox.Update();
 	ground.GetWorld()->SetS(1, 1, 1);
-	ground.GetWorld()->AddRC(0, 1, 0);
-	//render.Render(&fbx, &box);
 	render.Render(&mbox, &ground);
 
 
@@ -380,6 +381,7 @@ void MAIN::Render()
 //全てのインターフェイスをリリース
 void MAIN::DestroyD3D()
 {
+
 	SAFE_RELEASE(m_pRasterizerState);
 	SAFE_RELEASE(m_pSwapChain);
 	SAFE_RELEASE(m_pBackBuffer_TexRTV);

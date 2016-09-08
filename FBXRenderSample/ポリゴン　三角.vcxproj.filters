@@ -1,115 +1,139 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="fbxProc.cpp">
-      <Filter>DX11FbxLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="FbxVBO.cpp">
-      <Filter>DX11FbxLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="FbxMaterialCache.cpp">
-      <Filter>DX11FbxLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="DX11BaseShader.cpp">
-      <Filter>DX11Render\Source</Filter>
-    </ClCompile>
     <ClCompile Include="DX11Render.cpp">
-      <Filter>DX11Render\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DX11CustomShader.cpp">
-      <Filter>DX11Render\Source</Filter>
+      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
     </ClCompile>
     <ClCompile Include="Dx11FbxManager.cpp">
-      <Filter>DX11Render\Source</Filter>
+      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
     </ClCompile>
     <ClCompile Include="DX11RenderResource.cpp">
-      <Filter>DX11Render\Source</Filter>
+      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
     </ClCompile>
     <ClCompile Include="MAIN.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="FbxComputeDeformer.cpp">
-      <Filter>DX11FbxLoader</Filter>
-    </ClCompile>
     <ClCompile Include="DXCamera.cpp">
-      <Filter>DX11Helper\Source</Filter>
+      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
     </ClCompile>
     <ClCompile Include="DXVector3.cpp">
-      <Filter>DX11Helper\Source</Filter>
+      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
     </ClCompile>
     <ClCompile Include="DXProjection.cpp">
-      <Filter>DX11Helper\Source</Filter>
+      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
     </ClCompile>
     <ClCompile Include="DXWorld.cpp">
-      <Filter>DX11Helper\Source</Filter>
+      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
     </ClCompile>
-    <ClCompile Include="DX11FbxResource.cpp" />
     <ClCompile Include="DX11Texture.cpp">
-      <Filter>DX11Render\Source</Filter>
+      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="Helper.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11FbxResource.cpp">
+      <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxComputeDeformer.cpp">
+      <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxMaterialCache.cpp">
+      <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="fbxProc.cpp">
+      <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxVBO.cpp">
+      <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11BaseShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11CustomShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11TextureManager.cpp" />
+    <ClCompile Include="DX11Sprite2D.cpp" />
+    <ClCompile Include="DXVector2.cpp">
+      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite2DShader.cpp" />
+    <ClCompile Include="DXDisplay.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DX11FbxLoader.h">
-      <Filter>DX11FbxLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="FbxVBO.h">
-      <Filter>DX11FbxLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="FbxMaterialCache.h">
-      <Filter>DX11FbxLoader</Filter>
-    </ClInclude>
     <ClInclude Include="DX11Render.h">
-      <Filter>DX11Render\Header</Filter>
+      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
     <ClInclude Include="DX11FbxManager.h">
-      <Filter>DX11Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11BaseShader.h">
-      <Filter>DX11Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11CustomShader.h">
-      <Filter>DX11Render\Header</Filter>
+      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
     <ClInclude Include="DX11RenderResource.h">
-      <Filter>DX11Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11FbxResource.h">
-      <Filter>DX11FbxLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11Resrouce.h">
-      <Filter>DX11Helper\Header</Filter>
+      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
     <ClInclude Include="DXCamera.h">
-      <Filter>DX11Helper\Header</Filter>
+      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
     </ClInclude>
     <ClInclude Include="DXProjection.h">
-      <Filter>DX11Helper\Header</Filter>
+      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
     </ClInclude>
     <ClInclude Include="DXVector3.h">
-      <Filter>DX11Helper\Header</Filter>
+      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
     </ClInclude>
     <ClInclude Include="MAIN.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="FbxComputeDeformer.h">
-      <Filter>DX11FbxLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="DXDisplay.h">
-      <Filter>DX11Render\Header</Filter>
-    </ClInclude>
     <ClInclude Include="DXWorld.h">
-      <Filter>DX11Helper\Header</Filter>
+      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
     </ClInclude>
     <ClInclude Include="Dx11Manager.h">
-      <Filter>DX11Render\Header</Filter>
+      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
     <ClInclude Include="DX11Texture.h">
-      <Filter>DX11Render\Header</Filter>
+      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
     <ClInclude Include="Helper.h">
       <Filter>Helper</Filter>
     </ClInclude>
+    <ClInclude Include="DX11FbxLoader.h">
+      <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11FbxResource.h">
+      <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxComputeDeformer.h">
+      <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxMaterialCache.h">
+      <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxVBO.h">
+      <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11BaseShader.h">
+      <Filter>MSDirect\DX11\Shader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11CustomShader.h">
+      <Filter>MSDirect\DX11\Shader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DXDisplay.h">
+      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11Resrouce.h">
+      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11Sprite2D.h">
+      <Filter>MSDirect\DX11\DX11Sprite\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11Sprite3D.h">
+      <Filter>MSDirect\DX11\DX11Sprite\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11TextureManager.h">
+      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DXVector2.h">
+      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite2DShader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -120,27 +144,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="DX11FbxLoader">
-      <UniqueIdentifier>{be0449cb-e4e1-42cd-b924-a8c644f2088d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DX11Render">
-      <UniqueIdentifier>{525a8f17-1b67-45c5-b451-6a4b51158593}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DX11Render\Header">
-      <UniqueIdentifier>{450593b3-d878-4ddb-8691-c3e49df7dc31}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DX11Render\Source">
-      <UniqueIdentifier>{6f3242ee-6351-4d36-9ccb-94df8c450e32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DX11Helper">
-      <UniqueIdentifier>{8ff38007-295f-4ff5-927e-7fa91685fcfe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DX11Helper\Header">
-      <UniqueIdentifier>{3562b482-68e3-4118-93b3-7ee2d4460bb5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DX11Helper\Source">
-      <UniqueIdentifier>{c30e4d31-2ba1-4657-bdbc-00000abb7f53}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HLSL">
       <UniqueIdentifier>{130b753a-1bb0-43cb-8f24-36bd7c93b8ad}</UniqueIdentifier>
     </Filter>
@@ -152,6 +155,57 @@
     </Filter>
     <Filter Include="Helper">
       <UniqueIdentifier>{f28ec3ca-4e06-46f9-989d-47c88f7869eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect">
+      <UniqueIdentifier>{d1d43b4b-c034-4ce8-bb99-79bb41178784}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11">
+      <UniqueIdentifier>{6c83f339-a51a-498d-80bd-1e9a054cedf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DXHelper">
+      <UniqueIdentifier>{8ff38007-295f-4ff5-927e-7fa91685fcfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DXHelper\Header">
+      <UniqueIdentifier>{3562b482-68e3-4118-93b3-7ee2d4460bb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DXHelper\Source">
+      <UniqueIdentifier>{c30e4d31-2ba1-4657-bdbc-00000abb7f53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DX11Render">
+      <UniqueIdentifier>{525a8f17-1b67-45c5-b451-6a4b51158593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DX11Render\Header">
+      <UniqueIdentifier>{450593b3-d878-4ddb-8691-c3e49df7dc31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DX11Render\Source">
+      <UniqueIdentifier>{6f3242ee-6351-4d36-9ccb-94df8c450e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DX11FbxLoader">
+      <UniqueIdentifier>{be0449cb-e4e1-42cd-b924-a8c644f2088d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DX11FbxLoader\Header">
+      <UniqueIdentifier>{3f1e32be-58a9-48cc-9a7a-10e14779329f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DX11FbxLoader\Source">
+      <UniqueIdentifier>{c6a0ef1d-11b8-4838-b70e-ea8f36c58063}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader">
+      <UniqueIdentifier>{f8dab8cc-9d35-4943-9b68-210a648dc740}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Header">
+      <UniqueIdentifier>{5144595a-a23d-41f7-8bb3-1dc36824db80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Source">
+      <UniqueIdentifier>{128e9588-84de-4a62-96c9-9759662e02d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DX11Sprite">
+      <UniqueIdentifier>{4802fa5b-6c95-40de-8cd4-c697b8c03586}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DX11Sprite\Header">
+      <UniqueIdentifier>{7f4ec03b-d480-4daa-bccf-4dd653cc718c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\DX11Sprite\Source">
+      <UniqueIdentifier>{51ace513-df14-47f8-b738-baceacc585f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

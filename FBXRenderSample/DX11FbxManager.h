@@ -1,6 +1,5 @@
 #pragma once
-#include"DX11FbxResource.h"
-#include"DX11FbxLoader.h"
+
 #include<D3DX11.h>
 #include<string>
 #include<vector>
@@ -8,6 +7,8 @@
 	モデルデータとしての機能のみ
 	描画に必要な座標などの行列は一切残さない
 */
+struct FBXMesh;
+class DX11FbxLoader;
 class DX11FbxManager {
 public:
 	DX11FbxManager();
@@ -33,7 +34,6 @@ public:
 	ID3D11Buffer*GetVertexBuffer(int i, int j);
 	ID3D11Buffer*GetIndexBuffer(int i, int j);
 	unsigned int*GetIndexBufferCount(int i,int j);
-
 
 private:
 	//モデルごとに記憶

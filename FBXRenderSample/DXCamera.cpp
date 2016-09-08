@@ -1,129 +1,67 @@
 #include "DXCamera.h"
-//#include"DX11RenderResource.h"
 
-void DXCamera::SetEyeT(float pX, float pY, float pZ)
+const D3DXVECTOR3 DXCamera::sUpVector{ 0.0f,1.0f,0.0f };
+const D3DXVECTOR3 DXCamera::DIRECTION_TYPE::LEFTRIGHT{ 1.0f,0.0f,0.0f };
+const D3DXVECTOR3 DXCamera::DIRECTION_TYPE::UPDOWN{ 0.0f,1.0f,0.0f };
+const D3DXVECTOR3 DXCamera::DIRECTION_TYPE::FRONTBACK{ 0.0f,0.0f,1.0f };
+
+
+DXCamera::DXCamera() :
+	mEyePosition{ 0.0f,0.0f,0.0f },
+	mLookPosition{0.0f,0.0f,0.0f},
+	mUpVector{sUpVector},
+	mRotate{0.0f,0.0f,0.0f}
 {
-	mEyePosition.Set(pX, pY, pZ);
+	D3DXMatrixIdentity(&mMatrix);
 }
 
-void DXCamera::SetEyeT(D3DXVECTOR3 pPosition)
+void DXCamera::SetCamera(const DXWorld & pEyePosition, const DXWorld & pLookAtPosition)
 {
-	mEyePosition = pPosition;
+	D3DXMATRIX mUp, mView;
+	//視点の設定
+	mEyePosition = pEyePosition.mPosition;
+	//注視点の設定
+	mLookPosition = pLookAtPosition.mPosition;
+	//頭上方向の計算
+	D3DXMatrixLookAtLH(&mMatrix, &mEyePosition, &mLookPosition, &mUpVector);
+	D3DXMatrixInverse(&mView, NULL, &mMatrix);
+	D3DXVec3TransformNormal(&mUpVector, &sUpVector, &mView);
 }
 
-void DXCamera::SetEyeT(DXWorld pEyeTarget)
+void DXCamera::Translation(TYPEMOVE pType, float pSpeed,const D3DXVECTOR3&pDirection,bool pLockoned)
 {
-	mEyePosition = pEyeTarget.mPosition;
-}
+	//ロックオンフラグが立っていた場合はこの移動で注視点を変更しない
 
-//void DXCamera::SetEyeT(DX11RenderResource pEyeTarget)
-//{
-//	mEyePosition = pEyeTarget.smWorld.mPosition;
-//}
-
-void DXCamera::SetLookT(float pX, float pY, float pZ)
-{
-	mLookPosition.Set(pX, pY, pZ);
-}
-
-void DXCamera::SetLookT(D3DXVECTOR3 pLookAt)
-{
-	mLookPosition = pLookAt;
-}
-
-void DXCamera::SetLookT(DXWorld pEyeTarget)
-{
-	auto v = *pEyeTarget.GetMatrix();
-	mLookPosition.Set(v._41, v._42, v._43);
-}
-
-void DXCamera::AddEyeT(float pSpeed, DXVector3 pDirection)
-{
-
-	pDirection *= pSpeed;
-	mEyePosition += pDirection;
-
-}
-
-void DXCamera::AddLookT(float pSpeed, DXVector3 pDirection)
-{
-	pDirection *= pSpeed;
-	mLookPosition += pDirection;
-}
-
-void DXCamera::AddTranslation(TYPEMOVE pType, float pSpeed, DXVector3 pDirection)
-{
-	D3DXMATRIX lRotation;
+	DXVector3 lDirection = pDirection;
 	switch (pType)
 	{
-		//平行移動
+	case DXCamera::TYPE_NORMAL:
+		lDirection *= pSpeed;
+		mEyePosition += lDirection;
+		mLookPosition += pLockoned ? DXVector3::sZeroVector : lDirection;
+		break;
 	case DXCamera::TYPE_PARALLEL:
-		pDirection *= pSpeed;
-		mEyePosition += pDirection;
-		mLookPosition += pDirection;
-		break;
-	case DXCamera::TYPE_TARGET:
-		//回転移動(ターゲットの方向を正面としたロックオン移動)
-	{
-		float lTargetV, lTargetH;
-		lTargetV = DXVector3::GetVertical(DXVector3::TYPE_RADIAN, mEyePosition, mLookPosition);
-		lTargetH = DXVector3::GetHolizontal(DXVector3::TYPE_RADIAN, mEyePosition, mLookPosition);
-		D3DXMatrixRotationYawPitchRoll(&lRotation, lTargetH, lTargetV, 0);
-		//移動量計算
-		D3DXVec3TransformCoord(&pDirection, &pDirection, &lRotation);
-		pDirection *= pSpeed;
-		mEyePosition += pDirection;
-
-	}
-		break;
-	case DXCamera::TYPE_ROTATE:
-		//カメラの位置と注視点の角度を計算
-		float x, y, z;
-		x = DXVector3::GetAngleX(DXVector3::TYPE_RADIAN, mEyePosition, mLookPosition);
-		y = DXVector3::GetAngleY(DXVector3::TYPE_RADIAN, mEyePosition, mLookPosition);
-		z = DXVector3::GetAngleZ(DXVector3::TYPE_RADIAN, mEyePosition, mLookPosition);
-		D3DXMatrixRotationYawPitchRoll(
-			&lRotation,
-			y, x, z
-			);
-		D3DXVec3TransformCoord(&pDirection, &pDirection, &lRotation);
-		pDirection *= pSpeed;
-		mEyePosition += pDirection;
-		mLookPosition += pDirection;
+		D3DXMatrixLookAtLH(&mMatrix, &mEyePosition, &mLookPosition, &mUpVector);
+		D3DXMatrixInverse(&mMatrix, nullptr, &mMatrix);
+		D3DXVec3TransformNormal(&lDirection, &lDirection, &mMatrix);
+		D3DXVec3TransformNormal(&mUpVector, &sUpVector, &mMatrix);
+		lDirection *= pSpeed;
+		mEyePosition += lDirection;
+		mLookPosition += pLockoned ? DXVector3::sZeroVector : lDirection;
 		break;
 	default:
 		break;
 	}
 }
 
+
+
 void DXCamera::Rotate(float pX, float pY, float pZ)
 {
-	static D3DXMATRIX lPoseMat;
-	D3DXMatrixIdentity(&lPoseMat);
-	float Y, X, Z;
-	X = 0;
-	Y = 0;
-	Z = 0;
-	D3DXMATRIX lDeltamat;
-	D3DXMatrixIdentity(&lDeltamat);
 
 
 }
 
-//void DXCamera::SetLookT(DX11RenderResource pLookTarget)
-//{
-//	mLookPosition = pLookTarget.smWorld.mPosition;
-//}
-
-void DXCamera::SetUpV(float pX, float pY, float pZ)
-{
-	mUpVector.Set(pX, pY, pZ);
-}
-
-void DXCamera::SetUpV(D3DXVECTOR3 pVector)
-{
-	mUpVector = pVector;
-}
 
 D3DXMATRIX * DXCamera::GetMatrix()
 {

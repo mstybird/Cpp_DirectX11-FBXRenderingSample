@@ -1,16 +1,13 @@
 #include "DX11FbxManager.h"
-
+#include"DX11FbxResource.h"
+#include"DX11FbxLoader.h"
+#include<vector>
 #define SAFE_RELEASE(x) if(x){x->Release(); x=NULL;}
 
 ID3D11Device*DX11FbxManager::sDevice{ nullptr };				//DirectX11デバイス
 ID3D11DeviceContext*DX11FbxManager::sDeviceContext{ nullptr };	//DirectX11デバイスコンテキスト
 
 DX11FbxManager::DX11FbxManager() :
-	//mVertexShader{ nullptr },
-	//mPixelShader{ nullptr },
-	//mVertexLayout{ nullptr },
-	//mConstantBuffer1{ nullptr },
-	//mConstantBuffer2{ nullptr },
 	mLoader{ nullptr },
 	mVertexBuffer{ nullptr },
 	mIndexBuffer{ nullptr },
@@ -86,7 +83,7 @@ void DX11FbxManager::Update()
 		for (unsigned int j = 0; j < mMeshData->at(i)->subMesh.size(); j++) {
 			D3D11_BUFFER_DESC bd;
 			bd.Usage = D3D11_USAGE_DEFAULT;
-			bd.ByteWidth = sizeof(SimpleVertex)*mMeshData->at(i)->subMesh.at(j)->PosLength;
+			bd.ByteWidth = sizeof(FbxVertex)*mMeshData->at(i)->subMesh.at(j)->PosLength;
 			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 			bd.CPUAccessFlags = 0;
 			bd.MiscFlags = 0;

@@ -5,3 +5,4 @@ public:
 	//ファイルのフォルダパスを取得する
 	static void GetFolderPath(std::string&pDstString, const std::string&pFilePath);
 };
+

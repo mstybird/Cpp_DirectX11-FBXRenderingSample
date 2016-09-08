@@ -1,4 +1,5 @@
 #include "DXWorld.h"
+#include"DXVector3.h"
 
 D3DXMATRIX * DXWorld::GetMatrix()
 {
@@ -46,6 +47,7 @@ void DXWorld::AddT(D3DXVECTOR3 pPosition)
 
 void DXWorld::AddT(TYPEMOVE pType, float pSpeed, DXVector3 pDirection)
 {
+
 	D3DXMATRIX lRotation;
 	switch (pType)
 	{

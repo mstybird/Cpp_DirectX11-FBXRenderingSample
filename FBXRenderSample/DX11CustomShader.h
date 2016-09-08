@@ -1,8 +1,12 @@
 #pragma once
 #include<D3DX9.h>
-#include"DX11FbxResource.h"
 #include"DX11BaseShader.h"
-#include"DX11RenderResource.h"
+
+struct FBXMesh;
+struct FBXModelData;
+class DX11RenderResource;
+class DXDisplay;
+
 class MyDX11Shader :public DX11BaseShader {
 public:
 	MyDX11Shader();
@@ -14,6 +18,7 @@ public:
 		D3DXVECTOR4 LightDir{ 1,0,-1,0 };
 	};
 
+	//メッシュから取得する
 	struct MyFBXCONSTANTBUFFER2
 	{
 		D3DXVECTOR4 Diffuse;
@@ -21,11 +26,10 @@ public:
 
 
 
-	void SetConstantBuffer1(DX11RenderResource * resource, DXDisplay*pDisplay);
-	//行列設定用
-	virtual void SetConstantBuffer1_1(FBXMesh * fbxMesh, DX11RenderResource * resource, DXDisplay*pDisplay);
+	//メッシュ単位に設定用
+	void SetConstantBuffer1(FBXMesh * fbxMesh, DX11RenderResource * resource, DXDisplay*pDisplay);
 	void SetConstantBuffer2(FBXModelData*modelData);
 
 private:
-	void InitLayout();
+	void SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>&pLayout);
 };

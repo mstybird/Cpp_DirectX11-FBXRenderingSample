@@ -1,12 +1,26 @@
 #pragma once
 #include<d3dx9.h>
+
+//struct D3DXMATRIX;
+class DXDisplay;
 #include"DXWorld.h"
-#include"DXCamera.h"
-#include"DXProjection.h"
-#include"DXDisplay.h"
-struct D3DXMATRIX;
+
+/*
+	メモ
+	Sprite2D
+	Sprite3D
+	SpriteScreen
+	C++11移行
+
+
+*/
+
+
+class DXCamera;
+class DXProjection;
 class DX11RenderResource {
 public:
+
 	DX11RenderResource();
 	~DX11RenderResource();
 	//描画に必要なビュー行列と射影行列が必要な場合必ず呼ぶ

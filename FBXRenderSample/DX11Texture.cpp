@@ -15,7 +15,7 @@ void DXTexture::Initialize(ID3D11Device * pDevice)
 	mDevice = pDevice;
 }
 
-void DXTexture::Create(const std::string & pFileName)
+bool DXTexture::Create(const std::string & pFileName)
 {
 	//ƒTƒ“ƒvƒ‰‚Ìì¬
 	D3D11_SAMPLER_DESC lSamDesc;
@@ -33,7 +33,7 @@ void DXTexture::Create(const std::string & pFileName)
 	else {
 		mIsTexture = false;
 	}
-
+	return mIsTexture;
 }
 
 void DXTexture::Release()

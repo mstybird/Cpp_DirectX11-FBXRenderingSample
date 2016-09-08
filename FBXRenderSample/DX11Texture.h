@@ -6,8 +6,11 @@ public:
 	DXTexture();
 	~DXTexture();
 	static void Initialize(ID3D11Device*pDevice);
-	void Create(const std::string &pFileName);
+	//テクスチャ作成
+	bool Create(const std::string &pFileName);
+	//テクスチャの解放
 	void Release();
+
 	ID3D11SamplerState* GetSampler();
 	ID3D11ShaderResourceView* GetTexture();
 	bool GetIsTexture();

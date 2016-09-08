@@ -7,13 +7,7 @@ public:
 		TYPE_DEGREE=0,
 		TYPE_RADIAN
 	};
-	static float GetAngleX(TYPE_ANGLE pType, DXVector3&pPosition1, DXVector3&pPosition2);
-	static float GetAngleY(TYPE_ANGLE pType, DXVector3&pPosition1, DXVector3&pPosition2);
-	static float GetAngleZ(TYPE_ANGLE pType, DXVector3&pPosition1, DXVector3&pPosition2);
-	//2ì_ÇÃêÇíºï˚å¸ÇãÅÇﬂÇÈ
-	static float GetVertical(TYPE_ANGLE pType, DXVector3&pPosition1, DXVector3&pPosition2);
-	//2ì_ÇÃêÖïΩï˚å¸ÇãÅÇﬂÇÈ
-	static float GetHolizontal(TYPE_ANGLE pType, DXVector3&pPosition1, DXVector3&pPosition2);
+	static const DXVector3 sZeroVector;
 
 	DXVector3();
 	DXVector3(float pX, float pY, float pZ);
@@ -46,23 +40,23 @@ public:
 
 	DXVector3&operator+(float pXYZ);
 	DXVector3&operator+=(float pXYZ);
-	DXVector3&operator+(D3DXVECTOR3&pAddVector);
-	DXVector3&operator+=(D3DXVECTOR3&pAddVector);
+	DXVector3&operator+(const D3DXVECTOR3&pAddVector);
+	DXVector3&operator+=(const D3DXVECTOR3&pAddVector);
 
 	DXVector3&operator-(float pXYZ);
 	DXVector3&operator-=(float pXYZ);
-	DXVector3&operator-(D3DXVECTOR3&pSubVector);
-	DXVector3&operator-=(D3DXVECTOR3&pSubVector);
+	DXVector3&operator-(const D3DXVECTOR3&pSubVector);
+	DXVector3&operator-=(const D3DXVECTOR3&pSubVector);
 
 	DXVector3&operator*(float pXYZ);
 	DXVector3&operator*=(float pXYZ);
-	DXVector3&operator*(D3DXVECTOR3&pMulVector);
-	DXVector3&operator*=(D3DXVECTOR3&pMulVector);
+	DXVector3&operator*(const D3DXVECTOR3&pMulVector);
+	DXVector3&operator*=(const D3DXVECTOR3&pMulVector);
 
 	DXVector3&operator/(float pXYZ);
 	DXVector3&operator/=(float pXYZ);
-	DXVector3&operator/(D3DXVECTOR3&pMulVector);
-	DXVector3&operator/=(D3DXVECTOR3&pMulVector);
+	DXVector3&operator/(const D3DXVECTOR3&pMulVector);
+	DXVector3&operator/=(const D3DXVECTOR3&pMulVector);
 
 };
 
