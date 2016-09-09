@@ -1,9 +1,10 @@
 #pragma once
-#include<d3dx9.h>
-
+#include<memory>
+class DXMatrix;
 class DXProjection {
 public:
 	DXProjection();
+	~DXProjection();
 	static void SetAspect(float pWidth, float pHeight);
 
 	///‹–ìŠp
@@ -18,12 +19,12 @@ public:
 	void SetPlaneFar(float pFarPlane);
 	void AddPlaneFar(float pFarPlane);
 
-	D3DXMATRIX*GetMatrix();
+	std::weak_ptr<DXMatrix>GetMatrix();
 
 	float mAngle;//‹–ìŠp
 	float mNear;	//‹„‘ä‚Ìè‘O
 	float mFar;		//‹„‘ä‚Ìˆê”Ô‰œ
-	D3DXMATRIX mMatrix;
+	std::shared_ptr<DXMatrix>mMatrix;
 
 	static float mAspect;
 

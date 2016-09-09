@@ -1,17 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="DX11Render.cpp">
-      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Dx11FbxManager.cpp">
-      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
-    </ClCompile>
     <ClCompile Include="DX11RenderResource.cpp">
       <Filter>MSDirect\DX11\DX11Render\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="MAIN.cpp">
-      <Filter>MSDirect\System</Filter>
     </ClCompile>
     <ClCompile Include="DXCamera.cpp">
       <Filter>MSDirect\DX11\DXHelper\Source</Filter>
@@ -46,35 +37,68 @@
     <ClCompile Include="FbxVBO.cpp">
       <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
     </ClCompile>
-    <ClCompile Include="DX11BaseShader.cpp">
-      <Filter>MSDirect\DX11\Shader\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DX11CustomShader.cpp">
-      <Filter>MSDirect\DX11\Shader\Source</Filter>
-    </ClCompile>
     <ClCompile Include="DXVector2.cpp">
       <Filter>MSDirect\DX11\DXHelper\Source</Filter>
     </ClCompile>
     <ClCompile Include="DXDisplay.cpp">
       <Filter>MSDirect\DX11\DXHelper\Source</Filter>
     </ClCompile>
-    <ClCompile Include="DX11Sprite2D.cpp">
-      <Filter>MSDirect\DX11\DX11Sprite\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite2DShader.cpp">
-      <Filter>MSDirect\DX11\Shader\Source</Filter>
-    </ClCompile>
     <ClCompile Include="DX11TextureManager.cpp">
       <Filter>MSDirect\DX11\DX11Render\Source</Filter>
     </ClCompile>
+    <ClCompile Include="DXMatrix.cpp">
+      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSWindow.cpp">
+      <Filter>MSDirect\System\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSSceneBase.cpp">
+      <Filter>MSDirect\System\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSDirect.cpp">
+      <Filter>MSDirect\System\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSSprite2DRender.cpp">
+      <Filter>MSDirect\DX11\Shader\Sprite\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSBase3DShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSBaseShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSBaseShaderResource.cpp">
+      <Filter>MSDirect\DX11\Shader\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSPixelShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSVertexShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSSprite2DResource.cpp">
+      <Filter>MSDirect\DX11\Shader\Sprite\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSFbxManager.cpp">
+      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MS3DRender.cpp">
+      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MyScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="My3DShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Custom3DShader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MySprite2DShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Sprite\Custom\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSBaseSpriteShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Sprite\Base\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DX11Render.h">
-      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11FbxManager.h">
-      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
-    </ClInclude>
     <ClInclude Include="DX11RenderResource.h">
       <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
@@ -87,14 +111,8 @@
     <ClInclude Include="DXVector3.h">
       <Filter>MSDirect\DX11\DXHelper\Header</Filter>
     </ClInclude>
-    <ClInclude Include="MAIN.h">
-      <Filter>MSDirect\System</Filter>
-    </ClInclude>
     <ClInclude Include="DXWorld.h">
       <Filter>MSDirect\DX11\DXHelper\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Dx11Manager.h">
-      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
     <ClInclude Include="DX11Texture.h">
       <Filter>MSDirect\DX11\DX11Render\Header</Filter>
@@ -117,23 +135,11 @@
     <ClInclude Include="FbxVBO.h">
       <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
     </ClInclude>
-    <ClInclude Include="DX11BaseShader.h">
-      <Filter>MSDirect\DX11\Shader\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11CustomShader.h">
-      <Filter>MSDirect\DX11\Shader\Header</Filter>
-    </ClInclude>
     <ClInclude Include="DXDisplay.h">
       <Filter>MSDirect\DX11\DXHelper\Header</Filter>
     </ClInclude>
     <ClInclude Include="DX11Resrouce.h">
       <Filter>MSDirect\DX11\DX11Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11Sprite2D.h">
-      <Filter>MSDirect\DX11\DX11Sprite\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11Sprite3D.h">
-      <Filter>MSDirect\DX11\DX11Sprite\Header</Filter>
     </ClInclude>
     <ClInclude Include="DX11TextureManager.h">
       <Filter>MSDirect\DX11\DX11Render\Header</Filter>
@@ -141,8 +147,68 @@
     <ClInclude Include="DXVector2.h">
       <Filter>MSDirect\DX11\DXHelper\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite2DShader.h">
-      <Filter>MSDirect\DX11\Shader\Header</Filter>
+    <ClInclude Include="DXMatrix.h">
+      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSWindow.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSSceneBase.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSDirect.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSSprite2DRender.h">
+      <Filter>MSDirect\DX11\Shader\Sprite\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSBaseShaderResource.h">
+      <Filter>MSDirect\DX11\Shader\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSVertexShader.h">
+      <Filter>MSDirect\DX11\Shader\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSPixelShader.h">
+      <Filter>MSDirect\DX11\Shader\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSBaseShader.h">
+      <Filter>MSDirect\DX11\Shader\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSBase3DShader.h">
+      <Filter>MSDirect\DX11\Shader\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSInclude.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="IncludeForward.h">
+      <Filter>Game\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="IncludeInstance.h">
+      <Filter>Game\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="MS3DRender.h">
+      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSSprite2DResource.h">
+      <Filter>MSDirect\DX11\Shader\Sprite\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSFbxManager.h">
+      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MyScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="My3DShader.h">
+      <Filter>MSDirect\DX11\Shader\Custom3DShader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MySprite2DShader.h">
+      <Filter>MSDirect\DX11\Shader\Sprite\Custom\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSBaseSpriteShader.h">
+      <Filter>MSDirect\DX11\Shader\Sprite\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSwrap.h">
+      <Filter>MSDirect\System\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +218,10 @@
     <None Include="Simple.hlsl">
       <Filter>HLSL</Filter>
     </None>
+    <None Include="Sprite2D.hlsl">
+      <Filter>HLSL</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="HLSL">
@@ -199,26 +269,62 @@
     <Filter Include="MSDirect\DX11\Shader">
       <UniqueIdentifier>{f8dab8cc-9d35-4943-9b68-210a648dc740}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MSDirect\DX11\Shader\Header">
-      <UniqueIdentifier>{5144595a-a23d-41f7-8bb3-1dc36824db80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\Shader\Source">
-      <UniqueIdentifier>{128e9588-84de-4a62-96c9-9759662e02d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\DX11Sprite">
-      <UniqueIdentifier>{4802fa5b-6c95-40de-8cd4-c697b8c03586}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\DX11Sprite\Header">
-      <UniqueIdentifier>{7f4ec03b-d480-4daa-bccf-4dd653cc718c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\DX11Sprite\Source">
-      <UniqueIdentifier>{51ace513-df14-47f8-b738-baceacc585f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MSDirect\System">
       <UniqueIdentifier>{a2bd5129-71a6-434e-864d-33a027547224}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{07b8b7b6-9fbd-41b5-a46e-cb8f8b6a1ca0}</UniqueIdentifier>
+    <Filter Include="MSDirect\System\Header">
+      <UniqueIdentifier>{9988f607-b7ab-4d7f-a892-1687e3a7b74a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\System\Source">
+      <UniqueIdentifier>{155ff998-0f1e-4bae-bd72-fed4a41a3707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{935281dd-d56b-4051-9399-3f7dc73d0362}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Base">
+      <UniqueIdentifier>{a7c4318b-6f7a-4c68-bbf0-bbb88be9f772}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Base\Header">
+      <UniqueIdentifier>{5144595a-a23d-41f7-8bb3-1dc36824db80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Base\Source">
+      <UniqueIdentifier>{128e9588-84de-4a62-96c9-9759662e02d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{7f65409a-ac66-4061-81a5-d477400ca972}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Includes">
+      <UniqueIdentifier>{17d6cdba-1ef2-4a2f-b63e-6fd6e50dc594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Sprite">
+      <UniqueIdentifier>{4802fa5b-6c95-40de-8cd4-c697b8c03586}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Custom3DShader">
+      <UniqueIdentifier>{4509f21c-6adb-4257-baa9-83b6bb4d26bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Custom3DShader\Header">
+      <UniqueIdentifier>{9f9c7065-aa1d-4496-a4b3-6324ab8021eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Custom3DShader\Source">
+      <UniqueIdentifier>{c41423ad-bc56-4fb4-ab13-d67bb773225b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Sprite\Base">
+      <UniqueIdentifier>{ee8d15e6-f5da-4b6f-9549-6d9e39f32e12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Sprite\Base\Source">
+      <UniqueIdentifier>{51ace513-df14-47f8-b738-baceacc585f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Sprite\Base\Header">
+      <UniqueIdentifier>{7f4ec03b-d480-4daa-bccf-4dd653cc718c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Sprite\Custom">
+      <UniqueIdentifier>{9e9b8fd2-6fe9-4b1c-af4e-502ecd478b7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Sprite\Custom\Header">
+      <UniqueIdentifier>{eb1fe246-fb45-431c-8bd7-64f1d86d442e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Sprite\Custom\Source">
+      <UniqueIdentifier>{b688cf9b-7ae3-43c3-9dca-7849810737d0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

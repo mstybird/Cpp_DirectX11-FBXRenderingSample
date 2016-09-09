@@ -1,10 +1,15 @@
 #include "DXProjection.h"
-
+#include"DXMatrix.h"
+#include"DX11Resrouce.h"
 float DXProjection::mAspect;
 DXProjection::DXProjection():
 	mAngle{45},
 	mNear{0.0f},
-	mFar{100.0f}
+	mFar{100.0f},
+	mMatrix{std::make_shared<DXMatrix>()}
+{
+}
+DXProjection::~DXProjection()
 {
 }
 void DXProjection::SetAspect(float pWidth, float pHeight)
@@ -42,11 +47,11 @@ void DXProjection::AddPlaneFar(float pFarPlane)
 	mFar = pFarPlane;
 }
 
-D3DXMATRIX * DXProjection::GetMatrix()
+std::weak_ptr<DXMatrix> DXProjection::GetMatrix()
 {
 	D3DXMatrixPerspectiveFovLH(
-		&mMatrix,
+		mMatrix.get(),
 		D3DXToRadian(mAngle),
 		mAspect, mNear, mFar);
-	return &mMatrix;
+	return mMatrix;
 }

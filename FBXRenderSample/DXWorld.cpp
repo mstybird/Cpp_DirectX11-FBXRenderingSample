@@ -1,13 +1,15 @@
+
 #include "DXWorld.h"
+#include"DXMatrix.h"
 #include"DXVector3.h"
 #include"DX11Resrouce.h"
-D3DXMATRIX * DXWorld::GetMatrix()
+std::weak_ptr<DXMatrix> DXWorld::GetMatrix()
 {
 
-	D3DXMATRIX lTrans;
-	D3DXMATRIX lRotateCenter;
-	D3DXMATRIX lRotateTransed;
-	D3DXMATRIX lScale;
+	DXMatrix lTrans;
+	DXMatrix lRotateCenter;
+	DXMatrix lRotateTransed;
+	DXMatrix lScale;
 
 	D3DXMatrixTranslation(&lTrans, mPosition->x, mPosition->y, mPosition->z);
 	D3DXMatrixRotationYawPitchRoll(&lRotateCenter, D3DXToRadian(mRotationCenter->y), D3DXToRadian(mRotationCenter->x), D3DXToRadian(mRotationCenter->z));
@@ -18,21 +20,17 @@ D3DXMATRIX * DXWorld::GetMatrix()
 }
 
 DXWorld::DXWorld():
-	mPosition{new DXVector3},
-	mRotationCenter{ new DXVector3 },
-	mRotationTransed{ new DXVector3 },
-	mScale{ new DXVector3 },
-	mMatrix{new D3DXMATRIX}
+	mPosition{ std::make_shared<DXVector3>() },
+	mRotationCenter{ std::make_shared<DXVector3>() },
+	mRotationTransed{ std::make_shared<DXVector3>() },
+	mScale{ std::make_shared<DXVector3>() },
+	mMatrix{ std::make_shared<DXMatrix>() }
 {
 }
 
 DXWorld::~DXWorld()
 {
-	SAFE_DELETE(mPosition);
-	SAFE_DELETE(mRotationCenter);
-	SAFE_DELETE(mRotationTransed);
-	SAFE_DELETE(mScale);
-	SAFE_DELETE(mMatrix);
+
 }
 
 void DXWorld::SetT(float pX, float pY, float pZ)
@@ -40,7 +38,7 @@ void DXWorld::SetT(float pX, float pY, float pZ)
 	mPosition->Set(pX, pY, pZ);
 }
 
-void DXWorld::SetT(D3DXVECTOR3 pPosition)
+void DXWorld::SetT(DXVector3 pPosition)
 {
 	*mPosition = pPosition;
 }
@@ -50,7 +48,7 @@ void DXWorld::AddT(float pX, float pY, float pZ)
 	mPosition->Add(pX, pY, pZ);
 }
 
-void DXWorld::AddT(D3DXVECTOR3 pPosition)
+void DXWorld::AddT(DXVector3 pPosition)
 {
 	*mPosition += pPosition;
 }
@@ -92,7 +90,7 @@ void DXWorld::SubT(float pX, float pY, float pZ)
 	mPosition->Sub(pX, pY, pZ);
 }
 
-void DXWorld::SubT(D3DXVECTOR3 pPosition)
+void DXWorld::SubT(DXVector3 pPosition)
 {
 	*mPosition -= pPosition;
 }
@@ -102,7 +100,7 @@ void DXWorld::MulT(float pX, float pY, float pZ)
 	mPosition->Mul(pX, pY, pZ);
 }
 
-void DXWorld::MulT(D3DXVECTOR3 pPosition)
+void DXWorld::MulT(DXVector3 pPosition)
 {
 	*mPosition *= pPosition;
 
@@ -113,7 +111,7 @@ void DXWorld::DivT(float pX, float pY, float pZ)
 	mPosition->Div(pX, pY, pZ);
 }
 
-void DXWorld::DivT(D3DXVECTOR3 pPosition)
+void DXWorld::DivT(DXVector3 pPosition)
 {
 	*mPosition /= pPosition;
 }
@@ -123,7 +121,7 @@ void DXWorld::SetRC(float pX, float pY, float pZ)
 	mRotationCenter->Set(pX, pY, pZ);
 }
 
-void DXWorld::SetRC(D3DXVECTOR3 pRotation)
+void DXWorld::SetRC(DXVector3 pRotation)
 {
 	*mRotationCenter = pRotation;
 }
@@ -133,7 +131,7 @@ void DXWorld::AddRC(float pX, float pY, float pZ)
 	mRotationCenter->Add(pX, pY, pZ);
 }
 
-void DXWorld::AddRC(D3DXVECTOR3 pRotation)
+void DXWorld::AddRC(DXVector3 pRotation)
 {
 	*mRotationCenter += pRotation;
 }
@@ -143,7 +141,7 @@ void DXWorld::SubRC(float pX, float pY, float pZ)
 	mRotationCenter->Sub(pX, pY, pZ);
 }
 
-void DXWorld::SubRC(D3DXVECTOR3 pRotation)
+void DXWorld::SubRC(DXVector3 pRotation)
 {
 	*mRotationCenter -= pRotation;
 }
@@ -153,7 +151,7 @@ void DXWorld::MulRC(float pX, float pY, float pZ)
 	mRotationCenter->Mul(pX, pY, pZ);
 }
 
-void DXWorld::MulRC(D3DXVECTOR3 pRotation)
+void DXWorld::MulRC(DXVector3 pRotation)
 {
 	*mRotationCenter *= pRotation;
 }
@@ -163,7 +161,7 @@ void DXWorld::DivRC(float pX, float pY, float pZ)
 	mRotationCenter->Div(pX, pY, pZ);
 }
 
-void DXWorld::DivRC(D3DXVECTOR3 pRotation)
+void DXWorld::DivRC(DXVector3 pRotation)
 {
 	*mRotationCenter /= pRotation;
 }
@@ -173,7 +171,7 @@ void DXWorld::SetRT(float pX, float pY, float pZ)
 	mRotationTransed->Set(pX, pY, pZ);
 }
 
-void DXWorld::SetRT(D3DXVECTOR3 pRotation)
+void DXWorld::SetRT(DXVector3 pRotation)
 {
 	*mRotationTransed = pRotation;
 }
@@ -183,7 +181,7 @@ void DXWorld::AddRT(float pX, float pY, float pZ)
 	mRotationTransed->Add(pX, pY, pZ);
 }
 
-void DXWorld::AddRT(D3DXVECTOR3 pRotation)
+void DXWorld::AddRT(DXVector3 pRotation)
 {
 	*mRotationTransed += pRotation;
 }
@@ -193,7 +191,7 @@ void DXWorld::SubRT(float pX, float pY, float pZ)
 	mRotationTransed->Sub(pX, pY, pZ);
 }
 
-void DXWorld::SubRT(D3DXVECTOR3 pRotation)
+void DXWorld::SubRT(DXVector3 pRotation)
 {
 	*mRotationTransed -= pRotation;
 }
@@ -203,7 +201,7 @@ void DXWorld::MulRT(float pX, float pY, float pZ)
 	mRotationTransed->Mul(pX, pY, pZ);
 }
 
-void DXWorld::MulRT(D3DXVECTOR3 pRotation)
+void DXWorld::MulRT(DXVector3 pRotation)
 {
 	*mRotationTransed *= pRotation;
 }
@@ -213,7 +211,7 @@ void DXWorld::DivRT(float pX, float pY, float pZ)
 	mRotationTransed->Div(pX, pY, pZ);
 }
 
-void DXWorld::DivRT(D3DXVECTOR3 pRotation)
+void DXWorld::DivRT(DXVector3 pRotation)
 {
 	*mRotationTransed /= pRotation;
 }
@@ -223,7 +221,7 @@ void DXWorld::SetS(float pX, float pY, float pZ)
 	mScale->Set(pX, pY, pZ);
 }
 
-void DXWorld::SetS(D3DXVECTOR3 pScaling)
+void DXWorld::SetS(DXVector3 pScaling)
 {
 	*mScale = pScaling;
 }
@@ -233,7 +231,7 @@ void DXWorld::AddS(float pX, float pY, float pZ)
 	mScale->Add(pX, pY, pZ);
 }
 
-void DXWorld::AddS(D3DXVECTOR3 pScaling)
+void DXWorld::AddS(DXVector3 pScaling)
 {
 	*mScale += pScaling;
 }
@@ -243,7 +241,7 @@ void DXWorld::SubS(float pX, float pY, float pZ)
 	mScale->Sub(pX, pY, pZ);
 }
 
-void DXWorld::SubS(D3DXVECTOR3 pScaling)
+void DXWorld::SubS(DXVector3 pScaling)
 {
 	*mScale -= pScaling;
 }
@@ -253,7 +251,7 @@ void DXWorld::MulS(float pX, float pY, float pZ)
 	mScale->Mul(pX, pY, pZ);
 }
 
-void DXWorld::MulS(D3DXVECTOR3 pScaling)
+void DXWorld::MulS(DXVector3 pScaling)
 {
 	*mScale *= pScaling;
 }
@@ -263,7 +261,7 @@ void DXWorld::DivS(float pX, float pY, float pZ)
 	mScale->Div(pX, pY, pZ);
 }
 
-void DXWorld::DivS(D3DXVECTOR3 pScaling)
+void DXWorld::DivS(DXVector3 pScaling)
 {
 	*mScale /= pScaling;
 }

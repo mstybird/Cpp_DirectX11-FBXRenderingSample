@@ -6,12 +6,10 @@ class DXCamera;
 class DXProjection;
 class DXDisplay {
 public:
-	void SetRenderTarget(DXCamera*pCamera, DXProjection*pProjection);
-	DXCamera* GetCamera()const;
-	DXProjection*GetProjection()const;
+	void SetRenderTarget(const std::weak_ptr<DXCamera>pCamera, const std::weak_ptr<DXProjection>pProjection);
+	std::weak_ptr<DXCamera> GetCamera()const;
+	std::weak_ptr<DXProjection>GetProjection()const;
 private:
-	//std::weak_ptr<DXCamera>mUseCameraPtr;
-	//std::weak_ptr<DXCamera>mUseProjectoPtr;
-	DXCamera*mUseCameraPtr;
-	DXProjection*mUseProjectionPtr;
+	std::weak_ptr<DXCamera>mUseCamera;
+	std::weak_ptr<DXProjection>mUseProjection;
 };

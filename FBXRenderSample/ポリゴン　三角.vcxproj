@@ -93,17 +93,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DX11BaseShader.cpp" />
-    <ClCompile Include="DX11CustomShader.cpp" />
-    <ClCompile Include="Dx11FbxManager.cpp" />
+    <ClCompile Include="My3DShader.cpp" />
+    <ClCompile Include="MSFbxManager.cpp" />
     <ClCompile Include="DX11FbxResource.cpp" />
-    <ClCompile Include="DX11Render.cpp" />
+    <ClCompile Include="MS3DRender.cpp" />
     <ClCompile Include="DX11RenderResource.cpp" />
-    <ClCompile Include="DX11Sprite2D.cpp" />
+    <ClCompile Include="MSSprite2DResource.cpp" />
     <ClCompile Include="DX11Texture.cpp" />
     <ClCompile Include="DX11TextureManager.cpp" />
     <ClCompile Include="DXCamera.cpp" />
     <ClCompile Include="DXDisplay.cpp" />
+    <ClCompile Include="DXMatrix.cpp" />
     <ClCompile Include="DXProjection.cpp" />
     <ClCompile Include="DXVector2.cpp" />
     <ClCompile Include="DXWorld.cpp" />
@@ -113,25 +113,37 @@
     <ClCompile Include="fbxProc.cpp" />
     <ClCompile Include="FbxVBO.cpp" />
     <ClCompile Include="Helper.cpp" />
-    <ClCompile Include="MAIN.cpp" />
-    <ClCompile Include="Sprite2DShader.cpp" />
+    <ClCompile Include="MSBase3DShader.cpp" />
+    <ClCompile Include="MSBaseShader.cpp" />
+    <ClCompile Include="MSBaseShaderResource.cpp" />
+    <ClCompile Include="MSBaseSpriteShader.cpp" />
+    <ClCompile Include="MSDirect.cpp" />
+    <ClCompile Include="MSPixelShader.cpp" />
+    <ClCompile Include="MSSceneBase.cpp" />
+    <ClCompile Include="MSSprite2DRender.cpp" />
+    <ClCompile Include="MSVertexShader.cpp" />
+    <ClCompile Include="MSWindow.cpp" />
+    <ClCompile Include="MyScene.cpp" />
+    <ClCompile Include="MySprite2DShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DX11BaseShader.h" />
-    <ClInclude Include="DX11CustomShader.h" />
-    <ClInclude Include="DX11Sprite2D.h" />
-    <ClInclude Include="DX11Sprite3D.h" />
+    <ClInclude Include="My3DShader.h" />
+    <ClInclude Include="MSSprite2DResource.h" />
     <ClInclude Include="DX11Texture.h" />
     <ClInclude Include="DX11TextureManager.h" />
     <ClInclude Include="DXDisplay.h" />
     <ClInclude Include="DX11FbxLoader.h" />
-    <ClInclude Include="DX11FbxManager.h" />
+    <ClInclude Include="MSFbxManager.h" />
     <ClInclude Include="DX11FbxResource.h" />
-    <ClInclude Include="Dx11Manager.h" />
-    <ClInclude Include="DX11Render.h" />
+    <ClInclude Include="IncludeForward.h" />
+    <ClInclude Include="IncludeInstance.h" />
+    <ClInclude Include="MSInclude.h" />
+    <ClInclude Include="MSwrap.h" />
+    <ClInclude Include="MS3DRender.h" />
     <ClInclude Include="DX11RenderResource.h" />
     <ClInclude Include="DX11Resrouce.h" />
     <ClInclude Include="DXCamera.h" />
+    <ClInclude Include="DXMatrix.h" />
     <ClInclude Include="DXProjection.h" />
     <ClInclude Include="DXVector2.h" />
     <ClInclude Include="DXWorld.h" />
@@ -140,10 +152,21 @@
     <ClInclude Include="FbxMaterialCache.h" />
     <ClInclude Include="FbxVBO.h" />
     <ClInclude Include="Helper.h" />
-    <ClInclude Include="MAIN.h" />
-    <ClInclude Include="Sprite2DShader.h" />
+    <ClInclude Include="MSBase3DShader.h" />
+    <ClInclude Include="MSBaseShader.h" />
+    <ClInclude Include="MSBaseShaderResource.h" />
+    <ClInclude Include="MSBaseSpriteShader.h" />
+    <ClInclude Include="MSDirect.h" />
+    <ClInclude Include="MSPixelShader.h" />
+    <ClInclude Include="MSSceneBase.h" />
+    <ClInclude Include="MSSprite2DRender.h" />
+    <ClInclude Include="MSVertexShader.h" />
+    <ClInclude Include="MSWindow.h" />
+    <ClInclude Include="MyScene.h" />
+    <ClInclude Include="MySprite2DShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="Simple.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -152,6 +175,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sprite2D.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,8 @@
 #pragma once
-
-#include<d3dx9.h>
+#include<memory>
+//#include<d3dx9.h>
 class DXVector3;
+class DXMatrix;
 class DXWorld;
 class DXCamera {
 public:
@@ -24,24 +25,24 @@ public:
 	~DXCamera();
 
 	//視点とターゲット(注視点)の設定
-	void SetCamera(const DXWorld&pEyePosition, const DXWorld&pLookAtPosition);
+	void SetCamera(const std::weak_ptr<DXWorld>&pEyePosition, const std::weak_ptr<DXWorld>&pLookAtPosition);
 
-	void Translation(TYPEMOVE pType, float pSpeed, const D3DXVECTOR3&pDirection, bool pLockoned = false);
+	void Translation(TYPEMOVE pType, float pSpeed, const DXVector3&pDirection, bool pLockoned = false);
 
 
 	//カメラの回転
 	void Rotate(float pX, float pY, float pZ);
 
-	D3DXMATRIX*GetMatrix();
+	std::weak_ptr<DXMatrix>GetMatrix();
 
-	DXVector3 *mEyePosition;	//カメラの位置
-	DXVector3 *mLookPosition;//注視点
-	DXVector3 *mUpVector;	//頭上方向
-	DXVector3 *mRotate;		//カメラの角度
-	D3DXMATRIX *mMatrix;
+	std::shared_ptr<DXVector3>mEyePosition;	//カメラの位置
+	std::shared_ptr<DXVector3>mLookPosition;//注視点
+	std::shared_ptr<DXVector3>mUpVector;	//頭上方向
+	std::shared_ptr<DXVector3>mRotate;		//カメラの角度
+	std::shared_ptr<DXMatrix>mMatrix;
 	
 
-	D3DXMATRIX* operator*() {
+	std::weak_ptr<DXMatrix> operator*() {
 		return GetMatrix();
 	}
 private:

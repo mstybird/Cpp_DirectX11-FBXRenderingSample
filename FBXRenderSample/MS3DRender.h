@@ -1,17 +1,18 @@
 #pragma once
 #include<d3dx9.h>
 #include<D3DX11.h>
-class DX11FbxManager;
+class MSFbxManager;
 class DX11RenderResource;
-class DX11BaseShader;
+class MSBase3DShader;
 class DXDisplay;
+#include<memory>
 //#include"DXDisplay.h"
 //DirectX11で描画するクラス
-class DX11Render {
+class MS3DRender {
 public:
 	//トポロジーの初期化
-	DX11Render();
-	~DX11Render();
+	MS3DRender();
+	~MS3DRender();
 	//DirectX11デバイスの登録
 	static void Initialize(
 		ID3D11Device*pDevice,
@@ -23,17 +24,18 @@ public:
 	static void Clear(D3DXVECTOR4 pColor);
 
 	//レンダリング
-	void Render(DX11FbxManager*fbxManager,DX11RenderResource*resource);
+	void Render(const std::weak_ptr<MSFbxManager>fbxManager,const std::weak_ptr<DX11RenderResource>resource);
 
 	//描画画面(ビュー行列と射影行列)を設定
-	void SetRenderTarget(DX11RenderResource*resource);
+	void SetRenderTarget(const std::weak_ptr<DX11RenderResource>resource);
 	//シェーダーの登録
-	void SetShader(DX11BaseShader*pShader);
+	void SetShader(const std::shared_ptr<MSBase3DShader>pShader);
 protected:
 
 	//レンダリングに使用するシェーダー
-	DX11BaseShader*shader;
-	DXDisplay*display;
+
+	std::weak_ptr<MSBase3DShader>shader;
+	std::shared_ptr<DXDisplay>display;
 	const D3D_PRIMITIVE_TOPOLOGY mPrimitiveTopology;
 
 	 static ID3D11Device*sDevice;				//DirectX11デバイス
