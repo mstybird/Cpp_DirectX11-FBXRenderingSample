@@ -146,6 +146,9 @@ namespace FbxComputeDeformer {
 				pVertexArray[lBWIndex] = lVertexArrayDQ[lBWIndex] * lBlendWeight + lVertexArrayLinear[lBWIndex] * (1 - lBlendWeight);
 			}
 
+			delete[]lVertexArrayLinear;
+			delete[]lVertexArrayDQ;
+
 		}
 	}
 

@@ -91,4 +91,5 @@ DX11Render::DX11Render():
 
 DX11Render::~DX11Render()
 {
+	delete display;
 }

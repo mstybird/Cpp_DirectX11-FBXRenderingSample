@@ -10,9 +10,6 @@
     <ClCompile Include="DX11RenderResource.cpp">
       <Filter>MSDirect\DX11\DX11Render\Source</Filter>
     </ClCompile>
-    <ClCompile Include="MAIN.cpp">
-      <Filter>MSDirect\System</Filter>
-    </ClCompile>
     <ClCompile Include="DXCamera.cpp">
       <Filter>MSDirect\DX11\DXHelper\Source</Filter>
     </ClCompile>
@@ -67,6 +64,12 @@
     <ClCompile Include="DX11TextureManager.cpp">
       <Filter>MSDirect\DX11\DX11Render\Source</Filter>
     </ClCompile>
+    <ClCompile Include="DXMatrix.cpp">
+      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSWindow.cpp">
+      <Filter>MSDirect\System\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -86,9 +89,6 @@
     </ClInclude>
     <ClInclude Include="DXVector3.h">
       <Filter>MSDirect\DX11\DXHelper\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="MAIN.h">
-      <Filter>MSDirect\System</Filter>
     </ClInclude>
     <ClInclude Include="DXWorld.h">
       <Filter>MSDirect\DX11\DXHelper\Header</Filter>
@@ -143,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="Sprite2DShader.h">
       <Filter>MSDirect\DX11\Shader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DXMatrix.h">
+      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSWindow.h">
+      <Filter>MSDirect\System\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +225,12 @@
     </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{07b8b7b6-9fbd-41b5-a46e-cb8f8b6a1ca0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\System\Header">
+      <UniqueIdentifier>{9988f607-b7ab-4d7f-a892-1687e3a7b74a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\System\Source">
+      <UniqueIdentifier>{155ff998-0f1e-4bae-bd72-fed4a41a3707}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

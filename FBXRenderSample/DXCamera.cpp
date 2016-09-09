@@ -1,7 +1,9 @@
 #include "DXCamera.h"
 #include"DXVector3.h"
+#include"DXMatrix.h"
 #include"DXWorld.h"
 #include"DX11Resrouce.h"
+#include<d3dx9.h>
 
 const DXVector3 DXCamera::sUpVector{ 0.0f,1.0f,0.0f };
 const DXVector3 DXCamera::DIRECTION_TYPE::LEFTRIGHT{ 1.0f,0.0f,0.0f };
@@ -14,7 +16,7 @@ DXCamera::DXCamera() :
 	mLookPosition{ new DXVector3 },
 	mUpVector{ new DXVector3(sUpVector)},
 	mRotate{ new DXVector3 },
-	mMatrix{new D3DXMATRIX }
+	mMatrix{new DXMatrix }
 {
 	D3DXMatrixIdentity(mMatrix);
 }
@@ -36,12 +38,13 @@ void DXCamera::SetCamera(const DXWorld & pEyePosition, const DXWorld & pLookAtPo
 	//注視点の設定
 	*mLookPosition = *pLookAtPosition.mPosition;
 	//頭上方向の計算
-	D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);
+	mMatrix->SetLookAtLH(*mEyePosition, *mLookPosition, sUpVector);
+//	D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);
 	D3DXMatrixInverse(&mView, NULL, mMatrix);
 	D3DXVec3TransformNormal(mUpVector, &sUpVector, &mView);
 }
 
-void DXCamera::Translation(TYPEMOVE pType, float pSpeed,const D3DXVECTOR3&pDirection,bool pLockoned)
+void DXCamera::Translation(TYPEMOVE pType, float pSpeed,const DXVector3&pDirection,bool pLockoned)
 {
 	//ロックオンフラグが立っていた場合はこの移動で注視点を変更しない
 
@@ -54,7 +57,7 @@ void DXCamera::Translation(TYPEMOVE pType, float pSpeed,const D3DXVECTOR3&pDirec
 		*mLookPosition += pLockoned ? DXVector3::sZeroVector : lDirection;
 		break;
 	case DXCamera::TYPE_PARALLEL:
-		D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);
+		mMatrix->SetLookAtLH(*mEyePosition, *mLookPosition, sUpVector);
 		D3DXMatrixInverse(mMatrix, nullptr, mMatrix);
 		D3DXVec3TransformNormal(&lDirection, &lDirection, mMatrix);
 		D3DXVec3TransformNormal(mUpVector, &sUpVector, mMatrix);
@@ -76,8 +79,9 @@ void DXCamera::Rotate(float pX, float pY, float pZ)
 }
 
 
-D3DXMATRIX * DXCamera::GetMatrix()
+DXMatrix * DXCamera::GetMatrix()
 {
-	D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);
+	mMatrix->SetLookAtLH(*mEyePosition, *mLookPosition, sUpVector);
+	//D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);
 	return mMatrix;
 }

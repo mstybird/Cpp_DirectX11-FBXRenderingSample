@@ -1,4 +1,4 @@
-#include "MAIN.h"
+#include "MSWindow.h"
 
 #include"Helper.h"
 #include<cassert>
@@ -31,6 +31,7 @@ INT WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR,INT)
 	g_pMain=new MSWindow;
 	g_pMain->_Run(hInstance, 0, 0, WINDOW_WIDTH,
 		WINDOW_HEIGHT, APP_NAME);
+
 	delete g_pMain;
 
 //#ifdef _DEBUG
@@ -72,7 +73,7 @@ void MSWindow::_Run(HINSTANCE hInstance,
 		return;
 	}
 	
-	std::unique_ptr<MSSceneBase> lScene = std::make_unique<MSSceneBase>();
+	//std::unique_ptr<MSSceneBase> lScene = std::make_unique<MSSceneBase>();
 	
 	
 	//mDirectX.lock()->InitD3D(m_hWnd);
@@ -86,8 +87,14 @@ void MSWindow::_Run(HINSTANCE hInstance,
 	
 	MSDirect::SetScene(std::make_unique<MyMSScene>());
 	_Loop();
+	Destroy();
 
 
+}
+void MSWindow::Destroy()
+{
+	MSDirect::Destroy();
+	UnregisterClass(mWindowName, mHInst);
 }
 HRESULT MSWindow::_Loop()
 {
@@ -117,6 +124,7 @@ HRESULT MSWindow::_Loop()
 HRESULT MSWindow::InitWindow(HINSTANCE hInstance,
 		INT iX,INT iY,INT iWidth,INT iHeight,LPSTR WindowName)
 {
+	mWindowName = WindowName;
 	// ウィンドウの定義
 	WNDCLASSEX  wc;
 	ZeroMemory(&wc,sizeof(wc));
@@ -143,31 +151,30 @@ HRESULT MSWindow::InitWindow(HINSTANCE hInstance,
 
 	return S_OK;
 }
-//
-//
+
 //ウィンドウプロシージャー
 LRESULT MSWindow::MsgProc(HWND hWnd,UINT iMsg,WPARAM wParam,LPARAM lParam)
 {
-	switch(iMsg)
-	{
-		case WM_KEYDOWN:
-		switch((char)wParam)
-		{
-			case VK_ESCAPE://ESCキーで修了
-			PostQuitMessage(0);
-			break;
-		}
-		break;
-		case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
+
+	if (!mDirectX.expired()) {
+		return mDirectX.lock()->MessageProcedule(hWnd, iMsg, wParam, lParam);
 	}
-	return DefWindowProc (hWnd, iMsg, wParam, lParam);
+	else {
+		return DefWindowProc(hWnd, iMsg, wParam, lParam);
+	}
+
+
 }
 
 std::shared_ptr<MSDirect> MSDirect::sMSDirect{std::make_shared<MSDirect>()};
 
+void MSDirect::Destroy()
+{
+	sMSDirect.reset();
+}
+
 MSDirect::MSDirect():
+	mHwnd{nullptr},
 	m_pDevice{ nullptr },
 	m_pDeviceContext{ nullptr },
 	m_pSwapChain{ nullptr },
@@ -187,6 +194,29 @@ MSDirect::~MSDirect() {
 	SAFE_RELEASE(m_pBackBuffer_DSTexDSV);
 	SAFE_RELEASE(m_pBackBuffer_DSTex);
 	SAFE_RELEASE(m_pRasterizerState);
+}
+
+LRESULT MSDirect::MessageProcedule(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
+{
+	if (scene.get() != nullptr) {
+
+	switch (iMsg)
+	{
+	case WM_KEYDOWN:
+		scene->KeyDown(wParam);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+		//		break;
+	}
+	}
+	return DefWindowProc(hWnd, iMsg, wParam, lParam);
+}
+
+const std::weak_ptr<MSDirect> MSDirect::GetInstance()
+{
+	return sMSDirect; 
 }
 
 HRESULT MSDirect::InitD3D(HWND pHwnd)

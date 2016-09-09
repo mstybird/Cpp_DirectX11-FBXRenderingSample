@@ -5,7 +5,6 @@
 #include<stdio.h>
 #include <windows.h>
 #include<string>
-//#include<map>
 #include<vector>
 #include<array>
 #include <d3dx9.h>
@@ -36,6 +35,8 @@ public:
 	virtual void Render() {};
 	virtual void Destroy() {};
 	virtual ~MSSceneBase() {};
+	virtual void KeyDown(int pKey) {};
+private:
 };
 
 class MyMSScene :public MSSceneBase {
@@ -48,10 +49,14 @@ private:
 	void Update() {}
 	void Render();
 	void Destroy() {}
+	void KeyDown(int pKey) {
+		printf("KeyDown");
+	};
 private:
+
 	DX11TextureManager textureManager;
 
-	//DX11FbxManager fbx;				//モデルデータ
+	DX11FbxManager fbx;				//モデルデータ
 	DX11FbxManager mbox;				//モデルデータ
 	DX11RenderResource box;	//ボックス移動
 	DX11RenderResource ground;
@@ -70,15 +75,20 @@ private:
 
 class MSDirect {
 public:
-	static const std::weak_ptr<MSDirect>& GetInstance(){ return sMSDirect; }
+	static const std::weak_ptr<MSDirect> GetInstance();
 	HRESULT InitD3D(HWND pHwnd);
 	void Loop();
 	static void SetScene(std::unique_ptr<MSSceneBase>&&pScene);
+	//インスタンスの解放
+	static void Destroy();
 	MSDirect();
 	~MSDirect();
+	//メッセージプロシージャ
+	//シーンにキー入力などの処理をさせる用
+	LRESULT MessageProcedule(HWND, UINT, WPARAM, LPARAM);
 
 private:
-	
+
 	static std::shared_ptr<MSDirect>sMSDirect;
 	HWND mHwnd;
 
@@ -104,12 +114,16 @@ public:
 	~MSWindow();
 	//WinMainからの呼び出し
 	void _Run(HINSTANCE, INT, INT, INT, INT, LPSTR);
+	//Window破棄
+	void Destroy();
 	//Windowアプリループ
 	HRESULT _Loop();
 
 	HRESULT InitWindow(HINSTANCE,INT,INT,INT,INT,LPSTR);
-	LRESULT MsgProc(HWND,UINT,WPARAM,LPARAM);
-	//↓アプリにひとつ
+	LRESULT CALLBACK MsgProc(HWND,UINT,WPARAM,LPARAM);
+	
+	HINSTANCE mHInst;
+	LPSTR mWindowName;
 	HWND m_hWnd;
 	std::weak_ptr<MSDirect>mDirectX;
 };

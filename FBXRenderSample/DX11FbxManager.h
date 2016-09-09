@@ -37,11 +37,27 @@ public:
 	unsigned int*GetIndexBufferCount(int i,int j);
 
 private:
+	//バッファリソースを確保する
+	void CreateBuffer();
+
 	std::string mFileName;
 	//モデルごとに記憶
-	DX11FbxLoader*mLoader;				//FBX読み込み用
-	ID3D11Buffer***mVertexBuffer;		//頂点バッファ
-	ID3D11Buffer***mIndexBuffer;		//インデックスバッファ
+	//FBX読み込み用
+	DX11FbxLoader*mLoader;				
+	
+	//(サブ含む)メッシュの個数
+	//ベクタ要素数	=	メッシュ数
+	//要素の値		=	サブメッシュ数)
+	std::vector<int>mMeshCount;
+	std::vector<std::vector<int>>mMeshVertexCount;
+	std::vector<std::vector<int>>mMeshIndexCount;
+	std::vector<std::vector<D3D11_BUFFER_DESC>>mMeshVBDesc;
+	std::vector<std::vector<D3D11_BUFFER_DESC>>mMeshIBDesc;
+	std::vector<std::vector<ID3D11Buffer*>>mVertexBuffer;
+	std::vector<std::vector<ID3D11Buffer*>>mIndexBuffer;
+	D3D11_BUFFER_DESC mVBDesc;
+	D3D11_BUFFER_DESC mIBDesc;
+
 	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>>mMeshData;//メッシュデータ
 private:
 	//static変数

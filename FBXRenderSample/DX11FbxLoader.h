@@ -37,6 +37,9 @@ public:
 	void FbxDestroy();
 	//メッシュデータを取得する
 	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> GetGeometryData2();
+	void GetMeshCount(std::vector<int>&pCountVector);
+	void GetMeshVertexCount(std::vector<std::vector<int>>&pCountVector);
+	void GetMeshIndexCount(std::vector<std::vector<int>>&pCountVector);
 	//アニメーションの切り替え
 	void SetAnimation(std::string pName);
 	void SetAnimation(int pIndex);
