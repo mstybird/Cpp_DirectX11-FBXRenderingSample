@@ -9,7 +9,7 @@
 
 
 */
-
+#include<memory>
 class DXDisplay;
 class DXWorld;
 class DXCamera;
@@ -21,19 +21,19 @@ public:
 	~DX11RenderResource();
 	//描画に必要なビュー行列と射影行列が必要な場合必ず呼ぶ
 	void InitRenderMatrix();
-	D3DXMATRIX*GetMatrixWorld();
-	D3DXMATRIX*GetMatrixView();
-	D3DXMATRIX*GetMatrixProjection();
-	D3DXMATRIX GetMatrixWVP(DXDisplay*pDisplay);
-	D3DXMATRIX GetMatrixWVP(D3DXMATRIX*pAddWorldMatrix, DXDisplay*pDisplay);
+	std::weak_ptr<D3DXMATRIX>GetMatrixWorld();
+	std::weak_ptr<D3DXMATRIX>GetMatrixView();
+	std::weak_ptr<D3DXMATRIX>GetMatrixProjection();
+	std::unique_ptr<D3DXMATRIX> GetMatrixWVP(const std::weak_ptr<DXDisplay>pDisplay);
+	std::unique_ptr<D3DXMATRIX> GetMatrixWVP(const std::weak_ptr<D3DXMATRIX>pAddWorldMatrix, const std::weak_ptr<DXDisplay>pDisplay);
 
-	DXWorld*GetWorld();
-	DXCamera*GetCamera();
-	DXProjection*GetProjection();
+	std::weak_ptr<DXWorld>GetWorld();
+	std::weak_ptr<DXCamera>GetCamera();
+	std::weak_ptr<DXProjection>GetProjection();
 
 private:
-	DXWorld *mWorld;
-	DXCamera *mView;
-	DXProjection *mProj;
+	std::shared_ptr<DXWorld>mWorld;
+	std::shared_ptr<DXCamera>mView;
+	std::shared_ptr<DXProjection>mProj;
 
 };

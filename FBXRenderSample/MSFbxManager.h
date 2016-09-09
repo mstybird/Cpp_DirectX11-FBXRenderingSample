@@ -10,10 +10,10 @@
 */
 struct FBXMesh;
 class DX11FbxLoader;
-class DX11FbxManager {
+class MSFbxManager {
 public:
-	DX11FbxManager();
-	~DX11FbxManager();
+	MSFbxManager();
+	~MSFbxManager();
 
 	//デバイスは登録するものが常に同じなのですべてのクラスで共通に使えるようにしておく
 	static void InitDevice(
@@ -23,7 +23,7 @@ public:
 
 	void Initialize();
 	//ファイル読み込み
-	void LoadFile(std::string pFileName, bool animationLoad = true);
+	void LoadFile(std::string pFileName, bool animationLoad = false);
 	void LoadAnimationFromFile(std::string vfileName);
 
 	//メッシュの更新(毎フレーム必要)
@@ -59,6 +59,7 @@ private:
 	D3D11_BUFFER_DESC mIBDesc;
 
 	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>>mMeshData;//メッシュデータ
+	bool mAnimationFlag;	//アニメーションする場合はtrue
 private:
 	//static変数
 	//アプリに一つ

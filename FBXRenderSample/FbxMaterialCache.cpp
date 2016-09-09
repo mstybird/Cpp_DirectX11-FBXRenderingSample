@@ -93,7 +93,6 @@ FbxDouble3 FbxMaterialCache::GetMaterialProperty(const FbxSurfaceMaterial * pMat
 			else {
 				pTextureName = lTexture->GetRelativeFileName();
 				
-				char str[256];
 				char *pStr;
 				FbxUTF8ToAnsi(pTextureName.c_str(), pStr);
 				pTextureName = pTextureRelativePathName+"\\"+pStr;

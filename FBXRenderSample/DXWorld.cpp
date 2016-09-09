@@ -3,7 +3,7 @@
 #include"DXMatrix.h"
 #include"DXVector3.h"
 #include"DX11Resrouce.h"
-DXMatrix * DXWorld::GetMatrix()
+std::weak_ptr<DXMatrix> DXWorld::GetMatrix()
 {
 
 	DXMatrix lTrans;
@@ -20,21 +20,17 @@ DXMatrix * DXWorld::GetMatrix()
 }
 
 DXWorld::DXWorld():
-	mPosition{new DXVector3},
-	mRotationCenter{ new DXVector3 },
-	mRotationTransed{ new DXVector3 },
-	mScale{ new DXVector3 },
-	mMatrix{new DXMatrix}
+	mPosition{ std::make_shared<DXVector3>() },
+	mRotationCenter{ std::make_shared<DXVector3>() },
+	mRotationTransed{ std::make_shared<DXVector3>() },
+	mScale{ std::make_shared<DXVector3>() },
+	mMatrix{ std::make_shared<DXMatrix>() }
 {
 }
 
 DXWorld::~DXWorld()
 {
-	SAFE_DELETE(mPosition);
-	SAFE_DELETE(mRotationCenter);
-	SAFE_DELETE(mRotationTransed);
-	SAFE_DELETE(mScale);
-	SAFE_DELETE(mMatrix);
+
 }
 
 void DXWorld::SetT(float pX, float pY, float pZ)

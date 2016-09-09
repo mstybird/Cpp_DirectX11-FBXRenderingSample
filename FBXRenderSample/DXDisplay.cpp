@@ -2,18 +2,18 @@
 #include"DXCamera.h"
 #include"DXProjection.h"
 
-void DXDisplay::SetRenderTarget(DXCamera * pCamera, DXProjection * pProjection)
+void DXDisplay::SetRenderTarget(const std::weak_ptr<DXCamera>pCamera, const std::weak_ptr<DXProjection>pProjection)
 {
-	mUseCameraPtr = pCamera;
-	mUseProjectionPtr = pProjection;
+	mUseCamera = pCamera;
+	mUseProjection = pProjection;
 }
 
-DXCamera * DXDisplay::GetCamera() const
+std::weak_ptr<DXCamera> DXDisplay::GetCamera() const
 {
-	return mUseCameraPtr;
+	return mUseCamera;
 }
 
-DXProjection * DXDisplay::GetProjection() const
+std::weak_ptr<DXProjection> DXDisplay::GetProjection() const
 {
-	return mUseProjectionPtr;
+	return mUseProjection;
 }

@@ -1,5 +1,5 @@
 #pragma once
-
+#include<memory>
 class DXMatrix;
 class DXProjection {
 public:
@@ -19,12 +19,12 @@ public:
 	void SetPlaneFar(float pFarPlane);
 	void AddPlaneFar(float pFarPlane);
 
-	DXMatrix*GetMatrix();
+	std::weak_ptr<DXMatrix>GetMatrix();
 
 	float mAngle;//‹–ìŠp
 	float mNear;	//‹„‘ä‚Ìè‘O
 	float mFar;		//‹„‘ä‚Ìˆê”Ô‰œ
-	DXMatrix*mMatrix;
+	std::shared_ptr<DXMatrix>mMatrix;
 
 	static float mAspect;
 

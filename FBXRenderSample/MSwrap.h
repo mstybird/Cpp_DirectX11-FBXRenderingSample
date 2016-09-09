@@ -2,20 +2,17 @@
 //FBXローダー
 #include"DX11FbxLoader.h"
 //FBXマネージャ
-#include"DX11FbxManager.h"
+#include"MSFbxManager.h"
 
 //3Dモデル基底リソース
 #include"DX11RenderResource.h"
 #include"DXWorld.h"
 #include"DXCamera.h"
 #include"DXProjection.h"
-//3Dモデル(FBX)レンダリングマネージャ
-#include"DX11Render.h"
-//3Dレンダリング基底シェーダ
-#include"DX11BaseShader.h"
 
-//3Dカスタムシェーダ
-#include"DX11CustomShader.h"
+//3Dモデル(FBX)レンダリングマネージャ
+#include"MS3DRender.h"
+
 
 //2Dテクスチャクラス
 #include"DX11Texture.h"
@@ -23,8 +20,8 @@
 #include"DX11TextureManager.h"
 
 //2Dスプライト基底クラス
-#include"DX11Sprite2D.h"
-
+#include"MSSprite2DResource.h"
+#include"MSSprite2DRender.h"
 //三次元ベクトル
 #include"DXVector3.h"
 

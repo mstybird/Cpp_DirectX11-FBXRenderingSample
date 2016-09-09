@@ -730,7 +730,7 @@ void DX11FbxLoader::GetMeshCount(std::vector<int>& pCountVector)
 {
 	//メッシュ、サブメッシュの個数を表す配列の作成
 	pCountVector.resize(nodemeshes.size());
-	for (int i = 0; i < pCountVector.size(); ++i) {
+	for (unsigned int i = 0; i < pCountVector.size(); ++i) {
 		auto lMesh = nodemeshes[i]->GetMesh();
 
 		FbxVBO* lMeshCache = static_cast<FbxVBO*>(lMesh->GetUserDataPtr());
@@ -741,25 +741,35 @@ void DX11FbxLoader::GetMeshCount(std::vector<int>& pCountVector)
 void DX11FbxLoader::GetMeshVertexCount(std::vector<std::vector<int>>& pCountVector)
 {
 	pCountVector.resize(nodemeshes.size());
-	for (int i = 0; i < pCountVector.size(); ++i) {
+	for (unsigned int i = 0; i < pCountVector.size(); ++i) {
 		auto lMesh = nodemeshes[i]->GetMesh();
 
 		FbxVBO* lMeshCache = static_cast<FbxVBO*>(lMesh->GetUserDataPtr());
 		pCountVector[i].resize(lMeshCache->GetSubMeshCount());
-
-			auto lMesh = nodemeshes[i]->GetMesh();
-
-			FbxVBO* lMeshCache = static_cast<FbxVBO*>(lMesh->GetUserDataPtr());
-
-		for (int j = 0; j < pCountVector[i].size(); ++j) {
-
-			pCountVector[i][j] = lMeshCache->lVertices.Size();
-			//インデックス数取得
-			//pCountVector[i][j] = lMeshCache->mSubMeshes[j]->TriangleCount * 3;
+		for (unsigned int j = 0; j < pCountVector[i].size(); ++j) {
+			//頂点数
+			//Xx,y,z,wで1とするため4で割る
+			pCountVector[i][j] = lMeshCache->lVertices.Size() / 4;
 		}
 
 	}
 
+}
+
+void DX11FbxLoader::GetMeshIndexCount(std::vector<std::vector<int>>& pCountVector)
+{
+	pCountVector.resize(nodemeshes.size());
+	for (unsigned int i = 0; i < pCountVector.size(); ++i) {
+		auto lMesh = nodemeshes[i]->GetMesh();
+
+		FbxVBO* lMeshCache = static_cast<FbxVBO*>(lMesh->GetUserDataPtr());
+		pCountVector[i].resize(lMeshCache->GetSubMeshCount());
+		for (unsigned int j = 0; j < pCountVector[i].size(); ++j) {
+			//インデックス数取得
+			pCountVector[i][j] = lMeshCache->mSubMeshes[j]->TriangleCount * 3;
+		}
+
+	}
 }
 
 

@@ -4,70 +4,66 @@
 #include"DXCamera.h"
 #include"DXProjection.h"
 #include"DXDisplay.h"
-DX11RenderResource::DX11RenderResource()
+DX11RenderResource::DX11RenderResource():
+	mWorld{std::make_shared<DXWorld>()}
 {
-	mWorld = new DXWorld;
-	mView = nullptr;
-	mProj = nullptr;
+
 }
 
 DX11RenderResource::~DX11RenderResource()
 {
-	if (mWorld) {
-		delete mWorld;
-	}
-	if (mView) {
-		delete mView;
-	}
-	if (mProj) {
-		delete mProj;
-	}
+
 }
 
 void DX11RenderResource::InitRenderMatrix()
 {
-	mView = new DXCamera;
-	mProj = new DXProjection;
+	mView = std::make_shared<DXCamera>();
+	mProj = std::make_shared<DXProjection>();
 }
 
-D3DXMATRIX * DX11RenderResource::GetMatrixWorld()
+std::weak_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWorld()
 {
 	return mWorld->GetMatrix();
 }
 
-D3DXMATRIX * DX11RenderResource::GetMatrixView()
+std::weak_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixView()
 {
 	return mView->GetMatrix();
 }
 
-D3DXMATRIX * DX11RenderResource::GetMatrixProjection()
+std::weak_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixProjection()
 {
 	return mProj->GetMatrix();
 }
 
-D3DXMATRIX DX11RenderResource::GetMatrixWVP(DXDisplay*pDisplay)
+std::unique_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWVP(const std::weak_ptr<DXDisplay>pDisplay)
 {
-	return *mWorld->GetMatrix() * *pDisplay->GetCamera()->GetMatrix() * *pDisplay->GetProjection()->GetMatrix();
+	
+	std::unique_ptr<D3DXMATRIX> lResult = std::make_unique<D3DXMATRIX>();
+	*lResult=*mWorld->GetMatrix().lock() * *pDisplay.lock()->GetCamera().lock()->GetMatrix().lock() * *pDisplay.lock()->GetProjection().lock()->GetMatrix().lock();
+	return std::move(lResult);
 }
 
-D3DXMATRIX DX11RenderResource::GetMatrixWVP(D3DXMATRIX * pAddWorldMatrix, DXDisplay * pDisplay)
+std::unique_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWVP(const std::weak_ptr<D3DXMATRIX>pAddWorldMatrix, const std::weak_ptr<DXDisplay>pDisplay)
 {
-	return *pAddWorldMatrix * *mWorld->GetMatrix() * 
-		*pDisplay->GetCamera()->GetMatrix() * 
-		*pDisplay->GetProjection()->GetMatrix();
+	std::unique_ptr<D3DXMATRIX> lResult = std::make_unique<D3DXMATRIX>();
+	*lResult = *pAddWorldMatrix.lock() * *mWorld->GetMatrix().lock() *
+		*pDisplay.lock()->GetCamera().lock()->GetMatrix().lock() *
+		*pDisplay.lock()->GetProjection().lock()->GetMatrix().lock();
+	return std::move(lResult);
 }
 
-DXWorld * DX11RenderResource::GetWorld()
+std::weak_ptr<DXWorld> DX11RenderResource::GetWorld()
 {
 	return mWorld;
 }
 
-DXCamera * DX11RenderResource::GetCamera()
+std::weak_ptr<DXCamera> DX11RenderResource::GetCamera()
 {
 	return mView;
 }
 
-DXProjection * DX11RenderResource::GetProjection()
+std::weak_ptr<DXProjection> DX11RenderResource::GetProjection()
 {
 	return mProj;
 }

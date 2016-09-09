@@ -2,6 +2,7 @@
 #include<d3dx9.h>
 
 //class DXCamera;
+class DXVector2;
 class DXVector3;
 enum class TYPE_ANGLE;
 class DXMatrix :public D3DXMATRIX {
@@ -20,7 +21,6 @@ public:
 		const DXVector3&pEyePosition,
 		const DXVector3&pLookPosition,
 		const DXVector3&pUpVector
-
 		);
 	void Multiply(const DXMatrix&pMultipleMatrix);
 	void MultiplyTranspose(const DXMatrix&pMultipleMatrix);
@@ -30,6 +30,11 @@ public:
 	void RotationY(float pAngle, TYPE_ANGLE pType);
 	void RotationZ(float pAngle, TYPE_ANGLE pType);
 	void RotationXYZ(const DXVector3&pAngleXYZ,TYPE_ANGLE pType);
+	void Scaling(float pScale);
+	void Scaling(float pScaleX,float pScaleY);
+	void Scaling(const DXVector2&pScale);
+
+	void Translation(const DXVector2&pVector);
 	void Translation(const DXVector3&pVector);
 	void Transpose();
 	DXMatrix Clone();

@@ -1,15 +1,19 @@
 #pragma once
 #include<D3DX9.h>
-#include"DX11BaseShader.h"
+
+#include"MSBase3DShader.h"
+#include<memory>
+
+
 
 struct FBXMesh;
 struct FBXModelData;
 class DX11RenderResource;
 class DXDisplay;
-
-class MyDX11Shader :public DX11BaseShader {
+class My3DShader :public MSBase3DShader {
 public:
-	MyDX11Shader();
+	//バッファサイズ、頂点要素サイズを渡す
+	My3DShader();
 
 	struct MyFBXCONSTANTBUFFER1
 	{
@@ -27,8 +31,11 @@ public:
 
 
 	//メッシュ単位に設定用
-	void SetConstantBuffer1(FBXMesh * fbxMesh, DX11RenderResource * resource, DXDisplay*pDisplay);
-	void SetConstantBuffer2(FBXModelData*modelData);
+	void SetConstantBuffer1(
+		std::weak_ptr<FBXMesh> fbxMesh,
+		std::weak_ptr<DX11RenderResource> resource, 
+		std::weak_ptr<DXDisplay>pDisplay);
+	void SetConstantBuffer2(std::weak_ptr<FBXModelData>modelData);
 
 private:
 	void SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>&pLayout);

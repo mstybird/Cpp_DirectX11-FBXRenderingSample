@@ -12,36 +12,31 @@ const DXVector3 DXCamera::DIRECTION_TYPE::FRONTBACK{ 0.0f,0.0f,1.0f };
 
 
 DXCamera::DXCamera() :
-	mEyePosition{ new DXVector3 },
-	mLookPosition{ new DXVector3 },
-	mUpVector{ new DXVector3(sUpVector)},
-	mRotate{ new DXVector3 },
-	mMatrix{new DXMatrix }
+	mEyePosition{std::make_shared<DXVector3>()},
+	mLookPosition{ std::make_shared<DXVector3>() },
+	mUpVector{ std::make_shared<DXVector3>(sUpVector)},
+	mRotate{ std::make_shared<DXVector3>() },
+	mMatrix{ std::make_shared<DXMatrix>()  }
 {
-	D3DXMatrixIdentity(mMatrix);
+	mMatrix->SetIdentity();
 }
 
 DXCamera::~DXCamera()
 {
-	SAFE_DELETE(mEyePosition);
-	SAFE_DELETE(mLookPosition);
-	SAFE_DELETE(mUpVector);
-	SAFE_DELETE(mRotate);
-	SAFE_DELETE(mMatrix);
 }
 
-void DXCamera::SetCamera(const DXWorld & pEyePosition, const DXWorld & pLookAtPosition)
+void DXCamera::SetCamera(const std::weak_ptr<DXWorld>&pEyePosition, const std::weak_ptr<DXWorld>&pLookAtPosition)
 {
 	D3DXMATRIX mUp, mView;
 	//Ž‹“_‚ÌÝ’è
-	*mEyePosition = *pEyePosition.mPosition;
+	*mEyePosition = *pEyePosition.lock()->mPosition;
 	//’Ž‹“_‚ÌÝ’è
-	*mLookPosition = *pLookAtPosition.mPosition;
+	*mLookPosition = *pLookAtPosition.lock()->mPosition;
 	//“ªã•ûŒü‚ÌŒvŽZ
 	mMatrix->SetLookAtLH(*mEyePosition, *mLookPosition, sUpVector);
 //	D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);
-	D3DXMatrixInverse(&mView, NULL, mMatrix);
-	D3DXVec3TransformNormal(mUpVector, &sUpVector, &mView);
+	D3DXMatrixInverse(&mView, NULL, mMatrix.get());
+	D3DXVec3TransformNormal(mUpVector.get(), &sUpVector, &mView);
 }
 
 void DXCamera::Translation(TYPEMOVE pType, float pSpeed,const DXVector3&pDirection,bool pLockoned)
@@ -58,9 +53,9 @@ void DXCamera::Translation(TYPEMOVE pType, float pSpeed,const DXVector3&pDirecti
 		break;
 	case DXCamera::TYPE_PARALLEL:
 		mMatrix->SetLookAtLH(*mEyePosition, *mLookPosition, sUpVector);
-		D3DXMatrixInverse(mMatrix, nullptr, mMatrix);
-		D3DXVec3TransformNormal(&lDirection, &lDirection, mMatrix);
-		D3DXVec3TransformNormal(mUpVector, &sUpVector, mMatrix);
+		mMatrix->Inverse();
+		D3DXVec3TransformNormal(&lDirection, &lDirection, mMatrix.get());
+		D3DXVec3TransformNormal(mUpVector.get(), &sUpVector, mMatrix.get());
 		lDirection *= pSpeed;
 		*mEyePosition += lDirection;
 		*mLookPosition += pLockoned ? DXVector3::sZeroVector : lDirection;
@@ -79,7 +74,7 @@ void DXCamera::Rotate(float pX, float pY, float pZ)
 }
 
 
-DXMatrix * DXCamera::GetMatrix()
+std::weak_ptr<DXMatrix> DXCamera::GetMatrix()
 {
 	mMatrix->SetLookAtLH(*mEyePosition, *mLookPosition, sUpVector);
 	//D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);

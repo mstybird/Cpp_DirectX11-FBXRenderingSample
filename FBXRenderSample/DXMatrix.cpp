@@ -1,4 +1,5 @@
 #include "DXMatrix.h"
+#include"DXVector2.h"
 #include"DXVector3.h"
 #include"DX11Resrouce.h"
 DXMatrix::DXMatrix()
@@ -13,7 +14,7 @@ void DXMatrix::SetIdentity()
 
 bool DXMatrix::IsIdentity()
 {
-	return D3DXMatrixIsIdentity(this);
+	return (bool)D3DXMatrixIsIdentity(this);
 }
 
 void DXMatrix::Inverse()
@@ -92,6 +93,17 @@ void DXMatrix::RotationXYZ(const DXVector3&pAngleXYZ, TYPE_ANGLE pType)
 {
 }
 
+
+void DXMatrix::Scaling(const DXVector2 & pScale)
+{
+	D3DXMatrixScaling(this, pScale.x, pScale.y, 1.0f);
+}
+
+void DXMatrix::Translation(const DXVector2 & pVector)
+{
+	D3DXMatrixTranslation(this, pVector.x, pVector.y, 0.0f);
+}
+
 void DXMatrix::Translation(const DXVector3&pVector)
 {
 	D3DXMatrixTranslation(this, pVector.x, pVector.y, pVector.z);
@@ -115,9 +127,11 @@ const DXMatrix * DXMatrix::GetPtr()
 
 DXMatrix & DXMatrix::operator=(const D3DXMATRIX & pMatrix)
 {
-	*this = pMatrix;
+//	memcpy_s(this, sizeof(DXMatrix), &pMatrix, sizeof(D3DXMATRIX));
+	D3DXMatrixMultiply(this, this, &pMatrix);
+//	*this = pMatrix;
+	
 	return *this;
-	// TODO: return ステートメントをここに挿入します
 }
 
 DXMatrix & DXMatrix::operator*(const DXMatrix & pMatrix)

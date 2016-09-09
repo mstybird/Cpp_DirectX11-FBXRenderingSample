@@ -63,7 +63,7 @@ struct FBXMesh {
 	//メッシュ一つに含まれるサブメッシュの配列
 	std::vector<std::shared_ptr<FBXModelData>>subMesh;
 	//メッシュの行列
-	std::unique_ptr<D3DXMATRIX>mWorld;
+	std::shared_ptr<D3DXMATRIX>mWorld;
 //	D3DXMATRIX *mWorld;
 };
 /*

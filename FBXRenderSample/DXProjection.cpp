@@ -6,12 +6,11 @@ DXProjection::DXProjection():
 	mAngle{45},
 	mNear{0.0f},
 	mFar{100.0f},
-	mMatrix{new DXMatrix}
+	mMatrix{std::make_shared<DXMatrix>()}
 {
 }
 DXProjection::~DXProjection()
 {
-	SAFE_DELETE(mMatrix);
 }
 void DXProjection::SetAspect(float pWidth, float pHeight)
 {
@@ -48,10 +47,10 @@ void DXProjection::AddPlaneFar(float pFarPlane)
 	mFar = pFarPlane;
 }
 
-DXMatrix * DXProjection::GetMatrix()
+std::weak_ptr<DXMatrix> DXProjection::GetMatrix()
 {
 	D3DXMatrixPerspectiveFovLH(
-		mMatrix,
+		mMatrix.get(),
 		D3DXToRadian(mAngle),
 		mAspect, mNear, mFar);
 	return mMatrix;

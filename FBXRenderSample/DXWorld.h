@@ -2,6 +2,7 @@
 //#include"DXVector3.h"
 //ワールド空間座標系クラス
 #include<d3dx9.h>
+#include<memory>
 class DXVector3;
 class DXMatrix;
 class DXWorld {
@@ -66,13 +67,13 @@ public:
 	void DivS(float pX, float pY, float pZ);
 	void DivS(DXVector3 pScaling);
 
-	DXMatrix* GetMatrix();
-	DXVector3 *mPosition;			//位置
-	DXVector3 *mRotationCenter;	//回転(移動行列適用前)
-	DXVector3 *mRotationTransed;	//回転移動行列適用後)
-	DXVector3 *mScale;				//拡大率
+	std::weak_ptr<DXMatrix> GetMatrix();
+	std::shared_ptr<DXVector3> mPosition;			//位置
+	std::shared_ptr<DXVector3> mRotationCenter;	//回転(移動行列適用前)
+	std::shared_ptr<DXVector3> mRotationTransed;	//回転移動行列適用後)
+	std::shared_ptr<DXVector3> mScale;				//拡大率
 
-	DXMatrix *mMatrix;			//計算用
+	std::shared_ptr<DXMatrix>mMatrix;			//計算用
 
 
 };
