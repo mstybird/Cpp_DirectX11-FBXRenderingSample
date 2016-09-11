@@ -94,9 +94,10 @@
     <ClCompile Include="MySprite2DShader.cpp">
       <Filter>MSDirect\DX11\Shader\Sprite\Custom\Source</Filter>
     </ClCompile>
-    <ClCompile Include="MSBaseSpriteShader.cpp">
+    <ClCompile Include="MSBase2DSpriteShader.cpp">
       <Filter>MSDirect\DX11\Shader\Sprite\Base\Source</Filter>
     </ClCompile>
+    <ClCompile Include="MySprite3DShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -204,11 +205,14 @@
     <ClInclude Include="MySprite2DShader.h">
       <Filter>MSDirect\DX11\Shader\Sprite\Custom\Header</Filter>
     </ClInclude>
-    <ClInclude Include="MSBaseSpriteShader.h">
-      <Filter>MSDirect\DX11\Shader\Sprite\Base\Header</Filter>
-    </ClInclude>
     <ClInclude Include="MSwrap.h">
       <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSBase2DSpriteShader.h">
+      <Filter>MSDirect\DX11\Shader\Sprite\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MySprite3DShader.h">
+      <Filter>MSDirect\DX11\Shader\Sprite\Custom\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +226,7 @@
       <Filter>HLSL</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="HLSL">

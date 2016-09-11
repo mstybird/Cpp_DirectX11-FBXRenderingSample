@@ -53,13 +53,44 @@ LRESULT MSDirect::MessageProcedule(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM l
 
 		switch (iMsg)
 		{
+		case WM_MOVE:
+			//ウィンドウ移動時
+			break;
+		case WM_SIZE:
+			//ウィンドウサイズ変更時
+			break;
+		case WM_ACTIVATE:
+			//ウィンドウのアクティブ状態の切り替え時
+			break;
+		case WM_ENABLE:
+			//ウィンドウの有効無効切り替え時
+			break;
+		case WM_SHOWWINDOW:
+			//ウィンドウ表示/非表示切り替え時
+			break;
+		case WM_SETFOCUS:
+			//ウィンドウがフォーカスを取得したとき
+			break;
+		case WM_KILLFOCUS:
+			//ウィンドウがフォーカスを失ったとき
+			break;
+		case WM_GETMINMAXINFO:
+			//ウィンドウの最大最小サイズ、最大時の位置、最小トラッキングサイズなどを取得
+			break;
+		case WM_SETTEXT:
+			//ウィンドウの文字列の設定時
+			break;
+		case WM_GETTEXT:
+			//ウィンドウの文字列の取得時
+			break;
 		case WM_KEYDOWN:
+			//キー入力時
 			scene->KeyDown(wParam);
 			break;
 		case WM_DESTROY:
+			//ウィンドウ破棄時
 			PostQuitMessage(0);
-			return 0;
-			//		break;
+			break;
 		}
 	}
 	return DefWindowProc(hWnd, iMsg, wParam, lParam);
@@ -150,8 +181,8 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 	MSBaseShaderResource::sInitialize(m_pDevice, m_pDeviceContext);
 	//MSPixelShader::sInitialize(m_pDevice, m_pDeviceContext);
 	MSBaseShader::Init(m_pDevice, m_pDeviceContext);
-	MSSprite2DResource::sInitialize(m_pDevice);
-	DX11Sprite2DRender::Initialize(m_pDevice, m_pDeviceContext, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV);
+	MSSpriteBaseResource::sInitialize(m_pDevice);
+	MSSpriteBaseRender::Initialize(m_pDevice, m_pDeviceContext, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV);
 	MS3DRender::Initialize(m_pDevice, m_pDeviceContext, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV);
 
 	MSFbxManager::InitDevice(m_pDevice, m_pDeviceContext);

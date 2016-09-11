@@ -1,5 +1,5 @@
 #include "DXVector3.h"
-
+#include"DXVector2.h"
 const DXVector3 DXVector3::sZeroVector{};
 
 DXVector3::DXVector3()
@@ -134,6 +134,15 @@ float DXVector3::GetAngle(TYPE_ANGLE pType, DXVector3 & pPosition2)
 
 
 	return lSita;
+}
+
+DXVector3 & DXVector3::operator=(const DXVector2 & pVector2D)
+{
+	// TODO: return ステートメントをここに挿入します
+	x = pVector2D.x;
+	y = pVector2D.y;
+	z = 0.0f;
+	return *this;
 }
 
 DXVector3 & DXVector3::operator+(float pXYZ)

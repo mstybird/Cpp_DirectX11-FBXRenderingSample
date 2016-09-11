@@ -34,9 +34,9 @@ public:
 	void SetConstantBuffer1(
 		std::weak_ptr<FBXMesh> fbxMesh,
 		std::weak_ptr<DX11RenderResource> resource, 
-		std::weak_ptr<DXDisplay>pDisplay);
-	void SetConstantBuffer2(std::weak_ptr<FBXModelData>modelData);
+		std::weak_ptr<DXDisplay>pDisplay)override;
+	void SetConstantBuffer2(std::weak_ptr<FBXModelData>modelData)override;
 
 private:
-	void SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>&pLayout);
+	void SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>&pLayout)override;
 };

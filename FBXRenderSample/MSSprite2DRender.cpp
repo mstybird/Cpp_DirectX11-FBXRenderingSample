@@ -1,15 +1,16 @@
 #include"MSSprite2DRender.h"
 
-#include"MSBaseSpriteShader.h"
+#include"MSBase2DSpriteShader.h"
 #include"MSSprite2DResource.h"
 #include"DX11Texture.h"
+#include"DXDisplay.h"
+#include"DX11RenderResource.h"
+ID3D11Device*MSSpriteBaseRender::sDevice;
+ID3D11DeviceContext*MSSpriteBaseRender::sDeviceContext;
+ID3D11RenderTargetView*MSSpriteBaseRender::sRenderTargetView;
+ID3D11DepthStencilView*MSSpriteBaseRender::sDepthStencilView;
 
-ID3D11Device*DX11Sprite2DRender::sDevice;
-ID3D11DeviceContext*DX11Sprite2DRender::sDeviceContext;
-ID3D11RenderTargetView*DX11Sprite2DRender::sRenderTargetView;
-ID3D11DepthStencilView*DX11Sprite2DRender::sDepthStencilView;
-
-void DX11Sprite2DRender::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, ID3D11RenderTargetView * pRenderTargetView, ID3D11DepthStencilView * pDepthStencilView)
+void MSSpriteBaseRender::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, ID3D11RenderTargetView * pRenderTargetView, ID3D11DepthStencilView * pDepthStencilView)
 {
 	sDevice = pDevice;
 	sDeviceContext = pDeviceContext;
@@ -17,7 +18,7 @@ void DX11Sprite2DRender::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext 
 	sDepthStencilView = pDepthStencilView;
 }
 
-void DX11Sprite2DRender::Render(const std::weak_ptr<MSSprite2DResource>&pSprite)
+void MSSprite2DRender::Render(const std::weak_ptr<MSSpriteBaseResource>&pSprite)
 {
 
 	shader.lock()->mVertexShader.SetShader();
@@ -29,7 +30,7 @@ void DX11Sprite2DRender::Render(const std::weak_ptr<MSSprite2DResource>&pSprite)
 	sDeviceContext->VSSetConstantBuffers(0, 1, &shader.lock()->mConstantBuffer);
 	sDeviceContext->PSSetConstantBuffers(0, 1, &shader.lock()->mConstantBuffer);
 
-	UINT lStride = sizeof(MSBase2DSpriteShader::SpriteVertex);
+	UINT lStride = sizeof(SpriteVertex);
 	UINT lOffset = 0;
 	sDeviceContext->IASetVertexBuffers(0, 1, &pSprite.lock()->mVertexBuffer, &lStride, &lOffset);
 	;
@@ -38,12 +39,42 @@ void DX11Sprite2DRender::Render(const std::weak_ptr<MSSprite2DResource>&pSprite)
 	sDeviceContext->Draw(4, 0);
 }
 
-void DX11Sprite2DRender::SetShader(const std::shared_ptr<MSBase2DSpriteShader>&pShader)
+void MSSpriteBaseRender::SetShader(const std::shared_ptr<MSBaseSpriteShader>&pShader)
 {
 	shader = pShader;
 }
 
-void DX11Sprite2DRender::SetViewPort(D3D11_VIEWPORT * pViewPort)
+void MSSprite2DRender::SetViewPort(D3D11_VIEWPORT * pViewPort)
 {
 	mViewPort = pViewPort;
+}
+
+MSSprite3DRender::MSSprite3DRender():
+	display{std::make_shared<DXDisplay>()}
+{
+}
+
+void MSSprite3DRender::SetRenderTarget(const std::weak_ptr<DX11RenderResource> resource)
+{
+	display->SetRenderTarget(
+		resource.lock()->GetCamera(),
+		resource.lock()->GetProjection()
+	);
+}
+
+void MSSprite3DRender::Render(const std::weak_ptr<MSSpriteBaseResource>& pSprite)
+{
+	shader.lock()->mVertexShader.SetShader();
+	shader.lock()->mPixelShader.SetShader();
+	sDeviceContext->IASetPrimitiveTopology(mPrimitiveTopology);
+	shader.lock()->SetConstantBuffer(pSprite,display,mBillBoardFlag);
+	sDeviceContext->VSSetConstantBuffers(0, 1, &shader.lock()->mConstantBuffer);
+	sDeviceContext->PSSetConstantBuffers(0, 1, &shader.lock()->mConstantBuffer);
+	UINT lStride = sizeof(SpriteVertex);
+	UINT lOffset = 0;
+	sDeviceContext->IASetVertexBuffers(0, 1, &pSprite.lock()->mVertexBuffer, &lStride, &lOffset);
+	;
+	sDeviceContext->PSSetSamplers(0, 1, &pSprite.lock()->GetTexture().lock()->mSampleLinear);
+	sDeviceContext->PSSetShaderResources(0, 1, &pSprite.lock()->GetTexture().lock()->mTexture);
+	sDeviceContext->Draw(4, 0);
 }

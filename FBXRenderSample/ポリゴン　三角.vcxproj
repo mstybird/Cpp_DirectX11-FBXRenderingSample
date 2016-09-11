@@ -116,7 +116,7 @@
     <ClCompile Include="MSBase3DShader.cpp" />
     <ClCompile Include="MSBaseShader.cpp" />
     <ClCompile Include="MSBaseShaderResource.cpp" />
-    <ClCompile Include="MSBaseSpriteShader.cpp" />
+    <ClCompile Include="MSBase2DSpriteShader.cpp" />
     <ClCompile Include="MSDirect.cpp" />
     <ClCompile Include="MSPixelShader.cpp" />
     <ClCompile Include="MSSceneBase.cpp" />
@@ -125,6 +125,7 @@
     <ClCompile Include="MSWindow.cpp" />
     <ClCompile Include="MyScene.cpp" />
     <ClCompile Include="MySprite2DShader.cpp" />
+    <ClCompile Include="MySprite3DShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="My3DShader.h" />
@@ -155,7 +156,7 @@
     <ClInclude Include="MSBase3DShader.h" />
     <ClInclude Include="MSBaseShader.h" />
     <ClInclude Include="MSBaseShaderResource.h" />
-    <ClInclude Include="MSBaseSpriteShader.h" />
+    <ClInclude Include="MSBase2DSpriteShader.h" />
     <ClInclude Include="MSDirect.h" />
     <ClInclude Include="MSPixelShader.h" />
     <ClInclude Include="MSSceneBase.h" />
@@ -164,9 +165,11 @@
     <ClInclude Include="MSWindow.h" />
     <ClInclude Include="MyScene.h" />
     <ClInclude Include="MySprite2DShader.h" />
+    <ClInclude Include="MySprite3DShader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Simple.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>

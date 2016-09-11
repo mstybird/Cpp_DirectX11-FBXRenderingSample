@@ -11,6 +11,14 @@ class MSFbxManager;
 class DX11RenderResource;
 //2Dスプライト用レンダリングリソース
 class MSSprite2DResource;
+//2Dスプライトレンダラー
+class MSSprite2DRender;
+
+//2Dスプライト用レンダリングリソース
+class MSSprite3DResource;
+//2Dスプライトレンダラー
+class MSSprite3DRender;
+
 
 
 

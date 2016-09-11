@@ -1,8 +1,8 @@
 #pragma once
-#include"MSBaseSpriteShader.h"
+#include"MSBase2DSpriteShader.h"
 #include"DX11Resrouce.h"
 //Œ³Sprite2DShader
-class My2DSpriteShader :public MSBase2DSpriteShader {
+class My2DSpriteShader :public MSBaseSpriteShader {
 public:
 	My2DSpriteShader();
 
@@ -12,10 +12,8 @@ public:
 		ALIGN16 float ViewPortHeight;
 	};
 
-	void SetConstantBuffer(const std::weak_ptr<MSSprite2DResource>&pResource, D3D11_VIEWPORT&pViewPort)override;
+	void SetConstantBuffer(const std::weak_ptr<MSSpriteBaseResource>&pResource, D3D11_VIEWPORT&pViewPort)override;
 
-
-	void SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>&pLayout)override;
 
 
 };

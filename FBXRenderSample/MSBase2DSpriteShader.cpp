@@ -1,20 +1,20 @@
-#include"MSBaseSpriteShader.h"
+#include"MSBase2DSpriteShader.h"
 #include"DX11Resrouce.h"
 #include<cassert>
-MSBase2DSpriteShader::MSBase2DSpriteShader(const int pConstBufferSize):
+MSBaseSpriteShader::MSBaseSpriteShader(const int pConstBufferSize):
 	CONSTANTBUFFERSIZE1{pConstBufferSize},
 	VERTEXSIZE{sizeof(SpriteVertex)},
 	mConstantBuffer{nullptr}
 {
 }
 
-MSBase2DSpriteShader::~MSBase2DSpriteShader()
+MSBaseSpriteShader::~MSBaseSpriteShader()
 {
 	SAFE_RELEASE(mConstantBuffer);
 }
 
 
-void MSBase2DSpriteShader::Init()
+void MSBaseSpriteShader::Init()
 {
 	D3D11_BUFFER_DESC cb;
 	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -28,5 +28,11 @@ void MSBase2DSpriteShader::Init()
 	{
 		assert(0);
 	}
+}
+
+void MSBaseSpriteShader::SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>& pLayout)
+{
+	pLayout.push_back(INPUTLAYOUT_POSITION2D(0));
+	pLayout.push_back(INPUTLAYOUT_TEXCOORD2D(8));
 }
 

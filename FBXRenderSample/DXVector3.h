@@ -1,5 +1,6 @@
 #pragma once
 #include<d3dx9.h>
+class DXVector2;
 class DXVector3 :public D3DXVECTOR3 {
 public:
 
@@ -37,6 +38,8 @@ public:
 	void GetNormalize();
 	//2“_‚ÌŠp“x‚ðŽæ“¾‚·‚é
 	float GetAngle(TYPE_ANGLE pType, DXVector3&pPosition2);
+
+	DXVector3&operator=(const DXVector2&pVector2D);
 
 	DXVector3&operator+(float pXYZ);
 	DXVector3&operator+=(float pXYZ);

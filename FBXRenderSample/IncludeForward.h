@@ -6,5 +6,5 @@ class My3DShader;
 class MS3DRender;
 
 class My2DSpriteShader;
-class DX11Sprite2DRender;
-
+class MSSpriteBaseRender;
+class My3DSpriteShader;

@@ -25,7 +25,13 @@ private:
 
 	std::shared_ptr<MSSprite2DResource> spRes;	//スプライトリソース
 	std::shared_ptr<My2DSpriteShader>sprite;	//スプライトシェーダ
-	std::shared_ptr<DX11Sprite2DRender> render2D;//スプライトレンダラー
+	std::shared_ptr<MSSprite2DRender> render2D;//スプライトレンダラー
+
+
+	//3Dスプライト
+	std::shared_ptr<MSSprite3DResource>sp3DRes;
+	std::shared_ptr<My3DSpriteShader>sprite3D;
+	std::shared_ptr<MSSprite3DRender>render3D;
 
 	std::shared_ptr<My3DShader> shader;//描画に使うシェーダ
 										 //シーンに一つ
