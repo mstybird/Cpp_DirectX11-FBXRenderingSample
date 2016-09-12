@@ -530,7 +530,7 @@ std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometr
 		const bool lHasSkin = lMesh->GetDeformerCount(FbxDeformer::eSkin) > 0;
 		const bool lHasDeformation = lHasVertexCache || lHasShape || lHasSkin;
 
-
+		
 		//頂点バッファ
 		FbxVector4* lVertexArray = nullptr;
 		//法線バッファ
@@ -628,7 +628,7 @@ std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometr
 				for (int i = 0; i < vertexCount / 4; ++i) {
 
 					//頂点のコピー
-					memcpy(&md->Data[i].Pos, &lMeshCache->lVertices.GetArray()[i * 4], sizeof(D3DXVECTOR4));
+					memcpy(&md->Data[i].Pos, &lMeshCache->lVertices.GetArray()[i * 4], sizeof(md->Data[i].Pos));
 
 
 					if (!lHasDeformation) {

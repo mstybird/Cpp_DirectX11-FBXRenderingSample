@@ -2,6 +2,7 @@
 #include<D3DX9.h>
 
 #include"MSBase3DShader.h"
+#include"DX11Resrouce.h"
 #include<memory>
 
 
@@ -25,7 +26,9 @@ public:
 	//ƒƒbƒVƒ…‚©‚çæ“¾‚·‚é
 	struct MyFBXCONSTANTBUFFER2
 	{
+
 		D3DXVECTOR4 Diffuse;
+		ALIGN16 float ColorPer;
 	};
 
 

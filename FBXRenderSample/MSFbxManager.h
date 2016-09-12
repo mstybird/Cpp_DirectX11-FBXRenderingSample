@@ -10,6 +10,7 @@
 */
 struct FBXMesh;
 class DX11FbxLoader;
+class DXVector3;
 class MSFbxManager {
 public:
 	MSFbxManager();
@@ -31,7 +32,15 @@ public:
 
 	//解放処理
 	void Release();
-	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> GetMeshData();
+	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> &GetMeshData();
+
+	//既にあるメッシュから頂点データとインデックスデータのみ取得する
+	void GetGeometryOnly(
+		std::vector<std::vector<DXVector3>>*pDstVertexData,
+		std::vector<std::vector<DXVector3>>*pDstIndexData
+		);
+
+
 	ID3D11Buffer*GetVertexBuffer(int i, int j);
 	ID3D11Buffer*GetIndexBuffer(int i, int j);
 	unsigned int*GetIndexBufferCount(int i,int j);

@@ -19,9 +19,9 @@ void MSVertexShader::Create(const std::string & fileName, const std::string & En
 {
 	//頂点シェーダ作成
 	{
-		if (FAILED(D3DX11CompileFromFile(fileName.c_str(), NULL, NULL, EntryPoint.c_str(), Version.c_str(), 0, 0, NULL, &mCompiledShader, &mErrors, NULL)))
+		if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), NULL, NULL, EntryPoint.c_str(), Version.c_str(), 0, 0, NULL, &mCompiledShader, &mErrors, NULL)))
 		{
-			//MessageBox(0, "hlsl読み込み失敗", NULL, MB_OK);
+			MessageBox(0,(LPCSTR)mErrors->GetBufferPointer(), "hlsl読み込み失敗", MB_OK);
 			assert(0);
 			return;
 		}

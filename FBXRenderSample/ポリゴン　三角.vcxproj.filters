@@ -98,6 +98,12 @@
       <Filter>MSDirect\DX11\Shader\Sprite\Base\Source</Filter>
     </ClCompile>
     <ClCompile Include="MySprite3DShader.cpp" />
+    <ClCompile Include="MSKeyCodeList.cpp">
+      <Filter>MSDirect\System\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="example_Sprite2D.cpp">
+      <Filter>Example</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -213,6 +219,15 @@
     </ClInclude>
     <ClInclude Include="MySprite3DShader.h">
       <Filter>MSDirect\DX11\Shader\Sprite\Custom\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSKeyCodeList.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSDebug.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSCollision.h">
+      <Filter>MSDirect\MSCollision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -331,5 +346,19 @@
     <Filter Include="MSDirect\DX11\Shader\Sprite\Custom\Source">
       <UniqueIdentifier>{b688cf9b-7ae3-43c3-9dca-7849810737d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{4f9be697-853a-4bf3-b512-e2d8401adcb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Example">
+      <UniqueIdentifier>{40206220-457a-4c77-8d78-778f7f6b32ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\MSCollision">
+      <UniqueIdentifier>{7cb5edf9-6f81-4371-971f-ec89c17ca374}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="2DSprite.txt">
+      <Filter>Reference</Filter>
+    </Text>
   </ItemGroup>
 </Project>

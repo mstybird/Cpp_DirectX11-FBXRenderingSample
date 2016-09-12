@@ -16,6 +16,7 @@ cbuffer global:register(b0)
 //サブメッシュごとに適用
 cbuffer global:register(b1) {
 	float4 g_Diffuse = float4(1, 0, 0, 0); //拡散反射(色）
+	float g_ColorPer = 1.0f;
 }
 
 //構造体
@@ -42,5 +43,5 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL, float2 Tex : TEXCOOR
 float4 PS(VS_OUTPUT input) : SV_Target
 {
 	
-	return gTexture.Sample(gSampler,input.UV);
+	return gTexture.Sample(gSampler,input.UV)*(1.0 - g_ColorPer) + g_Diffuse*(g_ColorPer);
 }

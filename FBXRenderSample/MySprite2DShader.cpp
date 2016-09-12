@@ -3,14 +3,14 @@
 #include"MSSprite2DResource.h"
 #include"DXMatrix.h"
 #include<d3dx9.h>
-My2DSpriteShader::My2DSpriteShader() :
+MySprite2DShader::MySprite2DShader() :
 	MSBaseSpriteShader(
 		sizeof(CONSTANTDATA)
 	)
 {
 }
 
-void My2DSpriteShader::SetConstantBuffer(const std::weak_ptr<MSSpriteBaseResource>&pResource, D3D11_VIEWPORT & pViewPort)
+void MySprite2DShader::SetConstantBuffer(const std::weak_ptr<MSSpriteBaseResource>&pResource, D3D11_VIEWPORT & pViewPort)
 {
 	CONSTANTDATA cb;
 	D3D11_MAPPED_SUBRESOURCE pData;

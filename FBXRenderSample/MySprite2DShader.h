@@ -2,9 +2,9 @@
 #include"MSBase2DSpriteShader.h"
 #include"DX11Resrouce.h"
 //Œ³Sprite2DShader
-class My2DSpriteShader :public MSBaseSpriteShader {
+class MySprite2DShader :public MSBaseSpriteShader {
 public:
-	My2DSpriteShader();
+	MySprite2DShader();
 
 	struct CONSTANTDATA {
 		ALIGN16 D3DXMATRIX mW;

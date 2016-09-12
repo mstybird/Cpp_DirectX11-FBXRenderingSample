@@ -74,7 +74,7 @@ void MSFbxManager::LoadFile(std::string pFileName, bool animationLoad)
 				mMeshVBDesc[i][j].Usage = D3D11_USAGE_DEFAULT;
 				mMeshVBDesc[i][j].ByteWidth = sizeof(FbxVertex)*mMeshData->at(i)->subMesh.at(j)->PosLength;
 				mMeshVBDesc[i][j].BindFlags = D3D11_BIND_VERTEX_BUFFER;
-				mMeshVBDesc[i][j].CPUAccessFlags = 0;
+				mMeshVBDesc[i][j].CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 				mMeshVBDesc[i][j].MiscFlags = 0;
 			}
 			{
@@ -82,7 +82,7 @@ void MSFbxManager::LoadFile(std::string pFileName, bool animationLoad)
 				mMeshIBDesc[i][j].Usage = D3D11_USAGE_DEFAULT;
 				mMeshIBDesc[i][j].ByteWidth = mMeshData->at(i)->subMesh.at(j)->IndexLength * sizeof(int);
 				mMeshIBDesc[i][j].BindFlags = D3D11_BIND_INDEX_BUFFER;
-				mMeshIBDesc[i][j].CPUAccessFlags = 0;
+				mMeshIBDesc[i][j].CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 				mMeshIBDesc[i][j].MiscFlags = 0;
 			}
 		}
@@ -206,9 +206,16 @@ void MSFbxManager::Release()
 
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> MSFbxManager::GetMeshData()
+std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> &MSFbxManager::GetMeshData()
 {
 	return mMeshData;
+}
+
+void MSFbxManager::GetGeometryOnly(std::vector<std::vector<DXVector3>>*pDstVertexData,
+	std::vector<std::vector<DXVector3>>*pDstIndexData)
+{
+
+
 }
 
 ID3D11Buffer * MSFbxManager::GetVertexBuffer(int i, int j)

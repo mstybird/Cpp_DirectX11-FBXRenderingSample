@@ -2,6 +2,8 @@
 #include<d3dx9.h>
 #include<vector>
 #include<memory>
+#include"DXVector2.h"
+#include"DXVector3.h"
 class DXTexture;
 class DX11TextureManager;
 struct ColorChannel {
@@ -21,9 +23,9 @@ struct ColorChannel {
 
 struct FbxVertex
 {
-	D3DXVECTOR4 Pos;
-	D3DXVECTOR3 Normal;
-	D3DXVECTOR2 UV;
+	DXVector3 Pos;
+	DXVector3 Normal;
+	DXVector2 UV;
 };
 constexpr int GEOMETRYSIZE = sizeof(FbxVertex);
 

@@ -14,6 +14,8 @@
 //Other
 #include"DXProjection.h"
 #include"DX11Texture.h"
+#include"MSKeyCodeList.h"
+
 
 #include<D3DX11.h>
 
@@ -49,15 +51,27 @@ MSDirect::~MSDirect() {
 
 LRESULT MSDirect::MessageProcedule(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
+	//1つでもキーが入力されていたらtrueを返す
 	if (scene.get() != nullptr) {
 
 		switch (iMsg)
 		{
 		case WM_MOVE:
 			//ウィンドウ移動時
+			//X座標,Y座標
 			break;
 		case WM_SIZE:
 			//ウィンドウサイズ変更時
+			/*
+				w:
+				SIZE_MAXMIZED
+				SIZE_MINIMIZED
+				SIZE_MAXHIDE
+				SIZE_MAXSHOW
+				l:
+				LOWORD(lp)幅
+				HIWORD(lp)高さ
+			*/
 			break;
 		case WM_ACTIVATE:
 			//ウィンドウのアクティブ状態の切り替え時
@@ -84,15 +98,46 @@ LRESULT MSDirect::MessageProcedule(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM l
 			//ウィンドウの文字列の取得時
 			break;
 		case WM_KEYDOWN:
-			//キー入力時
-			scene->KeyDown(wParam);
+			//非システムキー入力時
+			/*
+				wParam:キーコード
+				LOWORD(lp)押しっぱなしかどうか。1でtrue
+			*/
+			//初回の入力
+			if (KeyList[static_cast<MSKEY>(wParam)] == false) {
+				scene->KeyFirst(static_cast<MSKEY>(wParam));
+				KeyList[static_cast<MSKEY>(wParam)] = true;
+			}
+			//2度目以降の判定
+			else {
+				scene->KeyDown(static_cast<MSKEY>(wParam));
+
+			}
+
+
 			break;
+		case WM_KEYUP:
+			//キーが離されたとき
+			KeyList[static_cast<MSKEY>(wParam)] = false;
+			scene->KeyUp(static_cast<MSKEY>(wParam));
+			break;
+
+
 		case WM_DESTROY:
 			//ウィンドウ破棄時
 			PostQuitMessage(0);
 			break;
+		case WM_TIMER:
+			//一定時間ごとに処理
+			//仮想キーコードリストから押されているキーのみ選んで処理
+			for (auto& x : KeyList) {
+				if (x.second)scene->KeyHold(x.first);
+			}
+	
+			break;
 		}
 	}
+
 	return DefWindowProc(hWnd, iMsg, wParam, lParam);
 }
 
@@ -118,6 +163,9 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 	sd.SampleDesc.Count = 1;
 	sd.SampleDesc.Quality = 0;
 	sd.Windowed = TRUE;
+
+	//タイマーのセット
+	SetTimer(mHwnd, 1, 1000 / 60, nullptr);
 
 	D3D_FEATURE_LEVEL pFeatureLevels = D3D_FEATURE_LEVEL_11_0;
 	D3D_FEATURE_LEVEL* pFeatureLevel = NULL;
@@ -189,6 +237,7 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 	DXProjection::SetAspect((FLOAT)WINDOW_WIDTH, (FLOAT)WINDOW_HEIGHT);
 	DXTexture::Initialize(m_pDevice);
 
+	this->KeyList = MSKeyList;
 
 	return S_OK;
 }
@@ -213,5 +262,15 @@ void MSDirect::SetScene(std::unique_ptr<MSSceneBase>&& pScene)
 D3D11_VIEWPORT * MSDirect::GetViewPort()
 {
 	return &sMSDirect->mViewPort;
+}
+
+void MSDirect::ResetKeyStateAll()
+{
+	sMSDirect->KeyList = MSKeyList;
+}
+
+void MSDirect::ResetKeyState(MSKEY pResetKey)
+{
+	sMSDirect->KeyList[pResetKey] = false;
 }
 

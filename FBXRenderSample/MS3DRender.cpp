@@ -52,8 +52,8 @@ void MS3DRender::Render(const std::weak_ptr<MSFbxManager>fbxManager, const std::
 		//サブメッシュの個数分
 		for (unsigned int j = 0; j < meshData->at(i)->subMesh.size(); j++) {
 			shader.lock()->SetConstantBuffer2(meshData->at(i)->subMesh.at(j));
-			sDeviceContext->VSSetConstantBuffers(1, 1, shader.lock()->GetCB1());
-			sDeviceContext->PSSetConstantBuffers(1, 1, shader.lock()->GetCB1());
+			sDeviceContext->VSSetConstantBuffers(1, 1, shader.lock()->GetCB2());
+			sDeviceContext->PSSetConstantBuffers(1, 1, shader.lock()->GetCB2());
 			UINT stride = shader.lock()->GetVertexSize();
 			UINT offset = 0;
 			ID3D11Buffer* lVertexBuffer = fbxManager.lock()->GetVertexBuffer(i, j);
@@ -70,6 +70,7 @@ void MS3DRender::Render(const std::weak_ptr<MSFbxManager>fbxManager, const std::
 
 }
 
+
 void MS3DRender::SetRenderTarget(const std::weak_ptr<DX11RenderResource> resource)
 {
 	display->SetRenderTarget(
@@ -78,10 +79,14 @@ void MS3DRender::SetRenderTarget(const std::weak_ptr<DX11RenderResource> resourc
 		);
 }
 
+
+
 void MS3DRender::SetShader(const std::shared_ptr<MSBase3DShader> pShader)
 {
 	shader = pShader;
 }
+
+
 
 MS3DRender::MS3DRender():
 	mPrimitiveTopology{ D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST },

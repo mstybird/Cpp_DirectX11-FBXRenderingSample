@@ -1,7 +1,10 @@
 #pragma once
 #include<memory>
 #include<D3DX11.h>
+#include<unordered_map>
 class MSSceneBase;
+enum class MSKEY;
+
 class MSDirect {
 public:
 	static const std::weak_ptr<MSDirect> GetInstance();
@@ -11,7 +14,10 @@ public:
 	static void SetScene(std::unique_ptr<MSSceneBase>&&pScene);
 	//ビューポートを取得する
 	static D3D11_VIEWPORT*GetViewPort();
-	//インスタンスの解放
+	//キー入力状態を初期化する
+	static void ResetKeyStateAll();
+	static void ResetKeyState(MSKEY pResetKey);
+	//インスタンスの解放(シーンからは呼ばない)
 	static void Destroy();
 	MSDirect();
 	~MSDirect();
@@ -33,7 +39,7 @@ private:
 	ID3D11Texture2D* m_pBackBuffer_DSTex;
 	ID3D11RasterizerState* m_pRasterizerState;
 	D3D11_VIEWPORT mViewPort;
-
+	std::unordered_map<MSKEY, bool> KeyList;
 	std::unique_ptr<MSSceneBase>scene;
 	//	MSSceneBase scene;
 };

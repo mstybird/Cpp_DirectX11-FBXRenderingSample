@@ -41,21 +41,37 @@ void My3DShader::SetConstantBuffer2(std::weak_ptr<FBXModelData> modelData)
 {
 	D3D11_MAPPED_SUBRESOURCE pData;
 	MyFBXCONSTANTBUFFER2 cb;
-	auto lSampler = modelData.lock()->Diffuse.lock()->mTexture.lock()->GetSampler();
-	auto lTexture = modelData.lock()->Diffuse.lock()->mTexture.lock()->GetTexture();
-	sDeviceContext->PSSetSamplers(0, 1, &lSampler);
-	sDeviceContext->PSSetShaderResources(0, 1, &lTexture);
+
+	ID3D11SamplerState*lSampler{ nullptr };
+	ID3D11ShaderResourceView*lTexture{ nullptr };
+	//テクスチャがあった場合のみセットする
+	if (!modelData.lock()->Diffuse.lock()->mTexture.expired()) {
+		lSampler = modelData.lock()->Diffuse.lock()->mTexture.lock()->GetSampler();
+		lTexture = modelData.lock()->Diffuse.lock()->mTexture.lock()->GetTexture();
+
+		cb.ColorPer = 0.0f;
+
+	}
+	else {
+		//テクスチャがない場合はマテリアルカラー
+		cb.ColorPer = 1.0f;
+
+	}
+	cb.Diffuse = modelData.lock()->Diffuse.lock()->Color;
+
+
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer2, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-		cb.Diffuse = modelData.lock()->Diffuse.lock()->Color;
-		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
+		memcpy(pData.pData,(void*)(&cb), sizeof(cb));
 		sDeviceContext->Unmap(mConstantBuffer2, 0);
 
 	}
+	sDeviceContext->PSSetSamplers(0, 1, &lSampler);
+	sDeviceContext->PSSetShaderResources(0, 1, &lTexture);
 }
 
 void My3DShader::SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>&pLayout)
 {
-	pLayout.push_back(INPUTLAYOUT_POSITION4D(0));
+	pLayout.push_back(INPUTLAYOUT_POSITION3D(0));
 	pLayout.push_back(INPUTLAYOUT_NORMAL(12));
-	pLayout.push_back(INPUTLAYOUT_TEXCOORD2D(28));
+	pLayout.push_back(INPUTLAYOUT_TEXCOORD2D(24));
 }

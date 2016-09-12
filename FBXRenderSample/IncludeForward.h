@@ -1,10 +1,13 @@
 #pragma once
 /*
-	自身で新たに追加したクラスを宣言する
+	自身で新たに追加したクラスのヘッダをインクルードする
 */
-class My3DShader;
-class MS3DRender;
 
-class My2DSpriteShader;
-class MSSpriteBaseRender;
-class My3DSpriteShader;
+#include"My3DShader.h"
+
+#include"MSSprite2DRender.h"
+#include"MS3DRender.h"
+
+#include"MySprite2DShader.h"
+
+#include"MySprite3DShader.h"
