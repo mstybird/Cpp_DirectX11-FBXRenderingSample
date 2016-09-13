@@ -2,6 +2,7 @@
 #include"DX11FbxResource.h"
 #include"DX11FbxLoader.h"
 #include"DX11Resrouce.h"
+#include"MSCollision.h"
 #define SAFE_RELEASE(x) if(x){x->Release(); x=NULL;}
 
 ID3D11Device*MSFbxManager::sDevice{ nullptr };				//DirectX11デバイス
@@ -74,7 +75,7 @@ void MSFbxManager::LoadFile(std::string pFileName, bool animationLoad)
 				mMeshVBDesc[i][j].Usage = D3D11_USAGE_DEFAULT;
 				mMeshVBDesc[i][j].ByteWidth = sizeof(FbxVertex)*mMeshData->at(i)->subMesh.at(j)->PosLength;
 				mMeshVBDesc[i][j].BindFlags = D3D11_BIND_VERTEX_BUFFER;
-				mMeshVBDesc[i][j].CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+				mMeshVBDesc[i][j].CPUAccessFlags = 0;
 				mMeshVBDesc[i][j].MiscFlags = 0;
 			}
 			{
@@ -82,7 +83,7 @@ void MSFbxManager::LoadFile(std::string pFileName, bool animationLoad)
 				mMeshIBDesc[i][j].Usage = D3D11_USAGE_DEFAULT;
 				mMeshIBDesc[i][j].ByteWidth = mMeshData->at(i)->subMesh.at(j)->IndexLength * sizeof(int);
 				mMeshIBDesc[i][j].BindFlags = D3D11_BIND_INDEX_BUFFER;
-				mMeshIBDesc[i][j].CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+				mMeshIBDesc[i][j].CPUAccessFlags = 0;
 				mMeshIBDesc[i][j].MiscFlags = 0;
 			}
 		}
@@ -138,43 +139,6 @@ void MSFbxManager::Update()
 			sDevice->CreateBuffer(&mMeshIBDesc[i][j], &InitData, &mIndexBuffer[i][j]);
 		}
 	}
-
-	//バッファの作成
-	//メッシュの数だけ作成
-	//mVertexBuffer.clear();
-	//mIndexBuffer.clear();
-
-	//mVertexBuffer.resize(mMeshData->size());
-	//mIndexBuffer.resize(mMeshData->size());
-	//for (unsigned int i = 0; i < mMeshData->size(); i++) {
-	//	//サブメッシュの数だけ作成
-	//	//mVertexBuffer[i].resize(mMeshData->at(i)->subMesh.size());
-	//	//mIndexBuffer[i].resize(mMeshData->at(i)->subMesh.size());
-	//	for (unsigned int j = 0; j < mMeshData->at(i)->subMesh.size(); j++) {
-	//		D3D11_BUFFER_DESC bd;
-	//		bd.Usage = D3D11_USAGE_DEFAULT;
-	//		bd.ByteWidth = sizeof(FbxVertex)*mMeshData->at(i)->subMesh.at(j)->PosLength;
-	//		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	//		bd.CPUAccessFlags = 0;
-	//		bd.MiscFlags = 0;
-
-	//		D3D11_SUBRESOURCE_DATA InitData;
-	//		InitData.pSysMem = mMeshData->at(i)->subMesh.at(j)->Data.data();
-	//		sDevice->CreateBuffer(&bd, &InitData, &mVertexBuffer[i][j]);
-
-	//		//インデックスバッファーを作成
-	//		bd.Usage = D3D11_USAGE_DEFAULT;
-	//		bd.ByteWidth = sizeof(int) * mMeshData->at(i)->subMesh.at(j)->IndexLength;
-	//		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	//		bd.CPUAccessFlags = 0;
-	//		bd.MiscFlags = 0;
-	//		InitData.pSysMem = mMeshData->at(i)->subMesh.at(j)->Index;
-	//		InitData.SysMemPitch = 0;
-	//		InitData.SysMemSlicePitch = 0;
-	//		sDevice->CreateBuffer(&bd, &InitData, &mIndexBuffer[i][j]);
-	//	}
-	//}
-
 }
 
 
@@ -216,6 +180,29 @@ void MSFbxManager::GetGeometryOnly(std::vector<std::vector<DXVector3>>*pDstVerte
 {
 
 
+}
+
+void MSFbxManager::CreateCollisionSphere()
+{
+	/*
+		メッシュのインデックスに対応するように設計
+	*/
+
+	//コリジョンのベクタを作成
+	if (!mCollisions) {
+		mCollisions = std::make_shared<std::vector<std::vector<MSCollisionSphere>>>();
+	}
+
+	mCollisions->resize(mMeshData->size());
+	for (unsigned int i = 0; i < mMeshData->size(); i++) {
+		mCollisions->at(i).resize(mCollisions->size());
+		for (unsigned int j = 0; j < mMeshData->at(i)->subMesh.size(); j++) {
+			mCollisions->at(i).at(j).CreateCollision(
+				*mMeshData->at(i)->subMesh.at(j),
+				*mMeshData->at(i)->mWorld
+			);
+		}
+	}
 }
 
 ID3D11Buffer * MSFbxManager::GetVertexBuffer(int i, int j)

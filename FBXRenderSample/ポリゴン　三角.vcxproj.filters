@@ -104,6 +104,9 @@
     <ClCompile Include="example_Sprite2D.cpp">
       <Filter>Example</Filter>
     </ClCompile>
+    <ClCompile Include="MSCollision.cpp">
+      <Filter>MSDirect\MSCollision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">

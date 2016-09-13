@@ -4,8 +4,8 @@
 #include"DX11FbxResource.h"
 #include"DXMatrix.h"
 MSCollisionSphere::MSCollisionSphere():
-	mRadius{0}
-	//mCenter{std::make_unique<DXVector3>()}
+	mRadius{0},
+	mCenter{std::make_unique<DXVector3>()}
 {
 }
 
@@ -13,7 +13,11 @@ void MSCollisionSphere::CreateCollision(const FBXModelData&pMesh, const DXMatrix
 {
 	D3DXComputeBoundingSphere((const D3DXVECTOR3*)pMesh.Data.data(), pMesh.Data.size(), sizeof(FbxVertex), mCenter.get(), &mRadius);
 	//îªíËògèkè¨
-	mRadius *= 0.7f;
+	DXVector3 lScale,lTrans;
+	pGlobalPosition.GetS(lScale);
+	pGlobalPosition.GetT(lTrans);
+	mRadius *= lScale.GetMedian();
+	*mCenter += lTrans;
 	mGlobalPosition =std::make_unique<DXMatrix>(pGlobalPosition);
 }
 

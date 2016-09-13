@@ -9,6 +9,7 @@ class DXMatrix :public D3DXMATRIX {
 public:
 
 	DXMatrix();
+	DXMatrix(const D3DXMATRIX&pCopy);
 	void SetIdentity();
 	bool IsIdentity();
 	void Inverse();
@@ -39,6 +40,10 @@ public:
 	void Transpose();
 	DXMatrix Clone();
 	const DXMatrix*GetPtr();
+	//ˆÚ“®¬•ª‚ğæ“¾
+	void GetT(DXVector3&pOutVector)const;
+	//Šg‘åk¬¬•ª‚ğæ“¾
+	void GetS(DXVector3&pOutVector)const;
 
 	DXMatrix&operator=(const D3DXMATRIX&pMatrix);
 	DXMatrix&operator*(const DXMatrix&pMatrix);

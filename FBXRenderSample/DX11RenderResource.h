@@ -10,10 +10,13 @@
 
 */
 #include<memory>
+#include<vector>
 class DXDisplay;
 class DXWorld;
 class DXCamera;
 class DXProjection;
+class DXMatrix;
+class MSCollisionSphere;
 class DX11RenderResource {
 public:
 
@@ -32,8 +35,12 @@ public:
 	std::weak_ptr<DXProjection>GetProjection();
 
 private:
+	//ワールド行列
 	std::shared_ptr<DXWorld>mWorld;
+	//ビュー行列
 	std::shared_ptr<DXCamera>mView;
+	//射影行列
 	std::shared_ptr<DXProjection>mProj;
-
+	//境界球コリジョン参照
+	std::weak_ptr<std::vector<std::vector<MSCollisionSphere>>>mCollisions;
 };

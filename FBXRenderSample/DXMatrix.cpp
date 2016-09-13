@@ -2,9 +2,15 @@
 #include"DXVector2.h"
 #include"DXVector3.h"
 #include"DX11Resrouce.h"
+#include"MSDebug.h"
 DXMatrix::DXMatrix()
 {
 	D3DXMatrixIdentity(this);
+}
+
+DXMatrix::DXMatrix(const D3DXMATRIX & pCopy)
+{
+	memcpy(this, &pCopy, sizeof(DXMatrix));
 }
 
 void DXMatrix::SetIdentity()
@@ -91,6 +97,7 @@ void DXMatrix::RotationZ(float pAngle, TYPE_ANGLE pType)
 
 void DXMatrix::RotationXYZ(const DXVector3&pAngleXYZ, TYPE_ANGLE pType)
 {
+	assert(0);
 }
 
 
@@ -125,12 +132,23 @@ const DXMatrix * DXMatrix::GetPtr()
 	return this;
 }
 
+void DXMatrix::GetT(DXVector3 & pOutVector)const
+{
+	pOutVector.x = _41;
+	pOutVector.y = _42;
+	pOutVector.z = _43;
+}
+
+void DXMatrix::GetS(DXVector3 & pOutVector)const
+{
+	pOutVector.x = sqrtf(_11*_11+ _12*_12+ _13*_13);
+	pOutVector.y = sqrtf(_21*_21 + _22*_22 + _23*_23);
+	pOutVector.z = sqrtf(_31*_31 + _32*_32 + _33*_33);
+}
+
 DXMatrix & DXMatrix::operator=(const D3DXMATRIX & pMatrix)
 {
-//	memcpy_s(this, sizeof(DXMatrix), &pMatrix, sizeof(D3DXMATRIX));
-	D3DXMatrixMultiply(this, this, &pMatrix);
-//	*this = pMatrix;
-	
+	memcpy(this, &pMatrix, sizeof(DXMatrix));
 	return *this;
 }
 

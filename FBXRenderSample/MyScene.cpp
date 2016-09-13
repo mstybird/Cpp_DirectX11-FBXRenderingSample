@@ -38,6 +38,8 @@ void MyMSScene::Initialize()
 	shader->InitPixel("Simple.hlsl");
 
 	mbox->LoadFile("res/box.fbx", false);
+	//コリジョン生成
+	mbox->CreateCollisionSphere();
 
 	//どのシェーダーでレンダリングするか登録
 	render->SetShader(shader);
@@ -65,7 +67,7 @@ void MyMSScene::Render()
 	////画面クリア
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	mbox->Update();
-	ground->GetWorld().lock()->SetS(0.1, 0.1, 0.1);
+	ground->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
 	//ground->GetWorld().lock()->SetS(1, 1, 1);
 	render->Render(mbox, ground);
 }

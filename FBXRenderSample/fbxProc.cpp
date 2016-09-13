@@ -503,6 +503,20 @@ std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometr
 
 		//モデルデータに格納する行列を作成
 		lMeshData->mWorld = std::make_unique<D3DXMATRIX>();
+
+		//auto lTrans = lGlobalOffPosition.GetT();
+		//auto lRotate = lGlobalOffPosition.GetR();
+		//auto lScale = lGlobalOffPosition.GetS();
+		//D3DXMATRIX lTransMatrix;
+		//D3DXMATRIX lRotateMatrix;
+		//D3DXMATRIX lScaleMatrix;
+
+		//D3DXMatrixTranslation(&lTransMatrix, lTrans.mData[0], lTrans.mData[1], lTrans.mData[2]);
+		//D3DXMatrixRotationYawPitchRoll(&lRotateMatrix, lRotate.mData[1], lRotate.mData[0], lRotate.mData[2]);
+		//D3DXMatrixScaling(&lScaleMatrix, lScale.mData[0], lScale.mData[1], lScale.mData[2]);
+
+		//*lMeshData->mWorld = lRotateMatrix*lTransMatrix*lScaleMatrix;
+
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {			
 				lMeshData->mWorld->m[i][j] = (float)lGlobalOffPosition.Buffer()->Buffer()[i * 4 + j];

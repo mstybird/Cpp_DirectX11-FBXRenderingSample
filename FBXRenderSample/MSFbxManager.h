@@ -11,6 +11,7 @@
 struct FBXMesh;
 class DX11FbxLoader;
 class DXVector3;
+class MSCollisionSphere;
 class MSFbxManager {
 public:
 	MSFbxManager();
@@ -39,7 +40,8 @@ public:
 		std::vector<std::vector<DXVector3>>*pDstVertexData,
 		std::vector<std::vector<DXVector3>>*pDstIndexData
 		);
-
+	//現在のメッシュを使ってコリジョン作成
+	void CreateCollisionSphere();
 
 	ID3D11Buffer*GetVertexBuffer(int i, int j);
 	ID3D11Buffer*GetIndexBuffer(int i, int j);
@@ -66,6 +68,10 @@ private:
 	std::vector<std::vector<ID3D11Buffer*>>mIndexBuffer;
 	D3D11_BUFFER_DESC mVBDesc;
 	D3D11_BUFFER_DESC mIBDesc;
+
+	//コリジョンデータ
+	std::shared_ptr<std::vector<std::vector<MSCollisionSphere>>>mCollisions;
+	
 
 	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>>mMeshData;//メッシュデータ
 	bool mAnimationFlag;	//アニメーションする場合はtrue

@@ -36,6 +36,8 @@ public:
 	void Normalize();
 	//正規化したベクトルを取得する
 	void GetNormalize();
+	//3つの値の平均を取得
+	float GetMedian();
 	//2点の角度を取得する
 	float GetAngle(TYPE_ANGLE pType, DXVector3&pPosition2);
 

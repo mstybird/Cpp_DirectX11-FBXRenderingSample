@@ -112,6 +112,11 @@ void DXVector3::GetCross(float * DstCross, DXVector3 & pVector)
 		z*pVector.z;
 }
 
+float DXVector3::GetMedian()
+{
+	return (x + y + z) / 3.0f;
+}
+
 float DXVector3::GetAngle(TYPE_ANGLE pType, DXVector3 & pPosition2)
 {
 	float lengthA=GetDistance();

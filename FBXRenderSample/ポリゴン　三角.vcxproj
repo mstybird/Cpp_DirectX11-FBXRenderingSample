@@ -94,6 +94,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="example_Sprite2D.cpp" />
+    <ClCompile Include="MSCollision.cpp" />
     <ClCompile Include="MSKeyCodeList.cpp" />
     <ClCompile Include="My3DShader.cpp" />
     <ClCompile Include="MSFbxManager.cpp" />
