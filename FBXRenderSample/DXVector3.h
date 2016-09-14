@@ -26,7 +26,7 @@ public:
 	void Div(float pX, float pY, float pZ);
 	void Div(float pXYZ);
 	//このベクトルの距離を取得
-	float GetDistance();
+	float GetDistance()const;
 	//2点の距離を取得
 	float GetDistance(DXVector3&pPosition2);
 	//2本のベクトルの外積を求める
@@ -43,24 +43,24 @@ public:
 
 	DXVector3&operator=(const DXVector2&pVector2D);
 
-	DXVector3&operator+(float pXYZ);
+	DXVector3 operator+(float pXYZ);
 	DXVector3&operator+=(float pXYZ);
-	DXVector3&operator+(const D3DXVECTOR3&pAddVector);
+	DXVector3 operator+(const D3DXVECTOR3&pAddVector);
 	DXVector3&operator+=(const D3DXVECTOR3&pAddVector);
 
-	DXVector3&operator-(float pXYZ);
+	DXVector3 operator-(float pXYZ);
 	DXVector3&operator-=(float pXYZ);
-	DXVector3&operator-(const D3DXVECTOR3&pSubVector);
+	DXVector3 operator-(const D3DXVECTOR3&pSubVector);
 	DXVector3&operator-=(const D3DXVECTOR3&pSubVector);
 
-	DXVector3&operator*(float pXYZ);
+	DXVector3 operator*(float pXYZ);
 	DXVector3&operator*=(float pXYZ);
-	DXVector3&operator*(const D3DXVECTOR3&pMulVector);
+	DXVector3 operator*(const D3DXVECTOR3&pMulVector);
 	DXVector3&operator*=(const D3DXVECTOR3&pMulVector);
 
-	DXVector3&operator/(float pXYZ);
+	DXVector3 operator/(float pXYZ);
 	DXVector3&operator/=(float pXYZ);
-	DXVector3&operator/(const D3DXVECTOR3&pMulVector);
+	DXVector3 operator/(const D3DXVECTOR3&pMulVector);
 	DXVector3&operator/=(const D3DXVECTOR3&pMulVector);
 
 };

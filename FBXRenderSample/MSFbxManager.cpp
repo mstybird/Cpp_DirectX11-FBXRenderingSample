@@ -3,6 +3,7 @@
 #include"DX11FbxLoader.h"
 #include"DX11Resrouce.h"
 #include"MSCollision.h"
+#include"DX11RenderResource.h"
 #define SAFE_RELEASE(x) if(x){x->Release(); x=NULL;}
 
 ID3D11Device*MSFbxManager::sDevice{ nullptr };				//DirectX11デバイス
@@ -87,7 +88,7 @@ void MSFbxManager::LoadFile(std::string pFileName, bool animationLoad)
 				mMeshIBDesc[i][j].MiscFlags = 0;
 			}
 		}
-	}
+	} 
 
 	//アニメーションしない場合はこの時点でメッシュデータを作成しておく
 	if (mAnimationFlag == false) {
@@ -153,20 +154,6 @@ void MSFbxManager::Release()
 	}
 	mVertexBuffer.clear();
 	mIndexBuffer.clear();
-	//
-
-	//if (mMeshData.use_count() == 0)return;
-	//for (unsigned int i = 0; i < mMeshData->size(); i++) {
-	//	for (unsigned int j = 0; j < mMeshData->at(i)->subMesh.size(); j++) {
-	//		SAFE_RELEASE(mVertexBuffer[i][j]);
-	//		SAFE_RELEASE(mIndexBuffer[i][j]);
-	//	}
-	//	SAFE_DELETE_ARRAY(mVertexBuffer[i]);
-	//	SAFE_DELETE_ARRAY(mVertexBuffer[i]);
-
-	//}
-	//SAFE_DELETE_ARRAY(mVertexBuffer);
-	//SAFE_DELETE_ARRAY(mVertexBuffer);
 
 }
 
@@ -175,12 +162,7 @@ std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> &MSFbxManager::GetMeshDat
 	return mMeshData;
 }
 
-void MSFbxManager::GetGeometryOnly(std::vector<std::vector<DXVector3>>*pDstVertexData,
-	std::vector<std::vector<DXVector3>>*pDstIndexData)
-{
 
-
-}
 
 void MSFbxManager::CreateCollisionSphere()
 {
@@ -203,6 +185,10 @@ void MSFbxManager::CreateCollisionSphere()
 			);
 		}
 	}
+}
+
+void MSFbxManager::RegisterCollision(const std::shared_ptr<DX11RenderResource>&pResource) {
+	pResource->SetCollisionSphere(mCollisions);
 }
 
 ID3D11Buffer * MSFbxManager::GetVertexBuffer(int i, int j)

@@ -12,6 +12,7 @@ struct FBXMesh;
 class DX11FbxLoader;
 class DXVector3;
 class MSCollisionSphere;
+class DX11RenderResource;
 class MSFbxManager {
 public:
 	MSFbxManager();
@@ -35,13 +36,11 @@ public:
 	void Release();
 	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> &GetMeshData();
 
-	//既にあるメッシュから頂点データとインデックスデータのみ取得する
-	void GetGeometryOnly(
-		std::vector<std::vector<DXVector3>>*pDstVertexData,
-		std::vector<std::vector<DXVector3>>*pDstIndexData
-		);
+
 	//現在のメッシュを使ってコリジョン作成
 	void CreateCollisionSphere();
+	//作成済みのコリジョンをリソースに登録する
+	void RegisterCollision(const std::shared_ptr<DX11RenderResource>&pResource);
 
 	ID3D11Buffer*GetVertexBuffer(int i, int j);
 	ID3D11Buffer*GetIndexBuffer(int i, int j);

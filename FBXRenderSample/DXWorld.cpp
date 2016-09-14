@@ -23,7 +23,7 @@ DXWorld::DXWorld():
 	mPosition{ std::make_shared<DXVector3>() },
 	mRotationCenter{ std::make_shared<DXVector3>() },
 	mRotationTransed{ std::make_shared<DXVector3>() },
-	mScale{ std::make_shared<DXVector3>() },
+	mScale{ std::make_shared<DXVector3>(1.0f,1.0f,1.0f) },
 	mMatrix{ std::make_shared<DXMatrix>() }
 {
 }

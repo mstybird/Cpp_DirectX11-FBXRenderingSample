@@ -13,6 +13,14 @@ FBXModelData::~FBXModelData()
 	//delete Index;
 }
 
+void FBXModelData::GetPolygon(std::array<FbxVertex*, 3>&pOutPolygon,unsigned int pPolygonIndex)
+{
+
+	pOutPolygon[0] = &Data[pPolygonIndex * 3 + 0];
+	pOutPolygon[1] = &Data[pPolygonIndex * 3 + 1];
+	pOutPolygon[2] = &Data[pPolygonIndex * 3 + 2];
+}
+
 FBXMesh::FBXMesh()
 {
 	mWorld = nullptr;

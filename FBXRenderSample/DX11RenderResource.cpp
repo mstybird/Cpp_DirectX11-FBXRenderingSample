@@ -4,6 +4,7 @@
 #include"DXCamera.h"
 #include"DXProjection.h"
 #include"DXDisplay.h"
+#include"MSCollision.h"
 DX11RenderResource::DX11RenderResource():
 	mWorld{std::make_shared<DXWorld>()}
 {
@@ -66,4 +67,31 @@ std::weak_ptr<DXCamera> DX11RenderResource::GetCamera()
 std::weak_ptr<DXProjection> DX11RenderResource::GetProjection()
 {
 	return mProj;
+}
+
+void DX11RenderResource::SetCollisionSphere(const std::shared_ptr<std::vector<std::vector<MSCollisionSphere>>>&pCollisions)
+{
+	mCollisions = pCollisions;
+}
+
+bool DX11RenderResource::CollisionSphere(std::shared_ptr<DX11RenderResource>&pResource)
+{
+
+	for (auto&tX : *this->mCollisions.lock()) {
+		for (auto&tCollision : tX) {
+			for (auto&pX : *pResource->mCollisions.lock()) {
+				for (auto&pCollision : pX) {
+
+					if (MSCollisionSphere::Collision(
+						tCollision, *this->GetWorld().lock(),
+						pCollision, *pResource->GetWorld().lock()
+						)) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
 }

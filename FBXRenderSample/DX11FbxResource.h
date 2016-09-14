@@ -2,10 +2,12 @@
 #include<d3dx9.h>
 #include<vector>
 #include<memory>
+#include<array>
 #include"DXVector2.h"
 #include"DXVector3.h"
 class DXTexture;
 class DX11TextureManager;
+
 struct ColorChannel {
 	ColorChannel();
 	~ColorChannel();
@@ -34,6 +36,11 @@ struct FBXModelData {
 	FBXModelData();
 	~FBXModelData();
 	std::vector<FbxVertex> Data;	//ジオメトリデータ
+
+	//三角形ポリゴン一つを形成するジオメトリ3つを取得する
+	void GetPolygon(std::array<FbxVertex*, 3>&pOutPolygon,unsigned int pPolygonIndex);
+
+	unsigned int PolygonCount;
 
 	unsigned int PosLength;		//頂点数
 	unsigned int *Index;		//インデックスバッファ生成用

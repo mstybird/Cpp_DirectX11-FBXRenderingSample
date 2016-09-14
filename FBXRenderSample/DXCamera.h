@@ -27,6 +27,8 @@ public:
 	//視点とターゲット(注視点)の設定
 	void SetCamera(const std::weak_ptr<DXWorld>&pEyePosition, const std::weak_ptr<DXWorld>&pLookAtPosition);
 
+	void CreateRay(DXVector3&pOutRay, const DXVector3&pRayDirection)const;
+
 	void Translation(TYPEMOVE pType, float pSpeed, const DXVector3&pDirection, bool pLockoned = false);
 
 

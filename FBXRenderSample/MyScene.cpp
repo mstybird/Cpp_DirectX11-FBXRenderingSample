@@ -1,9 +1,11 @@
 #include"MyScene.h"
-
+#include"MSCollision.h"
 MyMSScene::MyMSScene() :
-	mbox{ make_shared<MSFbxManager>() },
-	ground{ make_shared<DX11RenderResource>() },
-	me{ make_shared<DX11RenderResource>() },
+	mdBox{ make_shared<MSFbxManager>() },
+	rBox1{ make_shared<DX11RenderResource>() },
+	rBox2{ make_shared<DX11RenderResource>() },
+	rMe{ make_shared<DX11RenderResource>() },
+	rLook{ make_shared<DX11RenderResource>() },
 	shader{ make_shared<My3DShader>() },
 	render{ make_shared<MS3DRender>() }
 {
@@ -11,50 +13,40 @@ MyMSScene::MyMSScene() :
 
 void MyMSScene::Initialize()
 {
-	struct VERT {
-		DXVector3 Pos;
-		DXVector2 UV;
-	};
 
-	VERT v[4] = {
-		{
-			{0,0,0},{0,0}
-		},
-		{
-			{ 1,0,0 },{ 0,0 }
-		},
-		{
-			{ 0,1,0 },{ 0,0 }
-		},
-		{
-			{ 1,1,0 },{ 0,0 }
-		}
-	};
 
-	float a, b;
 
 	shader->Init();
 	shader->InitVertex("Simple.hlsl");
 	shader->InitPixel("Simple.hlsl");
 
-	mbox->LoadFile("res/box.fbx", false);
+	mdBox->LoadFile("res/box.fbx", false);
 	//コリジョン生成
-	mbox->CreateCollisionSphere();
-
+	mdBox->CreateCollisionSphere();
+	//生成したコリジョンを登録
+	mdBox->RegisterCollision(rBox1);
+	mdBox->RegisterCollision(rBox2);
 	//どのシェーダーでレンダリングするか登録
 	render->SetShader(shader);
 	//このリソースをレンダリング用に使う
-	me->InitRenderMatrix();
+	rMe->InitRenderMatrix();
 	//レンダーにカメラを登録
-	render->SetRenderTarget(me);
+	render->SetRenderTarget(rMe);
 
 
-	auto lWorld = me->GetWorld();
-	auto lView = me->GetCamera();
-	auto lProjection = me->GetProjection();
+	auto lWorld = rMe->GetWorld();
+	auto lView = rMe->GetCamera();
+	auto lProjection = rMe->GetProjection();
 
-	lWorld.lock()->SetT(30, 60, -140);
-	lView.lock()->SetCamera(me->GetWorld(), ground->GetWorld());
+	lWorld.lock()->SetT(40, 50, -140);
+	rBox1->GetWorld().lock()->SetT(25, 0, 0);
+	rBox2->GetWorld().lock()->SetT(-25, 0, 0);
+	rBox1->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
+	rBox2->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
+
+
+
+	lView.lock()->SetCamera(rMe->GetWorld(), rLook->GetWorld());
 
 	lProjection.lock()->SetViewAngle(45);
 	lProjection.lock()->SetPlaneNear(0.1f);
@@ -62,14 +54,53 @@ void MyMSScene::Initialize()
 
 }
 
+void MyMSScene::Update() {
+
+	MSCollisionRay lRay;
+	lRay.SetRay(*rMe->GetCamera().lock());
+	if (MSCollisionRay::Collision(lRay, *rMe, *rBox1, *mdBox)) {
+		printf("Rayed\n");
+	}
+	else {
+		printf("\n");
+
+	}
+
+	if (rBox1->CollisionSphere(rBox2)) {
+		//printf("Hit\n");
+	}
+}
+
+void MyMSScene::KeyHold(MSKEY pKey)
+{
+	switch (pKey)
+	{
+	case MSKEY::CH_W:
+		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,1 });
+		break;
+	case MSKEY::CH_S:
+		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,-1 });
+		break;
+	case MSKEY::CH_A:
+		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { -1,0,0 });
+		break;
+	case MSKEY::CH_D:
+		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 1,0,0 });
+		break;
+	default:
+		break;
+	}
+}
+
 void MyMSScene::Render()
 {
 	////画面クリア
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
-	mbox->Update();
-	ground->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
+	mdBox->Update();
 	//ground->GetWorld().lock()->SetS(1, 1, 1);
-	render->Render(mbox, ground);
+	rBox1->GetWorld().lock()->AddRC(0, 1, 0);
+	render->Render(mdBox, rBox1);
+	render->Render(mdBox, rBox2);
 }
 
 /*

@@ -87,7 +87,7 @@ void DXVector3::Div(float pXYZ)
 	z /= pXYZ;
 }
 
-float DXVector3::GetDistance()
+float DXVector3::GetDistance()const
 {
 	return D3DXVec3Length(this);
 }
@@ -150,12 +150,13 @@ DXVector3 & DXVector3::operator=(const DXVector2 & pVector2D)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator+(float pXYZ)
+DXVector3 DXVector3::operator+(float pXYZ)
 {
-	x += pXYZ;
-	y += pXYZ;
-	z += pXYZ;
-	return *this;
+	DXVector3 lResult{ *this };
+	lResult.x += pXYZ;
+	lResult.y += pXYZ;
+	lResult.z += pXYZ;
+	return lResult;
 }
 
 DXVector3 & DXVector3::operator+=(float pXYZ)
@@ -166,12 +167,13 @@ DXVector3 & DXVector3::operator+=(float pXYZ)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator+(const D3DXVECTOR3 & pAddVector)
+DXVector3 DXVector3::operator+(const D3DXVECTOR3 & pAddVector)
 {
-	x += pAddVector.x;
-	y += pAddVector.y;
-	z += pAddVector.z;
-	return *this;
+	DXVector3 lResult{ *this };
+	lResult.x += pAddVector.x;
+	lResult.y += pAddVector.y;
+	lResult.z += pAddVector.z;
+	return lResult;
 }
 
 DXVector3 & DXVector3::operator+=(const D3DXVECTOR3 & pAddVector)
@@ -184,12 +186,13 @@ DXVector3 & DXVector3::operator+=(const D3DXVECTOR3 & pAddVector)
 
 
 
-DXVector3 & DXVector3::operator-(float pXYZ)
+DXVector3 DXVector3::operator-(float pXYZ)
 {
-	x -= pXYZ;
-	y -= pXYZ;
-	z -= pXYZ;
-	return *this;
+	DXVector3 lResult{ *this };
+	lResult.x -= pXYZ;
+	lResult.y -= pXYZ;
+	lResult.z -= pXYZ;
+	return lResult;
 }
 
 DXVector3 & DXVector3::operator-=(float pXYZ)
@@ -200,12 +203,13 @@ DXVector3 & DXVector3::operator-=(float pXYZ)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator-(const D3DXVECTOR3 & pSubVector)
+DXVector3 DXVector3::operator-(const D3DXVECTOR3 & pSubVector)
 {
-	x -= pSubVector.x;
-	y -= pSubVector.y;
-	z -= pSubVector.z;
-	return *this;
+	DXVector3 lResult{ *this };
+	lResult.x -= pSubVector.x;
+	lResult.y -= pSubVector.y;
+	lResult.z -= pSubVector.z;
+	return lResult;
 }
 
 DXVector3 & DXVector3::operator-=(const D3DXVECTOR3 & pSubVector)
@@ -216,12 +220,13 @@ DXVector3 & DXVector3::operator-=(const D3DXVECTOR3 & pSubVector)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator*(float pXYZ)
+DXVector3 DXVector3::operator*(float pXYZ)
 {
-	x *= pXYZ;
-	y *= pXYZ;
-	z *= pXYZ;
-	return *this;
+	DXVector3 lResult{ *this };
+	lResult.x *= pXYZ;
+	lResult.y *= pXYZ;
+	lResult.z *= pXYZ;
+	return lResult;
 }
 
 DXVector3 & DXVector3::operator*=(float pXYZ)
@@ -232,12 +237,13 @@ DXVector3 & DXVector3::operator*=(float pXYZ)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator*(const D3DXVECTOR3 & pMulVector)
+DXVector3 DXVector3::operator*(const D3DXVECTOR3 & pMulVector)
 {
-	x *= pMulVector.x;
-	y *= pMulVector.y;
-	z *= pMulVector.z;
-	return *this;
+	DXVector3 lResult{*this};
+	lResult.x *= pMulVector.x;
+	lResult.y *= pMulVector.y;
+	lResult.z *= pMulVector.z;
+	return lResult;
 }
 
 DXVector3 & DXVector3::operator*=(const D3DXVECTOR3 & pMulVector)
@@ -248,12 +254,13 @@ DXVector3 & DXVector3::operator*=(const D3DXVECTOR3 & pMulVector)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator/(float pXYZ)
+DXVector3 DXVector3::operator/(float pXYZ)
 {
-	x /= pXYZ;
-	y /= pXYZ;
-	z /= pXYZ;
-	return *this;
+	DXVector3 lResult{ *this };
+	lResult.x /= pXYZ;
+	lResult.y /= pXYZ;
+	lResult.z /= pXYZ;
+	return lResult;
 }
 
 DXVector3 & DXVector3::operator/=(float pXYZ)
@@ -264,12 +271,13 @@ DXVector3 & DXVector3::operator/=(float pXYZ)
 	return *this;
 }
 
-DXVector3 & DXVector3::operator/(const D3DXVECTOR3 & pMulVector)
+DXVector3 DXVector3::operator/(const D3DXVECTOR3 & pMulVector)
 {
+	DXVector3 lResult{ *this };
 	x /= pMulVector.x;
 	y /= pMulVector.y;
 	z /= pMulVector.z;
-	return *this;
+	return lResult;
 }
 
 DXVector3 & DXVector3::operator/=(const D3DXVECTOR3 & pMulVector)
