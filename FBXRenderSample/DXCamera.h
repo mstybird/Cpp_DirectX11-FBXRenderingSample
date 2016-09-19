@@ -29,6 +29,7 @@ public:
 
 	void CreateRay(DXVector3&pOutRay, const DXVector3&pRayDirection)const;
 
+	//指定した分移動する
 	void Translation(TYPEMOVE pType, float pSpeed, const DXVector3&pDirection, bool pLockoned = false);
 
 
@@ -36,6 +37,8 @@ public:
 	void Rotate(float pX, float pY, float pZ);
 
 	std::weak_ptr<DXMatrix>GetMatrix();
+	void GetEyeT(DXVector3 &pOutTranslate);
+	void GetLookT(DXVector3 &pOutTranslate);
 
 	std::shared_ptr<DXVector3>mEyePosition;	//カメラの位置
 	std::shared_ptr<DXVector3>mLookPosition;//注視点

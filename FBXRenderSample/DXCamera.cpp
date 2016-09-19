@@ -92,3 +92,13 @@ std::weak_ptr<DXMatrix> DXCamera::GetMatrix()
 	//D3DXMatrixLookAtLH(mMatrix, mEyePosition, mLookPosition, mUpVector);
 	return mMatrix;
 }
+
+void DXCamera::GetEyeT(DXVector3& pOutTranslate)
+{
+	pOutTranslate = *mEyePosition;
+}
+
+void DXCamera::GetLookT(DXVector3& pOutTranslate)
+{
+	pOutTranslate = *mLookPosition;
+}

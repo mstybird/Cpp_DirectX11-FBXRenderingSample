@@ -65,4 +65,7 @@ private:
 	std::shared_ptr<DXVector3>mRayDirection;
 };
 
-//
+//レイピッキング判定用
+class MSCollisionRayPicking :public MSCollisionBase {
+public:
+};

@@ -38,7 +38,7 @@ void MyMSScene::Initialize()
 	auto lView = rMe->GetCamera();
 	auto lProjection = rMe->GetProjection();
 
-	lWorld.lock()->SetT(40, 50, -140);
+	lWorld.lock()->SetT(0, 0, -140);
 	rBox1->GetWorld().lock()->SetT(25, 0, 0);
 	rBox2->GetWorld().lock()->SetT(-25, 0, 0);
 	rBox1->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
@@ -76,16 +76,20 @@ void MyMSScene::KeyHold(MSKEY pKey)
 	switch (pKey)
 	{
 	case MSKEY::CH_W:
-		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,1 });
+		rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 1, { 0,0,1 }, false);
+//		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,1 });
 		break;
 	case MSKEY::CH_S:
-		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,-1 });
+		rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -1, { 0,0,1 }, false);
+		//		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,-1 });
 		break;
 	case MSKEY::CH_A:
-		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { -1,0,0 });
+		rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -1, { 1,0,0 }, false);
+		//		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { -1,0,0 });
 		break;
 	case MSKEY::CH_D:
-		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 1,0,0 });
+		rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 1, { 1,0,0 }, false);
+		//		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 1,0,0 });
 		break;
 	default:
 		break;
@@ -98,7 +102,7 @@ void MyMSScene::Render()
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	mdBox->Update();
 	//ground->GetWorld().lock()->SetS(1, 1, 1);
-	rBox1->GetWorld().lock()->AddRC(0, 1, 0);
+	//rBox1->GetWorld().lock()->AddRC(0, 1, 0);
 	render->Render(mdBox, rBox1);
 	render->Render(mdBox, rBox2);
 }

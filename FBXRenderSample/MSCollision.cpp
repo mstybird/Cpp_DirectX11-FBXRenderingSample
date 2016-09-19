@@ -123,7 +123,8 @@ bool MSCollisionRay::Collision(const MSCollisionRay & pRay, DX11RenderResource&p
 				}
 				//ƒŒƒC”»’è
 				DXVector3 lRayPos;
-				pRayPosition.GetWorld().lock()->GetMatrix().lock()->GetT(lRayPos);
+				pRayPosition.GetCamera().lock()->GetEyeT(lRayPos);
+//				pRayPosition.GetWorld().lock()->GetMatrix().lock()->GetT(lRayPos);
 				if(D3DXIntersectTri(
 					&lPosition[0],
 					&lPosition[1],
