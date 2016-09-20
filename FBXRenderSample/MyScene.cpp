@@ -1,5 +1,4 @@
 #include"MyScene.h"
-#include"MSCollision.h"
 MyMSScene::MyMSScene() :
 	mdBox{ make_shared<MSFbxManager>() },
 	rBox1{ make_shared<DX11RenderResource>() },
@@ -38,9 +37,9 @@ void MyMSScene::Initialize()
 	auto lView = rMe->GetCamera();
 	auto lProjection = rMe->GetProjection();
 
-	lWorld.lock()->SetT(0, 0, -140);
-	rBox1->GetWorld().lock()->SetT(25, 0, 0);
-	rBox2->GetWorld().lock()->SetT(-25, 0, 0);
+	lWorld.lock()->SetT(40, 50, -140);
+	rBox1->GetWorld().lock()->SetT(30, 0, 0);
+	rBox2->GetWorld().lock()->SetT(-50, 0, 0);
 	rBox1->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
 	rBox2->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
 
@@ -51,7 +50,10 @@ void MyMSScene::Initialize()
 	lProjection.lock()->SetViewAngle(45);
 	lProjection.lock()->SetPlaneNear(0.1f);
 	lProjection.lock()->SetPlaneFar(2000.0f);
-
+	//初期位置を設定
+	lRayPick.SetSlipFlag(true);
+	lRayPick.SetFramePosition(*rBox1);
+	
 }
 
 void MyMSScene::Update() {
@@ -59,37 +61,43 @@ void MyMSScene::Update() {
 	MSCollisionRay lRay;
 	lRay.SetRay(*rMe->GetCamera().lock());
 	if (MSCollisionRay::Collision(lRay, *rMe, *rBox1, *mdBox)) {
-		printf("Rayed\n");
+		//レイ
 	}
-	else {
-		printf("\n");
-
+	DXVector3 lResult;
+	if (lRayPick.Collision(lResult, *rBox1, *rBox2, *mdBox)) {
+		//レイピッキング
+		rBox1->GetWorld().lock()->SetT(lResult);
 	}
+	//座標の更新
+	lRayPick.SetFramePosition(*rBox1);
+	
 
 	if (rBox1->CollisionSphere(rBox2)) {
-		//printf("Hit\n");
+		//境界球
 	}
 }
 
 void MyMSScene::KeyHold(MSKEY pKey)
 {
+	DXVector3 data;
+
 	switch (pKey)
 	{
 	case MSKEY::CH_W:
-		rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 1, { 0,0,1 }, false);
-//		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,1 });
+		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 1, { 0,0,1 }, false);
+		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,1 });
 		break;
 	case MSKEY::CH_S:
-		rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -1, { 0,0,1 }, false);
-		//		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,-1 });
+		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -1, { 0,0,1 }, false);
+		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,-1 });
 		break;
 	case MSKEY::CH_A:
-		rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -1, { 1,0,0 }, false);
-		//		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { -1,0,0 });
+		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -1, { 1,0,0 }, false);
+		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { -1,0,0 });
 		break;
 	case MSKEY::CH_D:
-		rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 1, { 1,0,0 }, false);
-		//		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 1,0,0 });
+		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 1, { 1,0,0 }, false);
+		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 1,0,0 });
 		break;
 	default:
 		break;

@@ -112,6 +112,11 @@ void DXVector3::GetCross(float * DstCross, DXVector3 & pVector)
 		z*pVector.z;
 }
 
+void DXVector3::Normalize()
+{
+	D3DXVec3Normalize(this, this);
+}
+
 float DXVector3::GetMedian()
 {
 	return (x + y + z) / 3.0f;

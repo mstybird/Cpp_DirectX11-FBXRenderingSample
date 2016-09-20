@@ -87,6 +87,13 @@ DirectX11マネージャ
 ************************************/
 #include"MSDirect.h"
 
+/************************************
+
+コリジョン関係
+
+************************************/
+#include"MSCollision.h"
+
 
 #include<memory>
 using std::unique_ptr;

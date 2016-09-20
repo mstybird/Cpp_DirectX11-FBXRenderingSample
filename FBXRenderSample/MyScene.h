@@ -28,4 +28,6 @@ private:
 	//ƒV[ƒ“‚Éˆê‚Â
 	std::shared_ptr<MS3DRender> render;
 
+	MSCollisionRayPicking lRayPick;
+
 };
