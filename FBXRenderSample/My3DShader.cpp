@@ -29,7 +29,7 @@ void My3DShader::SetConstantBuffer1(
 		cb.mWVP = *resource.lock()->GetMatrixWVP(fbxMesh.lock()->mWorld,pDisplay);
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		D3DXMatrixTranspose(&cb.mWVP, &cb.mWVP);
-		cb.LightDir = D3DXVECTOR4(1, 0, -1, 0);
+		cb.LightDir = D3DXVECTOR4(1, 1, -1, 0);
 
 		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
 		sDeviceContext->Unmap(mConstantBuffer1, 0);

@@ -1,6 +1,7 @@
 #include"MyScene.h"
 MyMSScene::MyMSScene() :
 	mdBox{ make_shared<MSFbxManager>() },
+	mdField{ make_shared<MSFbxManager>() },
 	rBox1{ make_shared<DX11RenderResource>() },
 	rBox2{ make_shared<DX11RenderResource>() },
 	rMe{ make_shared<DX11RenderResource>() },
@@ -20,6 +21,8 @@ void MyMSScene::Initialize()
 	shader->InitPixel("Simple.hlsl");
 
 	mdBox->LoadFile("res/box.fbx", false);
+	mdField->LoadFile("res/field.fbx", false);
+
 	//コリジョン生成
 	mdBox->CreateCollisionSphere();
 	//生成したコリジョンを登録
@@ -37,23 +40,30 @@ void MyMSScene::Initialize()
 	auto lView = rMe->GetCamera();
 	auto lProjection = rMe->GetProjection();
 
-	lWorld.lock()->SetT(40, 50, -140);
-	rBox1->GetWorld().lock()->SetT(30, 0, 0);
-	rBox2->GetWorld().lock()->SetT(-50, 0, 0);
-	rBox1->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
-	rBox2->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
+	lWorld.lock()->SetT(0, 0, 0);
+	lWorld.lock()->SetRC({ 0,0,0 });
+	lWorld.lock()->SetS(0.01f, 0.01f, 0.01f);
+	rBox2->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
+	rBox1->GetWorld().lock()->SetT(3, 0, 0);
+	rBox2->GetWorld().lock()->SetT(0, 0, 0);
+	rBox1->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
+	rBox2->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
 
 
 
-	lView.lock()->SetCamera(rMe->GetWorld(), rLook->GetWorld());
+	lView.lock()->SetCamera(rMe->GetWorld(), { 0,2,-10 });
 
 	lProjection.lock()->SetViewAngle(45);
 	lProjection.lock()->SetPlaneNear(0.1f);
 	lProjection.lock()->SetPlaneFar(2000.0f);
 	//初期位置を設定
 	lRayPick.SetSlipFlag(true);
-	lRayPick.SetFramePosition(*rBox1);
+	lRayPick.SetFramePosition(*rMe);
 	
+	lRayPlane.Collision(
+		*rMe, { 0,0,7 }, *rBox1, *mdBox
+		);
+
 }
 
 void MyMSScene::Update() {
@@ -64,40 +74,56 @@ void MyMSScene::Update() {
 		//レイ
 	}
 	DXVector3 lResult;
-	if (lRayPick.Collision(lResult, *rBox1, *rBox2, *mdBox)) {
+	if (lRayPick.Collision(lResult, *rMe, *rBox2, *mdField)) {
 		//レイピッキング
-		rBox1->GetWorld().lock()->SetT(lResult);
+		//rMe->GetWorld().lock()->SetT(lResult);
 	}
 	//座標の更新
-	lRayPick.SetFramePosition(*rBox1);
+	lRayPick.SetFramePosition(*rMe);
 	
 
 	if (rBox1->CollisionSphere(rBox2)) {
 		//境界球
 	}
+
+	rMe->GetCamera().lock()->SetCamera(rMe->GetWorld(), { 0,2,-10});
+
+	if(lRayPlane.Collision(*rMe, { 0,0,7 }, *rBox1, *mdBox)) {
+		printf("Hit\n");
+	}
+	else {
+		printf("\n");
+	}
+
 }
 
 void MyMSScene::KeyHold(MSKEY pKey)
 {
 	DXVector3 data;
-
+	float speed = 0.25f;
 	switch (pKey)
 	{
 	case MSKEY::CH_W:
-		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 1, { 0,0,1 }, false);
-		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,1 });
+		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 0.1, { 0,0,1 }, false);
+		rMe->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,1 });
 		break;
 	case MSKEY::CH_S:
-		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -1, { 0,0,1 }, false);
-		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 0,0,-1 });
+		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -0.1, { 0,0,1 }, false);
+		rMe->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,-1 });
 		break;
 	case MSKEY::CH_A:
-		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -1, { 1,0,0 }, false);
-		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { -1,0,0 });
+		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -0.1, { 1,0,0 }, false);
+		rMe->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, speed, { -1,0,0 });
 		break;
 	case MSKEY::CH_D:
-		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 1, { 1,0,0 }, false);
-		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 1, { 1,0,0 });
+		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 0.1, { 1,0,0 }, false);
+		rMe->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
+		break;
+	case MSKEY::LEFT:
+		rMe->GetWorld().lock()->AddRC({ 0,-1,0 });
+		break;
+	case MSKEY::RIGHT:
+		rMe->GetWorld().lock()->AddRC({ 0,1,0 });
 		break;
 	default:
 		break;
@@ -109,10 +135,10 @@ void MyMSScene::Render()
 	////画面クリア
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	mdBox->Update();
-	//ground->GetWorld().lock()->SetS(1, 1, 1);
-	//rBox1->GetWorld().lock()->AddRC(0, 1, 0);
 	render->Render(mdBox, rBox1);
 	render->Render(mdBox, rBox2);
+	render->Render(mdBox, rMe);
+
 }
 
 /*
@@ -122,3 +148,4 @@ void MyMSScene::Render()
 		イベントメソッド書き足し
 		ダイナミクス実装
 */
+

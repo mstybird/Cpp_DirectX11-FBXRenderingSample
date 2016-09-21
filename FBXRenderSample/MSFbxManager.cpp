@@ -2,7 +2,7 @@
 #include"DX11FbxResource.h"
 #include"DX11FbxLoader.h"
 #include"DX11Resrouce.h"
-#include"MSCollision.h"
+#include"MSCollisionSphere.h"
 #include"DXMatrix.h"
 #include"DX11RenderResource.h"
 #define SAFE_RELEASE(x) if(x){x->Release(); x=NULL;}

@@ -94,7 +94,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="example_Sprite2D.cpp" />
-    <ClCompile Include="MSCollision.cpp" />
+    <ClCompile Include="MSCollisionBase.cpp" />
+    <ClCompile Include="MSCollisionRay.cpp" />
+    <ClCompile Include="MSCollisionRayPicking.cpp" />
+    <ClCompile Include="MSCollisionRayPlane.cpp" />
+    <ClCompile Include="MSCollisionSphere.cpp" />
     <ClCompile Include="MSKeyCodeList.cpp" />
     <ClCompile Include="My3DShader.cpp" />
     <ClCompile Include="MSFbxManager.cpp" />
@@ -131,7 +135,11 @@
     <ClCompile Include="MySprite3DShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MSCollision.h" />
+    <ClInclude Include="MSCollisionBase.h" />
+    <ClInclude Include="MSCollisionRay.h" />
+    <ClInclude Include="MSCollisionRayPicking.h" />
+    <ClInclude Include="MSCollisionRayPlane.h" />
+    <ClInclude Include="MSCollisionSphere.h" />
     <ClInclude Include="MSDebug.h" />
     <ClInclude Include="MSKeyCodeList.h" />
     <ClInclude Include="My3DShader.h" />

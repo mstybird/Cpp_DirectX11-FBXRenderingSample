@@ -4,7 +4,7 @@
 #include"DXCamera.h"
 #include"DXProjection.h"
 #include"DXDisplay.h"
-#include"MSCollision.h"
+#include"MSCollisionSphere.h"
 DX11RenderResource::DX11RenderResource():
 	mWorld{std::make_shared<DXWorld>()}
 {

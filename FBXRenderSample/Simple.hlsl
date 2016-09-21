@@ -23,6 +23,7 @@ cbuffer global:register(b1) {
 struct VS_OUTPUT
 {
 	float4 Pos : SV_POSITION;
+	float4 Color : COLOR0;
 	float2 UV:TEXCOORD;
 };
 
@@ -34,6 +35,11 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL, float2 Tex : TEXCOOR
 	VS_OUTPUT output = (VS_OUTPUT)0;
 	output.Pos = mul(Pos, g_mWVP);
 	output.UV = Tex;
+	Normal.w = 0;
+	Normal = mul(Normal, g_mW);
+	Normal = normalize(Normal);
+	output.Color = 1.0 * g_Diffuse * dot(Normal, g_vLightDir);//この式はランバートの余弦則
+
 	return output;
 }
 
@@ -43,5 +49,5 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL, float2 Tex : TEXCOOR
 float4 PS(VS_OUTPUT input) : SV_Target
 {
 	
-	return gTexture.Sample(gSampler,input.UV)*(1.0 - g_ColorPer) + g_Diffuse*(g_ColorPer);
+	return gTexture.Sample(gSampler,input.UV)*(1.0 - g_ColorPer) + input.Color*(g_ColorPer);
 }

@@ -104,9 +104,19 @@
     <ClCompile Include="example_Sprite2D.cpp">
       <Filter>Example</Filter>
     </ClCompile>
-    <ClCompile Include="MSCollision.cpp">
-      <Filter>MSDirect\MSCollision</Filter>
+    <ClCompile Include="MSCollisionBase.cpp">
+      <Filter>MSDirect\MSCollision\Source</Filter>
     </ClCompile>
+    <ClCompile Include="MSCollisionSphere.cpp">
+      <Filter>MSDirect\MSCollision\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSCollisionRay.cpp">
+      <Filter>MSDirect\MSCollision\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSCollisionRayPicking.cpp">
+      <Filter>MSDirect\MSCollision\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSCollisionRayPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -229,8 +239,20 @@
     <ClInclude Include="MSDebug.h">
       <Filter>MSDirect\System\Header</Filter>
     </ClInclude>
-    <ClInclude Include="MSCollision.h">
-      <Filter>MSDirect\MSCollision</Filter>
+    <ClInclude Include="MSCollisionBase.h">
+      <Filter>MSDirect\MSCollision\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSCollisionRay.h">
+      <Filter>MSDirect\MSCollision\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSCollisionRayPicking.h">
+      <Filter>MSDirect\MSCollision\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSCollisionSphere.h">
+      <Filter>MSDirect\MSCollision\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSCollisionRayPlane.h">
+      <Filter>MSDirect\MSCollision\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -357,6 +379,12 @@
     </Filter>
     <Filter Include="MSDirect\MSCollision">
       <UniqueIdentifier>{7cb5edf9-6f81-4371-971f-ec89c17ca374}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\MSCollision\Header">
+      <UniqueIdentifier>{020dd5a3-063c-441d-b4c7-e8033253f9e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\MSCollision\Source">
+      <UniqueIdentifier>{35aad3b1-8111-4a98-97d1-6d38c3295ab9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

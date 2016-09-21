@@ -147,8 +147,8 @@ void DX11FbxLoader::FbxLoadFromFile()
 
 
 		//読み込んだファイルと座標系が異なる場合はシーンの座標系を変換
-		if (SceneAxisSystem != FbxAxisSystem::DirectX) {
-			FbxAxisSystem::DirectX.ConvertScene(Scene);
+		if (SceneAxisSystem != OurAxisSystem) {
+			OurAxisSystem.ConvertScene(Scene);
 		}
 
 		Scene->FillAnimStackNameArray(AnimStackNameArray);

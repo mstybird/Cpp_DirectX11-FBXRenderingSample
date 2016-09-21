@@ -92,7 +92,10 @@ DirectX11マネージャ
 コリジョン関係
 
 ************************************/
-#include"MSCollision.h"
+#include"MSCollisionSphere.h"
+#include"MSCollisionRay.h"
+#include"MSCollisionRayPicking.h"
+#include"MSCollisionRayPlane.h"
 
 
 #include<memory>

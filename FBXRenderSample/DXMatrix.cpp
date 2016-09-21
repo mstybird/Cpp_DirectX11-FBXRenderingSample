@@ -97,9 +97,24 @@ void DXMatrix::RotationZ(float pAngle, TYPE_ANGLE pType)
 
 void DXMatrix::RotationXYZ(const DXVector3&pAngleXYZ, TYPE_ANGLE pType)
 {
-	assert(0);
+	if (pType == TYPE_ANGLE::DEGREE) {
+		D3DXMatrixRotationYawPitchRoll(
+			this, 
+			D3DXToRadian(pAngleXYZ.y),
+			D3DXToRadian(pAngleXYZ.x),
+			D3DXToRadian(pAngleXYZ.z)
+			);
+	}
+	else {
+		D3DXMatrixRotationYawPitchRoll(this, pAngleXYZ.y, pAngleXYZ.x, pAngleXYZ.z);
+
+	}
 }
 
+void DXMatrix::Scaling(float pScale)
+{
+	D3DXMatrixScaling(this, pScale, pScale, pScale);
+}
 
 void DXMatrix::Scaling(const DXVector2 & pScale)
 {
