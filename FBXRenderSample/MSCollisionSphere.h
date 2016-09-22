@@ -14,6 +14,8 @@ public:
 		MSCollisionSphere&pCollision2,
 		const DXWorld&pWorldMatrix2
 		);
+	float GetRadius()const;
+	void GetCenterPosition(DXVector3&pOutCenter)const;
 private:
 	float mRadius;//“–‚½‚è”»’è”¼Œa
 	std::unique_ptr<DXVector3>mCenter;//’†SÀ•W

@@ -14,6 +14,8 @@ public:
 	static void SetScene(std::unique_ptr<MSSceneBase>&&pScene);
 	//ビューポートを取得する
 	static D3D11_VIEWPORT*GetViewPort();
+	static ID3D11Device*GetDevice();
+	static IDXGISwapChain*GetSwapChain();
 	//キー入力状態を初期化する
 	static void ResetKeyStateAll();
 	static void ResetKeyState(MSKEY pResetKey);

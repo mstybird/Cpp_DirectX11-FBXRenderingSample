@@ -6,21 +6,18 @@
 #include"DXWorld.h"
 #include"MSFbxManager.h"
 #include"DX11FbxResource.h"
-MSCollisionRayPlane::MSCollisionRayPlane()
+#include<map>
+using std::pair;
+MSCollisionRayPlane::MSCollisionRayPlane():
+	mFramePosition{std::make_unique<DXVector3>()}
 {
-	vPoint = new DXVector3;
-	vDirection = new DXVector3;
-	vPos = new DXVector3;
 }
 
 MSCollisionRayPlane::~MSCollisionRayPlane()
 {
-	SAFE_DELETE(vPoint);
-	SAFE_DELETE(vDirection);
-	SAFE_DELETE(vPos);
 }
 
-bool MSCollisionRayPlane::Collision(DX11RenderResource & pRayPosition, const DXVector3& pRayLength, DX11RenderResource & pRayTarget, MSFbxManager & pFbxTarget)
+bool MSCollisionRayPlane::Collision(DX11RenderResource & pRayPosition, const DXVector3& pRayLength, DX11RenderResource & pRayTarget, MSFbxManager & pFbxTarget, float& pOutDistance, DXVector3&pOutNormal)
 {
 	//レイの始点と終点
 	DXVector3 vP[2];
@@ -44,6 +41,9 @@ bool MSCollisionRayPlane::Collision(DX11RenderResource & pRayPosition, const DXV
 		auto lMeshList = pFbxTarget.GetMeshData();
 
 
+
+		//距離を初期化
+		pOutDistance = FLT_MAX;
 		DXVector3 lPosition[3];		//レイ判定使う最終的な3頂点
 		for (auto&lMesh : *lMeshList) {
 			//変換行列の合成
@@ -51,9 +51,12 @@ bool MSCollisionRayPlane::Collision(DX11RenderResource & pRayPosition, const DXV
 			DXMatrix lGlobalMatrix{ *lMesh->mWorld.get() };
 			//合成
 			lGlobalMatrix = lGlobalMatrix * lResourceMatrix;
+			//サブメッシュ単位でループ
 			for (auto&lSubMesh : lMesh->subMesh) {
+				//ポリゴン単位でループ
 				for (int i = 0; i < lSubMesh->PolygonCount; i++) {
 					FbxPtrPolygon lPtrPolygon;
+					//メッシュを構成する一つのポリゴンを取得する
 					lSubMesh->GetPolygon(lPtrPolygon, i);
 
 					//行列を使って頂点位置の修正
@@ -87,14 +90,75 @@ bool MSCollisionRayPlane::Collision(DX11RenderResource & pRayPosition, const DXV
 							lCrossPoint.y = t*vP[0].y + (1 - t)*vP[1].y;
 							lCrossPoint.z = t*vP[0].z + (1 - t)*vP[1].z;
 
-							return true;
+							if (IsInside(
+								lCrossPoint,
+								lPosition[0],
+								lPosition[1],
+								lPosition[2]
+							)) {
+								//レイ発射位置から交点を引いたベクトルの距離が、交点との距離
+								float lTmpDistance = (vP[0] - lCrossPoint).GetDistance();
+								//既に衝突したポリゴンより近ければ更新
+								if (pOutDistance > lTmpDistance) {
+									pOutDistance = lTmpDistance;
+									
+									pOutNormal.x = p.a;
+									pOutNormal.y = p.b;
+									pOutNormal.z = p.c;
+								}
+							}
 						}
 					}
 				}
 			}
 		}
+		if (pOutDistance == FLT_MAX)return false;
+	}
+	return true;
+}
+
+bool MSCollisionRayPlane::Collision(DX11RenderResource & pRayPosition, const float & pRayLength, DX11RenderResource & pRayTarget, MSFbxManager & pFbxTarget, float & pOutDistance, DXVector3&pOutNormal)
+{
+	//レイの方向を計算する
+	DXVector3 lRayDirection;
+	pRayPosition.GetWorld().lock()->GetMatrix().lock()->GetT(lRayDirection);
+	lRayDirection -= *mFramePosition;
+	//方向を確定
+	lRayDirection.Normalize();
+	//距離を加えてレイの長さを計算する
+	lRayDirection *= pRayLength;
+	//このレイを使って判定
+	if(Collision(
+		pRayPosition,
+		lRayDirection,
+		pRayTarget,
+		pFbxTarget,
+		pOutDistance,
+		pOutNormal
+	)) {
+		return true;
 	}
 	return false;
+}
+
+void MSCollisionRayPlane::SetFramePosition(DX11RenderResource & pRayPosition)
+{
+		pRayPosition.GetWorld().lock()->GetMatrix().lock()->GetT(*mFramePosition);
+}
+
+void MSCollisionRayPlane::Slip(DXVector3&pOutSlipVector,DX11RenderResource & pUpdPosition, DXVector3&pNormal)
+{
+	//移動ベクトル(滑りベクトルの計算
+	//レイの方向を計算する
+	DXVector3 lRayDirection;
+	pUpdPosition.GetWorld().lock()->GetMatrix().lock()->GetT(lRayDirection);
+	//移動距離
+	lRayDirection -= *mFramePosition;
+	pNormal.z *= 1;
+	pOutSlipVector = lRayDirection - ((D3DXVec3Dot(&pNormal, &lRayDirection)) / (powf(D3DXVec3Length(&pNormal), 2.0f)))*pNormal;
+
+	pOutSlipVector *= -1;
+	return;
 }
 
 bool MSCollisionRayPlane::IsInside( DXVector3 & pvI,  DXVector3 & pvA,  DXVector3 & pvB,  DXVector3 & pvC)
@@ -112,13 +176,44 @@ bool MSCollisionRayPlane::IsInside( DXVector3 & pvI,  DXVector3 & pvA,  DXVector
 	DXVector3 vCrossBC;
 	DXVector3 vCrossCA;
 
-	float dotAB;
-	float dotBC;
-	float dotCA;
+	float fAB;
+	float fBC;
+	float fCA;
 
-	/*
-		有限平面との当たり判定
-	
-	*/
+	//法線
+	DXVector3 vNormal;
+	//3頂点から平面方程式を求める
+	D3DXPLANE pln;
+	D3DXPlaneFromPoints(&pln, &pvA, &pvB, &pvC);
+	vNormal.x = pln.a;
+	vNormal.y = pln.b;
+	vNormal.z = pln.c;
+	vNormal.Normalize();
 
+	//各頂点から交点Iに向かうベクトルをvVとする
+	DXVector3 vV;
+	//辺ABベクトル（頂点Bベクトルー頂点Aベクトル）と、頂点から交点Iへ向かうベクトルの外積を求める
+	vV = pvI - pvA;
+	D3DXVec3Cross(&vCrossAB, &vAB, &vV);
+	vV = pvI - pvB;
+	D3DXVec3Cross(&vCrossBC, &vBC, &vV);
+
+	vV = pvI - pvC;
+	D3DXVec3Cross(&vCrossCA, &vCA, &vV);
+	//それぞれの外積ベクトルとの内積を求める
+	fAB = D3DXVec3Dot(&vNormal, &vCrossAB);
+	fBC = D3DXVec3Dot(&vNormal, &vCrossBC);
+	fCA = D3DXVec3Dot(&vNormal, &vCrossCA);
+
+	//どれか一つでも負数であれば、交点はポリゴンの外
+	if (
+		fAB >= 0.0f &&
+		fBC >= 0.0f&&
+		fCA >= 0.0f
+		) {
+		//交点は面の内側
+		return true;
+	}
+	//交点は面の外
+	return false;
 }

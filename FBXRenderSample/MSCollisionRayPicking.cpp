@@ -213,7 +213,7 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 
 		lAns[0] = fPlaneCalc(lRayAfterPosition);
 		lAns[1] = fPlaneCalc(*mPosBefore);
-		printf("%2.2f:%2.2f\n", lAns[0], lAns[1]);
+
 		//‚Q‚Â‚Ì³•‰‚ª”½‘Î‚Å‚ ‚ê‚ÎAƒ|ƒŠƒSƒ“‚ğ‚Ü‚½‚¢‚Å‚¢‚é
 		if (lAns[0] * lAns[1] < 0.0f) {
 			//ŠŠ‚éê‡‚Ìˆ—

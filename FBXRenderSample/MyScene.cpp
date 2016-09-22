@@ -44,14 +44,14 @@ void MyMSScene::Initialize()
 	lWorld.lock()->SetRC({ 0,0,0 });
 	lWorld.lock()->SetS(0.01f, 0.01f, 0.01f);
 	rBox2->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
-	rBox1->GetWorld().lock()->SetT(3, 0, 0);
-	rBox2->GetWorld().lock()->SetT(0, 0, 0);
+	rBox1->GetWorld().lock()->SetT(-15, 0, 0);
+	rBox2->GetWorld().lock()->SetT(-3, -1, 0);
 	rBox1->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
-	rBox2->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
+	rBox2->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
 
 
 
-	lView.lock()->SetCamera(rMe->GetWorld(), { 0,2,-10 });
+	lView.lock()->SetCamera(rMe->GetWorld(), { 0,20,-10 });
 
 	lProjection.lock()->SetViewAngle(45);
 	lProjection.lock()->SetPlaneNear(0.1f);
@@ -60,9 +60,7 @@ void MyMSScene::Initialize()
 	lRayPick.SetSlipFlag(true);
 	lRayPick.SetFramePosition(*rMe);
 	
-	lRayPlane.Collision(
-		*rMe, { 0,0,7 }, *rBox1, *mdBox
-		);
+	lRayPlane.SetFramePosition(*rMe);
 
 }
 
@@ -76,7 +74,7 @@ void MyMSScene::Update() {
 	DXVector3 lResult;
 	if (lRayPick.Collision(lResult, *rMe, *rBox2, *mdField)) {
 		//レイピッキング
-		//rMe->GetWorld().lock()->SetT(lResult);
+		rMe->GetWorld().lock()->SetT(lResult);
 	}
 	//座標の更新
 	lRayPick.SetFramePosition(*rMe);
@@ -86,21 +84,25 @@ void MyMSScene::Update() {
 		//境界球
 	}
 
-	rMe->GetCamera().lock()->SetCamera(rMe->GetWorld(), { 0,2,-10});
+	rMe->GetCamera().lock()->SetCamera(rMe->GetWorld(), { 0,20,-10});
 
-	if(lRayPlane.Collision(*rMe, { 0,0,7 }, *rBox1, *mdBox)) {
-		printf("Hit\n");
+
+	lRayPlane.SetFramePosition(*rMe);
+
+	MSCullingFrustum cf;
+	if (cf.IsCullingWorld(*rMe, *rBox1, D3DXToRadian(30), 1.0f, 100.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT)) {
+		printf("Yes\n");
 	}
 	else {
 		printf("\n");
 	}
-
+	
 }
 
 void MyMSScene::KeyHold(MSKEY pKey)
 {
 	DXVector3 data;
-	float speed = 0.25f;
+	float speed = 0.25;
 	switch (pKey)
 	{
 	case MSKEY::CH_W:
@@ -120,10 +122,10 @@ void MyMSScene::KeyHold(MSKEY pKey)
 		rMe->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
 		break;
 	case MSKEY::LEFT:
-		rMe->GetWorld().lock()->AddRC({ 0,-1,0 });
+		rMe->GetWorld().lock()->AddRC({ 0,-5,0 });
 		break;
 	case MSKEY::RIGHT:
-		rMe->GetWorld().lock()->AddRC({ 0,1,0 });
+		rMe->GetWorld().lock()->AddRC({ 0,5,0 });
 		break;
 	default:
 		break;
@@ -136,7 +138,7 @@ void MyMSScene::Render()
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	mdBox->Update();
 	render->Render(mdBox, rBox1);
-	render->Render(mdBox, rBox2);
+	render->Render(mdField, rBox2);
 	render->Render(mdBox, rMe);
 
 }

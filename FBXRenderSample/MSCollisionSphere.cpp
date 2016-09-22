@@ -61,3 +61,13 @@ bool MSCollisionSphere::Collision(MSCollisionSphere&pCollision1,
 
 	return(lLength <= lRadius1 + lRadius2);
 }
+
+float MSCollisionSphere::GetRadius()const
+{
+	return mRadius;
+}
+
+void MSCollisionSphere::GetCenterPosition(DXVector3 & pOutCenter)const
+{
+	pOutCenter = *mCenter;
+}

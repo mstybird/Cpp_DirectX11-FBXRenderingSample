@@ -117,6 +117,10 @@
       <Filter>MSDirect\MSCollision\Source</Filter>
     </ClCompile>
     <ClCompile Include="MSCollisionRayPlane.cpp" />
+    <ClCompile Include="MSCullingFrustum.cpp">
+      <Filter>MSDirect\MSCulling\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSCullingOcclusion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -254,6 +258,12 @@
     <ClInclude Include="MSCollisionRayPlane.h">
       <Filter>MSDirect\MSCollision\Header</Filter>
     </ClInclude>
+    <ClInclude Include="MSCullingFrustum.h">
+      <Filter>MSDirect\MSCulling\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MSCullingOcclusion.h">
+      <Filter>MSDirect\MSCulling\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -385,6 +395,15 @@
     </Filter>
     <Filter Include="MSDirect\MSCollision\Source">
       <UniqueIdentifier>{35aad3b1-8111-4a98-97d1-6d38c3295ab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\MSCulling">
+      <UniqueIdentifier>{5d565fe2-38eb-485d-a5c2-df1efc7c5d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\MSCulling\Header">
+      <UniqueIdentifier>{ec657a3f-27b7-43cd-8b51-f6984fc8c7b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\MSCulling\Source">
+      <UniqueIdentifier>{634ed22c-95d0-4a30-917f-30abe0be6368}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

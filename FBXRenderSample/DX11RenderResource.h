@@ -38,7 +38,7 @@ public:
 	void SetCollisionSphere(const std::shared_ptr<std::vector<std::vector<MSCollisionSphere>>>&pCollisions);
 	//指定したリソースとの衝突判定
 	bool CollisionSphere( std::shared_ptr<DX11RenderResource>&pResource);
-
+	void GetCollisionSphere(std::weak_ptr<std::vector<std::vector<MSCollisionSphere>>>&pOutCollisions);
 private:
 	//ワールド行列
 	std::shared_ptr<DXWorld>mWorld;

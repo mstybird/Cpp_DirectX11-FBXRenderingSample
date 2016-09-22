@@ -15,7 +15,7 @@
     <RootNamespace>PolygonTriangle</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>DirectX11 FBX Sample</ProjectName>
+    <ProjectName>DirectX11 FBX Sample1</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -99,6 +99,8 @@
     <ClCompile Include="MSCollisionRayPicking.cpp" />
     <ClCompile Include="MSCollisionRayPlane.cpp" />
     <ClCompile Include="MSCollisionSphere.cpp" />
+    <ClCompile Include="MSCullingFrustum.cpp" />
+    <ClCompile Include="MSCullingOcclusion.cpp" />
     <ClCompile Include="MSKeyCodeList.cpp" />
     <ClCompile Include="My3DShader.cpp" />
     <ClCompile Include="MSFbxManager.cpp" />
@@ -140,6 +142,8 @@
     <ClInclude Include="MSCollisionRayPicking.h" />
     <ClInclude Include="MSCollisionRayPlane.h" />
     <ClInclude Include="MSCollisionSphere.h" />
+    <ClInclude Include="MSCullingFrustum.h" />
+    <ClInclude Include="MSCullingOcclusion.h" />
     <ClInclude Include="MSDebug.h" />
     <ClInclude Include="MSKeyCodeList.h" />
     <ClInclude Include="My3DShader.h" />

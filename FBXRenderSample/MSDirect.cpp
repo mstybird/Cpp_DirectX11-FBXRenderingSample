@@ -264,6 +264,16 @@ D3D11_VIEWPORT * MSDirect::GetViewPort()
 	return &sMSDirect->mViewPort;
 }
 
+ID3D11Device * MSDirect::GetDevice()
+{
+	return sMSDirect->m_pDevice;
+}
+
+IDXGISwapChain * MSDirect::GetSwapChain()
+{
+	return sMSDirect->m_pSwapChain;
+}
+
 void MSDirect::ResetKeyStateAll()
 {
 	sMSDirect->KeyList = MSKeyList;

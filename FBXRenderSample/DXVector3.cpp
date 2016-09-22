@@ -279,9 +279,9 @@ DXVector3 & DXVector3::operator/=(float pXYZ)
 DXVector3 DXVector3::operator/(const D3DXVECTOR3 & pMulVector)
 {
 	DXVector3 lResult{ *this };
-	x /= pMulVector.x;
-	y /= pMulVector.y;
-	z /= pMulVector.z;
+	lResult.x /= pMulVector.x;
+	lResult.y /= pMulVector.y;
+	lResult.z /= pMulVector.z;
 	return lResult;
 }
 

@@ -95,3 +95,8 @@ bool DX11RenderResource::CollisionSphere(std::shared_ptr<DX11RenderResource>&pRe
 
 	return false;
 }
+
+void DX11RenderResource::GetCollisionSphere(std::weak_ptr<std::vector<std::vector<MSCollisionSphere>>> &pOutCollisions)
+{
+	pOutCollisions = mCollisions;
+}
