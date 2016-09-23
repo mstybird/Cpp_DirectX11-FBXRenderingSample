@@ -54,6 +54,21 @@ std::unique_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWVP(const std::weak_ptr
 	return std::move(lResult);
 }
 
+void DX11RenderResource::SetWorld(const DXWorld & pWorld)
+{
+	*mWorld = pWorld;
+}
+
+void DX11RenderResource::SetCamera(const DXCamera & pCamera)
+{
+	*mView = pCamera;
+}
+
+void DX11RenderResource::SetProjection(const DXProjection & pProjection)
+{
+	*mProj = pProjection;
+}
+
 std::weak_ptr<DXWorld> DX11RenderResource::GetWorld()
 {
 	return mWorld;

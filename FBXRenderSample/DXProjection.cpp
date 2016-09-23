@@ -47,6 +47,14 @@ void DXProjection::AddPlaneFar(float pFarPlane)
 	mFar = pFarPlane;
 }
 
+void DXProjection::Clone(DXProjection & pOutClone)
+{
+	pOutClone.mAngle = mAngle;
+	pOutClone.mAspect = mAspect;
+	pOutClone.mFar = mFar;
+	pOutClone.mNear = mNear;
+}
+
 std::weak_ptr<DXMatrix> DXProjection::GetMatrix()
 {
 	D3DXMatrixPerspectiveFovLH(

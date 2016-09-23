@@ -19,6 +19,8 @@ public:
 	void SetPlaneFar(float pFarPlane);
 	void AddPlaneFar(float pFarPlane);
 
+	void Clone(DXProjection&pOutClone);
+
 	std::weak_ptr<DXMatrix>GetMatrix();
 
 	float mAngle;//Ž‹–ìŠp

@@ -5,6 +5,7 @@
 #include"DXMatrix.h"
 #include"DXWorld.h"
 #include"DXCamera.h"
+#include"DXProjection.h"
 #include<d3dx9.h>
 #include<memory>
 #include<cassert>
@@ -12,10 +13,7 @@
 bool MSCullingFrustum::IsCullingWorld(
 	DX11RenderResource & pCameraResource, 
 	DX11RenderResource & pTargetResource, 
-	float pAngle,
-	float pNearClip,
-	float pFarClip,
-	float Aspect)
+	DXProjection& pProjection)
 {
 	D3DXPLANE VFLeftPlane;
 	D3DXPLANE VFRightPlane;
@@ -55,41 +53,46 @@ bool MSCullingFrustum::IsCullingWorld(
 	c.SetCamera(pCameraResource.GetWorld(), { 0,0,-1 });
 	D3DXVec3TransformCoord(&lTargetPos, &lTargetPos, c.GetMatrix().lock().get());
 
+	float& lFarClip = pProjection.mFar;
+	float& lNearClip = pProjection.mNear;
+	float& lAspect = pProjection.mAspect;
+	float& lAngle = pProjection.mAngle;
+
 	//左右、上下の平面を計算
 	{
 		D3DXVECTOR3 p1, p2, p3;
 		//左面
 		p1 = D3DXVECTOR3(0, 0, 0);
-		p2.x = -pFarClip * ((FLOAT)tan(pAngle / 2)*Aspect);
-		p2.y = -pFarClip * (FLOAT)tan(pAngle / 2);
-		p2.z = pFarClip;
+		p2.x = -lFarClip * ((FLOAT)tan(lAngle / 2)*lAspect);
+		p2.y = -lFarClip * (FLOAT)tan(lAngle / 2);
+		p2.z = lFarClip;
 		p3.x = p2.x;
 		p3.y = -p2.y;
 		p3.z = p2.z;
 		D3DXPlaneFromPoints(&VFLeftPlane, &p1, &p2, &p3);
 		//右面
 		p1 = D3DXVECTOR3(0, 0, 0);
-		p2.x = pFarClip * ((FLOAT)tan(pAngle / 2)*Aspect);
-		p2.y = pFarClip * (FLOAT)tan(pAngle / 2);
-		p2.z = pFarClip;
+		p2.x = lFarClip * ((FLOAT)tan(lAngle / 2)*lAspect);
+		p2.y = lFarClip * (FLOAT)tan(lAngle / 2);
+		p2.z = lFarClip;
 		p3.x = p2.x;
 		p3.y = -p2.y;
 		p3.z = p2.z;
 		D3DXPlaneFromPoints(&VFRightPlane, &p1, &p2, &p3);
 		//上面
 		p1 = D3DXVECTOR3(0, 0, 0);
-		p2.x = -pFarClip * ((FLOAT)tan(pAngle / 2)*Aspect);
-		p2.y = pFarClip * (FLOAT)tan(pAngle / 2);
-		p2.z = pFarClip;
+		p2.x = -lFarClip * ((FLOAT)tan(lAngle / 2)*lAspect);
+		p2.y = lFarClip * (FLOAT)tan(lAngle / 2);
+		p2.z = lFarClip;
 		p3.x = -p2.x;
 		p3.y = p2.y;
 		p3.z = p2.z;
 		D3DXPlaneFromPoints(&VFTopPlane, &p1, &p2, &p3);
 		//下面
 		p1 = D3DXVECTOR3(0, 0, 0);
-		p2.x = pFarClip * ((FLOAT)tan(pAngle / 2)*Aspect);
-		p2.y = -pFarClip * (FLOAT)tan(pAngle / 2);
-		p2.z = pFarClip;
+		p2.x = lFarClip * ((FLOAT)tan(lAngle / 2)*lAspect);
+		p2.y = -lFarClip * (FLOAT)tan(lAngle / 2);
+		p2.z = lFarClip;
 		p3.x = -p2.x;
 		p3.y = p2.y;
 		p3.z = p2.z;
@@ -107,12 +110,12 @@ bool MSCullingFrustum::IsCullingWorld(
 			//6つの平面とジオメトリ境界球をチェック
 			{
 				//ニアクリップ面について
-				if ((Pos.z + Radius) < pNearClip)
+				if ((Pos.z + Radius) < lNearClip)
 				{
 					return false;
 				}
 				//ファークリップ面について
-				if ((Pos.z - Radius) > pFarClip)
+				if ((Pos.z - Radius) > lFarClip)
 				{
 					return false;
 				}

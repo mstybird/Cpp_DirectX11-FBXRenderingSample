@@ -30,6 +30,10 @@ public:
 	std::unique_ptr<D3DXMATRIX> GetMatrixWVP(const std::weak_ptr<DXDisplay>pDisplay);
 	std::unique_ptr<D3DXMATRIX> GetMatrixWVP(const std::weak_ptr<D3DXMATRIX>pAddWorldMatrix, const std::weak_ptr<DXDisplay>pDisplay);
 
+
+	void SetWorld(const DXWorld&pWorld);
+	void SetCamera(const DXCamera&pCamera);
+	void SetProjection(const DXProjection&pProjection);
 	std::weak_ptr<DXWorld>GetWorld();
 	std::weak_ptr<DXCamera>GetCamera();
 	std::weak_ptr<DXProjection>GetProjection();

@@ -89,14 +89,34 @@ void MyMSScene::Update() {
 
 	lRayPlane.SetFramePosition(*rMe);
 
+	//Ž‹Ž‘äƒJƒŠƒ“ƒO
 	MSCullingFrustum cf;
-	if (cf.IsCullingWorld(*rMe, *rBox1, D3DXToRadian(30), 1.0f, 100.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT)) {
-		printf("Yes\n");
+
+	if (cf.IsCullingWorld(*rMe, *rBox1, *rMe->GetProjection().lock())) {
+		DXProjection lP;
+		lP.SetViewAngle(45);
+		lP.SetPlaneNear(1.0f);
+		lP.SetPlaneFar(1000.0f);
+
+		if (MSCullingOcculusion::IsCullingWorld(
+			*render, *rMe, lP, rBox1, mdBox,0.05f,
+			[&]() {
+			render->Render(mdField, rBox2);
+		}
+			)) {
+			printf("Occluse\n");
+		}
+		else {
+			printf("NoOccluse\n");
+
+		}
 	}
 	else {
 		printf("\n");
 	}
 	
+
+
 }
 
 void MyMSScene::KeyHold(MSKEY pKey)
@@ -130,6 +150,7 @@ void MyMSScene::KeyHold(MSKEY pKey)
 	default:
 		break;
 	}
+	
 }
 
 void MyMSScene::Render()

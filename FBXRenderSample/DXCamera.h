@@ -35,6 +35,7 @@ public:
 	//w’è‚µ‚½•ªˆÚ“®‚·‚é
 	void Translation(TYPEMOVE pType, float pSpeed, const DXVector3&pDirection, bool pLockoned = false);
 
+	void Clone(DXCamera&pOutClone);
 
 	//ƒJƒƒ‰‚Ì‰ñ“]
 	void Rotate(float pX, float pY, float pZ);

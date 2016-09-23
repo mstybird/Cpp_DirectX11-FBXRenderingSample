@@ -2,6 +2,7 @@
 
 class DX11RenderResource;
 class MSFbxManager;
+class DXProjection;
 //éãêçë‰ÉNÉâÉX
 class MSCullingFrustum {
 public:
@@ -12,9 +13,6 @@ public:
 	bool IsCullingWorld(
 		DX11RenderResource&pCameraResource,
 		DX11RenderResource&pTargetResource,
-		float pAngle,
-		float pNearClip,
-		float pFarClip,
-		float Aspect
+		DXProjection& pProjection
 	);
 };

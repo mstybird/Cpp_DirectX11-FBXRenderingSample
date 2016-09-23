@@ -98,6 +98,7 @@ DirectX11マネージャ
 #include"MSCollisionRayPlane.h"
 
 #include"MSCullingFrustum.h"
+#include"MSCullingOcclusion.h"
 
 #include<memory>
 using std::unique_ptr;

@@ -95,6 +95,15 @@ void DXCamera::Translation(TYPEMOVE pType, float pSpeed,const DXVector3&pDirecti
 	}
 }
 
+void DXCamera::Clone(DXCamera & pOutClone)
+{
+	*pOutClone.mEyePosition = *mEyePosition;
+	*pOutClone.mLookPosition = *mLookPosition;
+	*pOutClone.mRotate = *mRotate;
+	*pOutClone.mUpVector = *mUpVector;
+	*pOutClone.mMatrix = *mMatrix;
+}
+
 
 
 void DXCamera::Rotate(float pX, float pY, float pZ)

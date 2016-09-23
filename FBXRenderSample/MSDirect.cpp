@@ -16,6 +16,8 @@
 #include"DX11Texture.h"
 #include"MSKeyCodeList.h"
 
+//ƒJƒŠƒ“ƒO
+#include"MSCullingOcclusion.h"
 
 #include<D3DX11.h>
 
@@ -47,6 +49,7 @@ MSDirect::~MSDirect() {
 	SAFE_RELEASE(m_pBackBuffer_DSTexDSV);
 	SAFE_RELEASE(m_pBackBuffer_DSTex);
 	SAFE_RELEASE(m_pRasterizerState);
+
 }
 
 LRESULT MSDirect::MessageProcedule(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
@@ -236,6 +239,8 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 	MSFbxManager::InitDevice(m_pDevice, m_pDeviceContext);
 	DXProjection::SetAspect((FLOAT)WINDOW_WIDTH, (FLOAT)WINDOW_HEIGHT);
 	DXTexture::Initialize(m_pDevice);
+
+	MSCullingOcculusion::Initialize(m_pDevice, m_pDeviceContext,m_pSwapChain);
 
 	this->KeyList = MSKeyList;
 
