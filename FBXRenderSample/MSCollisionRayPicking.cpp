@@ -36,8 +36,12 @@ bool MSCollisionRayPicking::GetSlipFlag()
 	return mSlipFlag;
 }
 
+
 bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResource&pRayPosition, DX11RenderResource & pRayTarget, MSFbxManager & pFbxTarget)
 {
+
+	
+
 	using FbxPolygon = std::array<FbxVertex, 3>;
 	using FbxPtrPolygon = std::array<FbxVertex*, 3>;
 
@@ -81,11 +85,6 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 			DXMatrix lGlobalMatrix{ *lMesh->mWorld.get() };
 			//合成
 			lGlobalMatrix = lGlobalMatrix * lResourceMatrix;
-			//逆行列の取得
-			//D3DXMatrixInverse(&invMat, nullptr, &lGlobalMatrix);
-			//レイ始点情報を変換
-			//D3DXVec3TransformCoord(&*mPosBefore, &*mPosBefore, &invMat);
-			//D3DXVec3TransformCoord(&lRayAfterPosition, &lRayAfterPosition, &invMat);
 			//レイ方向を計算
 			D3DXVec3Normalize(&lDirection, &(lRayAfterPosition - *mPosBefore));
 
@@ -102,8 +101,7 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 						lPositionMatrix[i] *= lGlobalMatrix;
 						lPositionMatrix[i].GetT(lPosition[i]);
 					}
-
-
+					int a, b;
 
 
 
@@ -142,16 +140,14 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 								D3DXVec3TransformNormal(&lHitPolygon.second.polygon[i].Normal, &lHitPolygon.second.polygon[i].Normal, &lGlobalMatrix);
 								lHitPolygon.second.polygon[i].Normal.Normalize();
 							}
-
 						}
 					}
 				}
 			}
-
-
 		}
-
 	}
+
+
 	//レイがヒットした場合、それが実際に衝突したか検知する
 
 	//レイがヒットしなかった場合、ここで処理終了。

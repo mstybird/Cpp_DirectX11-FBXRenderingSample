@@ -43,6 +43,7 @@ void MyMSScene::Initialize()
 	lWorld.lock()->SetT(0, 0, 0);
 	lWorld.lock()->SetRC({ 0,0,0 });
 	lWorld.lock()->SetS(0.01f, 0.01f, 0.01f);
+
 	rBox2->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
 	rBox1->GetWorld().lock()->SetT(-15, 0, 0);
 	rBox2->GetWorld().lock()->SetT(-3, -1, 0);

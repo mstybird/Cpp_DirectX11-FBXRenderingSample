@@ -54,6 +54,9 @@ MSDirect::~MSDirect() {
 
 LRESULT MSDirect::MessageProcedule(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
+	
+
+
 	//1‚Â‚Å‚àƒL[‚ª“ü—Í‚³‚ê‚Ä‚¢‚½‚çtrue‚ğ•Ô‚·
 	if (scene.get() != nullptr) {
 
