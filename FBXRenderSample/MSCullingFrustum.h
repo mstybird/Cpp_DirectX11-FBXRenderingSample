@@ -12,7 +12,6 @@ public:
 	*/
 	bool IsCullingWorld(
 		DX11RenderResource&pCameraResource,
-		DX11RenderResource&pTargetResource,
-		DXProjection& pProjection
+		DX11RenderResource&pTargetResource
 	);
 };

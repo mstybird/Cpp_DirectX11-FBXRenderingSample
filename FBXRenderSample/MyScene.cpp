@@ -1,9 +1,10 @@
 #include"MyScene.h"
+#include"MSUtility.h"
 MyMSScene::MyMSScene() :
 	mdBox{ make_shared<MSFbxManager>() },
 	mdField{ make_shared<MSFbxManager>() },
 	rBox1{ make_shared<DX11RenderResource>() },
-	rBox2{ make_shared<DX11RenderResource>() },
+	rField{ make_shared<DX11RenderResource>() },
 	rMe{ make_shared<DX11RenderResource>() },
 	rLook{ make_shared<DX11RenderResource>() },
 	shader{ make_shared<My3DShader>() },
@@ -26,12 +27,14 @@ void MyMSScene::Initialize()
 	//コリジョン生成
 	mdBox->CreateCollisionSphere();
 	//生成したコリジョンを登録
+	mdBox->RegisterCollision(rMe);
 	mdBox->RegisterCollision(rBox1);
-	mdBox->RegisterCollision(rBox2);
+	mdBox->RegisterCollision(rField);
 	//どのシェーダーでレンダリングするか登録
 	render->SetShader(shader);
-	//このリソースをレンダリング用に使う
+	//このリソースにビュー行列と射影行列を追加
 	rMe->InitRenderMatrix();
+	rBox1->InitRenderMatrix();
 	//レンダーにカメラを登録
 	render->SetRenderTarget(rMe);
 
@@ -44,15 +47,22 @@ void MyMSScene::Initialize()
 	lWorld.lock()->SetRC({ 0,0,0 });
 	lWorld.lock()->SetS(0.01f, 0.01f, 0.01f);
 
-	rBox2->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
+	rField->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
 	rBox1->GetWorld().lock()->SetT(-15, 0, 0);
-	rBox2->GetWorld().lock()->SetT(-3, -1, 0);
+	rField->GetWorld().lock()->SetT(-3, -1, 0);
 	rBox1->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
-	rBox2->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
+	rBox1->GetWorld().lock()->SetRC(0, 0, 0);
+	rField->GetWorld().lock()->SetS(0.1f, 0.1f, 0.1f);
 
 
 
 	lView.lock()->SetCamera(rMe->GetWorld(), { 0,20,-10 });
+
+	rBox1->GetCamera().lock()->SetCamera(rBox1->GetWorld(), { 0,0,-5 });
+
+	rBox1->GetProjection().lock()->SetViewAngle(45);
+	rBox1->GetProjection().lock()->SetPlaneNear(0.1f);
+	rBox1->GetProjection().lock()->SetPlaneFar(2000.0f);
 
 	lProjection.lock()->SetViewAngle(45);
 	lProjection.lock()->SetPlaneNear(0.1f);
@@ -67,57 +77,53 @@ void MyMSScene::Initialize()
 
 void MyMSScene::Update() {
 
-	MSCollisionRay lRay;
-	lRay.SetRay(*rMe->GetCamera().lock());
-	if (MSCollisionRay::Collision(lRay, *rMe, *rBox1, *mdBox)) {
-		//レイ
-	}
-	DXVector3 lResult;
-	if (lRayPick.Collision(lResult, *rMe, *rBox2, *mdField)) {
-		//レイピッキング
-		rMe->GetWorld().lock()->SetT(lResult);
-	}
-	//座標の更新
-	lRayPick.SetFramePosition(*rMe);
-	
 
-	if (rBox1->CollisionSphere(rBox2)) {
-		//境界球
-	}
+	rMe->GetCamera().lock()->SetCamera(rMe->GetWorld(), { 0,5,-10});
 
-	rMe->GetCamera().lock()->SetCamera(rMe->GetWorld(), { 0,20,-10});
-
-
-	lRayPlane.SetFramePosition(*rMe);
 
 	//視錘台カリング
 	MSCullingFrustum cf;
 
-	if (cf.IsCullingWorld(*rMe, *rBox1, *rMe->GetProjection().lock())) {
-		DXProjection lP;
-		lP.SetViewAngle(45);
-		lP.SetPlaneNear(1.0f);
-		lP.SetPlaneFar(1000.0f);
-
+	//敵から見てプレイヤーが視界に居るか
+	if (cf.IsCullingWorld(*rBox1, *rMe)) {
 		if (MSCullingOcculusion::IsCullingWorld(
-			*render, *rMe, lP, rBox1, mdBox,0.05f,
+			*render, *rBox1, rMe, mdBox,0.05f,
 			[&]() {
-			render->Render(mdField, rBox2);
+			render->Render(mdField, rField);
 		}
 			)) {
-			printf("Occluse\n");
+
+			float lAng = MSHormingY(*rBox1, *rMe, 1.0f);
+			rBox1->GetWorld().lock()->AddRC(0, lAng, 0);
+			if (IsZero(lAng,0.1f)) {
+				//rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 0.1f, { 0,0,1 });
+
+			}
 		}
 		else {
-			printf("NoOccluse\n");
 
 		}
 	}
-	else {
-		printf("\n");
+
+
+
+}
+
+void MyMSScene::KeyDown(MSKEY pKey)
+{
+	switch (pKey)
+	{
+		case MSKEY::SPACE:
+		{
+			DXVector3 Pos;
+			rMe->GetWorld().lock()->GetMatrix().lock()->GetT(Pos);
+			printf("%3.2f %3.2f %3.2f\n", Pos.x, Pos.y, Pos.z);
+
+		}
+			break;
+		default:
+			break;
 	}
-	
-
-
 }
 
 void MyMSScene::KeyHold(MSKEY pKey)
@@ -156,11 +162,11 @@ void MyMSScene::KeyHold(MSKEY pKey)
 
 void MyMSScene::Render()
 {
-	////画面クリア
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
+	////画面クリア
 	mdBox->Update();
 	render->Render(mdBox, rBox1);
-	render->Render(mdField, rBox2);
+	render->Render(mdField, rField);
 	render->Render(mdBox, rMe);
 
 }

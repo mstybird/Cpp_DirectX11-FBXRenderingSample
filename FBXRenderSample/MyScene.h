@@ -11,6 +11,7 @@ public:
 private:
 	void Initialize();
 	void Update()override;
+	void KeyDown(MSKEY pKey)override;
 	void KeyHold(MSKEY pKey)override;
 	void Render();
 	void Destroy() override {}
@@ -20,7 +21,7 @@ private:
 	std::shared_ptr<MSFbxManager> mdBox;
 	std::shared_ptr<MSFbxManager> mdField;				//モデルデータ
 	std::shared_ptr<DX11RenderResource> rBox1;
-	std::shared_ptr<DX11RenderResource> rBox2;
+	std::shared_ptr<DX11RenderResource> rField;
 	std::shared_ptr<DX11RenderResource> rMe;	//自身
 	std::shared_ptr<DX11RenderResource> rLook;	//自身
 

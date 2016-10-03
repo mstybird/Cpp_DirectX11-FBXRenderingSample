@@ -79,6 +79,24 @@ void MS3DRender::SetRenderTarget(const std::weak_ptr<DX11RenderResource> resourc
 		);
 }
 
+void MS3DRender::SetRenderTarget(DX11RenderResource & resource)
+{
+	display->SetRenderTarget(
+		resource.GetCamera(),
+		resource.GetProjection()
+	);
+}
+
+void MS3DRender::SetRenderTarget(const DXDisplay & aDisplay)
+{
+	*display = aDisplay;
+}
+
+void MS3DRender::GetDisplay(DXDisplay & aOutDisplay)
+{
+	aOutDisplay = *display;
+}
+
 
 
 void MS3DRender::SetShader(const std::shared_ptr<MSBase3DShader> pShader)

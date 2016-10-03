@@ -109,16 +109,11 @@ LRESULT MSDirect::MessageProcedule(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM l
 				wParam:キーコード
 				LOWORD(lp)押しっぱなしかどうか。1でtrue
 			*/
-			//初回の入力
 			if (KeyList[static_cast<MSKEY>(wParam)] == false) {
-				scene->KeyFirst(static_cast<MSKEY>(wParam));
+				scene->KeyDown(static_cast<MSKEY>(wParam));
 				KeyList[static_cast<MSKEY>(wParam)] = true;
 			}
-			//2度目以降の判定
-			else {
-				scene->KeyDown(static_cast<MSKEY>(wParam));
 
-			}
 
 
 			break;

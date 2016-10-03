@@ -12,8 +12,7 @@
 #include"MSCollisionSphere.h"
 bool MSCullingFrustum::IsCullingWorld(
 	DX11RenderResource & pCameraResource, 
-	DX11RenderResource & pTargetResource, 
-	DXProjection& pProjection)
+	DX11RenderResource & pTargetResource)
 {
 	D3DXPLANE VFLeftPlane;
 	D3DXPLANE VFRightPlane;
@@ -53,10 +52,11 @@ bool MSCullingFrustum::IsCullingWorld(
 	c.SetCamera(pCameraResource.GetWorld(), { 0,0,-1 });
 	D3DXVec3TransformCoord(&lTargetPos, &lTargetPos, c.GetMatrix().lock().get());
 
-	float& lFarClip = pProjection.mFar;
-	float& lNearClip = pProjection.mNear;
-	float& lAspect = pProjection.mAspect;
-	float& lAngle = pProjection.mAngle;
+	DXProjection& lEyeProjection = *pCameraResource.GetProjection().lock();
+	float& lFarClip = lEyeProjection.mFar;
+	float& lNearClip = lEyeProjection.mNear;
+	float& lAspect = lEyeProjection.mAspect;
+	float& lAngle = lEyeProjection.mAngle;
 
 	//ç∂âEÅAè„â∫ÇÃïΩñ ÇåvéZ
 	{

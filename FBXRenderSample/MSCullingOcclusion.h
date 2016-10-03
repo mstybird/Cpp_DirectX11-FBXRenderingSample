@@ -6,6 +6,7 @@
 #include"DX11RenderResource.h"
 #include"DXProjection.h"
 #include<memory>
+#include<unordered_map>
 class MSCullingOcculusion abstract{
 public:
 	//視点リソースから見たターゲットのオクルージョン判定
@@ -21,7 +22,6 @@ public:
 	static bool IsCullingWorld(
 		MS3DRender&pRender,
 		DX11RenderResource&pEyeResource,
-		DXProjection&pEyeProjection,
 		const std::weak_ptr<DX11RenderResource>&pTargetResource,
 		const std::weak_ptr<MSFbxManager>&pTargetMesh,
 		float pPixelper,

@@ -19,7 +19,6 @@ public:
 	virtual ~MSSceneBase() {};
 
 	//イベントプロシージャ
-	virtual void KeyFirst(MSKEY pKey) {};
 	virtual void KeyDown(MSKEY pKey) {};
 	virtual void KeyHold(MSKEY pKey) {};
 	virtual void KeyUp(MSKEY pKey) {};

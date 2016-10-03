@@ -102,6 +102,7 @@
     <ClCompile Include="MSCullingFrustum.cpp" />
     <ClCompile Include="MSCullingOcclusion.cpp" />
     <ClCompile Include="MSKeyCodeList.cpp" />
+    <ClCompile Include="MSUtility.cpp" />
     <ClCompile Include="My3DShader.cpp" />
     <ClCompile Include="MSFbxManager.cpp" />
     <ClCompile Include="DX11FbxResource.cpp" />
@@ -135,6 +136,7 @@
     <ClCompile Include="MyScene.cpp" />
     <ClCompile Include="MySprite2DShader.cpp" />
     <ClCompile Include="MySprite3DShader.cpp" />
+    <None Include="Sample.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MSCollisionBase.h" />
@@ -146,6 +148,7 @@
     <ClInclude Include="MSCullingOcclusion.h" />
     <ClInclude Include="MSDebug.h" />
     <ClInclude Include="MSKeyCodeList.h" />
+    <ClInclude Include="MSUtility.h" />
     <ClInclude Include="My3DShader.h" />
     <ClInclude Include="MSSprite2DResource.h" />
     <ClInclude Include="DX11Texture.h" />

@@ -28,6 +28,11 @@ public:
 
 	//描画画面(ビュー行列と射影行列)を設定
 	void SetRenderTarget(const std::weak_ptr<DX11RenderResource>resource);
+	void SetRenderTarget(DX11RenderResource& resource);
+	void SetRenderTarget(const DXDisplay& aDisplay);
+
+	void GetDisplay(DXDisplay&aOutDisplay);
+
 	//シェーダーの登録
 	void SetShader(const std::shared_ptr<MSBase3DShader>pShader);
 protected:

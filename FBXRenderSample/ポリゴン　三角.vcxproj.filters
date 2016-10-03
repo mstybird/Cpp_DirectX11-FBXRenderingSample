@@ -123,6 +123,7 @@
     <ClCompile Include="MSCullingOcclusion.cpp">
       <Filter>MSDirect\MSCulling\Source</Filter>
     </ClCompile>
+    <ClCompile Include="MSUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -266,6 +267,9 @@
     <ClInclude Include="MSCullingOcclusion.h">
       <Filter>MSDirect\MSCulling\Header</Filter>
     </ClInclude>
+    <ClInclude Include="MSUtility.h">
+      <Filter>MSDirect\MSUtility\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -279,6 +283,9 @@
     </None>
     <None Include="ClassDiagram.cd" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="Sample.cxx">
+      <Filter>Reference</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="HLSL">
@@ -406,6 +413,15 @@
     </Filter>
     <Filter Include="MSDirect\MSCulling\Source">
       <UniqueIdentifier>{634ed22c-95d0-4a30-917f-30abe0be6368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\MSUtility">
+      <UniqueIdentifier>{9c34703e-2736-4113-a406-8571bdb72114}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\MSUtility\Header">
+      <UniqueIdentifier>{7a708ea0-80ee-4881-9dcd-449fe5009c0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\MSUtility\Source">
+      <UniqueIdentifier>{cce55552-4b6d-4cf1-90d2-84c5edf8e8a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

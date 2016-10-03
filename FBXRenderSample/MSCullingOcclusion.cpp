@@ -5,6 +5,7 @@
 #include"DXCamera.h"
 #include"DXVector3.h"
 #include"MSDirect.h"
+#include"DXDisplay.h"
 ID3D11RenderTargetView* MSCullingOcculusion::sRTV;
 ID3D11DepthStencilView* MSCullingOcculusion::sDSV;
 ID3D11Texture2D* MSCullingOcculusion::sDS2D;
@@ -17,7 +18,6 @@ IDXGISwapChain*MSCullingOcculusion::sSwapChain;
 bool MSCullingOcculusion::IsCullingWorld(
 	MS3DRender&pRender,
 	DX11RenderResource&pEyeResource,
-	DXProjection&pEyeProjection,
 	const std::weak_ptr<DX11RenderResource>&pTargetResource,
 	const std::weak_ptr<MSFbxManager>&pTargetMesh,
 	float pPixelper,
@@ -35,7 +35,7 @@ bool MSCullingOcculusion::IsCullingWorld(
 	//カメラをワールド行列を使って正面方向に作成する
 	pEyeResource.GetCamera().lock()->SetCamera(pEyeResource.GetWorld(), { 0,0,-1 });
 	//視野を設定
-	pEyeResource.SetProjection(pEyeProjection);
+	//pEyeResource.SetProjection(pEyeProjection);
 
 	//クエリの開始
 	{
@@ -57,20 +57,25 @@ bool MSCullingOcculusion::IsCullingWorld(
 		sDeviceContext->RSSetViewports(1, &vp);
 		sDeviceContext->OMSetRenderTargets(1, &sRTV, sDSV);
 
-		float ClearColor[4] = { 0,0,1,1 };
+		float ClearColor[4] = { 0,0,0,1 };
 		sDeviceContext->ClearRenderTargetView(sRTV, ClearColor);//レンダーターゲットクリア
 		sDeviceContext->ClearDepthStencilView(sDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度ステンシルバッファクリア
 
 		//障害物を描画する処理
+		DXDisplay lTmpDisplay;
+		pRender.GetDisplay(lTmpDisplay);
+		pRender.SetRenderTarget(pEyeResource);
 		pRenderFunc();
+
 
 		//レンダリング判定をする描画
 		BeginOcclusionQuery();
 		pRender.Render(pTargetMesh, pTargetResource);
 		EndOcclusionQuery();
+		pRender.SetRenderTarget(lTmpDisplay);
 		//カメラと視野をもとに戻す
 		pEyeResource.SetCamera(lEyeCameraCopy);
-		pEyeResource.SetProjection(lEyeProjCopy);
+		//pEyeResource.SetProjection(lEyeProjCopy);
 		//描画先を元に戻す
 		sDeviceContext->OMSetRenderTargets(1, &lRTVCopy, lDSVCopy);
 		sDeviceContext->RSSetViewports(1, lMainViewPort);
