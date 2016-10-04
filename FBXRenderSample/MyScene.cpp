@@ -78,11 +78,48 @@ void MyMSScene::Initialize()
 void MyMSScene::Update() {
 
 
-	rMe->GetCamera().lock()->SetCamera(rMe->GetWorld(), { 0,5,-10});
+	rMe->GetCamera().lock()->SetCamera(rMe->GetWorld(), { 0,25,-10});
 
 
 	//視錘台カリング
 	MSCullingFrustum cf;
+
+
+	/*
+	-14.62 0.00 8.58
+8.63 0.00 8.58
+	*/
+
+	static int index = 0;
+	static int pm = 1;
+	static std::vector<DXVector3> CheckPoint = {
+		{-15.00f,0.00f,0.00f},
+		{-14.62f,0.00f,8.58f},
+		{4.63f,0.00f,8.58f}
+	};
+
+
+	float lAng = MSHormingY(*rBox1, CheckPoint[index], 3.0f);
+	rBox1->GetWorld().lock()->AddRC(0, lAng, 0);
+	if (IsZero(lAng, 0.1f)) {
+		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 0.3f, { 0,0,1 });
+		DXVector3 lLength;
+		rBox1->GetWorld().lock()->GetMatrix().lock()->GetT(lLength);
+		lLength = lLength - CheckPoint[index];
+		if (lLength.GetDistance() < 0.5f) {
+
+
+
+			if (pm>0&&index == CheckPoint.size() - 1) {
+				pm *= -1;
+			}else if (pm<0&&index == 0) {
+				pm *= -1;
+			}
+			index += pm;
+			printf("%d\n", index);
+		}
+	}
+
 
 	//敵から見てプレイヤーが視界に居るか
 	if (cf.IsCullingWorld(*rBox1, *rMe)) {
@@ -94,7 +131,7 @@ void MyMSScene::Update() {
 			)) {
 
 			float lAng = MSHormingY(*rBox1, *rMe, 1.0f);
-			rBox1->GetWorld().lock()->AddRC(0, lAng, 0);
+			//rBox1->GetWorld().lock()->AddRC(0, lAng, 0);
 			if (IsZero(lAng,0.1f)) {
 				//rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 0.1f, { 0,0,1 });
 
