@@ -124,6 +124,12 @@
       <Filter>MSDirect\MSCulling\Source</Filter>
     </ClCompile>
     <ClCompile Include="MSUtility.cpp" />
+    <ClCompile Include="AI\Dijkstra.cpp">
+      <Filter>Game\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\EnemyAI.cpp">
+      <Filter>Game\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -269,6 +275,12 @@
     </ClInclude>
     <ClInclude Include="MSUtility.h">
       <Filter>MSDirect\MSUtility\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Dijkstra.h">
+      <Filter>Game\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\EnemyAI.h">
+      <Filter>Game\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -422,6 +434,9 @@
     </Filter>
     <Filter Include="MSDirect\MSUtility\Source">
       <UniqueIdentifier>{cce55552-4b6d-4cf1-90d2-84c5edf8e8a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AI">
+      <UniqueIdentifier>{f3c27f57-97ac-4159-bf26-c270809efff5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

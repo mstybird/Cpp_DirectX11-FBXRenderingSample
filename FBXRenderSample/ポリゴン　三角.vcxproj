@@ -93,6 +93,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AI\Dijkstra.cpp" />
+    <ClCompile Include="AI\EnemyAI.cpp" />
     <ClCompile Include="example_Sprite2D.cpp" />
     <ClCompile Include="MSCollisionBase.cpp" />
     <ClCompile Include="MSCollisionRay.cpp" />
@@ -139,6 +141,8 @@
     <None Include="Sample.cxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AI\Dijkstra.h" />
+    <ClInclude Include="AI\EnemyAI.h" />
     <ClInclude Include="MSCollisionBase.h" />
     <ClInclude Include="MSCollisionRay.h" />
     <ClInclude Include="MSCollisionRayPicking.h" />

@@ -31,5 +31,8 @@ private:
 	std::shared_ptr<MS3DRender> render;
 
 	MSCollisionRayPicking lRayPick;
-	MSCollisionRayPlane lRayPlane;
+	MSCollisionRayPicking lRayPickEnemy;
+
+	EnemyAI ai;
+
 };

@@ -11,7 +11,9 @@ public:
 	static const DXVector3 sZeroVector;
 
 	DXVector3();
+	DXVector3(int pX, int pY, int pZ);
 	DXVector3(float pX, float pY, float pZ);
+	DXVector3(double pX, double pY, double pZ);
 	DXVector3(D3DXVECTOR3 pvector);
 
 

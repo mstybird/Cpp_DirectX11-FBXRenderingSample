@@ -4,6 +4,9 @@
 #include"DXMatrix.h"
 #include"DXVector3.h"
 #include<memory>
+
+//Y軸回転角計算
+//回転角は必ず、pDegree>最終回転角となる
 float MSHormingY(DX11RenderResource & pEyeResource, DX11RenderResource & pTargetResource, const float pDegree)
 {
 	//視点リソースの角度を求める
@@ -58,6 +61,8 @@ float MSHormingY(DX11RenderResource & pEyeResource, DX11RenderResource & pTarget
 	return lResultDegree;
 }
 
+//Y軸回転角計算
+//回転角は必ず、pDegree>最終回転角となる
 float MSHormingY(DX11RenderResource & pEyeResource, DXVector3 & pTargetPos, const float pDegree)
 {
 	//視点リソースの角度を求める
@@ -112,12 +117,14 @@ float MSHormingY(DX11RenderResource & pEyeResource, DXVector3 & pTargetPos, cons
 	return lResultDegree;
 }
 
+//Threshold未満の値を0として計算する
 bool IsZero(float pValue, float Threshold)
 {
 	Threshold = fabsf(Threshold);
 	return pValue<Threshold&&pValue>-Threshold;
 }
 
+//pRyrから見た相対的な角度差を求める
 float MSGetToRotateY(DX11RenderResource & pEyeResource, DX11RenderResource & pTargetResource)
 {
 	//視点リソースの角度を求める
@@ -160,3 +167,4 @@ float MSGetToRotateY(DX11RenderResource & pEyeResource, DX11RenderResource & pTa
 
 	return lResultDegree;
 }
+

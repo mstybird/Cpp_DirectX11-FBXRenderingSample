@@ -9,7 +9,19 @@ DXVector3::DXVector3()
 	z = 0.0f;
 }
 
+DXVector3::DXVector3(int pX, int pY, int pZ):D3DXVECTOR3(pX, pY, pZ)
+{
+}
+
 DXVector3::DXVector3(float pX, float pY, float pZ):D3DXVECTOR3(pX,pY,pZ)
+{
+}
+
+DXVector3::DXVector3(double pX, double pY, double pZ) : 
+	D3DXVECTOR3(
+		(float)pX, 
+		(float)pY,
+		(float)pZ)
 {
 }
 
@@ -218,6 +230,8 @@ DXVector3 DXVector3::operator-(const D3DXVECTOR3 & pSubVector)
 	lResult.z -= pSubVector.z;
 	return lResult;
 }
+
+
 
 DXVector3 & DXVector3::operator-=(const D3DXVECTOR3 & pSubVector)
 {

@@ -12,6 +12,8 @@ bool IsZero(float pValue, float Threshold=0.0000001);
 //視点とターゲットとの相対角度を取得する
 float MSGetToRotateY(DX11RenderResource&pEyeResource, DX11RenderResource&pTargetResource);
 
+
+
 /*
 	やること。
 	チェックポイントを利用した誘導(順番にたどる)

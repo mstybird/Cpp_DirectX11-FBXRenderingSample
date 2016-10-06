@@ -1,4 +1,4 @@
-#include"MyScene.h"
+ï»¿#include"MyScene.h"
 #include"MSUtility.h"
 MyMSScene::MyMSScene() :
 	mdBox{ make_shared<MSFbxManager>() },
@@ -24,18 +24,18 @@ void MyMSScene::Initialize()
 	mdBox->LoadFile("res/box.fbx", false);
 	mdField->LoadFile("res/field.fbx", false);
 
-	//ƒRƒŠƒWƒ‡ƒ“¶¬
+	//ã‚³ãƒªã‚¸ãƒ§ãƒ³ç”Ÿæˆ
 	mdBox->CreateCollisionSphere();
-	//¶¬‚µ‚½ƒRƒŠƒWƒ‡ƒ“‚ğ“o˜^
+	//ç”Ÿæˆã—ãŸã‚³ãƒªã‚¸ãƒ§ãƒ³ã‚’ç™»éŒ²
 	mdBox->RegisterCollision(rMe);
 	mdBox->RegisterCollision(rBox1);
 	mdBox->RegisterCollision(rField);
-	//‚Ç‚ÌƒVƒF[ƒ_[‚ÅƒŒƒ“ƒ_ƒŠƒ“ƒO‚·‚é‚©“o˜^
+	//ã©ã®ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã§ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã™ã‚‹ã‹ç™»éŒ²
 	render->SetShader(shader);
-	//‚±‚ÌƒŠƒ\[ƒX‚Éƒrƒ…[s—ñ‚ÆË‰es—ñ‚ğ’Ç‰Á
+	//ã“ã®ãƒªã‚½ãƒ¼ã‚¹ã«ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ã¨å°„å½±è¡Œåˆ—ã‚’è¿½åŠ 
 	rMe->InitRenderMatrix();
 	rBox1->InitRenderMatrix();
-	//ƒŒƒ“ƒ_[‚ÉƒJƒƒ‰‚ğ“o˜^
+	//ãƒ¬ãƒ³ãƒ€ãƒ¼ã«ã‚«ãƒ¡ãƒ©ã‚’ç™»éŒ²
 	render->SetRenderTarget(rMe);
 
 
@@ -43,7 +43,7 @@ void MyMSScene::Initialize()
 	auto lView = rMe->GetCamera();
 	auto lProjection = rMe->GetProjection();
 
-	lWorld.lock()->SetT(0, 0, 0);
+	lWorld.lock()->SetT(-5, 0, -2);
 	lWorld.lock()->SetRC({ 0,0,0 });
 	lWorld.lock()->SetS(0.01f, 0.01f, 0.01f);
 
@@ -67,61 +67,72 @@ void MyMSScene::Initialize()
 	lProjection.lock()->SetViewAngle(45);
 	lProjection.lock()->SetPlaneNear(0.1f);
 	lProjection.lock()->SetPlaneFar(2000.0f);
-	//‰ŠúˆÊ’u‚ğİ’è
+	//åˆæœŸä½ç½®ã‚’è¨­å®š
 	lRayPick.SetSlipFlag(true);
 	lRayPick.SetFramePosition(*rMe);
-	
-	lRayPlane.SetFramePosition(*rMe);
+	//åˆæœŸä½ç½®ã‚’è¨­å®š
+	lRayPickEnemy.SetSlipFlag(true);
+	lRayPickEnemy.SetFramePosition(*rBox1);
 
+
+
+
+	//AIåˆæœŸåŒ–
+	ai.CreateNodes();
+
+	DXVector3 lPosition;
+	rBox1->GetWorld().lock()->GetMatrix().lock()->GetT(lPosition);
+	auto lNearNode = ai.GetNearNodeList(lPosition)[0];
+	ai.SetStartNode(lNearNode->GetID());
 }
 
 void MyMSScene::Update() {
 
+	printf("Update\n");
 
-	rMe->GetCamera().lock()->SetCamera(rMe->GetWorld(), { 0,25,-10});
+	DXVector3 lResult;
+	if (lRayPick.Collision(lResult, *rMe, *rField, *mdField)) {
+		
+		rMe->GetWorld().lock()->SetT(lResult);
+	}
+	lRayPick.SetFramePosition(*rMe);
+	rMe->GetCamera().lock()->SetCamera(rMe->GetWorld(), { 0,25,-10 });
 
 
-	//‹‘äƒJƒŠƒ“ƒO
+
+	//è¦–éŒ˜å°ã‚«ãƒªãƒ³ã‚°
 	MSCullingFrustum cf;
 
 
-	/*
-	-14.62 0.00 8.58
-8.63 0.00 8.58
-	*/
 
-	static int index = 0;
-	static int pm = 1;
-	static std::vector<DXVector3> CheckPoint = {
-		{-15.00f,0.00f,0.00f},
-		{-14.62f,0.00f,8.58f},
-		{4.63f,0.00f,8.58f}
-	};
-
-
-	float lAng = MSHormingY(*rBox1, CheckPoint[index], 3.0f);
+	//ãƒ«ãƒ¼ãƒˆãŒãªã„å ´åˆ
+	if (ai.IsRootEmpty() == true) {
+		//ãƒ«ãƒ¼ãƒˆã‚’ç”Ÿæˆã™ã‚‹
+		ai.CreateNextRoot(false);
+	}
+	MyNode*lAINode;
+	ai.GetFrontNode(lAINode);
+	float lAng = MSHormingY(*rBox1, lAINode->Position, 15.0f);
 	rBox1->GetWorld().lock()->AddRC(0, lAng, 0);
-	if (IsZero(lAng, 0.1f)) {
-		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 0.3f, { 0,0,1 });
+	if (IsZero(lAng, 5.1f)) {
+		rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 0.1f, { 0,0,1 });
 		DXVector3 lLength;
 		rBox1->GetWorld().lock()->GetMatrix().lock()->GetT(lLength);
-		lLength = lLength - CheckPoint[index];
+		lLength = lLength - lAINode->Position;
 		if (lLength.GetDistance() < 0.5f) {
-
-
-
-			if (pm>0&&index == CheckPoint.size() - 1) {
-				pm *= -1;
-			}else if (pm<0&&index == 0) {
-				pm *= -1;
-			}
-			index += pm;
-			printf("%d\n", index);
+			printf("%d\n", lAINode->GetID());
+			ai.SetNextNode();
 		}
 	}
 
+	if (lRayPickEnemy.Collision(lResult, *rBox1, *rField, *mdField)) {
+		rBox1->GetWorld().lock()->SetT(lResult);
+	}
+	lRayPickEnemy.SetFramePosition(*rBox1);
 
-	//“G‚©‚çŒ©‚ÄƒvƒŒƒCƒ„[‚ª‹ŠE‚É‹‚é‚©
+
+
+	//æ•µã‹ã‚‰è¦‹ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒè¦–ç•Œã«å±…ã‚‹ã‹
 	if (cf.IsCullingWorld(*rBox1, *rMe)) {
 		if (MSCullingOcculusion::IsCullingWorld(
 			*render, *rBox1, rMe, mdBox,0.05f,
@@ -148,14 +159,16 @@ void MyMSScene::Update() {
 
 void MyMSScene::KeyDown(MSKEY pKey)
 {
+	printf("Key\n");
+
 	switch (pKey)
 	{
 		case MSKEY::SPACE:
 		{
 			DXVector3 Pos;
-			rMe->GetWorld().lock()->GetMatrix().lock()->GetT(Pos);
-			printf("%3.2f %3.2f %3.2f\n", Pos.x, Pos.y, Pos.z);
-
+			/*rMe->GetWorld().lock()->GetMatrix().lock()->GetT(Pos);
+			printf("%3.2f, %3.2f, %3.2f\n", Pos.x, Pos.y, Pos.z);
+*/
 		}
 			break;
 		default:
@@ -200,7 +213,7 @@ void MyMSScene::KeyHold(MSKEY pKey)
 void MyMSScene::Render()
 {
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
-	////‰æ–ÊƒNƒŠƒA
+	////ç”»é¢ã‚¯ãƒªã‚¢
 	mdBox->Update();
 	render->Render(mdBox, rBox1);
 	render->Render(mdField, rField);
@@ -209,10 +222,10 @@ void MyMSScene::Render()
 }
 
 /*
-	ƒ^ƒXƒN‘±‚«
-		ƒrƒ‹ƒ{[ƒhÀ‘•
-		ƒXƒvƒ‰ƒCƒg‚Ì‰ñ“]À‘•
-		ƒCƒxƒ“ƒgƒƒ\ƒbƒh‘‚«‘«‚µ
-		ƒ_ƒCƒiƒ~ƒNƒXÀ‘•
+	ã‚¿ã‚¹ã‚¯ç¶šã
+		ãƒ“ãƒ«ãƒœãƒ¼ãƒ‰å®Ÿè£…
+		ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®å›è»¢å®Ÿè£…
+		ã‚¤ãƒ™ãƒ³ãƒˆãƒ¡ã‚½ãƒƒãƒ‰æ›¸ãè¶³ã—
+		ãƒ€ã‚¤ãƒŠãƒŸã‚¯ã‚¹å®Ÿè£…
 */
 

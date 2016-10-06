@@ -16,6 +16,7 @@ namespace Collisions {
 	}
 
 	//レイピッキング
+	//物体の座標移動を含むのでカメラの設定はこの後に行うこと
 	void RayPicking() {
 		//直前フレームの座標が必要なので使いまわすように
 
@@ -26,7 +27,7 @@ namespace Collisions {
 		lRay.SetSlipFlag(true);
 		//最初のフレームを設定
 		lRay.SetFramePosition(lEye);
-
+		//lEye(座標)更新処理
 		if (lRay.Collision(lResult, lEye, lTarget, lTargetModel)) {
 			//ヒット時の処理
 			//大抵は押し戻す処理など
