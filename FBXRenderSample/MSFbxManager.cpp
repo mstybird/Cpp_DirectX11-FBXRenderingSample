@@ -19,6 +19,8 @@ MSFbxManager::MSFbxManager() :
 
 MSFbxManager::~MSFbxManager()
 {
+	FbxTime f;
+	
 	Release();
 	FBX_SAFE_DELETE(mLoader);
 }
@@ -46,7 +48,8 @@ void MSFbxManager::LoadFile(std::string pFileName, bool animationLoad)
 	}
 	mLoader->FbxInit(pFileName,animationLoad);
 	mAnimationFlag = animationLoad;
-	mMeshData = mLoader->GetGeometryData2();
+
+	mMeshData = mLoader->GetGeometryData2(mLoader->GetStartFrame());
 
 	//バッファリソースの作成
 	//メッシュの数取得
@@ -92,7 +95,7 @@ void MSFbxManager::LoadFile(std::string pFileName, bool animationLoad)
 	} 
 
 	//アニメーションしない場合はこの時点でメッシュデータを作成しておく
-	if (mAnimationFlag == false) {
+	if (true) {
 
 		for (unsigned int i = 0; i < mMeshData->size(); i++) {
 			for (unsigned int j = 0; j < mMeshData->at(i)->subMesh.size(); j++) {
@@ -114,11 +117,11 @@ void MSFbxManager::LoadFile(std::string pFileName, bool animationLoad)
 
 }
 
-void MSFbxManager::Update()
+bool MSFbxManager::Update(FbxTime& mCurrentFrame)
 {
 	//アニメーションしない場合は更新処理不要
-	if (mAnimationFlag == false)return;
-	mMeshData = mLoader->GetGeometryData2();
+	if (mAnimationFlag == false)return false;
+	mMeshData = mLoader->GetGeometryData2(mCurrentFrame);
 
 	for (unsigned int i = 0; i < mVertexBuffer.size(); i++) {
 		for (unsigned int j = 0; j < mVertexBuffer.at(i).size(); j++) {
@@ -127,7 +130,14 @@ void MSFbxManager::Update()
 		}
 	}
 
+	
+	mVertexBuffer.clear();
+	mIndexBuffer.clear();
+	mVertexBuffer.resize(mMeshVBDesc.size());
+	mIndexBuffer.resize(mMeshIBDesc.size());
 	for (unsigned int i = 0; i < mMeshData->size(); i++) {
+		mVertexBuffer[i].resize(mMeshVBDesc[i].size());
+		mIndexBuffer[i].resize(mMeshIBDesc[i].size());
 		for (unsigned int j = 0; j < mMeshData->at(i)->subMesh.size(); j++) {
 
 			D3D11_SUBRESOURCE_DATA InitData;
@@ -141,6 +151,7 @@ void MSFbxManager::Update()
 			sDevice->CreateBuffer(&mMeshIBDesc[i][j], &InitData, &mIndexBuffer[i][j]);
 		}
 	}
+	return true;
 }
 
 
@@ -189,7 +200,9 @@ void MSFbxManager::CreateCollisionSphere()
 }
 
 void MSFbxManager::RegisterCollision(const std::shared_ptr<DX11RenderResource>&pResource) {
-	pResource->SetCollisionSphere(mCollisions);
+	if (mCollisions->size() > 0) {
+		pResource->SetCollisionSphere(mCollisions);
+	}
 }
 
 ID3D11Buffer * MSFbxManager::GetVertexBuffer(int i, int j)
@@ -208,5 +221,19 @@ unsigned int * MSFbxManager::GetIndexBufferCount(int i,int j)
 	return &mMeshData->at(i)->subMesh.at(j)->IndexLength;
 }
 
+std::vector<std::shared_ptr<FBXMesh>> MSFbxManager::MoveMeshData() {
+	return std::move(*mMeshData);
+}
 
+std::vector<std::vector<ID3D11Buffer*>> MSFbxManager::MoveVertexBuffer() {
+	return std::move(mVertexBuffer);
+}
+
+std::vector<std::vector<ID3D11Buffer*>> MSFbxManager::MoveIndexBuffer() {
+	return std::move(mIndexBuffer);
+}
+
+bool MSFbxManager::IsCreatedMeshData() {
+	return mMeshData->size() != 0;
+}
 

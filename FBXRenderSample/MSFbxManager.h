@@ -1,5 +1,6 @@
 #pragma once
 
+#include<fbxsdk.h>
 #include<D3DX11.h>
 #include<string>
 #include<vector>
@@ -13,8 +14,10 @@ class DX11FbxLoader;
 class DXVector3;
 class MSCollisionSphere;
 class DX11RenderResource;
+class MSFbxObject;
 class MSFbxManager {
 public:
+	friend class MSFbxObject;
 	MSFbxManager();
 	~MSFbxManager();
 
@@ -30,7 +33,7 @@ public:
 	void LoadAnimationFromFile(std::string vfileName);
 
 	//メッシュの更新(毎フレーム必要)
-	void Update();
+	bool Update(FbxTime& mCurrentFrame);
 
 	//解放処理
 	void Release();
@@ -46,6 +49,13 @@ public:
 	ID3D11Buffer*GetIndexBuffer(int i, int j);
 	unsigned int*GetIndexBufferCount(int i,int j);
 
+	//これらのメソッドはムーブするので使用後、このクラスの各インスタンスは空になる
+	std::vector<std::shared_ptr<FBXMesh>> MoveMeshData();
+	std::vector<std::vector<ID3D11Buffer*>>MoveVertexBuffer();
+	std::vector<std::vector<ID3D11Buffer*>>MoveIndexBuffer();
+
+	//生成済みのメッシュがあるかどうか
+	bool IsCreatedMeshData();
 private:
 	//バッファリソースを確保する
 	void CreateBuffer();

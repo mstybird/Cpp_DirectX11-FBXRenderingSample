@@ -37,7 +37,7 @@ bool MSCollisionRayPicking::GetSlipFlag()
 }
 
 
-bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResource&pRayPosition, DX11RenderResource & pRayTarget, MSFbxManager & pFbxTarget)
+bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResource&pRayPosition, DX11RenderResource & pRayTarget)
 {
 
 	
@@ -73,11 +73,11 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 		pRayPosition.GetWorld().lock()->GetMatrix().lock()->GetT(lRayAfterPosition);
 
 		
-		auto lMeshList = pFbxTarget.GetMeshData();
+		auto lMeshList = pRayTarget.mMesh.mMeshData;
 		//移動方向にポリゴンがあるかチェック
 		//ここでレイがヒットする一番近いポリゴンを取得する
 		DXVector3 lTmpPosBefore = *mPosBefore;
-		for (auto&lMesh : *lMeshList) {
+		for (auto&lMesh : lMeshList) {
 			
 			*mPosBefore = lTmpPosBefore;
 			//変換行列の合成

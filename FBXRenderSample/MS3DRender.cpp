@@ -32,7 +32,7 @@ void MS3DRender::Clear(D3DXVECTOR4 pColor)
 
 
 
-void MS3DRender::Render(const std::weak_ptr<MSFbxManager>fbxManager, const std::weak_ptr<DX11RenderResource>resource)
+void MS3DRender::Render(const std::weak_ptr<DX11RenderResource>resource)
 {
 	//shader->SetConstantBuffer1(resource,&display);
 	//シェーダの設定
@@ -41,24 +41,27 @@ void MS3DRender::Render(const std::weak_ptr<MSFbxManager>fbxManager, const std::
 	//プリミティブトポロジーの登録
 	sDeviceContext->IASetPrimitiveTopology(mPrimitiveTopology);
 
-	auto meshData = fbxManager.lock()->GetMeshData();
+	auto& meshData = resource.lock()->mMesh.mMeshData;
+
+	//auto meshData = fbxManager.lock()->GetMeshData();
 	//メッシュの個数分
-	for (unsigned int i = 0; i < meshData->size(); i++) {
+	for (unsigned int i = 0; i < meshData.size(); i++) {
 		//メッシュ単位の設定
-		shader.lock()->SetConstantBuffer1(meshData->at(i), resource, display);
+		shader.lock()->SetConstantBuffer1(meshData.at(i), resource, display);
 		//全てのメッシュに対して共通のデータを登録
 		sDeviceContext->VSSetConstantBuffers(0, 1, shader.lock()->GetCB1());
 		sDeviceContext->PSSetConstantBuffers(0, 1, shader.lock()->GetCB1());
 		//サブメッシュの個数分
-		for (unsigned int j = 0; j < meshData->at(i)->subMesh.size(); j++) {
-			shader.lock()->SetConstantBuffer2(meshData->at(i)->subMesh.at(j));
+		for (unsigned int j = 0; j < meshData.at(i)->subMesh.size(); j++) {
+			shader.lock()->SetConstantBuffer2(meshData.at(i)->subMesh.at(j));
 			sDeviceContext->VSSetConstantBuffers(1, 1, shader.lock()->GetCB2());
 			sDeviceContext->PSSetConstantBuffers(1, 1, shader.lock()->GetCB2());
 			UINT stride = shader.lock()->GetVertexSize();
 			UINT offset = 0;
-			ID3D11Buffer* lVertexBuffer = fbxManager.lock()->GetVertexBuffer(i, j);
-			ID3D11Buffer* lIndexBuffer = fbxManager.lock()->GetIndexBuffer(i, j);
-			unsigned int* indexLength = fbxManager.lock()->GetIndexBufferCount(i, j);
+			ID3D11Buffer* lVertexBuffer = resource.lock()->mMesh.mVertexBuffer[i][j];
+			ID3D11Buffer* lIndexBuffer = resource.lock()->mMesh.mIndexBuffer[i][j];
+			unsigned int* indexLength = resource.lock()->mMesh.GetIndexBufferCount(i, j);
+
 			sDeviceContext->IASetVertexBuffers(0, 1, &lVertexBuffer, &stride, &offset);
 			stride = sizeof(int);
 			offset = 0;

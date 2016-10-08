@@ -21,15 +21,15 @@ void MyMSScene::Initialize()
 	shader->InitVertex("Simple.hlsl");
 	shader->InitPixel("Simple.hlsl");
 
-	mdBox->LoadFile("res/box.fbx", false);
+	mdBox->LoadFile("res/humanoid2.fbx", true);
 	mdField->LoadFile("res/field.fbx", false);
 
-	//コリジョン生成
-	mdBox->CreateCollisionSphere();
-	//生成したコリジョンを登録
-	mdBox->RegisterCollision(rMe);
-	mdBox->RegisterCollision(rBox1);
-	mdBox->RegisterCollision(rField);
+	//リソースにオブジェクトを登録
+	rMe->mMesh.Initialize(*mdBox);
+	rBox1->mMesh.Initialize(*mdBox);
+	rField->mMesh.Initialize(*mdField);
+
+	//タスク:メッシュにコリジョン生成機能をつける
 	//どのシェーダーでレンダリングするか登録
 	render->SetShader(shader);
 	//このリソースにビュー行列と射影行列を追加
@@ -43,9 +43,9 @@ void MyMSScene::Initialize()
 	auto lView = rMe->GetCamera();
 	auto lProjection = rMe->GetProjection();
 
-	lWorld.lock()->SetT(-5, 0, -2);
+	lWorld.lock()->SetT(-5, 0, -8);
 	lWorld.lock()->SetRC({ 0,0,0 });
-	lWorld.lock()->SetS(0.01f, 0.01f, 0.01f);
+	lWorld.lock()->SetS(0.03f, 0.03f, 0.03f);
 
 	rField->GetWorld().lock()->SetS(0.01f, 0.01f, 0.01f);
 	rBox1->GetWorld().lock()->SetT(-15, 0, 0);
@@ -88,10 +88,13 @@ void MyMSScene::Initialize()
 
 void MyMSScene::Update() {
 
-	printf("Update\n");
+	rMe->mMesh.NextFrame();
+	rMe->mMesh.Update();
+	rBox1->mMesh.NextFrame();
+	rBox1->mMesh.Update();
 
 	DXVector3 lResult;
-	if (lRayPick.Collision(lResult, *rMe, *rField, *mdField)) {
+	if (lRayPick.Collision(lResult, *rMe, *rField)) {
 		
 		rMe->GetWorld().lock()->SetT(lResult);
 	}
@@ -111,6 +114,7 @@ void MyMSScene::Update() {
 		ai.CreateNextRoot(false);
 	}
 	MyNode*lAINode;
+	static int count = 0;
 	ai.GetFrontNode(lAINode);
 	float lAng = MSHormingY(*rBox1, lAINode->Position, 15.0f);
 	rBox1->GetWorld().lock()->AddRC(0, lAng, 0);
@@ -121,37 +125,44 @@ void MyMSScene::Update() {
 		lLength = lLength - lAINode->Position;
 		if (lLength.GetDistance() < 0.5f) {
 			printf("%d\n", lAINode->GetID());
+			if (lAINode->GetID() == 1) {
+				++count;
+			}
 			ai.SetNextNode();
 		}
 	}
 
-	if (lRayPickEnemy.Collision(lResult, *rBox1, *rField, *mdField)) {
+	if (lRayPickEnemy.Collision(lResult, *rBox1, *rField)) {
 		rBox1->GetWorld().lock()->SetT(lResult);
 	}
 	lRayPickEnemy.SetFramePosition(*rBox1);
 
+	if (count == 3) {
+		printf("%d\n", count);
 
-
-	//敵から見てプレイヤーが視界に居るか
-	if (cf.IsCullingWorld(*rBox1, *rMe)) {
-		if (MSCullingOcculusion::IsCullingWorld(
-			*render, *rBox1, rMe, mdBox,0.05f,
-			[&]() {
-			render->Render(mdField, rField);
-		}
-			)) {
-
-			float lAng = MSHormingY(*rBox1, *rMe, 1.0f);
-			//rBox1->GetWorld().lock()->AddRC(0, lAng, 0);
-			if (IsZero(lAng,0.1f)) {
-				//rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 0.1f, { 0,0,1 });
-
-			}
-		}
-		else {
-
-		}
 	}
+
+	//rMeにはコリジョンが入っている
+	//敵から見てプレイヤーが視界に居るか
+	//if (cf.IsCullingWorld(*rBox1, *rMe)) {
+	//	if (MSCullingOcculusion::IsCullingWorld(
+	//		*render, *rBox1, rMe,0.05f,
+	//		[&]() {
+	//		render->Render(rField);
+	//	}
+	//		)) {
+
+	//		float lAng = MSHormingY(*rBox1, *rMe, 1.0f);
+	//		//rBox1->GetWorld().lock()->AddRC(0, lAng, 0);
+	//		if (IsZero(lAng,0.1f)) {
+	//			//rBox1->GetWorld().lock()->AddT(DXWorld::TYPE_ROTATE, 0.1f, { 0,0,1 });
+
+	//		}
+	//	}
+	//	else {
+
+	//	}
+	//}
 
 
 
@@ -214,10 +225,10 @@ void MyMSScene::Render()
 {
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	////画面クリア
-	mdBox->Update();
-	render->Render(mdBox, rBox1);
-	render->Render(mdField, rField);
-	render->Render(mdBox, rMe);
+	//mdBox->Update();
+	render->Render(rBox1);
+	render->Render(rField);
+	render->Render(rMe);
 
 }
 

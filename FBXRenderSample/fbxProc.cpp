@@ -452,7 +452,7 @@ void DX11FbxLoader::SetAnimation(int pIndex)
 }
 
 
-std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometryData2()
+std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometryData2(FbxTime&aCurrentTime)
 {
 	//メッシュデータの解放
 	ReleaseGeometryData();
@@ -465,15 +465,6 @@ std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometr
 	FbxAMatrix lDummyGlobalPosition;
 
 
-	if (Stop > Start)
-	{
-		CurrentTime += FrameTime;
-
-		if (CurrentTime > Stop)
-		{
-			CurrentTime = Start;
-		}
-	}
 
 	//メッシュの数だけ配列作成
 	mMesh = std::make_shared<std::vector<std::shared_ptr<FBXMesh>>>();
@@ -491,7 +482,7 @@ std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometr
 		FbxNode* node = nodemeshes[i];
 		FbxAMatrix lGlobalPosition;
 
-		FbxComputeDeformer::GetGlobalPosition(lGlobalPosition, node, CurrentTime, lPose, &lDummyGlobalPosition);
+		FbxComputeDeformer::GetGlobalPosition(lGlobalPosition, node, aCurrentTime, lPose, &lDummyGlobalPosition);
 		
 		FbxAMatrix lGeometryOffset;
 		FbxAMatrix lGlobalOffPosition;
@@ -550,13 +541,13 @@ std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometr
 		if (lHasDeformation) {
 
 			if (lHasVertexCache) {
-				FbxComputeDeformer::ReadVertexCacheData(lMesh, CurrentTime, lVertexArray);
+				FbxComputeDeformer::ReadVertexCacheData(lMesh, aCurrentTime, lVertexArray);
 			}
 			else {
 				if (lHasShape)
 				{
 					// Deform the vertex array with the shapes.
-					FbxComputeDeformer::ComputeShapeDeformation(lMesh, CurrentTime, CurrentAnimLayer, lVertexArray);
+					FbxComputeDeformer::ComputeShapeDeformation(lMesh, aCurrentTime, CurrentAnimLayer, lVertexArray);
 				}
 				//we need to get the number of clusters
 				const int lSkinCount = lMesh->GetDeformerCount(FbxDeformer::eSkin);
@@ -568,7 +559,7 @@ std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometr
 				if (lClusterCount)
 				{
 					// Deform the vertex array with the skin deformer.
-					FbxComputeDeformer::ComputeSkinDeformation(lGlobalOffPosition, lMesh, CurrentTime, lVertexArray, lPose);
+					FbxComputeDeformer::ComputeSkinDeformation(lGlobalOffPosition, lMesh, aCurrentTime, lVertexArray, lPose);
 
 				}
 
@@ -818,8 +809,6 @@ bool DX11FbxLoader::SetCurrentAnimStack(int pIndex)
 	if (Cache_Stop  > Stop)
 		Stop = Cache_Stop;
 
-	//スタート時間を設定しておく
-	CurrentTime = Start;
 	return true;
 }
 

@@ -24,8 +24,7 @@ public:
 	bool Collision(
 		DXVector3&pResultPosition,
 		DX11RenderResource&pRayPosition,
-		DX11RenderResource&pRayTarget,
-		MSFbxManager&pFbxTarget
+		DX11RenderResource&pRayTarget
 		);
 private:
 	//ŠŠ‚ç‚¹‚é‚©‚Ç‚¤‚©

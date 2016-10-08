@@ -251,7 +251,7 @@ void MSDirect::Loop()
 
 	scene->Update();
 	scene->Render();
-	m_pSwapChain->Present(1, 0);
+	m_pSwapChain->Present(0, 0);
 }
 
 void MSDirect::SetScene(std::unique_ptr<MSSceneBase>&& pScene)
@@ -265,6 +265,16 @@ void MSDirect::SetScene(std::unique_ptr<MSSceneBase>&& pScene)
 D3D11_VIEWPORT * MSDirect::GetViewPort()
 {
 	return &sMSDirect->mViewPort;
+}
+
+ID3D11RenderTargetView * MSDirect::GetRTV()
+{
+	return sMSDirect->m_pBackBuffer_TexRTV;
+}
+
+ID3D11DepthStencilView * MSDirect::GetDSV()
+{
+	return sMSDirect->m_pBackBuffer_DSTexDSV;
 }
 
 ID3D11Device * MSDirect::GetDevice()

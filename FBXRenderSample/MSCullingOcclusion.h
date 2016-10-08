@@ -23,7 +23,6 @@ public:
 		MS3DRender&pRender,
 		DX11RenderResource&pEyeResource,
 		const std::weak_ptr<DX11RenderResource>&pTargetResource,
-		const std::weak_ptr<MSFbxManager>&pTargetMesh,
 		float pPixelper,
 		std::function<void(void)>pRenderFunc
 		);

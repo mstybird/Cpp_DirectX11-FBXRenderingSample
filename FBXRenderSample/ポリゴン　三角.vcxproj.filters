@@ -130,6 +130,7 @@
     <ClCompile Include="AI\EnemyAI.cpp">
       <Filter>Game\AI</Filter>
     </ClCompile>
+    <ClCompile Include="MSFbxObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -281,6 +282,12 @@
     </ClInclude>
     <ClInclude Include="AI\EnemyAI.h">
       <Filter>Game\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterBase.h">
+      <Filter>Game\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="MSFbxObject.h">
+      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

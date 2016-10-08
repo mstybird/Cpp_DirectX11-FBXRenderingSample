@@ -20,9 +20,9 @@ typedef std::tr1::unordered_map<std::string, std::vector<std::string>> TextureNa
 #include"FbxVBO.h"
 #include"FbxMaterialCache.h"
 #include"FbxComputeDeformer.h"
-
+class MSFbxObject;
 class DX11FbxLoader {
-
+	friend class MSFbxObject;
 public:
 	//解放処理用
 	DX11FbxLoader();
@@ -36,7 +36,7 @@ public:
 	//FBXクラス解放
 	void FbxDestroy();
 	//メッシュデータを取得する
-	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> GetGeometryData2();
+	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> GetGeometryData2(FbxTime&aCurrentTime);
 	void GetMeshCount(std::vector<int>&pCountVector);
 	void GetMeshVertexCount(std::vector<std::vector<int>>&pCountVector);
 	void GetMeshIndexCount(std::vector<std::vector<int>>&pCountVector);
@@ -44,6 +44,9 @@ public:
 	void SetAnimation(std::string pName);
 	void SetAnimation(int pIndex);
 
+	FbxTime GetStartFrame() {
+		return Start;
+	}
 private:
 	//FBXファイル読み込み
 	void FbxLoadFromFile();	
@@ -75,6 +78,9 @@ private:
 	//	void SetSelectNode(FbxNode*pSelectedNode);
 
 	void ReleaseGeometryData();
+
+
+
 private:
 
 	//メンバ宣言部分
@@ -98,7 +104,7 @@ private:
 	//アニメーション情報
 	bool EnableAnimation;	//アニメーションが有効かどうか
 	FbxAnimLayer * CurrentAnimLayer;	//FBXアニメーション
-	FbxTime FrameTime, Start, Stop, CurrentTime;
+	FbxTime FrameTime, Start, Stop;
 
 
 	std::unordered_map<std::string, int>AnimData;		//アニメーションスタック

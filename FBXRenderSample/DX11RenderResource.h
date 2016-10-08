@@ -9,6 +9,7 @@
 
 
 */
+#include"MSFbxObject.h"
 #include<memory>
 #include<vector>
 class DXDisplay;
@@ -43,6 +44,7 @@ public:
 	//指定したリソースとの衝突判定
 	bool CollisionSphere( std::shared_ptr<DX11RenderResource>&pResource);
 	void GetCollisionSphere(std::weak_ptr<std::vector<std::vector<MSCollisionSphere>>>&pOutCollisions);
+	MSFbxObject mMesh;
 private:
 	//ワールド行列
 	std::shared_ptr<DXWorld>mWorld;
@@ -52,4 +54,7 @@ private:
 	std::shared_ptr<DXProjection>mProj;
 	//境界球コリジョン参照
 	std::weak_ptr<std::vector<std::vector<MSCollisionSphere>>>mCollisions;
+
+
+
 };

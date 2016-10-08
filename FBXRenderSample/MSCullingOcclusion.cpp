@@ -19,7 +19,6 @@ bool MSCullingOcculusion::IsCullingWorld(
 	MS3DRender&pRender,
 	DX11RenderResource&pEyeResource,
 	const std::weak_ptr<DX11RenderResource>&pTargetResource,
-	const std::weak_ptr<MSFbxManager>&pTargetMesh,
 	float pPixelper,
 	std::function<void(void)>pRenderFunc
 	)
@@ -44,7 +43,8 @@ bool MSCullingOcculusion::IsCullingWorld(
 		ID3D11RenderTargetView* lRTVCopy;
 		ID3D11DepthStencilView* lDSVCopy;
 		D3D11_VIEWPORT* lMainViewPort = MSDirect::GetViewPort();
-		sDeviceContext->OMGetRenderTargets(1, &lRTVCopy, &lDSVCopy);
+		lRTVCopy = MSDirect::GetRTV();
+		lDSVCopy = MSDirect::GetDSV();
 
 
 		D3D11_VIEWPORT vp;
@@ -54,12 +54,14 @@ bool MSCullingOcculusion::IsCullingWorld(
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
-		sDeviceContext->RSSetViewports(1, &vp);
-		sDeviceContext->OMSetRenderTargets(1, &sRTV, sDSV);
+		//sDeviceContext->RSSetViewports(1, &vp);
+		//sDeviceContext->OMSetRenderTargets(1, &sRTV, sDSV);
 
-		float ClearColor[4] = { 0,0,0,1 };
-		sDeviceContext->ClearRenderTargetView(sRTV, ClearColor);//レンダーターゲットクリア
-		sDeviceContext->ClearDepthStencilView(sDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度ステンシルバッファクリア
+
+
+		//float ClearColor[4] = { 0,0,0,1 };
+		//sDeviceContext->ClearRenderTargetView(sRTV, ClearColor);//レンダーターゲットクリア
+		//sDeviceContext->ClearDepthStencilView(sDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度ステンシルバッファクリア
 
 		//障害物を描画する処理
 		DXDisplay lTmpDisplay;
@@ -70,21 +72,30 @@ bool MSCullingOcculusion::IsCullingWorld(
 
 		//レンダリング判定をする描画
 		BeginOcclusionQuery();
-		pRender.Render(pTargetMesh, pTargetResource);
+		pRender.Render(pTargetResource);
 		EndOcclusionQuery();
 		pRender.SetRenderTarget(lTmpDisplay);
 		//カメラと視野をもとに戻す
 		pEyeResource.SetCamera(lEyeCameraCopy);
 		//pEyeResource.SetProjection(lEyeProjCopy);
 		//描画先を元に戻す
-		sDeviceContext->OMSetRenderTargets(1, &lRTVCopy, lDSVCopy);
-		sDeviceContext->RSSetViewports(1, lMainViewPort);
+		//sDeviceContext->OMSetRenderTargets(1, &lRTVCopy, lDSVCopy);
+		//sDeviceContext->RSSetViewports(1, lMainViewPort);
 
+		lRTVCopy->Release();
+		lDSVCopy->Release();
 
 	}
 	UINT64 lDrawPixels{};
+	//指定数以上ループした場合、強制で抜ける
+	unsigned int lLoopCount = 0;
 	//ピクセル数を取得
-	while (S_OK != sDeviceContext->GetData(sOcculusionQuery, (void*)&lDrawPixels, sizeof(UINT64), 0));
+	while (S_OK != sDeviceContext->GetData(sOcculusionQuery, (void*)&lDrawPixels, sizeof(UINT64), 0)) {
+		if (++lLoopCount > 500) {
+			break;
+		}
+	}
+	
 
 	//見えたと判定する必要なピクセル数の計算
 	UINT64 lCheckPixels = (float)(640 * 480)*pPixelper;
@@ -135,6 +146,8 @@ void MSCullingOcculusion::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext
 void MSCullingOcculusion::CreateOcclusionQuery()
 {
 	D3D11_QUERY_DESC lQueryDesc{};
+	ZeroMemory(&lQueryDesc, sizeof(D3D11_QUERY_DESC));
+
 	lQueryDesc.Query = D3D11_QUERY_OCCLUSION;
 	sDevice->CreateQuery(&lQueryDesc, &sOcculusionQuery);
 }
