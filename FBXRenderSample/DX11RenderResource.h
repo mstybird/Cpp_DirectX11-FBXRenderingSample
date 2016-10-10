@@ -28,8 +28,8 @@ public:
 	std::weak_ptr<D3DXMATRIX>GetMatrixWorld();
 	std::weak_ptr<D3DXMATRIX>GetMatrixView();
 	std::weak_ptr<D3DXMATRIX>GetMatrixProjection();
-	std::unique_ptr<D3DXMATRIX> GetMatrixWVP(const std::weak_ptr<DXDisplay>pDisplay);
-	std::unique_ptr<D3DXMATRIX> GetMatrixWVP(const std::weak_ptr<D3DXMATRIX>pAddWorldMatrix, const std::weak_ptr<DXDisplay>pDisplay);
+	std::unique_ptr<D3DXMATRIX> GetMatrixWVP(const DXDisplay& pDisplay);
+	std::unique_ptr<D3DXMATRIX> GetMatrixWVP(const D3DXMATRIX& pAddWorldMatrix, const DXDisplay& pDisplay);
 
 
 	void SetWorld(const DXWorld&pWorld);

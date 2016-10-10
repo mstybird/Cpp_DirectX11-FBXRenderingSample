@@ -35,9 +35,9 @@ public:
 
 	//メッシュ単位に設定用
 	void SetConstantBuffer1(
-		std::weak_ptr<FBXMesh> fbxMesh,
-		std::weak_ptr<DX11RenderResource> resource, 
-		std::weak_ptr<DXDisplay>pDisplay)override;
+		FBXMesh& fbxMesh,
+		DX11RenderResource& resource, 
+		DXDisplay& pDisplay)override;
 	void SetConstantBuffer2(std::weak_ptr<FBXModelData>modelData)override;
 
 private:

@@ -69,7 +69,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2016.1\lib\vs2015\x86\debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-FBXRenderingSample\FBXRenderSample\NcgLua;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1\lib\vs2015\x86\debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -89,17 +89,21 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1\lib\vs2015\x86\release</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-FBXRenderingSample\FBXRenderSample\NcgLua;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1\lib\vs2015\x86\release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI\Dijkstra.cpp" />
     <ClCompile Include="AI\EnemyAI.cpp" />
+    <ClCompile Include="BulletNormal.cpp" />
+    <ClCompile Include="BulletObject.cpp" />
+    <ClCompile Include="CharacterBase.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="example_Sprite2D.cpp" />
+    <ClCompile Include="GameObjectBase.cpp" />
     <ClCompile Include="MSCollisionBase.cpp" />
     <ClCompile Include="MSCollisionRay.cpp" />
     <ClCompile Include="MSCollisionRayPicking.cpp" />
-    <ClCompile Include="MSCollisionRayPlane.cpp" />
     <ClCompile Include="MSCollisionSphere.cpp" />
     <ClCompile Include="MSCullingFrustum.cpp" />
     <ClCompile Include="MSCullingOcclusion.cpp" />
@@ -139,16 +143,27 @@
     <ClCompile Include="MyScene.cpp" />
     <ClCompile Include="MySprite2DShader.cpp" />
     <ClCompile Include="MySprite3DShader.cpp" />
+    <ClCompile Include="NcgLua\NcgLuaBase.cxx" />
+    <ClCompile Include="NcgLua\NcgLuaDatabase.cpp" />
+    <ClCompile Include="NcgLua\NcgLuaHelper.cxx" />
+    <ClCompile Include="NcgLua\NcgLuaManager.cxx" />
+    <ClCompile Include="NcgLua\NcgUtility.cxx" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="StaticObject.cpp" />
+    <None Include="EnemyAI\htn_attack.lua" />
     <None Include="Sample.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI\Dijkstra.h" />
     <ClInclude Include="AI\EnemyAI.h" />
+    <ClInclude Include="BulletNormal.h" />
+    <ClInclude Include="BulletObject.h" />
     <ClInclude Include="CharacterBase.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="GameObjectBase.h" />
     <ClInclude Include="MSCollisionBase.h" />
     <ClInclude Include="MSCollisionRay.h" />
     <ClInclude Include="MSCollisionRayPicking.h" />
-    <ClInclude Include="MSCollisionRayPlane.h" />
     <ClInclude Include="MSCollisionSphere.h" />
     <ClInclude Include="MSCullingFrustum.h" />
     <ClInclude Include="MSCullingOcclusion.h" />
@@ -194,10 +209,16 @@
     <ClInclude Include="MyScene.h" />
     <ClInclude Include="MySprite2DShader.h" />
     <ClInclude Include="MySprite3DShader.h" />
+    <ClInclude Include="NcgLua\NcgLua.hpp" />
+    <ClInclude Include="NcgLua\NcgLuaBase.hxx" />
+    <ClInclude Include="NcgLua\NcgLuaDatabase.h" />
+    <ClInclude Include="NcgLua\NcgLuaHelper.hxx" />
+    <ClInclude Include="NcgLua\NcgLuaManager.hxx" />
+    <ClInclude Include="NcgLua\NcgUtility.hxx" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="StaticObject.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Simple.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>

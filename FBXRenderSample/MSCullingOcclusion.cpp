@@ -18,7 +18,7 @@ IDXGISwapChain*MSCullingOcculusion::sSwapChain;
 bool MSCullingOcculusion::IsCullingWorld(
 	MS3DRender&pRender,
 	DX11RenderResource&pEyeResource,
-	const std::weak_ptr<DX11RenderResource>&pTargetResource,
+	DX11RenderResource&pTargetResource,
 	float pPixelper,
 	std::function<void(void)>pRenderFunc
 	)
@@ -28,11 +28,9 @@ bool MSCullingOcculusion::IsCullingWorld(
 	//元に戻すためのカメラのコピーを生成
 	DXCamera lEyeCameraCopy;
 	pEyeResource.GetCamera().lock()->Clone(lEyeCameraCopy);
-	//元に戻すための視野のコピーを作成
-	auto lEyeProjCopy = *pEyeResource.GetProjection().lock();
 
 	//カメラをワールド行列を使って正面方向に作成する
-	pEyeResource.GetCamera().lock()->SetCamera(pEyeResource.GetWorld(), { 0,0,-1 });
+	pEyeResource.GetCamera().lock()->SetCamera(*pEyeResource.GetWorld().lock(), { 0,0,-1 });
 	//視野を設定
 	//pEyeResource.SetProjection(pEyeProjection);
 
@@ -54,14 +52,14 @@ bool MSCullingOcculusion::IsCullingWorld(
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
-		//sDeviceContext->RSSetViewports(1, &vp);
-		//sDeviceContext->OMSetRenderTargets(1, &sRTV, sDSV);
+		sDeviceContext->RSSetViewports(1, &vp);
+		sDeviceContext->OMSetRenderTargets(1, &sRTV, sDSV);
 
+		//MS3DRender::Clear({ 1,1,1,1 });
 
-
-		//float ClearColor[4] = { 0,0,0,1 };
-		//sDeviceContext->ClearRenderTargetView(sRTV, ClearColor);//レンダーターゲットクリア
-		//sDeviceContext->ClearDepthStencilView(sDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度ステンシルバッファクリア
+		float ClearColor[4] = { 0.2,0.2,0.2,1 };
+		sDeviceContext->ClearRenderTargetView(sRTV, ClearColor);//レンダーターゲットクリア
+		sDeviceContext->ClearDepthStencilView(sDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度ステンシルバッファクリア
 
 		//障害物を描画する処理
 		DXDisplay lTmpDisplay;
@@ -77,28 +75,24 @@ bool MSCullingOcculusion::IsCullingWorld(
 		pRender.SetRenderTarget(lTmpDisplay);
 		//カメラと視野をもとに戻す
 		pEyeResource.SetCamera(lEyeCameraCopy);
-		//pEyeResource.SetProjection(lEyeProjCopy);
 		//描画先を元に戻す
-		//sDeviceContext->OMSetRenderTargets(1, &lRTVCopy, lDSVCopy);
-		//sDeviceContext->RSSetViewports(1, lMainViewPort);
-
-		lRTVCopy->Release();
-		lDSVCopy->Release();
-
+		
+		//MSDirect::GetSwapChain()->Present(0, DXGI_PRESENT_RESTART);
+		sDeviceContext->OMSetRenderTargets(1, &lRTVCopy, lDSVCopy);
+		sDeviceContext->RSSetViewports(1, lMainViewPort);
 	}
 	UINT64 lDrawPixels{};
 	//指定数以上ループした場合、強制で抜ける
 	unsigned int lLoopCount = 0;
 	//ピクセル数を取得
 	while (S_OK != sDeviceContext->GetData(sOcculusionQuery, (void*)&lDrawPixels, sizeof(UINT64), 0)) {
-		if (++lLoopCount > 500) {
-			break;
-		}
 	}
 	
 
 	//見えたと判定する必要なピクセル数の計算
 	UINT64 lCheckPixels = (float)(640 * 480)*pPixelper;
+	if (lDrawPixels != 0) {
+	}
 
 	return lDrawPixels > lCheckPixels;
 }

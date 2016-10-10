@@ -79,6 +79,7 @@ void Dijkstra::Manager::SetStartNode(const int aStartNode)
 	mNowNode = mNodes[mStartIndex];
 	//直前ノードをクリア
 	mEndFrontNode = nullptr;
+	mIsGenerated = false;
 }
 
 void Dijkstra::Manager::SetNowNode(Node * const aNowNode)
@@ -169,6 +170,11 @@ bool Dijkstra::Manager::GenerateRoot()
 }
 
 
+void Dijkstra::Manager::ClearRoot()
+{
+	mRootNodes.clear();
+}
+
 bool Dijkstra::Manager::SetNextNode()
 {
 	//辿れるノードがあった場合
@@ -226,6 +232,11 @@ bool Dijkstra::Manager::CreateNextRoot(bool aBackFlag)
 	return true;
 }
 
+Dijkstra::Node * Dijkstra::Manager::GetNowNode()
+{
+	return mNowNode;
+}
+
 int Dijkstra::Manager::GetEdgeNodeCount(const Node * aRootNode)
 {
 	assert(aRootNode);
@@ -250,9 +261,9 @@ bool Dijkstra::Manager::IsEdgeIntoNode(const Node * IntoNodes, const Node * aSea
 
 bool Dijkstra::Manager::CreateRoot(int aGoalIndex)
 {
-	//未探索の場合は処理しない
+	//未探索の場合はルートを生成する
 	if (mIsGenerated == false) {
-		return false;
+		GenerateRoot();
 	}
 	assert(IsBetweenIndex(aGoalIndex));
 	auto lCurrentNode = mNodes[aGoalIndex];

@@ -32,35 +32,35 @@ void MS3DRender::Clear(D3DXVECTOR4 pColor)
 
 
 
-void MS3DRender::Render(const std::weak_ptr<DX11RenderResource>resource)
+void MS3DRender::Render(DX11RenderResource&resource)
 {
 	//shader->SetConstantBuffer1(resource,&display);
 	//シェーダの設定
-	shader.lock()->GetVS()->SetShader();
-	shader.lock()->GetPS()->SetShader();
+	shader->GetVS()->SetShader();
+	shader->GetPS()->SetShader();
 	//プリミティブトポロジーの登録
 	sDeviceContext->IASetPrimitiveTopology(mPrimitiveTopology);
 
-	auto& meshData = resource.lock()->mMesh.mMeshData;
+	auto& meshData = resource.mMesh.mMeshData;
 
 	//auto meshData = fbxManager.lock()->GetMeshData();
 	//メッシュの個数分
 	for (unsigned int i = 0; i < meshData.size(); i++) {
 		//メッシュ単位の設定
-		shader.lock()->SetConstantBuffer1(meshData.at(i), resource, display);
+		shader->SetConstantBuffer1(*meshData.at(i), resource, *display);
 		//全てのメッシュに対して共通のデータを登録
-		sDeviceContext->VSSetConstantBuffers(0, 1, shader.lock()->GetCB1());
-		sDeviceContext->PSSetConstantBuffers(0, 1, shader.lock()->GetCB1());
+		sDeviceContext->VSSetConstantBuffers(0, 1, shader->GetCB1());
+		sDeviceContext->PSSetConstantBuffers(0, 1, shader->GetCB1());
 		//サブメッシュの個数分
 		for (unsigned int j = 0; j < meshData.at(i)->subMesh.size(); j++) {
-			shader.lock()->SetConstantBuffer2(meshData.at(i)->subMesh.at(j));
-			sDeviceContext->VSSetConstantBuffers(1, 1, shader.lock()->GetCB2());
-			sDeviceContext->PSSetConstantBuffers(1, 1, shader.lock()->GetCB2());
-			UINT stride = shader.lock()->GetVertexSize();
+			shader->SetConstantBuffer2(meshData.at(i)->subMesh.at(j));
+			sDeviceContext->VSSetConstantBuffers(1, 1, shader->GetCB2());
+			sDeviceContext->PSSetConstantBuffers(1, 1, shader->GetCB2());
+			UINT stride = shader->GetVertexSize();
 			UINT offset = 0;
-			ID3D11Buffer* lVertexBuffer = resource.lock()->mMesh.mVertexBuffer[i][j];
-			ID3D11Buffer* lIndexBuffer = resource.lock()->mMesh.mIndexBuffer[i][j];
-			unsigned int* indexLength = resource.lock()->mMesh.GetIndexBufferCount(i, j);
+			ID3D11Buffer* lVertexBuffer = resource.mMesh.mVertexBuffer[i][j];
+			ID3D11Buffer* lIndexBuffer = resource.mMesh.mIndexBuffer[i][j];
+			unsigned int* indexLength = resource.mMesh.GetIndexBufferCount(i, j);
 
 			sDeviceContext->IASetVertexBuffers(0, 1, &lVertexBuffer, &stride, &offset);
 			stride = sizeof(int);
@@ -102,7 +102,7 @@ void MS3DRender::GetDisplay(DXDisplay & aOutDisplay)
 
 
 
-void MS3DRender::SetShader(const std::shared_ptr<MSBase3DShader> pShader)
+void MS3DRender::SetShader(MSBase3DShader*pShader)
 {
 	shader = pShader;
 }

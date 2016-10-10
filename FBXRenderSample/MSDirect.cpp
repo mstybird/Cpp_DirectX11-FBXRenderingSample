@@ -251,7 +251,7 @@ void MSDirect::Loop()
 
 	scene->Update();
 	scene->Render();
-	m_pSwapChain->Present(0, 0);
+	m_pSwapChain->Present(1, 0);
 }
 
 void MSDirect::SetScene(std::unique_ptr<MSSceneBase>&& pScene)

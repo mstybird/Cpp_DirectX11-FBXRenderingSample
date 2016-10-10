@@ -37,20 +37,20 @@ std::weak_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixProjection()
 	return mProj->GetMatrix();
 }
 
-std::unique_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWVP(const std::weak_ptr<DXDisplay>pDisplay)
+std::unique_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWVP(const DXDisplay& pDisplay)
 {
 	
 	std::unique_ptr<D3DXMATRIX> lResult = std::make_unique<D3DXMATRIX>();
-	*lResult=*mWorld->GetMatrix().lock() * *pDisplay.lock()->GetCamera().lock()->GetMatrix().lock() * *pDisplay.lock()->GetProjection().lock()->GetMatrix().lock();
+	*lResult=*mWorld->GetMatrix().lock() * *pDisplay.GetCamera().lock()->GetMatrix().lock() * *pDisplay.GetProjection().lock()->GetMatrix().lock();
 	return std::move(lResult);
 }
 
-std::unique_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWVP(const std::weak_ptr<D3DXMATRIX>pAddWorldMatrix, const std::weak_ptr<DXDisplay>pDisplay)
+std::unique_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWVP(const D3DXMATRIX& pAddWorldMatrix, const DXDisplay& pDisplay)
 {
 	std::unique_ptr<D3DXMATRIX> lResult = std::make_unique<D3DXMATRIX>();
-	*lResult = *pAddWorldMatrix.lock() * *mWorld->GetMatrix().lock() *
-		*pDisplay.lock()->GetCamera().lock()->GetMatrix().lock() *
-		*pDisplay.lock()->GetProjection().lock()->GetMatrix().lock();
+	*lResult = pAddWorldMatrix * *mWorld->GetMatrix().lock() *
+		*pDisplay.GetCamera().lock()->GetMatrix().lock() *
+		*pDisplay.GetProjection().lock()->GetMatrix().lock();
 	return std::move(lResult);
 }
 

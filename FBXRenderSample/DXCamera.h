@@ -25,9 +25,9 @@ public:
 	~DXCamera();
 
 	//視点とターゲット(注視点)の設定
-	void SetCamera(const std::weak_ptr<DXWorld>&pEyePosition, const std::weak_ptr<DXWorld>&pLookAtPosition);
+	void SetCamera(const DXWorld&pEyePosition, const DXWorld& pLookAtPosition);
 	//ワールド座標から指定数ずらす場合
-	void SetCamera(const std::weak_ptr<DXWorld>&pEyePosition, const DXVector3&pDistance);
+	void SetCamera(DXWorld&pEyePosition, const DXVector3&pDistance);
 	
 
 	void CreateRay(DXVector3&pOutRay, const DXVector3&pRayDirection)const;

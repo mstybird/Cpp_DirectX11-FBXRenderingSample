@@ -7,6 +7,9 @@ public:
 	~DXProjection();
 	static void SetAspect(float pWidth, float pHeight);
 
+	//‚·‚×‚ÄƒZƒbƒg‚·‚é
+	void SetProjection(float pAngle, float pNearPlane, float pFarPlane);
+
 	///Ž‹–ìŠp
 	void SetViewAngle(float pAngle);
 	void AddViewAngle(float pAngle);

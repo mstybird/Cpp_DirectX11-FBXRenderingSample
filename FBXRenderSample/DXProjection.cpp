@@ -17,6 +17,13 @@ void DXProjection::SetAspect(float pWidth, float pHeight)
 	mAspect = pWidth / pHeight;
 }
 
+void DXProjection::SetProjection(float pAngle, float pNearPlane, float pFarPlane)
+{
+	mAngle = pAngle;
+	mNear = pNearPlane;
+	mFar = pFarPlane;
+}
+
 void DXProjection::SetViewAngle(float pAngle)
 {
 	mAngle = pAngle;

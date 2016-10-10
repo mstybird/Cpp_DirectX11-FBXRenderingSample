@@ -25,13 +25,13 @@ DXCamera::~DXCamera()
 {
 }
 
-void DXCamera::SetCamera(const std::weak_ptr<DXWorld>&pEyePosition, const std::weak_ptr<DXWorld>&pLookAtPosition)
+void DXCamera::SetCamera(const DXWorld&pEyePosition, const DXWorld& pLookAtPosition)
 {
 	D3DXMATRIX mUp, mView;
 	//Ž‹“_‚ÌÝ’è
-	*mEyePosition = *pEyePosition.lock()->mPosition;
+	*mEyePosition = *pEyePosition.mPosition;
 	//’Ž‹“_‚ÌÝ’è
-	*mLookPosition = *pLookAtPosition.lock()->mPosition;
+	*mLookPosition = *pLookAtPosition.mPosition;
 	//“ªã•ûŒü‚ÌŒvŽZ
 	CreateRay(*mUpVector.get(), sUpVector);
 //	mMatrix->SetLookAtLH(*mEyePosition, *mLookPosition, sUpVector);
@@ -40,14 +40,14 @@ void DXCamera::SetCamera(const std::weak_ptr<DXWorld>&pEyePosition, const std::w
 //	D3DXVec3TransformNormal(mUpVector.get(), &sUpVector, &mView);
 }
 
-void DXCamera::SetCamera(const std::weak_ptr<DXWorld>& pEyePosition, const DXVector3 & pDistance)
+void DXCamera::SetCamera(DXWorld&pEyePosition, const DXVector3&pDistance)
 {
-	*mLookPosition = *pEyePosition.lock()->mPosition;
+	*mLookPosition = *pEyePosition.mPosition;
 	DXMatrix lTmpMatrixTrans;
 	DXMatrix lTmpMatrixRotate;
 
 	lTmpMatrixTrans.Translation(*mLookPosition);
-	lTmpMatrixRotate.RotationXYZ(*pEyePosition.lock()->mRotationCenter,TYPE_ANGLE::DEGREE);
+	lTmpMatrixRotate.RotationXYZ(*pEyePosition.mRotationCenter,TYPE_ANGLE::DEGREE);
 	D3DXVec3TransformCoord(
 		mEyePosition.get(),
 		&pDistance,

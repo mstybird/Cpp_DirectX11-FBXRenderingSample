@@ -95,7 +95,6 @@ DirectX11マネージャ
 #include"MSCollisionSphere.h"
 #include"MSCollisionRay.h"
 #include"MSCollisionRayPicking.h"
-#include"MSCollisionRayPlane.h"
 
 #include"MSCullingFrustum.h"
 #include"MSCullingOcclusion.h"

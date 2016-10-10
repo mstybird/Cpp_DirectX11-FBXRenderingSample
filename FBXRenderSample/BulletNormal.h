@@ -1,0 +1,16 @@
+#pragma once
+#include"BulletObject.h"
+
+//í èÌíe
+class BulletNormal :public BulletObject {
+public:
+	BulletNormal();
+	~BulletNormal();
+
+	void Initialize()override;
+	void Create(std::vector<std::unique_ptr<BulletObject>>&aOutBulletList, GameObjectBase& aShoter)override;
+	//íeÇÃçXêV
+	void Update()override;
+	void Render()override;
+
+};

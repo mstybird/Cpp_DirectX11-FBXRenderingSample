@@ -22,7 +22,7 @@ public:
 	static bool IsCullingWorld(
 		MS3DRender&pRender,
 		DX11RenderResource&pEyeResource,
-		const std::weak_ptr<DX11RenderResource>&pTargetResource,
+		DX11RenderResource&pTargetResource,
 		float pPixelper,
 		std::function<void(void)>pRenderFunc
 		);

@@ -89,15 +89,14 @@
       <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="My3DShader.cpp">
-      <Filter>MSDirect\DX11\Shader\Custom3DShader\Source</Filter>
+      <Filter>Game\Shader\3DShader\Source</Filter>
     </ClCompile>
     <ClCompile Include="MySprite2DShader.cpp">
-      <Filter>MSDirect\DX11\Shader\Sprite\Custom\Source</Filter>
+      <Filter>Game\Shader\Sprite\Source</Filter>
     </ClCompile>
     <ClCompile Include="MSBase2DSpriteShader.cpp">
       <Filter>MSDirect\DX11\Shader\Sprite\Base\Source</Filter>
     </ClCompile>
-    <ClCompile Include="MySprite3DShader.cpp" />
     <ClCompile Include="MSKeyCodeList.cpp">
       <Filter>MSDirect\System\Source</Filter>
     </ClCompile>
@@ -116,21 +115,63 @@
     <ClCompile Include="MSCollisionRayPicking.cpp">
       <Filter>MSDirect\MSCollision\Source</Filter>
     </ClCompile>
-    <ClCompile Include="MSCollisionRayPlane.cpp" />
     <ClCompile Include="MSCullingFrustum.cpp">
       <Filter>MSDirect\MSCulling\Source</Filter>
     </ClCompile>
     <ClCompile Include="MSCullingOcclusion.cpp">
       <Filter>MSDirect\MSCulling\Source</Filter>
     </ClCompile>
-    <ClCompile Include="MSUtility.cpp" />
     <ClCompile Include="AI\Dijkstra.cpp">
       <Filter>Game\AI</Filter>
     </ClCompile>
     <ClCompile Include="AI\EnemyAI.cpp">
       <Filter>Game\AI</Filter>
     </ClCompile>
-    <ClCompile Include="MSFbxObject.cpp" />
+    <ClCompile Include="NcgLua\NcgLuaBase.cxx">
+      <Filter>NcgLua</Filter>
+    </ClCompile>
+    <ClCompile Include="NcgLua\NcgLuaDatabase.cpp">
+      <Filter>NcgLua</Filter>
+    </ClCompile>
+    <ClCompile Include="NcgLua\NcgLuaHelper.cxx">
+      <Filter>NcgLua</Filter>
+    </ClCompile>
+    <ClCompile Include="NcgLua\NcgLuaManager.cxx">
+      <Filter>NcgLua</Filter>
+    </ClCompile>
+    <ClCompile Include="NcgLua\NcgUtility.cxx">
+      <Filter>NcgLua</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSFbxObject.cpp">
+      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MSUtility.cpp">
+      <Filter>MSDirect\MSUtility\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterBase.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MySprite3DShader.cpp">
+      <Filter>Game\Shader\Sprite\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticObject.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectBase.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletObject.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletNormal.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -233,10 +274,10 @@
       <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="My3DShader.h">
-      <Filter>MSDirect\DX11\Shader\Custom3DShader\Header</Filter>
+      <Filter>Game\Shader\3DShader\Header</Filter>
     </ClInclude>
     <ClInclude Include="MySprite2DShader.h">
-      <Filter>MSDirect\DX11\Shader\Sprite\Custom\Header</Filter>
+      <Filter>Game\Shader\Sprite\Header</Filter>
     </ClInclude>
     <ClInclude Include="MSwrap.h">
       <Filter>MSDirect\System\Header</Filter>
@@ -245,7 +286,7 @@
       <Filter>MSDirect\DX11\Shader\Sprite\Base\Header</Filter>
     </ClInclude>
     <ClInclude Include="MySprite3DShader.h">
-      <Filter>MSDirect\DX11\Shader\Sprite\Custom\Header</Filter>
+      <Filter>Game\Shader\Sprite\Header</Filter>
     </ClInclude>
     <ClInclude Include="MSKeyCodeList.h">
       <Filter>MSDirect\System\Header</Filter>
@@ -265,9 +306,6 @@
     <ClInclude Include="MSCollisionSphere.h">
       <Filter>MSDirect\MSCollision\Header</Filter>
     </ClInclude>
-    <ClInclude Include="MSCollisionRayPlane.h">
-      <Filter>MSDirect\MSCollision\Header</Filter>
-    </ClInclude>
     <ClInclude Include="MSCullingFrustum.h">
       <Filter>MSDirect\MSCulling\Header</Filter>
     </ClInclude>
@@ -283,11 +321,47 @@
     <ClInclude Include="AI\EnemyAI.h">
       <Filter>Game\AI</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterBase.h">
-      <Filter>Game\AI</Filter>
-    </ClInclude>
     <ClInclude Include="MSFbxObject.h">
       <Filter>MSDirect\DX11\DX11Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="NcgLua\NcgLua.hpp">
+      <Filter>NcgLua</Filter>
+    </ClInclude>
+    <ClInclude Include="NcgLua\NcgLuaBase.hxx">
+      <Filter>NcgLua</Filter>
+    </ClInclude>
+    <ClInclude Include="NcgLua\NcgLuaDatabase.h">
+      <Filter>NcgLua</Filter>
+    </ClInclude>
+    <ClInclude Include="NcgLua\NcgLuaHelper.hxx">
+      <Filter>NcgLua</Filter>
+    </ClInclude>
+    <ClInclude Include="NcgLua\NcgLuaManager.hxx">
+      <Filter>NcgLua</Filter>
+    </ClInclude>
+    <ClInclude Include="NcgLua\NcgUtility.hxx">
+      <Filter>NcgLua</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletNormal.h">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletObject.h">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterBase.h">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectBase.h">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticObject.h">
+      <Filter>Game\Object\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -300,10 +374,11 @@
     <None Include="Sprite2D.hlsl">
       <Filter>HLSL</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Sample.cxx">
       <Filter>Reference</Filter>
+    </None>
+    <None Include="EnemyAI\htn_attack.lua">
+      <Filter>Game\AI\HTN</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -382,15 +457,6 @@
     <Filter Include="MSDirect\DX11\Shader\Sprite">
       <UniqueIdentifier>{4802fa5b-6c95-40de-8cd4-c697b8c03586}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MSDirect\DX11\Shader\Custom3DShader">
-      <UniqueIdentifier>{4509f21c-6adb-4257-baa9-83b6bb4d26bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\Shader\Custom3DShader\Header">
-      <UniqueIdentifier>{9f9c7065-aa1d-4496-a4b3-6324ab8021eb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\Shader\Custom3DShader\Source">
-      <UniqueIdentifier>{c41423ad-bc56-4fb4-ab13-d67bb773225b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MSDirect\DX11\Shader\Sprite\Base">
       <UniqueIdentifier>{ee8d15e6-f5da-4b6f-9549-6d9e39f32e12}</UniqueIdentifier>
     </Filter>
@@ -399,15 +465,6 @@
     </Filter>
     <Filter Include="MSDirect\DX11\Shader\Sprite\Base\Header">
       <UniqueIdentifier>{7f4ec03b-d480-4daa-bccf-4dd653cc718c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\Shader\Sprite\Custom">
-      <UniqueIdentifier>{9e9b8fd2-6fe9-4b1c-af4e-502ecd478b7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\Shader\Sprite\Custom\Header">
-      <UniqueIdentifier>{eb1fe246-fb45-431c-8bd7-64f1d86d442e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\Shader\Sprite\Custom\Source">
-      <UniqueIdentifier>{b688cf9b-7ae3-43c3-9dca-7849810737d0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Reference">
       <UniqueIdentifier>{4f9be697-853a-4bf3-b512-e2d8401adcb3}</UniqueIdentifier>
@@ -444,6 +501,42 @@
     </Filter>
     <Filter Include="Game\AI">
       <UniqueIdentifier>{f3c27f57-97ac-4159-bf26-c270809efff5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object">
+      <UniqueIdentifier>{89a6d1b5-bf01-49a2-bd80-ba238b0c8fd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NcgLua">
+      <UniqueIdentifier>{82f15a6b-737d-4782-8d1f-ccd485d99f39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Header">
+      <UniqueIdentifier>{490de960-5c54-4197-bad4-cce2fd871eb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Source">
+      <UniqueIdentifier>{c8c2dfe9-a2e2-4a3c-baeb-0a3efd4ca638}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader">
+      <UniqueIdentifier>{1cd2a9be-7e9b-4a56-bf67-c3da7b9b5a3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader\Sprite">
+      <UniqueIdentifier>{9e9b8fd2-6fe9-4b1c-af4e-502ecd478b7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader\Sprite\Header">
+      <UniqueIdentifier>{eb1fe246-fb45-431c-8bd7-64f1d86d442e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader\Sprite\Source">
+      <UniqueIdentifier>{b688cf9b-7ae3-43c3-9dca-7849810737d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader\3DShader">
+      <UniqueIdentifier>{4509f21c-6adb-4257-baa9-83b6bb4d26bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader\3DShader\Header">
+      <UniqueIdentifier>{9f9c7065-aa1d-4496-a4b3-6324ab8021eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader\3DShader\Source">
+      <UniqueIdentifier>{c41423ad-bc56-4fb4-ab13-d67bb773225b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AI\HTN">
+      <UniqueIdentifier>{373532b6-4ca9-4472-86dd-e76486ee96fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

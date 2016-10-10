@@ -1,4 +1,5 @@
 #include "EnemyAI.h"
+#include"../NcgLua/NcgLua.hpp"
 #include<algorithm>
 #include<iterator>
 void EnemyAI::CreateNodes()
@@ -51,4 +52,67 @@ std::vector<MyNode*> EnemyAI::GetNearNodeList(const DXVector3 & pCenter)
 
 	return std::move(lNearNodeList);
 
+}
+
+void EnemyAI::Update(bool aTargeting, void* aTarget, bool aChargedEnergy)
+{
+	assert(mLuaAI);
+	mLuaAI->Call(aTargeting,aTarget, aChargedEnergy);
+	std::vector<std::string>lTmpPlan;
+	mLuaAI->Return(lTmpPlan, 0);
+	mAIType.clear();
+	for (auto&lType : lTmpPlan) {
+		mAIType.push_back(EnemyAIType::ConvertString(lType));
+	}
+	std::reverse(mAIType.begin(), mAIType.end());
+}
+
+EnemyAIType::Type EnemyAI::GetNowAI()
+{
+	if (mAIType.size() > 0) {
+		return mAIType.back();
+	}
+	else {
+		return EnemyAIType::Type::eUnKnown;
+	}
+
+}
+
+bool EnemyAI::NextAI()
+{
+	if (mAIType.size() > 0) {
+		mAIType.pop_back();
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void EnemyAI::ClearAI()
+{
+	mAIType.clear();
+}
+
+EnemyAIType::Type EnemyAIType::ConvertString(const std::string & aStr)
+{
+	Type lType{ eUnKnown };
+
+	if (aStr == sEnergyShot) {
+		lType = eEnergyShot;
+	}else if (aStr == sMovingHide) {
+		lType = eMovingHide;
+	}
+	else if (aStr == sChargeEnergy) {
+		lType = eChargeEnergy;
+	}
+	else if (aStr == sSearchTarget) {
+		lType = eSearchTarget;
+	}
+	else if (aStr == sMoveToTarget) {
+		lType = eMoveToTarget;
+	}
+
+
+	return lType;
 }

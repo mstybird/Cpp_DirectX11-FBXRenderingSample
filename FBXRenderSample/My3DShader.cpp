@@ -15,18 +15,17 @@ My3DShader::My3DShader() :
 
 
 void My3DShader::SetConstantBuffer1(
-	std::weak_ptr<FBXMesh> fbxMesh,
-	std::weak_ptr<DX11RenderResource> resource,
-	std::weak_ptr<DXDisplay>pDisplay
+	FBXMesh& fbxMesh,
+	DX11RenderResource& resource,
+	DXDisplay& pDisplay
 )
 {
 	MyFBXCONSTANTBUFFER1 cb;
 	D3D11_MAPPED_SUBRESOURCE pData;
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-
-		cb.mW = *fbxMesh.lock()->mWorld * *resource.lock()->GetMatrixWorld().lock();
 		
-		cb.mWVP = *resource.lock()->GetMatrixWVP(fbxMesh.lock()->mWorld,pDisplay);
+		cb.mW = *fbxMesh.mWorld * *resource.GetMatrixWorld().lock();
+		cb.mWVP = *resource.GetMatrixWVP(*fbxMesh.mWorld,pDisplay);
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		D3DXMatrixTranspose(&cb.mWVP, &cb.mWVP);
 		cb.LightDir = D3DXVECTOR4(1, 1, -1, 0);

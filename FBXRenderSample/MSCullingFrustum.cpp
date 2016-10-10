@@ -45,7 +45,9 @@ bool MSCullingFrustum::IsCullingWorld(
 	pTargetResource.GetWorld().lock()->GetMatrix().lock()->GetT(lTargetPos);
 	//ワールド空間からビュー空間に変換
 	DXCamera c;
-	c.SetCamera(pCameraResource.GetWorld(), { 0,0,-1 });
+	DXVector3 lCameraDir{ 0,0, 1 };
+	lCameraDir *= -1;
+	c.SetCamera(*pCameraResource.GetWorld().lock(),lCameraDir);
 	D3DXVec3TransformCoord(&lTargetPos, &lTargetPos, c.GetMatrix().lock().get());
 
 	DXProjection& lEyeProjection = *pCameraResource.GetProjection().lock();

@@ -20,9 +20,9 @@ public:
 
 	//ƒƒbƒVƒ…’PˆÊ‚É—^‚¦‚é
 	//virtual void SetConstantBuffer1(DX11RenderResource * resource,DXDisplay*pDisplay) = 0;
-	virtual void SetConstantBuffer1(std::weak_ptr<FBXMesh> fbxMesh,
-		std::weak_ptr<DX11RenderResource> resource,
-		std::weak_ptr<DXDisplay>pDisplay) = 0;
+	virtual void SetConstantBuffer1(FBXMesh& fbxMesh,
+		DX11RenderResource& resource,
+		DXDisplay& pDisplay) = 0;
 	virtual void SetConstantBuffer2(std::weak_ptr<FBXModelData>modelData) = 0;
 
 	MSVertexShader* GetVS();

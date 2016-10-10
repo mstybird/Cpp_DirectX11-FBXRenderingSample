@@ -90,6 +90,9 @@ namespace Dijkstra {
 			}
 		}
 		
+		//ルートを初期化する
+		void ClearRoot();
+
 		//次のノードに進める
 		//進めるノードがなくなった場合falseを返す
 		bool SetNextNode();
@@ -99,6 +102,8 @@ namespace Dijkstra {
 		//BackFlagにtrueを設定した場合、直前ノードには戻らないようにする
 		//この際、生成済みのルートは初期化する
 		bool CreateNextRoot(bool aBackFlag);
+		//現在居るノードを取得する
+		Node* GetNowNode();
 		//現在のノードから移動可能なノードの数を取得する
 		int GetEdgeNodeCount(const Node*aRootNode);
 
