@@ -85,17 +85,22 @@ void GameObjectBase::UpdateMesh()
 	mTransform->mMesh.Update();
 }
 
-GameObjectBase* GameObjectBase::UpdateCollision()
+std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosition)
 {
-	GameObjectBase* lHitTarget{};
+	std::vector<GameObjectBase*>lHitTargets{};
 	DXVector3 lResult;
 	for (auto&lCollision : mCollisionTargets) {
+		if (lCollision->IsActive() == false)continue;
 		if (mRayPick->Collision(lResult, *mTransform, *lCollision->GetTransform())) {
-			GetWorld()->SetT(lResult);
-			lHitTarget = lCollision;
-			break;
+			if (pIsUpdatePosition == true) {
+				GetWorld()->SetT(lResult);
+			}
+			lHitTargets.push_back(lCollision);
 		}
 	}
-	mRayPick->SetFramePosition(*mTransform);
-	return lHitTarget;
+
+	if (pIsUpdatePosition == true) {
+		mRayPick->SetFramePosition(*mTransform);
+	}
+	return std::move(lHitTargets);
 }

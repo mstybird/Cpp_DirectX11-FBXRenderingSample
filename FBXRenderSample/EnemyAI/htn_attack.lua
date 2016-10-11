@@ -107,38 +107,78 @@ domain.primitive.moveToTarget = function(state)
 	return false
 end
 
+domain.primitive.moveToGoal = function(state)
+	--ゴールに向かう
+	if state.bHoldBall == true and state.bTargeting == false then
+		state.bHoldBall=false
+		return true
+	end
+	return false
+end
+
+domain.primitive.moveToBall = function(state)
+	--ボールを拾いに行く
+	if state.bBallIsField == true then
+		state.bBallIsField = false
+		state.bHoldBall =true
+		return true
+	end
+	return false
+end
+
+domain.primitive.moveToBallTarget = function(state)
+	--ボールを持っているターゲットを追いかける
+	if state.bBallIsField == false and state.bTargetHoldBall == true then
+		state.bLockoned = true
+		state.bTargeting=true
+		return true
+	end
+	return false
+end
+
 --------------------------------------------------
 -- compound Task
 
 --攻撃
 domain.compound.attack={
-	function(state)
-		return {{"attackPrepare"},{"energyShot"}}
-	end
+function(state)
+	return {{"attackPrepare"}}
+end
 }
 
 --攻撃準備
 domain.compound.attackPrepare={
-	function(state)
-		--エネルギーがなければチャージ
-		if state.chargedEnergy == false then
-			if state.bTargeting ==true then
+function(state)
+	--エネルギーがなければチャージ
+	if state.chargedEnergy == false then
+		if state.bTargeting ==true then
 			--視界に敵がいた場合、物陰に隠れる
-				return {{"movingHide"},{"attackPrepare"}}
-			else
+			return {{"movingHide"},{"attackPrepare"}}
+		else
 			--視界に敵がいなかった場合、チャージ
-				return {{"chargeEnergy"},{"attackPrepare"}}
-			end
-		--一度物陰に隠れてチャージした場合、隠れる前の位置に移動する
-		elseif state.bLockoned == true then
-			return {{"moveToTarget"},{"attackPrepare"}}
-		--チャージ済みで視界に敵がいなかった場合、敵を探す
-		elseif state.bTargeting == false then
-			return {{"searchTarget"},{"attackPrepare"}}
+			return {{"chargeEnergy"},{"attackPrepare"}}
 		end
-		--ここまでくれば攻撃準備完了
-		return {}
-	end	
+	--一度物陰に隠れてチャージした場合、隠れる前の位置に移動する
+	elseif state.bLockoned == true and state.bHoldBall then
+		return {{"moveToTarget"},{"energyShot"}}	
+	--チャージ後(もしくはチャージ済みでボールを持っていて敵が視界からいない場合)
+	elseif state.bHoldBall == true and state.bTargeting == false then
+		return {{"moveToGoal"},{"attackPrepare"}}
+	--ボールが落ちていて、それを追いかける場合
+	elseif state.bBallIsField == true and state.bTargeting == false then
+		return {{"moveToBall"},{"attackPrepare"}}
+	--ボールが落ちていない(誰かがボールを持っている場合)
+	elseif state.bBallIsField == false and state.bTargetHoldBall == true then
+		return {{"moveToBallTarget"},{"energyShot"}}
+	elseif state.bTargeting == true and state.bHoldBall == true then
+		return {{"energyShot"}}
+	--チャージ済みで視界に敵がいなかった場合、敵を探す
+	elseif state.bTargeting == false then
+		return {{"searchTarget"},{"attackPrepare"}}
+	end
+	--ここまでくれば攻撃準備完了
+	return {}
+end	
 }
 
 --------------------------------------------------
@@ -146,13 +186,20 @@ domain.compound.attackPrepare={
 
 --state.bLockoned=false		--敵を捕捉済みか？
 
-function GetPlan(aTargeting,aTarget,aChargedEnergy)
+function GetPlan(aTargeting,aTarget,aChargedEnergy,aTargetHoldBall,aHoldingBall,aBallIsField)
 
 
 	state={}
-	state.bTargeting=aTargeting		--敵が視界にいるかどうか？
-	state.chargedEnergy=aChargedEnergy	--エネルギーがチャージ済みか？
-	state.bLockoned=aTarget
+	state.bTargeting=aTargeting				--敵が視界にいるかどうか？
+	state.bLockoned=aTarget					--敵を捉えていたかどうか
+	state.chargedEnergy=aChargedEnergy		--エネルギーがチャージ済みか？
+	state.bTargetHoldBall=aTargetHoldBall	--ターゲットがボールを持っているかどうか
+	state.bHoldBall=aHoldingBall			--ボールを所持しているかどうか
+	state.bBallIsField=aBallIsField			--ボールがフィールドに落ちているかどうか
+	print("Start")
 	plan = htn(domain, state, {{"attack"}})
+	print("End")
+	print_plan(plan)
 	return GetPlanArray(plan)
 end
+GetPlan(true,false,true,false,true,false)

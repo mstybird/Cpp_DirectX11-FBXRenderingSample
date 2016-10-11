@@ -45,6 +45,12 @@ private:
 	void UpdateMovingHide();
 	//攻撃
 	void UpdateEnergyShot();
+	//ゴールへと移動する
+	void UpdateMoveToGoal();
+	//ボールを手に入れにいく
+	void UpdateMoveToBall();
+	//ボールを持っている敵を攻撃しにいく
+	void UpdateMoveToBallTarget();
 
 	//ノード間移動処理
 	bool MoveNode();

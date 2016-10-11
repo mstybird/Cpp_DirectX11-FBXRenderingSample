@@ -2,6 +2,8 @@
 #include"MS3DRender.h"
 #include"DXCamera.h"
 #include"BulletNormal.h"
+#include"Ball.h"
+#include"StatusField.h"
 Player::Player():
 	mCameraLen{ 0,25,-10 }
 {
@@ -20,7 +22,20 @@ void Player::Update()
 {
 	UpdateMesh();
 	UpdateBullets();
-	UpdateCollision();
+	
+	
+	auto lHitTargets = UpdateCollision(true);
+	for (auto&lHitTarget : lHitTargets) {
+		if (lHitTarget) {
+			//ボールに当たった場合、そのボールを回収する
+			Ball* lBall = dynamic_cast<Ball*>(lHitTarget);
+			if (lBall) {
+				mStatus.mBall = lBall;
+				mField->SetBallHolder(this);
+			}
+		}
+	}
+
 	GetView()->SetCamera(*GetWorld(), mCameraLen);
 }
 

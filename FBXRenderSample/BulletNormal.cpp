@@ -78,20 +78,22 @@ void BulletNormal::Update()
 
 	GetWorld()->AddT(mDirection*mVelocity);
 	//当たった場合
-	auto lHitTarget = UpdateCollision();
-	if (lHitTarget) {
-		//弾を消すために非アクティブにする
-		SetActive(false);
-		//当たったのが(ターゲット)キャラクターだった場合
-		Player* lPlayer = static_cast<Player*>(lHitTarget);
+	auto lHitTargets = UpdateCollision(false);
+	for (auto&lHitTarget : lHitTargets) {
+		if (lHitTarget) {
+			//弾を消すために非アクティブにする
+			SetActive(false);
+			//当たったのが(ターゲット)キャラクターだった場合
+			Player* lPlayer = dynamic_cast<Player*>(lHitTarget);
 
-		//プレイヤーヒット時の処理
-		if (lPlayer) {
-			int a = 10;
-			int b = 10 * a;
+			//プレイヤーヒット時の処理
+			if (lPlayer) {
+				int a = 10;
+				int b = 10 * a;
+
+			}
 
 		}
-
 	}
 
 

@@ -9,6 +9,9 @@
 #include"MSCullingOcclusion.h"
 #include"MSCullingFrustum.h"
 #include"BulletNormal.h"
+#include"StatusField.h"
+#include"DXMatrix.h"
+#include"Ball.h"
 Enemy::Enemy()
 {
 	mBulletNormal = std::make_unique<BulletNormal>();
@@ -40,7 +43,7 @@ void Enemy::InitFinal()
 void Enemy::SetAI(NcgLuaManager * aAI)
 {
 	mAI->mLuaAI = aAI;
-	mAI->mLuaAI->SetFunction("GetPlan", 1, 3);	//関数の設定
+	mAI->mLuaAI->SetFunction("GetPlan", 1, 6);	//関数の設定
 }
 
 
@@ -70,13 +73,20 @@ void Enemy::Update()
 	case EnemyAIType::eMoveToTarget:
 		UpdateMoveToTarget();
 		break;
+	case EnemyAIType::eMoveToBall:
+		UpdateMoveToBall();
+		break;
+	case EnemyAIType::eMoveToBallTarget:
+		UpdateMoveToBallTarget();
+		break;
+	case EnemyAIType::eMoveToGoal:
+		UpdateMoveToGoal();
+		break;
 	default:
 		break;
 	}
-
 	//行動処理が全て終わってから衝突判定
-	UpdateCollision();
-
+	UpdateCollision(true);
 }
 
 void Enemy::InitStatus()
@@ -88,7 +98,14 @@ void Enemy::InitStatus()
 void Enemy::UpdateAI()
 {
 	mAI->ClearRoot();
-	mAI->Update(mStatus.mTargetting,(bool)mStatus.mTarget, mStatus.mEnergy > 0);
+	mAI->Update(
+		mStatus.mTargetting,
+		mStatus.mTarget!=nullptr, 
+		mStatus.mEnergy > 0,
+		mStatus.mTarget==mField->mBallHoldChara&&mStatus.mTarget!=nullptr,
+		mStatus.mBall!=nullptr,
+		mField->mBallIsField
+		);
 }
 
 void Enemy::Render()
@@ -121,13 +138,16 @@ void Enemy::UpdateMoveToTarget()
 	//戻る最中に視界に入れば発見。そのターゲットをロックオンする
 	auto lLookTarget = IsCulling();
 	if (lLookTarget) {
-		//発見したらシーケンスをすすめる
-		mAI->NextAI();
-		//敵を視認中
-		mStatus.mTargetting = true;
-		//捉えたターゲットを記憶
-		mStatus.mTarget = lLookTarget;
-		return;
+		//ボール以外の場合
+		if (!dynamic_cast<Ball*>(lLookTarget)) {
+			//発見したらシーケンスをすすめる
+			mAI->NextAI();
+			//敵を視認中
+			mStatus.mTargetting = true;
+			//捉えたターゲットを記憶
+			mStatus.mTarget = lLookTarget;
+			return;
+		}
 	}
 
 
@@ -268,11 +288,96 @@ void Enemy::UpdateEnergyShot()
 
 }
 
+//ボールを手に入れているのでゴールまで移動する
+void Enemy::UpdateMoveToGoal()
+{
+	if (mStatus.mInitMoveToGoal == false) {
+		mStatus.mInitMoveToGoal = true;
+		//移動先をゴールにする
+		mAI->SetStartNode(mAI->GetNowNode()->GetID());
+		mAI->GenerateRoot();
+		mAI->CreateRoot(19);
+	}
+
+	//移動中に敵を発見した場合、現在のAIを破棄する
+	auto lLookTarget = IsCulling();
+	if (lLookTarget) {
+		mAI->ClearAI();
+		mStatus.mInitMoveToGoal = false;
+	}
+
+	//ゴールに到着したらボールを手放す
+	if (!MoveNode()) {
+		mField->RespawnBall();
+		mStatus.mBall = nullptr;
+		mStatus.mInitMoveToGoal = false;
+		//AI再起動
+		mAI->ClearAI();
+	}
+
+}
+//ボールの位置まで移動する(拾いに行く)
+void Enemy::UpdateMoveToBall()
+{
+	//ボールの位置を取得する
+	if (mStatus.mInitMoveToBall == false) {
+		mStatus.mInitMoveToBall = true;
+		DXVector3 lBallPos;
+		mField->mBall->GetWorld()->GetMatrix().lock()->GetT(lBallPos);
+		auto lGoalID = mAI->GetNearNodeList(lBallPos)[0]->GetID();
+		mAI->SetStartNode(mAI->GetNowNode()->GetID());
+		mAI->GenerateRoot();
+		mAI->CreateRoot(lGoalID);
+	}
+
+	auto lLookTarget = IsCulling();
+	if (dynamic_cast<Ball*>(lLookTarget)) {
+		//ボールだった場合は追跡する
+		float lRotateY;
+		lRotateY = MSHormingY(*mTransform, *lLookTarget->GetTransform(), 5.0f);
+		GetWorld()->AddRC(0, lRotateY, 0);
+		//移動処理
+		if (IsZero(lRotateY, 0.1f)) {
+			GetWorld()->AddT(DXWorld::TYPE_ROTATE, 0.1f, { 0,0,1 });
+		}
+	}
+	else {
+		MoveNode();
+		//誰かがボールを取った場合、AIクリア
+		mAI->ClearAI();
+		mStatus.mInitMoveToBall = false;
+	}
+
+	//ボールと衝突したか調べる
+	auto lHitTargets = UpdateCollision(false);
+	for (auto&lHitTarget : lHitTargets) {
+		if (lHitTarget) {
+			//ボールに当たった場合、そのボールを回収する
+			Ball* lBall = dynamic_cast<Ball*>(lHitTarget);
+			if (lBall) {
+				mStatus.mBall = lBall;
+				mField->SetBallHolder(this);
+				//回収後、AIを進める
+				mAI->NextAI();
+			}
+		}
+	}
+
+
+
+}
+
+void Enemy::UpdateMoveToBallTarget()
+{
+}
+
 bool Enemy::MoveNode()
 {
 	MyNode*lAINode;
 	static int count = 0;
 	mAI->GetFrontNode(lAINode);
+	//移動先ノードがなかったときは処理しない
+	if (!lAINode)return false;
 	float lAng = MSHormingY(*mTransform, lAINode->Position, 6.0f);
 	GetWorld()->AddRC(0, lAng, 0);
 	if (IsZero(lAng, 5.1f)) {
@@ -302,8 +407,10 @@ GameObjectBase * Enemy::IsCulling()
 		if (/*cf.IsCullingWorld(*mTransform, *lTarget)*/true) {
 			if (MSCullingOcculusion::IsCullingWorld(
 				*mRender, *mTransform, *lTarget->GetTransform(), 0.02f,
-				[this]() {
+				[&,this]() {
 				for (auto&lCollision : mCollisionTargets) {
+					//登録済みコリジョンがカリングターゲットと同じだった場合は障害物として描画しない
+					if (lTarget == lCollision)continue;
 					mRender->Render(*lCollision->GetTransform());
 				}
 			}

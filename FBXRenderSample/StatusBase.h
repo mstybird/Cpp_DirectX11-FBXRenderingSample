@@ -8,7 +8,7 @@ struct StatusBase {
 	GameObjectBase* mTarget;
 	//エネルギー残量
 	int mEnergy;
-
-
+	//ボールを所持しているか(所持していたらそのボールのアドレス)
+	GameObjectBase* mBall;
 	
 };

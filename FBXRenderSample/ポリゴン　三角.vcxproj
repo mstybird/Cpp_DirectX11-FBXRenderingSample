@@ -152,6 +152,7 @@
     <ClCompile Include="StaticObject.cpp" />
     <ClCompile Include="StatusBase.cpp" />
     <ClCompile Include="StatusEnemy.cpp" />
+    <ClCompile Include="StatusField.cpp" />
     <ClCompile Include="StatusPlayer.cpp" />
     <None Include="EnemyAI\htn_attack.lua" />
     <None Include="Sample.cxx" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="AI\Dijkstra.h" />
     <ClInclude Include="AI\EnemyAI.h" />
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="BulletNormal.h" />
     <ClInclude Include="BulletObject.h" />
     <ClInclude Include="CharacterBase.h" />
@@ -222,6 +224,7 @@
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="StatusBase.h" />
     <ClInclude Include="StatusEnemy.h" />
+    <ClInclude Include="StatusField.h" />
     <ClInclude Include="StatusPlayer.h" />
     <ClInclude Include="StatusStatic.h" />
   </ItemGroup>

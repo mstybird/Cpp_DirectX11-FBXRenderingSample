@@ -39,7 +39,7 @@ public:
 	};
 protected:
 	virtual void UpdateMesh();
-	virtual GameObjectBase* UpdateCollision();
+	virtual std::vector<GameObjectBase*> UpdateCollision(bool pIsUpdatePosition);
 	//ƒ‰ƒ€ƒ_—p
 protected:
 	std::unique_ptr<DX11RenderResource>mTransform;

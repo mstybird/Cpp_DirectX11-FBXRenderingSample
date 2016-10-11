@@ -32,6 +32,13 @@ void MyMSScene::Initialize()
 		mImage.SetSplitSizeX({ 0.5f,1.0f });
 	}
 
+	{
+		mBall.Initialize();
+		mFieldStatus.mBallIsField = true;
+		mFieldStatus.mBall = &mBall;
+		mFieldStatus.RespawnBall();
+	}
+
 
 	//AI読み込み
 	mLuaDb.Load("EnemyAI/htn_attack.lua", 0, "EnemyAI");
@@ -40,12 +47,11 @@ void MyMSScene::Initialize()
 	shader.InitVertex("Simple.hlsl");
 	shader.InitPixel("Simple.hlsl");
 
-	mdBox.LoadFile("res/box.fbx", true);
+	mdBox.LoadFile("res/SD_QUERY_01.fbx", true);
 	mdField.LoadFile("res/field.fbx", false);
+	mdBall.LoadFile("res/ball.fbx", false);
 
 	//敵の初期化
-	enemy.push_back(make_unique<Enemy>());
-	enemy.push_back(make_unique<Enemy>());
 	enemy.push_back(make_unique<Enemy>());
 
 
@@ -57,25 +63,38 @@ void MyMSScene::Initialize()
 		enemy[i]->SetRenderer(&render);
 		enemy[i]->SetShader(&shader);
 		enemy[i]->SetBulletMesh(mdBox);
+		enemy[i]->SetField(mFieldStatus);
 
 	}
-
+	float scaleBall = 0.01f;
+	float scaleChara = 0.3f;
 	mField.Initialize();
 	mField.SetMesh(mdField);
 	mField.SetRenderer(&render);
 	mField.SetShader(&shader);
+
+	mBall.SetMesh(mdBall);
+	mBall.SetRenderer(&render);
+	mBall.SetShader(&shader);
+	mBall.GetWorld()->SetT(4, 0, 5);
+	mBall.GetWorld()->SetS(scaleBall, scaleBall, scaleBall);
+
 
 	mPlayer.Initialize();
 	mPlayer.SetMesh(mdBox);
 	mPlayer.SetRenderer(&render);
 	mPlayer.SetShader(&shader);
 	mPlayer.SetBulletMesh(mdBox);
+	mPlayer.SetField(mFieldStatus);
 
 	mPlayer.AddCollisionTarget(&mField);
+	mPlayer.AddCollisionTarget(&mBall);
 
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->AddSearchTarget(&mPlayer);
+		enemy[i]->AddSearchTarget(&mBall);
 		enemy[i]->AddCollisionTarget(&mField);
+		enemy[i]->AddCollisionTarget(&mBall);
 	}
 
 
@@ -83,11 +102,10 @@ void MyMSScene::Initialize()
 	render.SetShader(&shader);
 	render.SetRenderTarget(*mPlayer.GetTransform());
 
-	float scale = 0.01f;
 
-	mPlayer.GetWorld()->SetT(-5, 0, -8);
 	mPlayer.GetWorld()->SetRC({ 0,0,0 });
-	mPlayer.GetWorld()->SetS(scale, scale, scale);
+	mPlayer.GetWorld()->SetT(-5, 0, -8);
+	mPlayer.GetWorld()->SetS(scaleChara, scaleChara, scaleChara);
 	mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
 	mPlayer.GetProj()->SetProjection(60, 0.1f, 500.0f);
 
@@ -95,10 +113,10 @@ void MyMSScene::Initialize()
 	mField.GetWorld()->SetT(-3, -1, 0);
 
 	enemy[0]->GetWorld()->SetT(-15, 0, 0);
-	enemy[1]->GetWorld()->SetT(-5, 0, 8);
-	enemy[2]->GetWorld()->SetT(-10, 0, 10);
+	//enemy[1]->GetWorld()->SetT(-5, 0, 8);
+	//enemy[2]->GetWorld()->SetT(-10, 0, 10);
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
-		enemy[i]->GetWorld()->SetS(scale, scale, scale);
+		enemy[i]->GetWorld()->SetS(scaleChara, scaleChara, scaleChara);
 		enemy[i]->GetWorld()->SetRC(0, 0, 0);
 		enemy[i]->GetView()->SetCamera(*enemy[i]->GetWorld(), { 0,0,-5 });
 		enemy[i]->GetProj()->SetProjection(45, 0.01f, 50.0f);
@@ -118,8 +136,7 @@ void MyMSScene::Update() {
 
 void MyMSScene::KeyDown(MSKEY pKey)
 {
-	printf("Key\n");
-
+	static int count = 0;
 	switch (pKey)
 	{
 		case MSKEY::ENTER:
@@ -129,8 +146,8 @@ void MyMSScene::KeyDown(MSKEY pKey)
 		{
 			DXVector3 Pos;
 			mPlayer.GetWorld()->GetMatrix().lock()->GetT(Pos);
-			printf("%3.2f, %3.2f, %3.2f\n", Pos.x, Pos.y, Pos.z);
-
+			printf("new MyNode{ %d,\"obj%d\",{%.2f,%.2f,%.2f}\n", count, count, Pos.x, Pos.y, Pos.z);
+			++count;
 		}
 			break;
 		default:
@@ -181,7 +198,7 @@ void MyMSScene::Render()
 	}
 	mField.Render();
 	mPlayer.Render();
-
+	mBall.Render();
 	m2DRender.Render(mImage);
 
 }

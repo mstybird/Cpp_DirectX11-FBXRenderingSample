@@ -11,7 +11,7 @@
 #include"StaticObject.h"
 #include"BulletNormal.h"
 #include"BulletObject.h"
-
+#include"StatusField.h"
 
 #include<cassert>
 
@@ -29,6 +29,11 @@ void CharacterBase::Initialize()
 	GameObjectBase::Initialize();
 	//ƒm[ƒ}ƒ‹’e
 	mBulletNormal->Initialize();
+}
+
+void CharacterBase::SetField(StatusField&pSetStatus)
+{
+	mField = &pSetStatus;
 }
 
 void CharacterBase::SetBulletMesh(MSFbxManager & aSetMesh)

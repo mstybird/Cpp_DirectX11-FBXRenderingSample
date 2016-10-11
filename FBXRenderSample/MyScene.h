@@ -7,6 +7,8 @@
 #include"Enemy.h"
 #include"Player.h"
 #include"StaticObject.h"
+#include"Ball.h"
+#include"StatusField.h"
 #include"NcgLua\NcgLua.hpp"
 class MyMSScene :public MSSceneBase {
 public:
@@ -24,7 +26,8 @@ private:
 private:
 
 	MSFbxManager mdBox;
-	MSFbxManager mdField;		
+	MSFbxManager mdField;
+	MSFbxManager mdBall;
 	//描画に使うシェーダ
 	My3DShader shader;
 	//シーンに一つ
@@ -36,6 +39,8 @@ private:
 	std::vector<unique_ptr<Enemy>> enemy;
 	Player mPlayer;
 	StaticObject mField;
+	Ball mBall;
+	StatusField mFieldStatus;
 
 	NcgLuaDatabase mLuaDb;
 

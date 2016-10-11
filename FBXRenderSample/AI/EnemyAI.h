@@ -20,7 +20,10 @@ namespace EnemyAIType {
 		eMovingHide,
 		eChargeEnergy,
 		eSearchTarget,
-		eMoveToTarget
+		eMoveToTarget,
+		eMoveToGoal,
+		eMoveToBall,
+		eMoveToBallTarget
 	};
 	const std::string sUnKnown = "unKnown";
 	const std::string sEnergyShot = "energyShot";
@@ -28,6 +31,9 @@ namespace EnemyAIType {
 	const std::string sChargeEnergy = "chargeEnergy";
 	const std::string sSearchTarget = "searchTarget";
 	const std::string sMoveToTarget = "moveToTarget";
+	const std::string sMoveToGoal = "moveToGoal";
+	const std::string sMoveToBall = "moveToBall";
+	const std::string sMoveToBallTarget = "moveToBallTarget";
 
 
 	Type ConvertString(const std::string&aStr);
@@ -43,7 +49,14 @@ public:
 	//第一引数、中心となる座標
 	std::vector<MyNode*> GetNearNodeList(const DXVector3&pCenter);
 	//AIの更新
-	void Update(bool aTargeting,bool aTarget, bool aChargedEnergy);
+	void Update(
+		bool aTargeting,
+		bool aTarget, 
+		bool aChargedEnergy,
+		bool aTargetHoldBall,
+		bool aHoldingBall,
+		bool aBallIsField
+	);
 	//現在の行動パターンを取得する
 	EnemyAIType::Type GetNowAI();
 	//AIを一つすすめる

@@ -36,7 +36,8 @@ int ColorChannel::sTextureCounter{ 0 };
 
 ColorChannel::ColorChannel() :
 	Color{ 0.0f,0.0f,0.0f,1.0f },
-	mTextureID{ -1 }
+	mTextureID{ -1 },
+	mTexture{nullptr}
 {
 }
 

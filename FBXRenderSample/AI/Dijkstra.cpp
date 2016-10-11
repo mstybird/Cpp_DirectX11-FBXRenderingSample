@@ -208,6 +208,11 @@ bool Dijkstra::Manager::CreateNextRoot(bool aBackFlag)
 	//エッジノードインデクスを計算
 	int lNodeIndex;
 	while (true) {
+		//エッジが1だった場合、方向確定
+		if (EdgeCount == 1) {
+			lNodeIndex = 0;
+			break;
+		}
 		lNodeIndex = mRand() % EdgeCount;
 
 		//直前ノードに戻ってはいけない場合

@@ -77,7 +77,7 @@ bool MSCullingOcculusion::IsCullingWorld(
 		pEyeResource.SetCamera(lEyeCameraCopy);
 		//描画先を元に戻す
 		
-		//MSDirect::GetSwapChain()->Present(0, DXGI_PRESENT_RESTART);
+		//MSDirect::GetSwapChain()->Present(0,0);
 		sDeviceContext->OMSetRenderTargets(1, &lRTVCopy, lDSVCopy);
 		sDeviceContext->RSSetViewports(1, lMainViewPort);
 	}
@@ -92,6 +92,7 @@ bool MSCullingOcculusion::IsCullingWorld(
 	//見えたと判定する必要なピクセル数の計算
 	UINT64 lCheckPixels = (float)(640 * 480)*pPixelper;
 	if (lDrawPixels != 0) {
+		int a = 10;
 	}
 
 	return lDrawPixels > lCheckPixels;

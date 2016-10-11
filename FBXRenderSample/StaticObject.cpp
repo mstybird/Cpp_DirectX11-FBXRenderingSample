@@ -12,6 +12,7 @@ void StaticObject::Update()
 
 void StaticObject::Render()
 {
+	if (!mActive)return;
 	mRender->SetShader(mShader);
 	mRender->Render(*mTransform);
 }

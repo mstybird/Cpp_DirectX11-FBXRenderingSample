@@ -175,6 +175,7 @@
     <ClCompile Include="StatusEnemy.cpp" />
     <ClCompile Include="StatusBase.cpp" />
     <ClCompile Include="StatusPlayer.cpp" />
+    <ClCompile Include="StatusField.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -376,6 +377,12 @@
       <Filter>Game\Data</Filter>
     </ClInclude>
     <ClInclude Include="StatusStatic.h">
+      <Filter>Game\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusField.h">
       <Filter>Game\Data</Filter>
     </ClInclude>
   </ItemGroup>
