@@ -24,7 +24,7 @@ public:
 	virtual void SetMesh(MSFbxManager&aSetMesh);
 	void SetRenderer(MS3DRender*aSetRenderer);
 	void GetRenderer(MS3DRender*&aSetRenderer);
-	void AddCollisionTarget(DX11RenderResource*aCollisionTarget);
+	void AddCollisionTarget(GameObjectBase*aCollisionTarget);
 	void ClearCollisionTarget();
 
 	void SetActive(bool aActive);
@@ -34,17 +34,17 @@ public:
 	DXCamera* GetView();
 	DXProjection* GetProj();
 	DX11RenderResource* GetTransform();
-protected:
-	virtual void UpdateMesh();
-	virtual void UpdateCollision();
-	//ラムダ用
-	std::vector<DX11RenderResource*>*GetCollisionTargets() {
+	std::vector<GameObjectBase*>*GetCollisionTargets() {
 		return &mCollisionTargets;
 	};
 protected:
+	virtual void UpdateMesh();
+	virtual GameObjectBase* UpdateCollision();
+	//ラムダ用
+protected:
 	std::unique_ptr<DX11RenderResource>mTransform;
-	std::vector<DX11RenderResource*>mCollisionTargets;
 	std::unique_ptr<MSCollisionRayPicking>mRayPick;
+	std::vector<GameObjectBase*>mCollisionTargets;
 	MS3DRender*mRender;
 	//このオブジェクトの描画に使うシェーダ
 	MSBase3DShader* mShader;

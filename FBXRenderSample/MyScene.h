@@ -23,25 +23,26 @@ private:
 
 private:
 
-	std::shared_ptr<MSFbxManager> mdBox;
-	std::shared_ptr<MSFbxManager> mdField;				//モデルデータ
-	//std::shared_ptr<DX11RenderResource> rField;
-	//std::shared_ptr<DX11RenderResource> rMe;	//自身
-
+	MSFbxManager mdBox;
+	MSFbxManager mdField;		
 	//描画に使うシェーダ
-	std::shared_ptr<My3DShader> shader;
+	My3DShader shader;
 	//シーンに一つ
-	std::shared_ptr<MS3DRender> render;
+	MS3DRender render;
 
 	MSCollisionRayPicking lRayPick;
-	
-	//MSCollisionRayPicking lRayPickEnemy;
-	//std::shared_ptr<DX11RenderResource> rBox1;
-	//EnemyAI ai;
+
 
 	std::vector<unique_ptr<Enemy>> enemy;
 	Player mPlayer;
 	StaticObject mField;
 
 	NcgLuaDatabase mLuaDb;
+
+	DX11TextureManager mTexManager;
+
+	MySprite2DShader m2DShader;
+	MSSprite2DRender m2DRender;
+	MSSprite2DResource mImage;
+
 };

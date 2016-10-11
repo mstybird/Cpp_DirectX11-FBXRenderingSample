@@ -45,16 +45,6 @@ void Enemy::SetAI(NcgLuaManager * aAI)
 
 
 
-void Enemy::AddSearchTarget(DX11RenderResource * aCollisionTarget)
-{
-	mSearchTargets.push_back(aCollisionTarget);
-}
-
-void Enemy::ClearSearchTarget()
-{
-	mSearchTargets.clear();
-}
-
 void Enemy::Update()
 {
 	UpdateMesh();
@@ -98,7 +88,7 @@ void Enemy::InitStatus()
 void Enemy::UpdateAI()
 {
 	mAI->ClearRoot();
-	mAI->Update(mStatus.mTargetting,mStatus.mTarget, mStatus.mEnergy > 0);
+	mAI->Update(mStatus.mTargetting,(bool)mStatus.mTarget, mStatus.mEnergy > 0);
 }
 
 void Enemy::Render()
@@ -129,7 +119,7 @@ void Enemy::UpdateMoveToTarget()
 	}
 
 	//戻る最中に視界に入れば発見。そのターゲットをロックオンする
-	DX11RenderResource* lLookTarget = IsCulling();
+	auto lLookTarget = IsCulling();
 	if (lLookTarget) {
 		//発見したらシーケンスをすすめる
 		mAI->NextAI();
@@ -176,7 +166,7 @@ void Enemy::UpdateSearching()
 
 
 	//登録している走査ターゲット全てでループさせる
-	DX11RenderResource* lLookTarget = IsCulling();
+	auto lLookTarget = IsCulling();
 	if (lLookTarget) {
 		//発見したらシーケンスをすすめる
 		mAI->NextAI();
@@ -214,7 +204,7 @@ void Enemy::UpdateMovingHide()
 		auto lNearNodeList = mAI->GetNearNodeList(lPosition);
 
 		//レイ発射位置を設定(ターゲット座標)
-		mRayPick->SetFramePosition(*mStatus.mTarget);
+		mRayPick->SetFramePosition(*mStatus.mTarget->GetTransform());
 
 		//一番近いノードをレイ発射位置とする
 		mAI->SetStartNode(lNearNodeList[0]->GetID());
@@ -227,7 +217,7 @@ void Enemy::UpdateMovingHide()
 
 			//どれか一つでもヒットしていると隠れた判定
 			for (auto&lCollision : mCollisionTargets) {
-				if (mRayPick->Collision(lTmpVec3, *mTransform, *lCollision)) {
+				if (mRayPick->Collision(lTmpVec3, *mTransform, *lCollision->GetTransform())) {
 					//ゴールノードの確定
 					lGoalNodePtr = lNode;
 				}
@@ -245,7 +235,7 @@ void Enemy::UpdateMovingHide()
 		//移動ルートの確定
 		mAI->CreateRoot(lGoalNodePtr->GetID());
 		//最後にターゲットを見た位置を記憶する
-		mStatus.mTarget->GetWorld().lock()->GetMatrix().lock()->GetT(mStatus.mLastLookPosiion);
+		mStatus.mTarget->GetTransform()->GetWorld().lock()->GetMatrix().lock()->GetT(mStatus.mLastLookPosiion);
 		//隠れるため、必然的に視界から見失う
 		mStatus.mTargetting = false;
 	}
@@ -261,7 +251,7 @@ void Enemy::UpdateMovingHide()
 void Enemy::UpdateEnergyShot()
 {
 	//ターゲットの方向を向く
-	float lRotateY = MSHormingY(*mTransform, *mStatus.mTarget, 3.0f);
+	float lRotateY = MSHormingY(*mTransform, *mStatus.mTarget->GetTransform(), 3.0f);
 	if (IsZero(lRotateY, 0.001f)) {
 		//振り向ききれば攻撃
 		//弾の発射
@@ -303,18 +293,18 @@ bool Enemy::MoveNode()
 }
 
 
-DX11RenderResource * Enemy::IsCulling()
+GameObjectBase * Enemy::IsCulling()
 {
-	DX11RenderResource* lLookTargetPtr{};
+	GameObjectBase* lLookTargetPtr{};
 	//視界処理
-	MSCullingFrustum cf;
+	//MSCullingFrustum cf;
 	for (auto&lTarget : mSearchTargets) {
 		if (/*cf.IsCullingWorld(*mTransform, *lTarget)*/true) {
 			if (MSCullingOcculusion::IsCullingWorld(
-				*mRender, *mTransform, *lTarget, 0.02f,
+				*mRender, *mTransform, *lTarget->GetTransform(), 0.02f,
 				[this]() {
 				for (auto&lCollision : mCollisionTargets) {
-					mRender->Render(*lCollision);
+					mRender->Render(*lCollision->GetTransform());
 				}
 			}
 			)) {

@@ -1,10 +1,13 @@
 #include"BulletNormal.h"
 #include"My3DShader.h"
-#include"GameObjectBase.h"
+#include"CharacterBase.h"
 #include"DXWorld.h"
 #include"DXMatrix.h"
 #include"MS3DRender.h"
+#include"DX11RenderResource.h"
+#include"Player.h"
 #include<cassert>
+
 BulletNormal::BulletNormal()
 {
 }
@@ -23,7 +26,7 @@ void BulletNormal::Initialize()
 }
 
 //弾の生成
-void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBulletList, GameObjectBase & aShoter)
+void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBulletList, CharacterBase & aShoter)
 {
 	std::unique_ptr<BulletNormal>lBullet = std::make_unique<BulletNormal>();
 	lBullet->Initialize();
@@ -48,17 +51,56 @@ void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBullet
 	lShotPos.GetS(lSpwanPos);
 	lSpwanPos *= 0.5f;
 	lBullet->GetWorld()->SetS(lSpwanPos);
+
+	//衝突対象を登録
+	//壁を登録
+	for (auto& lCollision : *aShoter.GetCollisionTargets()) {
+		lBullet->AddCollisionTarget(lCollision);
+	}
+
+
+
+	//捜索対象(ターゲットを登録)
+	for (auto&lTarget : *aShoter.GetSearchTargets()) {
+		lBullet->AddCollisionTarget(lTarget);
+	}
+
+	//レイピックの初期化
+	lBullet->mRayPick->SetFramePosition(*lBullet->mTransform);
+
 	aOutBulletList.push_back(std::move(lBullet));
 	return;
 }
 
 void BulletNormal::Update()
 {
+	if (!mActive)return;
+
 	GetWorld()->AddT(mDirection*mVelocity);
+	//当たった場合
+	auto lHitTarget = UpdateCollision();
+	if (lHitTarget) {
+		//弾を消すために非アクティブにする
+		SetActive(false);
+		//当たったのが(ターゲット)キャラクターだった場合
+		Player* lPlayer = static_cast<Player*>(lHitTarget);
+
+		//プレイヤーヒット時の処理
+		if (lPlayer) {
+			int a = 10;
+			int b = 10 * a;
+
+		}
+
+	}
+
+
+	//UpdateCollision();
 }
 
 void BulletNormal::Render()
 {
+	if (!mActive)return;
 	assert(mRender);
 	mRender->SetShader(mShader);
 	mRender->Render(*mTransform);

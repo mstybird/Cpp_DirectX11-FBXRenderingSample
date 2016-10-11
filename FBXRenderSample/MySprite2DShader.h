@@ -12,7 +12,7 @@ public:
 		ALIGN16 float ViewPortHeight;
 	};
 
-	void SetConstantBuffer(const std::weak_ptr<MSSpriteBaseResource>&pResource, D3D11_VIEWPORT&pViewPort)override;
+	void SetConstantBuffer(MSSpriteBaseResource&pResource, D3D11_VIEWPORT&pViewPort)override;
 
 
 

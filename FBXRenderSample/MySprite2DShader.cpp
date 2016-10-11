@@ -10,14 +10,14 @@ MySprite2DShader::MySprite2DShader() :
 {
 }
 
-void MySprite2DShader::SetConstantBuffer(const std::weak_ptr<MSSpriteBaseResource>&pResource, D3D11_VIEWPORT & pViewPort)
+void MySprite2DShader::SetConstantBuffer(MSSpriteBaseResource&pResource, D3D11_VIEWPORT & pViewPort)
 {
 	CONSTANTDATA cb;
 	D3D11_MAPPED_SUBRESOURCE pData;
 
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
 
-		cb.mW = *pResource.lock()->GetMatrix().lock();
+		cb.mW = *pResource.GetMatrix().lock();
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		cb.ViewPortWidth = pViewPort.Width;
 		cb.ViewPortHeight = pViewPort.Height;

@@ -1,24 +1,47 @@
 ﻿#include"MyScene.h"
 #include"MSUtility.h"
-MyMSScene::MyMSScene() :
-	mdBox{ make_shared<MSFbxManager>() },
-	mdField{ make_shared<MSFbxManager>() },
-	shader{ make_shared<My3DShader>() },
-	render{ make_shared<MS3DRender>() }
+
+/*
+	タスク：
+	攻撃を受けるとダメージ
+	弾を二種類用意
+	弾ごとにコストを設定
+	チャージ速度など
+
+	UI設計
+*/
+
+MyMSScene::MyMSScene()
 {
 }
 
 void MyMSScene::Initialize()
 {
+	{
+		//スプライト初期化
+		m2DShader.Init();
+		m2DShader.InitVertex("Sprite2D.hlsl");
+		m2DShader.InitPixel("Sprite2D.hlsl");
+		m2DRender.SetViewPort(MSDirect::GetViewPort());
+		m2DRender.SetShader(m2DShader);
+
+		mTexManager.RegisterFile("res/yutapon lumia.png", 0);
+		mImage.SetTexture(mTexManager, 0);
+		mImage.SetSize({ 150,100 });
+		mImage.SetPosition({50, 25});
+		mImage.SetSplitSizeX({ 0.5f,1.0f });
+	}
+
+
 	//AI読み込み
 	mLuaDb.Load("EnemyAI/htn_attack.lua", 0, "EnemyAI");
 
-	shader->Init();
-	shader->InitVertex("Simple.hlsl");
-	shader->InitPixel("Simple.hlsl");
+	shader.Init();
+	shader.InitVertex("Simple.hlsl");
+	shader.InitPixel("Simple.hlsl");
 
-	mdBox->LoadFile("res/SD_QUERY_01.fbx", true);
-	mdField->LoadFile("res/field.fbx", false);
+	mdBox.LoadFile("res/box.fbx", true);
+	mdField.LoadFile("res/field.fbx", false);
 
 	//敵の初期化
 	enemy.push_back(make_unique<Enemy>());
@@ -27,42 +50,44 @@ void MyMSScene::Initialize()
 
 
 
-	for (int i = 0; i < enemy.size(); ++i) {
+	for (uint16_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->Initialize();
 		enemy[i]->SetAI(mLuaDb.GetManager(0));
-		enemy[i]->SetMesh(*mdBox);
-		enemy[i]->SetRenderer(render.get());
-		enemy[i]->SetShader(shader.get());
-		enemy[i]->SetBulletMesh(*mdBox);
+		enemy[i]->SetMesh(mdBox);
+		enemy[i]->SetRenderer(&render);
+		enemy[i]->SetShader(&shader);
+		enemy[i]->SetBulletMesh(mdBox);
 
 	}
 
 	mField.Initialize();
-	mField.SetMesh(*mdField);
-	mField.SetRenderer(render.get());
-	mField.SetShader(shader.get());
+	mField.SetMesh(mdField);
+	mField.SetRenderer(&render);
+	mField.SetShader(&shader);
 
 	mPlayer.Initialize();
-	mPlayer.SetMesh(*mdBox);
-	mPlayer.SetRenderer(render.get());
-	mPlayer.SetShader(shader.get());
-	mPlayer.SetBulletMesh(*mdBox);
+	mPlayer.SetMesh(mdBox);
+	mPlayer.SetRenderer(&render);
+	mPlayer.SetShader(&shader);
+	mPlayer.SetBulletMesh(mdBox);
 
-	mPlayer.AddCollisionTarget(mField.GetTransform());
+	mPlayer.AddCollisionTarget(&mField);
 
-	for (int i = 0; i < enemy.size(); ++i) {
-		enemy[i]->AddSearchTarget(mPlayer.GetTransform());
-		enemy[i]->AddCollisionTarget(mField.GetTransform());
+	for (uint32_t i = 0; i < enemy.size(); ++i) {
+		enemy[i]->AddSearchTarget(&mPlayer);
+		enemy[i]->AddCollisionTarget(&mField);
 	}
 
 
 	//リソースにオブジェクトを登録
-	render->SetShader(shader.get());
-	render->SetRenderTarget(*mPlayer.GetTransform());
+	render.SetShader(&shader);
+	render.SetRenderTarget(*mPlayer.GetTransform());
+
+	float scale = 0.01f;
 
 	mPlayer.GetWorld()->SetT(-5, 0, -8);
 	mPlayer.GetWorld()->SetRC({ 0,0,0 });
-	mPlayer.GetWorld()->SetS(0.3f, 0.3f, 0.3f);
+	mPlayer.GetWorld()->SetS(scale, scale, scale);
 	mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
 	mPlayer.GetProj()->SetProjection(60, 0.1f, 500.0f);
 
@@ -72,8 +97,8 @@ void MyMSScene::Initialize()
 	enemy[0]->GetWorld()->SetT(-15, 0, 0);
 	enemy[1]->GetWorld()->SetT(-5, 0, 8);
 	enemy[2]->GetWorld()->SetT(-10, 0, 10);
-	for (int i = 0; i < enemy.size(); ++i) {
-		enemy[i]->GetWorld()->SetS(0.3f, 0.3f, 0.3f);
+	for (uint32_t i = 0; i < enemy.size(); ++i) {
+		enemy[i]->GetWorld()->SetS(scale, scale, scale);
 		enemy[i]->GetWorld()->SetRC(0, 0, 0);
 		enemy[i]->GetView()->SetCamera(*enemy[i]->GetWorld(), { 0,0,-5 });
 		enemy[i]->GetProj()->SetProjection(45, 0.01f, 50.0f);
@@ -86,9 +111,8 @@ void MyMSScene::Initialize()
 void MyMSScene::Update() {
 	mPlayer.Update();
 	mField.Update();
-	for (int i = 0; i < enemy.size(); ++i) {
-	enemy[i]->Update();
-
+	for (uint32_t i = 0; i < enemy.size(); ++i) {
+		enemy[i]->Update();
 	}
 }
 
@@ -152,11 +176,13 @@ void MyMSScene::Render()
 {
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	////画面クリア
-	for (int i = 0; i < enemy.size(); ++i) {
+	for (uint32_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->Render();
 	}
 	mField.Render();
 	mPlayer.Render();
+
+	m2DRender.Render(mImage);
 
 }
 

@@ -17,6 +17,10 @@ MSSpriteBaseResource::MSSpriteBaseResource():
 	mPivot{ std::make_shared<DXVector2>(0.0f,0.0f) },
 	mSize{ std::make_shared<DXVector2>(100.0f,100.0f) },
 	mScale{ std::make_shared<DXVector2>(1.0f,1.0f) },
+	mSplitPolygonX{ 0.0f,1.0f },
+	mSplitPolygonY{ 0.0f,1.0f },
+	mSplitImageX{ 0.0f,1.0f },
+	mSplitImageY{ 0.0f,1.0f },
 	mMatrix{ std::make_shared<DXMatrix>() }
 {
 }
@@ -24,12 +28,13 @@ void MSSpriteBaseResource::sInitialize(ID3D11Device * pDevice)
 {
 	sDevice = pDevice;
 }
-void MSSpriteBaseResource::SetTexture(const std::weak_ptr<DX11TextureManager>& pTextureManager, const int pID)
+void MSSpriteBaseResource::SetTexture(DX11TextureManager& pTextureManager, const int pID)
 {
-	pTextureManager.lock()->Load(mTexture, pID);
+	pTextureManager.Load(mTexture, pID);
+	CreateBuffer();
 }
 
-std::weak_ptr<DXTexture> MSSpriteBaseResource::GetTexture()
+DXTexture* MSSpriteBaseResource::GetTexture()
 {
 	return mTexture;
 }
@@ -59,6 +64,36 @@ void MSSpriteBaseResource::SetSize(const DXVector2 & pSize)
 void MSSpriteBaseResource::SetScale(const DXVector2 & pScale)
 {
 	*mScale = pScale;
+}
+
+void MSSpriteBaseResource::SetSplitSize(const float pLeft, const float pRight, const float pTop, const float pBottom)
+{
+	mSplitPolygonX.Set(pLeft, pRight);
+	mSplitPolygonY.Set(pTop, pBottom);
+	mSplitImageX.Set(pLeft, pRight);
+	mSplitImageY.Set(pTop, pBottom);
+	CreateBuffer();
+}
+
+void MSSpriteBaseResource::SetSplitSizeX(const DXVector2 & pSizeX)
+{
+	mSplitPolygonX = pSizeX;
+	mSplitImageX = pSizeX;
+	CreateBuffer();
+}
+
+void MSSpriteBaseResource::SetSplitSizeY(const DXVector2 & pSizeY)
+{
+	mSplitPolygonY = pSizeY;
+	mSplitImageX = pSizeY;
+	CreateBuffer();
+}
+
+void MSSpriteBaseResource::SetSplitImage(const float pLeft, const float pRight, const float pTop, const float pBottom)
+{
+	mSplitImageX.Set(pLeft, pRight);
+	mSplitImageY.Set(pTop, pBottom);
+	CreateBuffer();
 }
 
 const std::weak_ptr<DXVector3>  MSSpriteBaseResource::GetPosition() const
@@ -92,12 +127,12 @@ const std::weak_ptr<DXMatrix> MSSpriteBaseResource::GetMatrix()
 	return mMatrix;
 }
 
-std::unique_ptr<DXMatrix> MSSpriteBaseResource::GetMatrixWVP(const std::weak_ptr<DXDisplay> pDisplay)
+DXMatrix MSSpriteBaseResource::GetMatrixWVP(DXDisplay& pDisplay)
 {
-	std::unique_ptr<DXMatrix> lResult = std::make_unique<DXMatrix>();
-	*lResult = *GetMatrix().lock() *
-		*pDisplay.lock()->GetCamera().lock()->GetMatrix().lock() *
-		*pDisplay.lock()->GetProjection().lock()->GetMatrix().lock();
+	DXMatrix lResult{};
+	lResult = *GetMatrix().lock() *
+		*pDisplay.GetCamera().lock()->GetMatrix().lock() *
+		*pDisplay.GetProjection().lock()->GetMatrix().lock();
 	return std::move(lResult);
 }
 
@@ -142,17 +177,38 @@ void MSSprite2DResource::CreatePolygon(SpriteVertex pPolygon[4])
 	//Pivotの値を使用して中心位置を調整する
 	DXVector2 lPivotPos{ mSize->x*mPivot->x,mSize->y*mPivot->y };
 	pPolygon[0] = {
-		{ 0 - lPivotPos.x, 0 - lPivotPos.y }, { 0,0 }
+		{ 0 - lPivotPos.x, 0 - lPivotPos.y }, { mSplitImageX.x,mSplitImageY.x }	//左上
 	};
 	pPolygon[1] = {
-	{ mSize->x - lPivotPos.x,0 - lPivotPos.y },{ 1,0 }
+	{ mSize->x - lPivotPos.x,0 - lPivotPos.y },{ mSplitImageX.y,mSplitImageY.x }	//右上
 	};
 	pPolygon[2] = {
-	{ 0 - lPivotPos.x,mSize->y - lPivotPos.y },{ 0,1 }
+	{ 0 - lPivotPos.x,mSize->y - lPivotPos.y },{ mSplitImageX.x,mSplitImageX.y }	//左下
 	};
 	pPolygon[3] = {
-	{ mSize->x - lPivotPos.x,mSize->y - lPivotPos.y },{ 1,1 }
+	{ mSize->x - lPivotPos.x,mSize->y - lPivotPos.y },{ mSplitImageX.y,mSplitImageX.y }	//右下
 	};
+
+	/*
+	splitX.x=left
+	splitX.y=right
+	splitY.x=top
+	splitY.y=bottom
+	*/
+
+	//位置が確定
+	//位置をずらす
+	pPolygon[0].Pos.x += mSize->x*mSplitPolygonX.x;
+	pPolygon[0].Pos.y += mSize->y*mSplitPolygonY.x;
+
+	pPolygon[1].Pos.x -= mSize->x*(1.0f - mSplitPolygonX.y);
+	pPolygon[1].Pos.y += mSize->y*mSplitPolygonY.x;
+
+	pPolygon[2].Pos.x += mSize->x*mSplitPolygonX.x;
+	pPolygon[2].Pos.y -= mSize->y*(1.0f - mSplitPolygonY.y);
+
+	pPolygon[3].Pos.x -= mSize->x*(1.0f - mSplitPolygonX.y);
+	pPolygon[3].Pos.y -= mSize->y*(1.0f - mSplitPolygonY.y);
 }
 
 void MSSprite3DResource::CreatePolygon(SpriteVertex pPolygon[4])

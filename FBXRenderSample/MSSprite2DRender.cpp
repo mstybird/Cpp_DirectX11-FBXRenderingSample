@@ -18,30 +18,30 @@ void MSSpriteBaseRender::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext 
 	sDepthStencilView = pDepthStencilView;
 }
 
-void MSSprite2DRender::Render(const std::weak_ptr<MSSpriteBaseResource>&pSprite)
+void MSSprite2DRender::Render(MSSpriteBaseResource&pSprite)
 {
 
-	shader.lock()->mVertexShader.SetShader();
-	shader.lock()->mPixelShader.SetShader();
+	shader->mVertexShader.SetShader();
+	shader->mPixelShader.SetShader();
 	//頂点インプットレイアウトをセット
 	//sDeviceContext->IASetInputLayout(m_pVertexLayout);
 	sDeviceContext->IASetPrimitiveTopology(mPrimitiveTopology);
-	shader.lock()->SetConstantBuffer(pSprite, *mViewPort);
-	sDeviceContext->VSSetConstantBuffers(0, 1, &shader.lock()->mConstantBuffer);
-	sDeviceContext->PSSetConstantBuffers(0, 1, &shader.lock()->mConstantBuffer);
+	shader->SetConstantBuffer(pSprite, *mViewPort);
+	sDeviceContext->VSSetConstantBuffers(0, 1, &shader->mConstantBuffer);
+	sDeviceContext->PSSetConstantBuffers(0, 1, &shader->mConstantBuffer);
 
 	UINT lStride = sizeof(SpriteVertex);
 	UINT lOffset = 0;
-	sDeviceContext->IASetVertexBuffers(0, 1, &pSprite.lock()->mVertexBuffer, &lStride, &lOffset);
+	sDeviceContext->IASetVertexBuffers(0, 1, &pSprite.mVertexBuffer, &lStride, &lOffset);
 	;
-	sDeviceContext->PSSetSamplers(0, 1, &pSprite.lock()->GetTexture().lock()->mSampleLinear);
-	sDeviceContext->PSSetShaderResources(0, 1, &pSprite.lock()->GetTexture().lock()->mTexture);
+	sDeviceContext->PSSetSamplers(0, 1, &pSprite.GetTexture()->mSampleLinear);
+	sDeviceContext->PSSetShaderResources(0, 1, &pSprite.GetTexture()->mTexture);
 	sDeviceContext->Draw(4, 0);
 }
 
-void MSSpriteBaseRender::SetShader(const std::shared_ptr<MSBaseSpriteShader>&pShader)
+void MSSpriteBaseRender::SetShader(MSBaseSpriteShader&pShader)
 {
-	shader = pShader;
+	shader = &pShader;
 }
 
 void MSSprite2DRender::SetViewPort(D3D11_VIEWPORT * pViewPort)
@@ -62,19 +62,19 @@ void MSSprite3DRender::SetRenderTarget(const std::weak_ptr<DX11RenderResource> r
 	);
 }
 
-void MSSprite3DRender::Render(const std::weak_ptr<MSSpriteBaseResource>& pSprite)
+void MSSprite3DRender::Render(MSSpriteBaseResource& pSprite)
 {
-	shader.lock()->mVertexShader.SetShader();
-	shader.lock()->mPixelShader.SetShader();
+	shader->mVertexShader.SetShader();
+	shader->mPixelShader.SetShader();
 	sDeviceContext->IASetPrimitiveTopology(mPrimitiveTopology);
-	shader.lock()->SetConstantBuffer(pSprite,display,mBillBoardFlag);
-	sDeviceContext->VSSetConstantBuffers(0, 1, &shader.lock()->mConstantBuffer);
-	sDeviceContext->PSSetConstantBuffers(0, 1, &shader.lock()->mConstantBuffer);
+	shader->SetConstantBuffer(pSprite,*display,mBillBoardFlag);
+	sDeviceContext->VSSetConstantBuffers(0, 1, &shader->mConstantBuffer);
+	sDeviceContext->PSSetConstantBuffers(0, 1, &shader->mConstantBuffer);
 	UINT lStride = sizeof(SpriteVertex);
 	UINT lOffset = 0;
-	sDeviceContext->IASetVertexBuffers(0, 1, &pSprite.lock()->mVertexBuffer, &lStride, &lOffset);
+	sDeviceContext->IASetVertexBuffers(0, 1, &pSprite.mVertexBuffer, &lStride, &lOffset);
 	;
-	sDeviceContext->PSSetSamplers(0, 1, &pSprite.lock()->GetTexture().lock()->mSampleLinear);
-	sDeviceContext->PSSetShaderResources(0, 1, &pSprite.lock()->GetTexture().lock()->mTexture);
+	sDeviceContext->PSSetSamplers(0, 1, &pSprite.GetTexture()->mSampleLinear);
+	sDeviceContext->PSSetShaderResources(0, 1, &pSprite.GetTexture()->mTexture);
 	sDeviceContext->Draw(4, 0);
 }

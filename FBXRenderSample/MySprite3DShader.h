@@ -15,6 +15,6 @@ public:
 		ALIGN16 DXMatrix mWVP;
 	};
 
-	void SetConstantBuffer(const std::weak_ptr<MSSpriteBaseResource>&pResource, std::weak_ptr<DXDisplay>pDisplay,bool pBillBoardFlag)override;
+	void SetConstantBuffer(MSSpriteBaseResource&pResource,DXDisplay& pDisplay,bool pBillBoardFlag)override;
 };
 

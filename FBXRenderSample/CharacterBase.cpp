@@ -51,3 +51,13 @@ void CharacterBase::RenderBullets()
 }
 
 
+void CharacterBase::AddSearchTarget(GameObjectBase * aCollisionTarget)
+{
+	mSearchTargets.push_back(aCollisionTarget);
+}
+
+void CharacterBase::ClearSearchTarget()
+{
+	mSearchTargets.clear();
+}
+

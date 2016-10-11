@@ -27,7 +27,7 @@ public:
 	//テクスチャを読み込み(参照)
 	//ファイルが存在しなかった場合、取得しない
 	//デバッグ時はassetチェック
-	bool Load(std::weak_ptr<DXTexture>&pDstTexture,const int pID)const;
+	bool Load(DXTexture*&pDstTexture,const int pID)const;
 
 	//登録したファイルを削除する
 	void UnRegisterFile(const int pID);

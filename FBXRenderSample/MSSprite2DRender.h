@@ -21,12 +21,12 @@ public:
 		ID3D11DepthStencilView*pDepthStencilView
 	);
 
-	virtual void Render(const std::weak_ptr<MSSpriteBaseResource>&pSprite) = 0;
+	virtual void Render(MSSpriteBaseResource&pSprite) = 0;
 	//シェーダーの登録
-	void SetShader(const std::shared_ptr<MSBaseSpriteShader>&pShader);
+	void SetShader(MSBaseSpriteShader&pShader);
 protected:
 
-	std::weak_ptr<MSBaseSpriteShader>shader;
+	MSBaseSpriteShader* shader;
 	//	DX11BaseSprite*shader;
 	const D3D_PRIMITIVE_TOPOLOGY mPrimitiveTopology;
 	static ID3D11Device*sDevice;
@@ -38,7 +38,7 @@ protected:
 //2Dスプライトレンダラー
 class MSSprite2DRender:public MSSpriteBaseRender {
 public:
-	void Render(const std::weak_ptr<MSSpriteBaseResource>&pSprite);
+	void Render(MSSpriteBaseResource &pSprite)override;
 	//ビューポートの設定
 	void SetViewPort(D3D11_VIEWPORT*pViewPort);
 	//描画先サイズ
@@ -51,7 +51,7 @@ class MSSprite3DRender:public MSSpriteBaseRender {
 public:
 	MSSprite3DRender();
 	void SetRenderTarget(const std::weak_ptr<DX11RenderResource>resource);
-	void Render(const std::weak_ptr<MSSpriteBaseResource>&pSprite);
+	void Render(MSSpriteBaseResource&pSprite)override;
 private:
 	bool mBillBoardFlag;
 	std::shared_ptr<DXDisplay>display;

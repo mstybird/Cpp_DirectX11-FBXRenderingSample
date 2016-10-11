@@ -14,7 +14,7 @@ struct ColorChannel {
 	void CreateTexture();
 	std::string TextureName;	//テクスチャファイルパス
 //	DXTexture*mTexture;			//テクスチャリソース
-	std::weak_ptr<DXTexture>mTexture;
+	DXTexture*mTexture;
 	int mTextureID;
 	float Color[4];				//マテリアルカラー
 

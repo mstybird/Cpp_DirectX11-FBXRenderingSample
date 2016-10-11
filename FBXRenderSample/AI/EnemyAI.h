@@ -43,7 +43,7 @@ public:
 	//第一引数、中心となる座標
 	std::vector<MyNode*> GetNearNodeList(const DXVector3&pCenter);
 	//AIの更新
-	void Update(bool aTargeting,void* aTarget, bool aChargedEnergy);
+	void Update(bool aTargeting,bool aTarget, bool aChargedEnergy);
 	//現在の行動パターンを取得する
 	EnemyAIType::Type GetNowAI();
 	//AIを一つすすめる

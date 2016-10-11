@@ -54,7 +54,7 @@ std::vector<MyNode*> EnemyAI::GetNearNodeList(const DXVector3 & pCenter)
 
 }
 
-void EnemyAI::Update(bool aTargeting, void* aTarget, bool aChargedEnergy)
+void EnemyAI::Update(bool aTargeting, bool aTarget, bool aChargedEnergy)
 {
 	assert(mLuaAI);
 	mLuaAI->Call(aTargeting,aTarget, aChargedEnergy);

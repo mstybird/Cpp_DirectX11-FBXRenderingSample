@@ -1,11 +1,8 @@
 #pragma once
 #include"CharacterBase.h"
 #include"DXVector3.h"
-struct PlayerStatus {
-	int mEnergy;
-	PlayerStatus() :
-		mEnergy{ 100 } {};
-};
+#include"StatusPlayer.h"
+
 
 class Player :public CharacterBase{
 public:
@@ -20,5 +17,6 @@ private:
 	void InitStatus()override;
 private:
 	DXVector3 mCameraLen;
+	StatusPlayer mStatus;
 };
 

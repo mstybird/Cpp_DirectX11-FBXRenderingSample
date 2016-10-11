@@ -4,6 +4,7 @@
 #include"DXWorld.h"
 GameObjectBase::GameObjectBase()
 {
+	mActive = true;
 }
 GameObjectBase::~GameObjectBase()
 {
@@ -37,7 +38,7 @@ void GameObjectBase::GetRenderer(MS3DRender *& aSetRenderer)
 	aSetRenderer = mRender;
 }
 
-void GameObjectBase::AddCollisionTarget(DX11RenderResource * aCollisionTarget)
+void GameObjectBase::AddCollisionTarget(GameObjectBase * aCollisionTarget)
 {
 	mCollisionTargets.push_back(aCollisionTarget);
 }
@@ -84,13 +85,17 @@ void GameObjectBase::UpdateMesh()
 	mTransform->mMesh.Update();
 }
 
-void GameObjectBase::UpdateCollision()
+GameObjectBase* GameObjectBase::UpdateCollision()
 {
+	GameObjectBase* lHitTarget{};
 	DXVector3 lResult;
 	for (auto&lCollision : mCollisionTargets) {
-		if (mRayPick->Collision(lResult, *mTransform, *lCollision)) {
+		if (mRayPick->Collision(lResult, *mTransform, *lCollision->GetTransform())) {
 			GetWorld()->SetT(lResult);
+			lHitTarget = lCollision;
+			break;
 		}
 	}
 	mRayPick->SetFramePosition(*mTransform);
+	return lHitTarget;
 }

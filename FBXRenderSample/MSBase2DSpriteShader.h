@@ -25,8 +25,8 @@ public:
 	void Init()override;
 
 
-	virtual void SetConstantBuffer(const std::weak_ptr<MSSpriteBaseResource>&pResource, std::weak_ptr<DXDisplay>pDisplay,bool pBillBoardFlag) { assert(0); };
-	virtual void SetConstantBuffer(const std::weak_ptr<MSSpriteBaseResource>&pResource, D3D11_VIEWPORT&pViewPort) { assert(0); };
+	virtual void SetConstantBuffer(MSSpriteBaseResource &pResource, DXDisplay& pDisplay,bool pBillBoardFlag) { assert(0); };
+	virtual void SetConstantBuffer(MSSpriteBaseResource &pResource, D3D11_VIEWPORT&pViewPort) { assert(0); };
 
 
 	virtual void SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>&pLayout) final;

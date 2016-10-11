@@ -150,6 +150,9 @@
     <ClCompile Include="NcgLua\NcgUtility.cxx" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="StatusBase.cpp" />
+    <ClCompile Include="StatusEnemy.cpp" />
+    <ClCompile Include="StatusPlayer.cpp" />
     <None Include="EnemyAI\htn_attack.lua" />
     <None Include="Sample.cxx" />
   </ItemGroup>
@@ -217,6 +220,10 @@
     <ClInclude Include="NcgLua\NcgUtility.hxx" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StaticObject.h" />
+    <ClInclude Include="StatusBase.h" />
+    <ClInclude Include="StatusEnemy.h" />
+    <ClInclude Include="StatusPlayer.h" />
+    <ClInclude Include="StatusStatic.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Simple.hlsl">

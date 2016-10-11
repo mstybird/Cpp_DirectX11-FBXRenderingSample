@@ -44,9 +44,9 @@ void My3DShader::SetConstantBuffer2(std::weak_ptr<FBXModelData> modelData)
 	ID3D11SamplerState*lSampler{ nullptr };
 	ID3D11ShaderResourceView*lTexture{ nullptr };
 	//テクスチャがあった場合のみセットする
-	if (!modelData.lock()->Diffuse.lock()->mTexture.expired()) {
-		lSampler = modelData.lock()->Diffuse.lock()->mTexture.lock()->GetSampler();
-		lTexture = modelData.lock()->Diffuse.lock()->mTexture.lock()->GetTexture();
+	if (!modelData.lock()->Diffuse.lock()->mTexture) {
+		lSampler = modelData.lock()->Diffuse.lock()->mTexture->GetSampler();
+		lTexture = modelData.lock()->Diffuse.lock()->mTexture->GetTexture();
 
 		cb.ColorPer = 0.0f;
 

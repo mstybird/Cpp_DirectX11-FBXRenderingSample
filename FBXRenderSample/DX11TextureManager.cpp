@@ -69,11 +69,11 @@ bool DX11TextureManager::RegisterFileList(const FileList & pFileList)
 	return false;
 }
 
-bool DX11TextureManager::Load(std::weak_ptr<DXTexture>& pDstTexture, const int pID)const
+bool DX11TextureManager::Load(DXTexture*& pDstTexture, const int pID)const
 {
-	pDstTexture = mTextureMap.at(pID);
+	pDstTexture = mTextureMap.at(pID).get();
 	//“Ç‚İ‚ß‚½‚çtrue‚ğ•Ô‚·
-	return !pDstTexture.expired();
+	return !pDstTexture;
 }
 
 void DX11TextureManager::UnRegisterFile(const int pID)

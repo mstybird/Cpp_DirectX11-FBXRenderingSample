@@ -172,6 +172,9 @@
     <ClCompile Include="BulletNormal.cpp">
       <Filter>Game\Object\Source</Filter>
     </ClCompile>
+    <ClCompile Include="StatusEnemy.cpp" />
+    <ClCompile Include="StatusBase.cpp" />
+    <ClCompile Include="StatusPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -363,6 +366,18 @@
     <ClInclude Include="StaticObject.h">
       <Filter>Game\Object\Header</Filter>
     </ClInclude>
+    <ClInclude Include="StatusBase.h">
+      <Filter>Game\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusEnemy.h">
+      <Filter>Game\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusPlayer.h">
+      <Filter>Game\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusStatic.h">
+      <Filter>Game\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -537,6 +552,9 @@
     </Filter>
     <Filter Include="Game\AI\HTN">
       <UniqueIdentifier>{373532b6-4ca9-4472-86dd-e76486ee96fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Data">
+      <UniqueIdentifier>{1eef93a3-3b05-4af9-9916-6ceb76b31d23}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

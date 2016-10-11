@@ -7,13 +7,13 @@ My3DSpriteShader::My3DSpriteShader():
 {
 }
 
-void My3DSpriteShader::SetConstantBuffer(const std::weak_ptr<MSSpriteBaseResource>& pResource, std::weak_ptr<DXDisplay>pDisplay,bool pBillBoardFlag)
+void My3DSpriteShader::SetConstantBuffer(MSSpriteBaseResource&pResource, DXDisplay& pDisplay, bool pBillBoardFlag)
 {
 	CONSTANTDATA cb;
 	D3D11_MAPPED_SUBRESOURCE pData;
 
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-		cb.mWVP= static_cast<D3DXMATRIX>(*pResource.lock()->GetMatrixWVP(pDisplay));
+		cb.mWVP= static_cast<D3DXMATRIX>(pResource.GetMatrixWVP(pDisplay));
 		//cb.mW = *pResource.lock()->GetMatrix().lock();
 		D3DXMatrixTranspose(&cb.mWVP, &cb.mWVP);
 		//cb.ViewPortWidth = pViewPort.Width;
