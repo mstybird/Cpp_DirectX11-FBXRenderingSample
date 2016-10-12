@@ -39,6 +39,12 @@ void CharacterBase::SetField(StatusField&pSetStatus)
 void CharacterBase::SetBulletMesh(MSFbxManager & aSetMesh)
 {
 	mBulletNormal->SetBulletMesh(aSetMesh);
+
+}
+
+StatusField * CharacterBase::GetField()
+{
+	return mField;
 }
 
 void CharacterBase::UpdateBullets()

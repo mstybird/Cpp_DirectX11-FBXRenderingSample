@@ -28,7 +28,7 @@ bool DX11TextureManager::RegisterFile(const string & pFileName, const int pID)
 		else {
 			//ì«Ç›çûÇﬂÇ»ÇØÇÍÇŒìoò^ÇµÇ»Ç¢
 			lResult = false;
-			assert(0 && pFileName.c_str());
+			//assert(0 && pFileName.c_str());
 		}
 		
 	}

@@ -19,7 +19,7 @@ void EnemyAI::CreateNodes()
 	CreateNodeSafe(new MyNode{ 11,"obj11",{ -11.00,0.00,5.25 } });
 	CreateNodeSafe(new MyNode{ 12,"obj12",{ -8.00,0.00,8.50 } });
 	CreateNodeSafe(new MyNode{ 13,"obj13",{ -4.00,0.00,8.50 } });
-	CreateNodeSafe(new MyNode{ 14,"obj14",{ -0.75,0.00,5.00 } });
+	CreateNodeSafe(new MyNode{ 14,"obj14",{ -0.00,0.00,4.50 } });
 	CreateNodeSafe(new MyNode{ 15,"obj15",{ 2.50,0.00,7.50 } });
 	CreateNodeSafe(new MyNode{ 16,"obj16",{ 7.00,0.00,7.50 } });
 	CreateNodeSafe(new MyNode{ 17,"obj17",{ 11.00,0.00,4.00 } });

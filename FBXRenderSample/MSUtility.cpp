@@ -121,7 +121,8 @@ float MSHormingY(DX11RenderResource & pEyeResource, DXVector3 & pTargetPos, cons
 bool IsZero(float pValue, float Threshold)
 {
 	Threshold = fabsf(Threshold);
-	return pValue<Threshold&&pValue>-Threshold;
+	pValue = fabsf(pValue);
+	return pValue<Threshold;
 }
 
 //pRyr‚©‚çŒ©‚½‘Š‘Î“I‚ÈŠp“x·‚ð‹‚ß‚é

@@ -17,6 +17,7 @@ class MS3DRender;
 class BulletObject;
 struct StatusField;
 class CharacterBase:public GameObjectBase {
+	friend class BulletObject;
 public:
 	CharacterBase();
 	virtual ~CharacterBase();
@@ -29,6 +30,9 @@ public:
 	std::vector<GameObjectBase*>*GetSearchTargets() {
 		return &mSearchTargets;
 	};
+
+	StatusField*GetField();
+
 protected:
 	void UpdateBullets();
 	void RenderBullets();

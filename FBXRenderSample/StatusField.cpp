@@ -20,4 +20,5 @@ void StatusField::RespawnBall()
 	mBall->SetActive(true);
 	mBall->GetWorld()->SetT(-10, 0, -8);
 	mBallIsField = true;
+	mBallHoldChara = nullptr;
 }

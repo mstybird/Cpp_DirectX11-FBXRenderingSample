@@ -2,7 +2,7 @@
 
 EnemyStatus::EnemyStatus() :
 	mTargetting{ false },
-	mLockOnType{EnemyLockOnType::UNKNOWN},
+	mIsTargetingBall{false},
 	mInitMoveToBall{false},
 	mInitMoveToGoal{false},
 	mInitMoveToBallTarget{false}

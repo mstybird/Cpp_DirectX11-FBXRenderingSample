@@ -172,10 +172,18 @@
     <ClCompile Include="BulletNormal.cpp">
       <Filter>Game\Object\Source</Filter>
     </ClCompile>
-    <ClCompile Include="StatusEnemy.cpp" />
-    <ClCompile Include="StatusBase.cpp" />
-    <ClCompile Include="StatusPlayer.cpp" />
-    <ClCompile Include="StatusField.cpp" />
+    <ClCompile Include="StatusBase.cpp">
+      <Filter>Game\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusEnemy.cpp">
+      <Filter>Game\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusField.cpp">
+      <Filter>Game\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusPlayer.cpp">
+      <Filter>Game\Data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -562,6 +570,9 @@
     </Filter>
     <Filter Include="Game\Data">
       <UniqueIdentifier>{1eef93a3-3b05-4af9-9916-6ceb76b31d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Data\Include">
+      <UniqueIdentifier>{c2fc2222-b0ff-49f5-a292-f522432cfaf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,7 @@ BulletObject::~BulletObject()
 void BulletObject::SetBulletMesh(MSFbxManager & aSetMesh)
 {
 	mBulletMesh = &aSetMesh;
+//	mCollisionMesh = &aSetMesh;
 }
 
 

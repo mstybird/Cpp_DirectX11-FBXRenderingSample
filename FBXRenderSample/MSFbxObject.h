@@ -2,7 +2,7 @@
 #include"DX11FbxLoader.h"
 #include"MSFbxManager.h"
 //FBXメッシュを管理するクラス
-class MSCollisionSphere;
+#include"MSCollisionSphere.h"
 class MSFbxObject {
 public:
 	//FBXマネージャを使って初期化
@@ -33,6 +33,7 @@ public:
 	FbxTime mFrameTime;
 	float mFrameSpeed;
 	FbxTime mCurrentFrame;
+	bool mFirstInit{ false };
 
 	std::vector<std::shared_ptr<FBXMesh>> mMeshData;
 	std::vector<std::vector<ID3D11Buffer*>>mVertexBuffer;

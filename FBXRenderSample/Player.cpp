@@ -51,6 +51,11 @@ void Player::AddBullet()
 	mBulletNormal->Create(mBullets, *this);
 }
 
+StatusPlayer * Player::GetStatus()
+{
+	return &mStatus;
+}
+
 void Player::InitStatus()
 {
 }

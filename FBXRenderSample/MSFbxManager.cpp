@@ -117,6 +117,11 @@ void MSFbxManager::LoadFile(std::string pFileName, bool animationLoad)
 
 }
 
+std::string MSFbxManager::GetFileName()
+{
+	return mFileName;
+}
+
 bool MSFbxManager::Update(FbxTime& mCurrentFrame)
 {
 	//アニメーションしない場合は更新処理不要

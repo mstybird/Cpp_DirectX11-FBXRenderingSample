@@ -12,6 +12,7 @@
 #include"StatusField.h"
 #include"DXMatrix.h"
 #include"Ball.h"
+#include"CharacterBase.h"
 Enemy::Enemy()
 {
 	mBulletNormal = std::make_unique<BulletNormal>();
@@ -44,6 +45,16 @@ void Enemy::SetAI(NcgLuaManager * aAI)
 {
 	mAI->mLuaAI = aAI;
 	mAI->mLuaAI->SetFunction("GetPlan", 1, 6);	//関数の設定
+}
+
+void Enemy::SetGoalIndex(int aIndex)
+{
+	mStatus.mGoalIndex = aIndex;
+}
+
+EnemyStatus * Enemy::GetStatus()
+{
+	return &mStatus;
 }
 
 
@@ -102,7 +113,7 @@ void Enemy::UpdateAI()
 		mStatus.mTargetting,
 		mStatus.mTarget!=nullptr, 
 		mStatus.mEnergy > 0,
-		mStatus.mTarget==mField->mBallHoldChara&&mStatus.mTarget!=nullptr,
+		mField->mBallHoldChara,
 		mStatus.mBall!=nullptr,
 		mField->mBallIsField
 		);
@@ -296,12 +307,14 @@ void Enemy::UpdateMoveToGoal()
 		//移動先をゴールにする
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
 		mAI->GenerateRoot();
-		mAI->CreateRoot(19);
+		mAI->CreateRoot(mStatus.mGoalIndex);
 	}
 
 	//移動中に敵を発見した場合、現在のAIを破棄する
 	auto lLookTarget = IsCulling();
-	if (lLookTarget) {
+	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
+		mStatus.mTargetting = true;
+		mStatus.mTarget = lLookTarget;
 		mAI->ClearAI();
 		mStatus.mInitMoveToGoal = false;
 	}
@@ -331,10 +344,26 @@ void Enemy::UpdateMoveToBall()
 	}
 
 	auto lLookTarget = IsCulling();
-	if (dynamic_cast<Ball*>(lLookTarget)) {
+
+	//キャラクターであればロックオン
+	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
+		//追従対象をキャラクタに切り替えるので、
+		//ボール発見フラグを消す
+		mStatus.mIsTargetingBall = false;
+
+		mStatus.mTargetting = true;
+		mStatus.mTarget = lLookTarget;
+		mAI->ClearAI();
+		mStatus.mInitMoveToBall = false;
+		return;
+	}
+
+	if (mStatus.mIsTargetingBall|| dynamic_cast<Ball*>(lLookTarget)) {
 		//ボールだった場合は追跡する
+		//視界に入ったのでボールを捉えておく
+		mStatus.mIsTargetingBall = true;
 		float lRotateY;
-		lRotateY = MSHormingY(*mTransform, *lLookTarget->GetTransform(), 5.0f);
+		lRotateY = MSHormingY(*mTransform, *mField->mBall->GetTransform(), 6.0f);
 		GetWorld()->AddRC(0, lRotateY, 0);
 		//移動処理
 		if (IsZero(lRotateY, 0.1f)) {
@@ -342,10 +371,32 @@ void Enemy::UpdateMoveToBall()
 		}
 	}
 	else {
-		MoveNode();
-		//誰かがボールを取った場合、AIクリア
-		mAI->ClearAI();
-		mStatus.mInitMoveToBall = false;
+		//ボールじゃなかった場合
+		auto lChara = dynamic_cast<CharacterBase*>(lLookTarget);
+		//キャラクターであればロックオン
+		if (lChara) {
+			//追従対象をキャラクタに切り替えるので、
+			//ボール発見フラグを消す
+			mStatus.mIsTargetingBall = false;
+
+			mStatus.mTargetting = true;
+			mStatus.mTarget = lChara;
+			mAI->ClearAI();
+			mStatus.mInitMoveToBall = false;
+		}
+		else {
+		//移動し終わってボールを手に取れなかった場合、再初期化
+			if (!MoveNode()) {
+				mStatus.mInitMoveToBall = false;
+			}
+			//誰かがボールを取った場合、AIクリア
+			if (mField->mBallHoldChara != nullptr) {
+				mAI->ClearAI();
+			
+				mStatus.mInitMoveToBall = false;
+			}
+
+		}
 	}
 
 	//ボールと衝突したか調べる
@@ -369,6 +420,41 @@ void Enemy::UpdateMoveToBall()
 
 void Enemy::UpdateMoveToBallTarget()
 {
+	//ボールを持っている相手の位置を取得する
+	if (mStatus.mInitMoveToBallTarget == false) {
+		mStatus.mInitMoveToBallTarget = true;
+		DXVector3 lBallPos;
+		mField->mBallHoldChara->GetWorld()->GetMatrix().lock()->GetT(lBallPos);
+		auto lGoalID = mAI->GetNearNodeList(lBallPos)[0]->GetID();
+		mAI->SetStartNode(mAI->GetNowNode()->GetID());
+		mAI->GenerateRoot();
+		mAI->CreateRoot(lGoalID);
+	}
+
+	auto lLookTarget = IsCulling();
+	//キャラクターであればロックオン
+	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
+		mStatus.mTargetting = true;
+		mStatus.mTarget = lLookTarget;
+		mAI->ClearAI();
+		mStatus.mInitMoveToBallTarget = false;
+		return;
+	}
+
+	bool lMoveEnd = MoveNode();
+	//ボールを落とした(フィールドに出現した場合)AIクリア
+	if (mField->mBallHoldChara == nullptr) {
+		mAI->ClearAI();
+		mStatus.mInitMoveToBallTarget = false;
+		return;
+	}
+	//移動し終わった場合(敵を発見できなかった場合)
+	if (!lMoveEnd) {
+		//再度敵を探す
+		mStatus.mInitMoveToBallTarget = false;
+	}
+
+
 }
 
 bool Enemy::MoveNode()

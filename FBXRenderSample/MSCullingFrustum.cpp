@@ -25,7 +25,7 @@ bool MSCullingFrustum::IsCullingWorld(
 	//ターゲットの拡大率を調整する必要があるので、位置と拡大率療法取得できるようにする
 	DXMatrix& lTargetMatrix = *pTargetResource.GetWorld().lock()->GetMatrix().lock();
 	//float Radius;
-	auto& lCollisions = pTargetResource.mMesh.mCollisionSphere;
+	auto& lCollisions = pTargetResource.mMesh->mCollisionSphere;
 
 	pCameraResource.GetWorld().lock()->GetMatrix().lock()->GetT(lCameraPos);
 	//位置を取得
@@ -98,8 +98,8 @@ bool MSCullingFrustum::IsCullingWorld(
 	}
 
 
-	for (const auto& lCollisionList : lCollisions) {
-		for (const auto& lCollision : lCollisionList) {
+	for (auto& lCollisionList : lCollisions) {
+		for (auto& lCollision : lCollisionList) {
 			float Radius = lCollision.GetRadius()*lTargetScale;
 
 			DXVector3 Pos;

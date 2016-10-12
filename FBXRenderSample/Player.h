@@ -5,6 +5,7 @@
 
 
 class Player :public CharacterBase{
+
 public:
 	Player();
 	~Player();
@@ -13,6 +14,7 @@ public:
 	void Update()override;
 	void Render()override;
 	void AddBullet();
+	StatusPlayer*GetStatus();
 private:
 	void InitStatus()override;
 private:

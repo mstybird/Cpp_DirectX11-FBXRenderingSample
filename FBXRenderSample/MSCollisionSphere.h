@@ -18,7 +18,7 @@ public:
 	void GetCenterPosition(DXVector3&pOutCenter)const;
 private:
 	float mRadius;//当たり判定半径
-	std::unique_ptr<DXVector3>mCenter;//中心座標
+	std::shared_ptr<DXVector3>mCenter;//中心座標
 };
 /*
 	A>B

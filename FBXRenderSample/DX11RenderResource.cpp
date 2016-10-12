@@ -6,7 +6,8 @@
 #include"DXDisplay.h"
 #include"MSCollisionSphere.h"
 DX11RenderResource::DX11RenderResource():
-	mWorld{std::make_shared<DXWorld>()}
+	mWorld{std::make_shared<DXWorld>()},
+	mMesh{std::make_shared<MSFbxObject>()}
 {
 
 }

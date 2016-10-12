@@ -73,7 +73,7 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 		pRayPosition.GetWorld().lock()->GetMatrix().lock()->GetT(lRayAfterPosition);
 
 		
-		auto lMeshList = pRayTarget.mMesh.mMeshData;
+		auto lMeshList = pRayTarget.mMesh->mMeshData;
 		//移動方向にポリゴンがあるかチェック
 		//ここでレイがヒットする一番近いポリゴンを取得する
 		DXVector3 lTmpPosBefore = *mPosBefore;

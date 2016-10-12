@@ -41,7 +41,7 @@ void MS3DRender::Render(DX11RenderResource&resource)
 	//プリミティブトポロジーの登録
 	sDeviceContext->IASetPrimitiveTopology(mPrimitiveTopology);
 
-	auto& meshData = resource.mMesh.mMeshData;
+	auto& meshData = resource.mMesh->mMeshData;
 
 	//auto meshData = fbxManager.lock()->GetMeshData();
 	//メッシュの個数分
@@ -58,9 +58,9 @@ void MS3DRender::Render(DX11RenderResource&resource)
 			sDeviceContext->PSSetConstantBuffers(1, 1, shader->GetCB2());
 			UINT stride = shader->GetVertexSize();
 			UINT offset = 0;
-			ID3D11Buffer* lVertexBuffer = resource.mMesh.mVertexBuffer[i][j];
-			ID3D11Buffer* lIndexBuffer = resource.mMesh.mIndexBuffer[i][j];
-			unsigned int* indexLength = resource.mMesh.GetIndexBufferCount(i, j);
+			ID3D11Buffer* lVertexBuffer = resource.mMesh->mVertexBuffer[i][j];
+			ID3D11Buffer* lIndexBuffer = resource.mMesh->mIndexBuffer[i][j];
+			unsigned int* indexLength = resource.mMesh->GetIndexBufferCount(i, j);
 
 			sDeviceContext->IASetVertexBuffers(0, 1, &lVertexBuffer, &stride, &offset);
 			stride = sizeof(int);

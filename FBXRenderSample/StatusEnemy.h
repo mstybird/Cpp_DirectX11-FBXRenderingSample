@@ -14,8 +14,9 @@ struct EnemyStatus:public StatusBase {
 	bool mTargetting;
 	//最後にターゲットを見た位置
 	DXVector3 mLastLookPosiion;
-	EnemyLockOnType mLockOnType;
 
+	int mGoalIndex;
+	bool mIsTargetingBall;
 	bool mInitMoveToGoal;
 	bool mInitMoveToBall;
 	bool mInitMoveToBallTarget;

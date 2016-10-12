@@ -9,7 +9,7 @@ class DXProjection;
 class MS3DRender;
 class MSBase3DShader;
 class MSFbxManager;
-
+class MSFbxObject;
 class GameObjectBase {
 public:
 	GameObjectBase();
@@ -22,6 +22,7 @@ public:
 	void SetShader(MSBase3DShader*aShader);
 
 	virtual void SetMesh(MSFbxManager&aSetMesh);
+	void SetCollisionMesh(MSFbxManager&aSetMesh);
 	void SetRenderer(MS3DRender*aSetRenderer);
 	void GetRenderer(MS3DRender*&aSetRenderer);
 	void AddCollisionTarget(GameObjectBase*aCollisionTarget);
@@ -43,6 +44,7 @@ protected:
 	//ƒ‰ƒ€ƒ_—p
 protected:
 	std::unique_ptr<DX11RenderResource>mTransform;
+	std::shared_ptr<MSFbxObject>mCollisionMesh;
 	std::unique_ptr<MSCollisionRayPicking>mRayPick;
 	std::vector<GameObjectBase*>mCollisionTargets;
 	MS3DRender*mRender;

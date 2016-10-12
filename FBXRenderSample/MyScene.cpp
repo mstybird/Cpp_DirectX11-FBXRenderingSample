@@ -47,11 +47,14 @@ void MyMSScene::Initialize()
 	shader.InitVertex("Simple.hlsl");
 	shader.InitPixel("Simple.hlsl");
 
-	mdBox.LoadFile("res/SD_QUERY_01.fbx", true);
-	mdField.LoadFile("res/field.fbx", false);
-	mdBall.LoadFile("res/ball.fbx", false);
+	mdBullet.LoadFile("res/box.fbx", true);
+	mdChara.LoadFile("res/SD_QUERY_01.fbx", true);
+
+	mdField.LoadFile("res/field.fbx", true);
+	mdBall.LoadFile("res/ball.fbx", true);
 
 	//敵の初期化
+	enemy.push_back(make_unique<Enemy>());
 	enemy.push_back(make_unique<Enemy>());
 
 
@@ -59,21 +62,25 @@ void MyMSScene::Initialize()
 	for (uint16_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->Initialize();
 		enemy[i]->SetAI(mLuaDb.GetManager(0));
-		enemy[i]->SetMesh(mdBox);
+		enemy[i]->SetMesh(mdChara);
+		enemy[i]->SetCollisionMesh(mdBullet);
 		enemy[i]->SetRenderer(&render);
 		enemy[i]->SetShader(&shader);
-		enemy[i]->SetBulletMesh(mdBox);
+		enemy[i]->SetBulletMesh(mdBullet);
 		enemy[i]->SetField(mFieldStatus);
 
 	}
 	float scaleBall = 0.01f;
-	float scaleChara = 0.3f;
+	float scaleChara = 0.01f;
+	float scaleField = 0.1f;
 	mField.Initialize();
 	mField.SetMesh(mdField);
+	mField.SetCollisionMesh(mdField);
 	mField.SetRenderer(&render);
 	mField.SetShader(&shader);
 
 	mBall.SetMesh(mdBall);
+	mBall.SetCollisionMesh(mdBall);
 	mBall.SetRenderer(&render);
 	mBall.SetShader(&shader);
 	mBall.GetWorld()->SetT(4, 0, 5);
@@ -81,10 +88,11 @@ void MyMSScene::Initialize()
 
 
 	mPlayer.Initialize();
-	mPlayer.SetMesh(mdBox);
+	mPlayer.SetMesh(mdChara);
+	mPlayer.SetCollisionMesh(mdBullet);
 	mPlayer.SetRenderer(&render);
 	mPlayer.SetShader(&shader);
-	mPlayer.SetBulletMesh(mdBox);
+	mPlayer.SetBulletMesh(mdBullet);
 	mPlayer.SetField(mFieldStatus);
 
 	mPlayer.AddCollisionTarget(&mField);
@@ -93,6 +101,12 @@ void MyMSScene::Initialize()
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->AddSearchTarget(&mPlayer);
 		enemy[i]->AddSearchTarget(&mBall);
+		//自分以外のエネミーを追加
+		for (auto&lEnemy : enemy) {
+			if (enemy[i] != lEnemy) {
+				enemy[i]->AddSearchTarget(&*lEnemy);
+			}
+		}
 		enemy[i]->AddCollisionTarget(&mField);
 		enemy[i]->AddCollisionTarget(&mBall);
 	}
@@ -108,13 +122,20 @@ void MyMSScene::Initialize()
 	mPlayer.GetWorld()->SetS(scaleChara, scaleChara, scaleChara);
 	mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
 	mPlayer.GetProj()->SetProjection(60, 0.1f, 500.0f);
+	for (auto&lEnemy : enemy) {
+		mPlayer.AddSearchTarget(&*lEnemy);
+	}
 
-	mField.GetWorld()->SetS(0.1f, 0.1f, 0.1f);
+
+	mField.GetWorld()->SetS(scaleField, scaleField, scaleField);
 	mField.GetWorld()->SetT(-3, -1, 0);
 
 	enemy[0]->GetWorld()->SetT(-15, 0, 0);
-	//enemy[1]->GetWorld()->SetT(-5, 0, 8);
+	enemy[1]->GetWorld()->SetT(-5, 0, 8);
 	//enemy[2]->GetWorld()->SetT(-10, 0, 10);
+	enemy[0]->SetGoalIndex(19);
+	enemy[1]->SetGoalIndex(20);
+
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->GetWorld()->SetS(scaleChara, scaleChara, scaleChara);
 		enemy[i]->GetWorld()->SetRC(0, 0, 0);

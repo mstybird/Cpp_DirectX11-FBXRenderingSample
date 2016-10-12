@@ -31,7 +31,7 @@ public:
 	//ファイル読み込み
 	void LoadFile(std::string pFileName, bool animationLoad = false);
 	void LoadAnimationFromFile(std::string vfileName);
-
+	std::string GetFileName();
 	//メッシュの更新(毎フレーム必要)
 	bool Update(FbxTime& mCurrentFrame);
 
@@ -84,6 +84,7 @@ private:
 
 	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>>mMeshData;//メッシュデータ
 	bool mAnimationFlag;	//アニメーションする場合はtrue
+
 private:
 	//static変数
 	//アプリに一つ

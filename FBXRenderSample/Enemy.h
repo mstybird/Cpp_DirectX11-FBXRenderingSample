@@ -24,6 +24,11 @@ public:
 	//必ず一回は呼ぶ必要がある
 	void SetAI(NcgLuaManager*aAI);
 
+	void SetGoalIndex(int aIndex);
+
+	//ステータスの参照を取得する
+	EnemyStatus* GetStatus();
+
 	//毎フレーム行うエネミーの更新処理
 	void Update()override;
 
@@ -35,9 +40,9 @@ private:
 	//AIを更新する
 	void UpdateAI();
 
-	//捜索時の処理
+	//探索(無計画)
 	void UpdateSearching();
-	//ターゲットに向かって移動する処理
+	//ターゲットの位置に移動する
 	void UpdateMoveToTarget();
 	//エネルギーチャージ
 	void UpdateChargeEnergy();

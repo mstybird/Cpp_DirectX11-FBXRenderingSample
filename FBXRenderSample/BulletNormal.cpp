@@ -6,6 +6,8 @@
 #include"MS3DRender.h"
 #include"DX11RenderResource.h"
 #include"Player.h"
+#include"Enemy.h"
+#include"StatusField.h"
 #include<cassert>
 
 BulletNormal::BulletNormal()
@@ -38,6 +40,7 @@ void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBullet
 	D3DXVec3TransformNormal(&lBullet->mDirection, &D3DXVECTOR3(0, 0, 1), &lShotPos);
 	lBullet->mDirection.Normalize();
 	lBullet->SetMesh(*mBulletMesh);
+	lBullet->SetCollisionMesh(*mBulletMesh);
 	lBullet->SetShader(mBulletShader.get());
 	//発射速度の設定
 	lBullet->mVelocity = 0.25f;
@@ -49,9 +52,8 @@ void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBullet
 	lShotPos.GetT(lSpwanPos);
 	lBullet->GetWorld()->SetT(lSpwanPos);
 	lShotPos.GetS(lSpwanPos);
-	lSpwanPos *= 0.5f;
+	lSpwanPos = { 0.01f ,0.01f ,0.01f };
 	lBullet->GetWorld()->SetS(lSpwanPos);
-
 	//衝突対象を登録
 	//壁を登録
 	for (auto& lCollision : *aShoter.GetCollisionTargets()) {
@@ -83,16 +85,28 @@ void BulletNormal::Update()
 		if (lHitTarget) {
 			//弾を消すために非アクティブにする
 			SetActive(false);
-			//当たったのが(ターゲット)キャラクターだった場合
+			//当たったのが(ターゲット)プレイヤーキャラクターだった場合
 			Player* lPlayer = dynamic_cast<Player*>(lHitTarget);
-
+			/*
+				ヒットしたキャラクターがボールを所持していた場合、
+				ボールをリスポーンさせる
+			*/
 			//プレイヤーヒット時の処理
 			if (lPlayer) {
-				int a = 10;
-				int b = 10 * a;
-
+				if (lPlayer->GetStatus()->mBall != nullptr) {
+					lPlayer->GetField()->RespawnBall();
+					lPlayer->GetStatus()->mBall = nullptr;
+				}
+				break;
 			}
-
+			Enemy* lEnemy = dynamic_cast<Enemy*>(lHitTarget);
+			//自分以外の敵にヒットした場合
+			if (lEnemy) {
+				if (lEnemy->GetStatus()->mBall != nullptr) {
+					lEnemy->GetField()->RespawnBall();
+					lEnemy->GetStatus()->mBall = nullptr;
+				}
+			}
 		}
 	}
 

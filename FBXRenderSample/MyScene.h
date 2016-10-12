@@ -25,7 +25,8 @@ private:
 
 private:
 
-	MSFbxManager mdBox;
+	MSFbxManager mdBullet;
+	MSFbxManager mdChara;
 	MSFbxManager mdField;
 	MSFbxManager mdBall;
 	//描画に使うシェーダ

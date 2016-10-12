@@ -1,7 +1,9 @@
 #include"GameObjectBase.h"
+#include"StaticObject.h"
 #include"DX11RenderResource.h"
 #include"DXMatrix.h"
 #include"DXWorld.h"
+#include"MSFbxObject.h"
 GameObjectBase::GameObjectBase()
 {
 	mActive = true;
@@ -13,6 +15,7 @@ void GameObjectBase::Initialize()
 {
 	mTransform = std::make_unique<DX11RenderResource>();
 	mTransform->InitRenderMatrix();
+	mCollisionMesh = std::make_unique<MSFbxObject>();
 	mRayPick = std::make_unique<MSCollisionRayPicking>();
 	mRayPick = std::make_unique<MSCollisionRayPicking>();
 	mRayPick->SetSlipFlag(true);
@@ -23,7 +26,12 @@ void GameObjectBase::SetShader(MSBase3DShader * aShader)
 }
 void GameObjectBase::SetMesh(MSFbxManager & aSetMesh)
 {
-	mTransform->mMesh.Initialize(aSetMesh);
+	mTransform->mMesh->Initialize(aSetMesh);
+}
+
+void GameObjectBase::SetCollisionMesh(MSFbxManager & aSetMesh)
+{
+	mCollisionMesh->Initialize(aSetMesh);
 }
 
 
@@ -81,8 +89,8 @@ DX11RenderResource * GameObjectBase::GetTransform()
 void GameObjectBase::UpdateMesh()
 {
 	//メッシュの更新
-	mTransform->mMesh.NextFrame();
-	mTransform->mMesh.Update();
+	mTransform->mMesh->NextFrame();
+	mTransform->mMesh->Update();
 }
 
 std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosition)
@@ -90,13 +98,36 @@ std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosit
 	std::vector<GameObjectBase*>lHitTargets{};
 	DXVector3 lResult;
 	for (auto&lCollision : mCollisionTargets) {
+		auto lTmpMesh = lCollision->mTransform->mMesh;
+		DXVector3 lTmpS;
+		//判定メッシュをコリジョン用に変更
+		lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
+		lCollision->mTransform->mMesh = lCollision->mCollisionMesh;
+
+
+		
+		if (dynamic_cast<StaticObject*>(lCollision)) {
+			if (lTmpMesh->mManager->GetFileName()=="res/field.fbx") {
+				lCollision->GetWorld()->SetS(0.1f, 0.1f, 0.1f);
+			}
+			else {
+				lCollision->GetWorld()->SetS(0.01f, 0.01f, 0.01f);
+			}
+		}
+		else {
+			lCollision->GetWorld()->SetS(0.01f, 0.01f, 0.01f);
+		}
 		if (lCollision->IsActive() == false)continue;
+
 		if (mRayPick->Collision(lResult, *mTransform, *lCollision->GetTransform())) {
 			if (pIsUpdatePosition == true) {
 				GetWorld()->SetT(lResult);
 			}
 			lHitTargets.push_back(lCollision);
 		}
+		lCollision->mTransform->mMesh = lTmpMesh;
+		lCollision->GetWorld()->SetS(lTmpS);
+
 	}
 
 	if (pIsUpdatePosition == true) {

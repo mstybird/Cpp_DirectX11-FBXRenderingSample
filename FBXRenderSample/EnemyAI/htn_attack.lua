@@ -159,7 +159,7 @@ function(state)
 			return {{"chargeEnergy"},{"attackPrepare"}}
 		end
 	--一度物陰に隠れてチャージした場合、隠れる前の位置に移動する
-	elseif state.bLockoned == true and state.bHoldBall then
+	elseif state.bLockoned == true  then
 		return {{"moveToTarget"},{"energyShot"}}	
 	--チャージ後(もしくはチャージ済みでボールを持っていて敵が視界からいない場合)
 	elseif state.bHoldBall == true and state.bTargeting == false then
@@ -196,10 +196,9 @@ function GetPlan(aTargeting,aTarget,aChargedEnergy,aTargetHoldBall,aHoldingBall,
 	state.bTargetHoldBall=aTargetHoldBall	--ターゲットがボールを持っているかどうか
 	state.bHoldBall=aHoldingBall			--ボールを所持しているかどうか
 	state.bBallIsField=aBallIsField			--ボールがフィールドに落ちているかどうか
-	print("Start")
 	plan = htn(domain, state, {{"attack"}})
 	print("End")
 	print_plan(plan)
 	return GetPlanArray(plan)
 end
-GetPlan(true,false,true,false,true,false)
+GetPlan(true,true,false,false,false,true)

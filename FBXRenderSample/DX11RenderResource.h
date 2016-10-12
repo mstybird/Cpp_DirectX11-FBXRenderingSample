@@ -44,7 +44,7 @@ public:
 	//指定したリソースとの衝突判定
 	bool CollisionSphere( std::shared_ptr<DX11RenderResource>&pResource);
 	void GetCollisionSphere(std::weak_ptr<std::vector<std::vector<MSCollisionSphere>>>&pOutCollisions);
-	MSFbxObject mMesh;
+	std::shared_ptr<MSFbxObject> mMesh;
 private:
 	//ワールド行列
 	std::shared_ptr<DXWorld>mWorld;
