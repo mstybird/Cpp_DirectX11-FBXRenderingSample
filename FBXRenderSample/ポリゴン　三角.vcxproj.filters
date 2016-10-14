@@ -184,6 +184,7 @@
     <ClCompile Include="StatusPlayer.cpp">
       <Filter>Game\Data</Filter>
     </ClCompile>
+    <ClCompile Include="MSProgressData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -393,6 +394,9 @@
     <ClInclude Include="StatusField.h">
       <Filter>Game\Data</Filter>
     </ClInclude>
+    <ClInclude Include="MSProgressData.h">
+      <Filter>MSDirect\MSUtility\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -578,6 +582,9 @@
   <ItemGroup>
     <Text Include="2DSprite.txt">
       <Filter>Reference</Filter>
+    </Text>
+    <Text Include="Task.txt">
+      <Filter>Resource</Filter>
     </Text>
   </ItemGroup>
 </Project>

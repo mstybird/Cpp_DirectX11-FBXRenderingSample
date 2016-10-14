@@ -109,6 +109,7 @@
     <ClCompile Include="MSCullingOcclusion.cpp" />
     <ClCompile Include="MSFbxObject.cpp" />
     <ClCompile Include="MSKeyCodeList.cpp" />
+    <ClCompile Include="MSProgressData.cpp" />
     <ClCompile Include="MSUtility.cpp" />
     <ClCompile Include="My3DShader.cpp" />
     <ClCompile Include="MSFbxManager.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="MSDebug.h" />
     <ClInclude Include="MSFbxObject.h" />
     <ClInclude Include="MSKeyCodeList.h" />
+    <ClInclude Include="MSProgressData.h" />
     <ClInclude Include="MSUtility.h" />
     <ClInclude Include="My3DShader.h" />
     <ClInclude Include="MSSprite2DResource.h" />
@@ -245,6 +247,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="2DSprite.txt" />
+    <Text Include="Task.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

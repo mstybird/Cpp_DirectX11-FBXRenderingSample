@@ -23,7 +23,7 @@ public:
 
 	//必ず一回は呼ぶ必要がある
 	void SetAI(NcgLuaManager*aAI);
-
+	//ゴール地点を設定する
 	void SetGoalIndex(int aIndex);
 
 	//ステータスの参照を取得する

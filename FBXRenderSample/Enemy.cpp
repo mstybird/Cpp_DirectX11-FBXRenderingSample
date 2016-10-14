@@ -191,7 +191,10 @@ void Enemy::UpdateSearching()
 			//ルートを生成する
 			mAI->CreateNextRoot(false);
 		}
-		MoveNode();
+		//移動に失敗すればAI更新
+		if (!MoveNode()) {
+			mAI->ClearAI();
+		}
 		
 	}
 
@@ -389,16 +392,16 @@ void Enemy::UpdateMoveToBall()
 			if (!MoveNode()) {
 				mStatus.mInitMoveToBall = false;
 			}
+
+		}
+	}
+
 			//誰かがボールを取った場合、AIクリア
 			if (mField->mBallHoldChara != nullptr) {
 				mAI->ClearAI();
 			
 				mStatus.mInitMoveToBall = false;
 			}
-
-		}
-	}
-
 	//ボールと衝突したか調べる
 	auto lHitTargets = UpdateCollision(false);
 	for (auto&lHitTarget : lHitTargets) {

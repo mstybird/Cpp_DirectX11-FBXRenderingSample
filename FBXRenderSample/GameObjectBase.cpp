@@ -7,6 +7,7 @@
 GameObjectBase::GameObjectBase()
 {
 	mActive = true;
+	mIsCollisionScaleDefault = true;
 }
 GameObjectBase::~GameObjectBase()
 {
@@ -15,7 +16,7 @@ void GameObjectBase::Initialize()
 {
 	mTransform = std::make_unique<DX11RenderResource>();
 	mTransform->InitRenderMatrix();
-	mCollisionMesh = std::make_unique<MSFbxObject>();
+	mCollisionMesh = std::make_unique<DX11RenderResource>();
 	mRayPick = std::make_unique<MSCollisionRayPicking>();
 	mRayPick = std::make_unique<MSCollisionRayPicking>();
 	mRayPick->SetSlipFlag(true);
@@ -31,8 +32,15 @@ void GameObjectBase::SetMesh(MSFbxManager & aSetMesh)
 
 void GameObjectBase::SetCollisionMesh(MSFbxManager & aSetMesh)
 {
-	mCollisionMesh->Initialize(aSetMesh);
+	mCollisionMesh->mMesh->Initialize(aSetMesh);
 }
+
+void GameObjectBase::SetCollisionScale(float aX, float aY, float aZ)
+{
+	mCollisionMesh->GetWorld().lock()->SetS(aX, aY, aZ);
+	mIsCollisionScaleDefault = false;
+}
+
 
 
 
@@ -98,25 +106,34 @@ std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosit
 	std::vector<GameObjectBase*>lHitTargets{};
 	DXVector3 lResult;
 	for (auto&lCollision : mCollisionTargets) {
-		auto lTmpMesh = lCollision->mTransform->mMesh;
+		auto lTmpMesh = lCollision->mTransform;
 		DXVector3 lTmpS;
 		//判定メッシュをコリジョン用に変更
-		lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
-		lCollision->mTransform->mMesh = lCollision->mCollisionMesh;
+		lCollision->GetWorld()->GetMatrix().lock()->GetT(lTmpS);
+		lCollision->mCollisionMesh->GetWorld().lock()->SetT(lTmpS);
+		lCollision->mCollisionMesh->GetWorld().lock()->SetRC(*lCollision->GetWorld()->mRotationCenter);
 
 
+		//コリジョンスケールが別で設定されていない場合は
+		//メッシュのコリジョンスケールを使う
+		if (lCollision->mIsCollisionScaleDefault == true) {
+			lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
+			lCollision->mCollisionMesh->GetWorld().lock()->SetS(lTmpS);
+		}
+
+		lCollision->mTransform = lCollision->mCollisionMesh;
 		
-		if (dynamic_cast<StaticObject*>(lCollision)) {
-			if (lTmpMesh->mManager->GetFileName()=="res/field.fbx") {
-				lCollision->GetWorld()->SetS(0.1f, 0.1f, 0.1f);
-			}
-			else {
-				lCollision->GetWorld()->SetS(0.01f, 0.01f, 0.01f);
-			}
-		}
-		else {
-			lCollision->GetWorld()->SetS(0.01f, 0.01f, 0.01f);
-		}
+		//if (dynamic_cast<StaticObject*>(lCollision)) {
+		//	if (lTmpMesh->mMesh->mManager->GetFileName() == "res/field3.fbx") {
+		//		lCollision->GetWorld()->SetS(0.1f, 0.1f, 0.1f);
+		//	}
+		//	else {
+		//		lCollision->GetWorld()->SetS(0.01f, 0.01f, 0.01f);
+		//	}
+		//}
+		//else {
+		//	//lCollision->GetWorld()->SetS(0.01f, 0.01f, 0.01f);
+		//}
 		if (lCollision->IsActive() == false)continue;
 
 		if (mRayPick->Collision(lResult, *mTransform, *lCollision->GetTransform())) {
@@ -125,8 +142,8 @@ std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosit
 			}
 			lHitTargets.push_back(lCollision);
 		}
-		lCollision->mTransform->mMesh = lTmpMesh;
-		lCollision->GetWorld()->SetS(lTmpS);
+		lCollision->mTransform = lTmpMesh;
+		//lCollision->GetWorld()->SetS(lTmpS);
 
 	}
 

@@ -23,6 +23,8 @@ public:
 
 	virtual void SetMesh(MSFbxManager&aSetMesh);
 	void SetCollisionMesh(MSFbxManager&aSetMesh);
+	void SetCollisionScale(float aX, float aY, float aZ);
+	//DX11RenderResource* GetCollision();
 	void SetRenderer(MS3DRender*aSetRenderer);
 	void GetRenderer(MS3DRender*&aSetRenderer);
 	void AddCollisionTarget(GameObjectBase*aCollisionTarget);
@@ -43,8 +45,8 @@ protected:
 	virtual std::vector<GameObjectBase*> UpdateCollision(bool pIsUpdatePosition);
 	//ラムダ用
 protected:
-	std::unique_ptr<DX11RenderResource>mTransform;
-	std::shared_ptr<MSFbxObject>mCollisionMesh;
+	std::shared_ptr<DX11RenderResource>mTransform;
+	std::shared_ptr<DX11RenderResource>mCollisionMesh;
 	std::unique_ptr<MSCollisionRayPicking>mRayPick;
 	std::vector<GameObjectBase*>mCollisionTargets;
 	MS3DRender*mRender;
@@ -52,4 +54,7 @@ protected:
 	MSBase3DShader* mShader;
 	//このオブジェクトがアクティブかどうか
 	bool mActive;
+	//コリジョンのサイズ(拡大率)はメッシュのサイズと同じにするかどうか
+	//一度でもコリジョン用のサイズを設定した場合、フラグはfalseになる
+	bool mIsCollisionScaleDefault;
 };

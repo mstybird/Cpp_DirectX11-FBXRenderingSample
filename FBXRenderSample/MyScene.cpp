@@ -50,12 +50,12 @@ void MyMSScene::Initialize()
 	mdBullet.LoadFile("res/box.fbx", true);
 	mdChara.LoadFile("res/SD_QUERY_01.fbx", true);
 
-	mdField.LoadFile("res/field.fbx", true);
+	mdField.LoadFile("res/field3.fbx", true);
 	mdBall.LoadFile("res/ball.fbx", true);
 
 	//敵の初期化
 	enemy.push_back(make_unique<Enemy>());
-	enemy.push_back(make_unique<Enemy>());
+	//enemy.push_back(make_unique<Enemy>());
 
 
 
@@ -71,11 +71,14 @@ void MyMSScene::Initialize()
 
 	}
 	float scaleBall = 0.01f;
-	float scaleChara = 0.01f;
+	float scaleChara = 0.3f;
 	float scaleField = 0.1f;
 	mField.Initialize();
 	mField.SetMesh(mdField);
 	mField.SetCollisionMesh(mdField);
+	mField.SetCollisionScale(scaleField, scaleField, scaleField);
+
+
 	mField.SetRenderer(&render);
 	mField.SetShader(&shader);
 
@@ -90,6 +93,7 @@ void MyMSScene::Initialize()
 	mPlayer.Initialize();
 	mPlayer.SetMesh(mdChara);
 	mPlayer.SetCollisionMesh(mdBullet);
+	mPlayer.SetCollisionScale(scaleBall, scaleBall, scaleBall);
 	mPlayer.SetRenderer(&render);
 	mPlayer.SetShader(&shader);
 	mPlayer.SetBulletMesh(mdBullet);
@@ -131,10 +135,10 @@ void MyMSScene::Initialize()
 	mField.GetWorld()->SetT(-3, -1, 0);
 
 	enemy[0]->GetWorld()->SetT(-15, 0, 0);
-	enemy[1]->GetWorld()->SetT(-5, 0, 8);
+	//enemy[1]->GetWorld()->SetT(-5, 0, 8);
 	//enemy[2]->GetWorld()->SetT(-10, 0, 10);
 	enemy[0]->SetGoalIndex(19);
-	enemy[1]->SetGoalIndex(20);
+	//enemy[1]->SetGoalIndex(20);
 
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->GetWorld()->SetS(scaleChara, scaleChara, scaleChara);
@@ -220,7 +224,7 @@ void MyMSScene::Render()
 	mField.Render();
 	mPlayer.Render();
 	mBall.Render();
-	m2DRender.Render(mImage);
+	//m2DRender.Render(mImage);
 
 }
 
