@@ -184,7 +184,9 @@
     <ClCompile Include="StatusPlayer.cpp">
       <Filter>Game\Data</Filter>
     </ClCompile>
-    <ClCompile Include="MSProgressData.cpp" />
+    <ClCompile Include="MSProgress\MSProgresData.cxx">
+      <Filter>MSDirect\MSUtility\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -394,7 +396,7 @@
     <ClInclude Include="StatusField.h">
       <Filter>Game\Data</Filter>
     </ClInclude>
-    <ClInclude Include="MSProgressData.h">
+    <ClInclude Include="MSProgress\MSProgressData.hxx">
       <Filter>MSDirect\MSUtility\Header</Filter>
     </ClInclude>
   </ItemGroup>

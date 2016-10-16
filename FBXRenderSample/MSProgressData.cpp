@@ -7,6 +7,41 @@ MSProgress::MSProgress():
 {
 }
 
+float MSProgress::GetMax()
+{
+	return mMax;
+}
+
+float MSProgress::GetNow()
+{
+	return mNow;
+}
+
+float MSProgress::GetMin()
+{
+	return mMin;
+}
+
+float MSProgress::GetNowPer()
+{
+	float lNowDiff, lFixDiff;
+	lFixDiff = mMax - mMin;
+	lNowDiff = mNow - mMin;
+
+
+	return ;
+}
+
+float MSProgress::GetMaxRemainPer()
+{
+	return 0.0f;
+}
+
+float MSProgress::GetMaxRemainFix()
+{
+	return 0.0f;
+}
+
 void MSProgress::Set(float aMax, float aMin, float aNow)
 {
 	mMax = aMax;

@@ -2,10 +2,10 @@
 
 //最大値と最小値、現在値を保持するクラス
 /*
-	現在値の設定に失敗した場合、設定済みの最小値がセットされる
+現在値の設定に失敗した場合、設定済みの最小値がセットされる
 */
 
-enum class MSPRogressFlag{
+enum class MSPRogressFlag {
 	LESSMIN,
 	GREATEMAX,
 	NOTOVERFLOW
@@ -13,15 +13,15 @@ enum class MSPRogressFlag{
 
 class MSProgress
 {
-
+public:
 	MSProgress();
 
 	float GetMax();
 	float GetNow();
 	float GetMin();
-	//現在の数値が最大値に対して何％分かどうか(戻り値の最大値は1.0f)
+	//現在の数値が最大値に対して何％分かどうか(100%を1.0fとする)
 	float GetNowPer();
-	//あと何％で最大値に達するか(戻り値の最大値は1.0f)
+	//あと何％で最大値に達するか(100%を1.0fとする)
 	float GetMaxRemainPer();
 	//あといくらで最大値に達するか
 	float GetMaxRemainFix();
@@ -32,28 +32,26 @@ class MSProgress
 	//それぞれの値をセットする
 	void Set(float aMax, float aMin, float aNow);
 	//現在地となる値を直接セットする
-	bool SetNowFix(float aNowValue);
+	void SetNowFix(float aNowValue);
 	//現在地となる値を割合(1を100%とする)分セットする
-	bool SetNowPer(float aNowValue);
-	
-	//指定した値をそのまま加算する
-	//最大値を超えたらtrueを返し、
-	//最大値に満たない場合はfalseを返す
-	bool AddFix(float aValue);
-	//指定した値をそのまま減算する
-	//最小値を超えたらtrueを返し、
-	//最小値に満たない場合はfalseを返す
-	bool SubFix(float aValue);
-	//指定した値を割合(1を100%とする)分加算する
-	//最大値を超えたらtrueを返し、
-	//最大値に満たない場合はfalseを返す
-	bool AddPer(float aValue);
-	//指定した値を割合(1を100%とする)分減算する
-	//最小値を超えたらtrueを返し、
-	//最小値に満たない場合はfalseを返す
-	bool SubPer(float aValue);
+	void SetNowPer(float aNowValue);
 
-	bool IsBetweenValue(float aValue);
+	//指定した値をそのまま加算する
+	//範囲から溢れたかの情報を返す
+	MSPRogressFlag AddFix(float aValue);
+	//指定した値をそのまま減算する
+	//範囲から溢れたかの情報を返す
+	MSPRogressFlag SubFix(float aValue);
+	//指定した値を割合(1を100%とする)分加算する
+	//範囲から溢れたかの情報を返す
+	MSPRogressFlag AddPer(float aValue);
+	//指定した値を割合(1を100%とする)分減算する
+	//範囲から溢れたかの情報を返す
+	MSPRogressFlag SubPer(float aValue);
+
+	MSPRogressFlag IsBetweenValue(float aValue);
+protected:
+	void FitValue();
 protected:
 	float mMax;
 	float mNow;
