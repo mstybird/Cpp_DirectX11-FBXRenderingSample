@@ -21,6 +21,9 @@ void Player::Initialize(StatusField&pSetStatus)
 
 void Player::Update()
 {
+	//éÄÇÒÇ≈ÇΩÇ∆Ç´ÇÃèàóù
+	UpdateAlive();
+
 	UpdateMesh();
 	UpdateBullets();
 	
@@ -38,6 +41,26 @@ void Player::Update()
 	}
 
 	GetView()->SetCamera(*GetWorld(), mCameraLen);
+}
+
+void Player::UpdateAlive()
+{
+	switch (mStatus->mLive)
+	{
+	case CharaStateFlag::ALIVE:
+		break;
+	case CharaStateFlag::DEAD:
+		mStatus->mLive = CharaStateFlag::RESPAWNWAIT;
+		break;
+	case CharaStateFlag::RESPAWNWAIT:
+		//ÉXÉ|Å[Éì
+		InitStatus();
+		Respawn();
+
+		break;
+	default:
+		break;
+	}
 }
 
 void Player::Render()

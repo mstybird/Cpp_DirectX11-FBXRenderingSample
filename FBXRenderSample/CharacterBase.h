@@ -25,6 +25,9 @@ public:
 	virtual ~CharacterBase();
 	virtual void Initialize(StatusField&pSetStatus);
 	virtual void InitStatus() = 0;
+	//¶‘¶€–S‚È‚Ç‚Ìˆ—‚ğs‚¤
+	virtual void UpdateAlive() = 0;
+
 	void SetField(StatusField&pSetStatus);
 	void SetBulletMesh(MSFbxManager&aSetMesh);
 	void AddSearchTarget(GameObjectBase*aCollisionTarget);

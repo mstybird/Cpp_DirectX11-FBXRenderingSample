@@ -106,10 +106,11 @@ void BulletNormal::Update()
 		if (lIsDead == false)break;
 		auto lStatus = lChara->GetStatus();
 		lStatus->mLive = CharaStateFlag::DEAD;
-		//lChara->SetActive(false);
-		//ボールを持っていた場合、ボールをセット
+		//ボールを持っていた場合、ボールをフィールドにセット
 		if (lStatus->mBall != nullptr) {
-			lChara->GetField()->RespawnBall();
+			DXVector3 lPosition;
+			lChara->GetWorld()->GetMatrix().lock()->GetT(lPosition);
+			lChara->GetField()->RespawnBall(&lPosition);
 			lStatus->mBall = nullptr;
 		}
 		break;

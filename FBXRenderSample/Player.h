@@ -12,6 +12,7 @@ public:
 
 	void Initialize(StatusField&pSetStatus)override;
 	void Update()override;
+	void UpdateAlive()override;
 	void Render()override;
 	void AddBullet();
 private:

@@ -45,6 +45,6 @@ struct StatusField {
 
 	StatusField();
 	void SetBallHolder(GameObjectBase*pBallHolder);
-	void RespawnBall();
+	void RespawnBall(DXVector3*pPosition = nullptr);
 
 };

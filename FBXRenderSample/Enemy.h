@@ -31,6 +31,7 @@ public:
 
 	//毎フレーム行うエネミーの更新処理
 	void Update()override;
+	void UpdateAlive()override;
 
 	void Render()override;
 

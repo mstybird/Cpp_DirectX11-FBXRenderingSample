@@ -60,6 +60,7 @@ void Enemy::SetGoalIndex(int aIndex)
 
 void Enemy::Update()
 {
+	UpdateAlive();
 	UpdateMesh();
 	UpdateBullets();
 
@@ -97,6 +98,28 @@ void Enemy::Update()
 	}
 	//行動処理が全て終わってから衝突判定
 	UpdateCollision(true);
+}
+
+void Enemy::UpdateAlive()
+{
+
+	switch (mStatus->mLive)
+	{
+	case CharaStateFlag::ALIVE:
+		break;
+	case CharaStateFlag::DEAD:
+		mStatus->mLive = CharaStateFlag::RESPAWNWAIT;
+		break;
+	case CharaStateFlag::RESPAWNWAIT:
+		//スポーン
+		InitStatus();
+		Respawn();
+
+		break;
+	default:
+		break;
+	}
+
 }
 
 void Enemy::InitStatus()

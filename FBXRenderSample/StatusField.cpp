@@ -90,6 +90,8 @@ std::vector<Dijkstra::Node*> StatusField::GetFieldNodesClone()
 }
 void StatusField::Respawn(CharacterBase * aSpawnChara)
 {
+	printf("%s is Respawn\n", typeid(aSpawnChara).name());
+
 	auto lCount = rand() % mSpawnCharaNodes.size();
 	//ランダムなノードから座標を取り出す
 	auto& lPosition = static_cast<MyNode*>(mSpawnCharaNodes[lCount])->Position;
@@ -113,16 +115,22 @@ void StatusField::SetBallHolder(GameObjectBase * pBallHolder)
 	mBall->SetActive(false);
 }
 
-void StatusField::RespawnBall()
+void StatusField::RespawnBall(DXVector3*pPosition)
 {
 	mBall->SetActive(true);
 	mBallIsField = true;
 	mBallHoldChara = nullptr;
 
-	//ボールがスポーン可能な場所ランダムにスポーンさせる
-	auto lCount = rand()%mSpawnBallNodes.size();
-	auto& lPosition =static_cast<MyNode*>(mSpawnBallNodes[lCount])->Position;
-	mBall->GetWorld()->SetT(lPosition);
+	if (pPosition != nullptr) {
+		mBall->GetWorld()->SetT(*pPosition);
+	}
+	else {
+		//位置が不定の場合、
+		//ボールがスポーン可能な場所ランダムにスポーンさせる
+		auto lCount = rand()%mSpawnBallNodes.size();
+		auto& lPosition =static_cast<MyNode*>(mSpawnBallNodes[lCount])->Position;
+		mBall->GetWorld()->SetT(lPosition);
+	}
 }
 
 void NodeControl::AddNodeSafe(std::vector<Dijkstra::Node*>& aNodeList, Dijkstra::Node * aAddNode)
