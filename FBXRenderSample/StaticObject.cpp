@@ -5,7 +5,6 @@ void StaticObject::Initialize()
 {
 	GameObjectBase::Initialize();
 }
-
 void StaticObject::Update()
 {
 }

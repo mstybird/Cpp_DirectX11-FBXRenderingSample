@@ -97,6 +97,7 @@
     <ClCompile Include="AI\EnemyAI.cpp" />
     <ClCompile Include="BulletNormal.cpp" />
     <ClCompile Include="BulletObject.cpp" />
+    <ClCompile Include="ChangeStates.cpp" />
     <ClCompile Include="CharacterBase.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="example_Sprite2D.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="BulletNormal.h" />
     <ClInclude Include="BulletObject.h" />
+    <ClInclude Include="ChangeStates.hxx" />
     <ClInclude Include="CharacterBase.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameObjectBase.h" />
@@ -225,6 +227,8 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="StatusBase.h" />
+    <ClInclude Include="StatusBulletBase.h" />
+    <ClInclude Include="StatusBulletNormal.h" />
     <ClInclude Include="StatusEnemy.h" />
     <ClInclude Include="StatusField.h" />
     <ClInclude Include="StatusPlayer.h" />

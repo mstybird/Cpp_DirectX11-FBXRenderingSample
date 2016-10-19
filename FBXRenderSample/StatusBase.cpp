@@ -2,6 +2,7 @@
 
 StatusBase::StatusBase() :
 	mTarget{ nullptr },
-	mEnergy{ 0 },
-	mBall{ nullptr }
+	mEnergy{},
+	mBall{ nullptr },
+	mLive{CharaStateFlag::ALIVE}
 {}

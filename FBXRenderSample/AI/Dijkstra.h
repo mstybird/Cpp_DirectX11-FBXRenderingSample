@@ -4,9 +4,10 @@
 #include<unordered_map>
 #include<type_traits>
 #include<random>
-using namespace std;
-
+struct StatusField;
 namespace Dijkstra {
+	using namespace std;
+	
 	class Manager;
 	struct Node {
 		static const int cNotInitCost;
@@ -56,7 +57,7 @@ namespace Dijkstra {
 		void LinkNode(std::pair<int,int>aFromTo, int aCost, bool aBothFlag);
 
 		//ノードデータの作成
-		virtual void CreateNodes() = 0;
+		virtual void CreateNodes(StatusField&aField) = 0;
 		//指定したIDの要素を削除する
 		void RemoveNode(const int aRemoveID);
 

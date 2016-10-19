@@ -1,4 +1,12 @@
 #pragma once
+#include"MSProgress\MSProgressData.hxx"
+
+enum class CharaStateFlag {
+	ALIVE,		//生存中
+	DEAD,		//死亡中
+	RESPAWNWAIT	//リスポーン待機中
+};
+
 class GameObjectBase;
 struct StatusBase {
 
@@ -10,8 +18,14 @@ struct StatusBase {
 	GameObjectBase* mBall;
 
 	//HP
+	MSProgress mHp;
 
 	//エネルギー残量
-	int mEnergy;
+	MSProgress mEnergy;
+
+	//生存関係フラグ
+	CharaStateFlag mLive;
+
+//	int mEnergy;
 
 };

@@ -9,7 +9,11 @@ DXVector3::DXVector3()
 	z = 0.0f;
 }
 
-DXVector3::DXVector3(int pX, int pY, int pZ):D3DXVECTOR3(pX, pY, pZ)
+DXVector3::DXVector3(int pX, int pY, int pZ):D3DXVECTOR3(
+	static_cast<float>(pX), 
+	static_cast<float>(pY),
+	static_cast<float>(pZ)
+)
 {
 }
 

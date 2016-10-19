@@ -8,13 +8,14 @@ Player::Player():
 	mCameraLen{ 0,25,-10 }
 {
 	mBulletNormal = std::make_unique<BulletNormal>();
+	mStatus = std::make_unique<StatusPlayer>();
 }
 Player::~Player()
 {
 }
-void Player::Initialize()
+void Player::Initialize(StatusField&pSetStatus)
 {
-	CharacterBase::Initialize();
+	CharacterBase::Initialize(pSetStatus);
 	InitStatus();
 }
 
@@ -30,7 +31,7 @@ void Player::Update()
 			//ボールに当たった場合、そのボールを回収する
 			Ball* lBall = dynamic_cast<Ball*>(lHitTarget);
 			if (lBall) {
-				mStatus.mBall = lBall;
+				GetStatus<StatusPlayer>()->mBall = lBall;
 				mField->SetBallHolder(this);
 			}
 		}
@@ -51,11 +52,13 @@ void Player::AddBullet()
 	mBulletNormal->Create(mBullets, *this);
 }
 
-StatusPlayer * Player::GetStatus()
-{
-	return &mStatus;
-}
 
 void Player::InitStatus()
 {
+	auto lStatus = GetStatus<StatusPlayer>();
+	lStatus->mBall = nullptr;
+	lStatus->mEnergy.Set(5.0f, 0.0f, 2.0f);
+	lStatus->mHp.Set(10.0f, .0f, 10.0f);
+	lStatus->mLive = CharaStateFlag::ALIVE;
+	lStatus->mTarget = nullptr;
 }

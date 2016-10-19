@@ -105,6 +105,9 @@ std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosit
 {
 	std::vector<GameObjectBase*>lHitTargets{};
 	DXVector3 lResult;
+	/*
+		lCollision	: 衝突ターゲット
+	*/
 	for (auto&lCollision : mCollisionTargets) {
 		auto lTmpMesh = lCollision->mTransform;
 		DXVector3 lTmpS;
@@ -123,17 +126,6 @@ std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosit
 
 		lCollision->mTransform = lCollision->mCollisionMesh;
 		
-		//if (dynamic_cast<StaticObject*>(lCollision)) {
-		//	if (lTmpMesh->mMesh->mManager->GetFileName() == "res/field3.fbx") {
-		//		lCollision->GetWorld()->SetS(0.1f, 0.1f, 0.1f);
-		//	}
-		//	else {
-		//		lCollision->GetWorld()->SetS(0.01f, 0.01f, 0.01f);
-		//	}
-		//}
-		//else {
-		//	//lCollision->GetWorld()->SetS(0.01f, 0.01f, 0.01f);
-		//}
 		if (lCollision->IsActive() == false)continue;
 
 		if (mRayPick->Collision(lResult, *mTransform, *lCollision->GetTransform())) {

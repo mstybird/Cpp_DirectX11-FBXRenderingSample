@@ -187,6 +187,7 @@
     <ClCompile Include="MSProgress\MSProgresData.cxx">
       <Filter>MSDirect\MSUtility\Source</Filter>
     </ClCompile>
+    <ClCompile Include="ChangeStates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -398,6 +399,15 @@
     </ClInclude>
     <ClInclude Include="MSProgress\MSProgressData.hxx">
       <Filter>MSDirect\MSUtility\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeStates.hxx">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusBulletBase.h">
+      <Filter>Game\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusBulletNormal.h">
+      <Filter>Game\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

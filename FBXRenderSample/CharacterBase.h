@@ -1,7 +1,9 @@
 #pragma once
 #include<memory>
 #include<vector>
+#include<type_traits>
 #include"GameObjectBase.h"
+#include"StatusBase.h"
 class MSFbxManager;
 class MSBase3DShader;
 class MSFbxManager;
@@ -21,7 +23,7 @@ class CharacterBase:public GameObjectBase {
 public:
 	CharacterBase();
 	virtual ~CharacterBase();
-	virtual void Initialize()override;
+	virtual void Initialize(StatusField&pSetStatus);
 	virtual void InitStatus() = 0;
 	void SetField(StatusField&pSetStatus);
 	void SetBulletMesh(MSFbxManager&aSetMesh);
@@ -32,6 +34,16 @@ public:
 	};
 
 	StatusField*GetField();
+	StatusBase* GetStatus() {
+		return mStatus.get();
+	}
+	template<typename T>
+	T* GetStatus() {
+		static_assert(std::is_base_of<StatusBase*,T*>::value == false, "Type Error.");
+		return static_cast<T*>(mStatus.get());
+	}
+
+	void Respawn();
 
 protected:
 	void UpdateBullets();
@@ -41,6 +53,7 @@ protected:
 	std::unique_ptr<BulletObject>mBulletNormal;
 	std::vector<GameObjectBase*>mSearchTargets;
 	StatusField*mField;
+	std::unique_ptr<StatusBase>mStatus;
 };
 
 

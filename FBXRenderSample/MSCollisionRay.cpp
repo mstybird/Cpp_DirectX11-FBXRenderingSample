@@ -51,7 +51,7 @@ bool MSCollisionRay::Collision(const MSCollisionRay & pRay, DX11RenderResource&p
 		DXMatrix lGlobalMatrix{ *lMesh->mWorld.get() };
 		lGlobalMatrix = lGlobalMatrix * lResourceMatrix;
 		for (auto&lSubMesh : lMesh->subMesh) {
-			for (int i = 0; i < lSubMesh->PolygonCount; i++) {
+			for (uint32_t i = 0; i < lSubMesh->PolygonCount; i++) {
 				//”»’è‚ðs‚¤ƒ|ƒŠƒSƒ“‚ðŽæ“¾
 				lSubMesh->GetPolygon(lPolygon, i);
 

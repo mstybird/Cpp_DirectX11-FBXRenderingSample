@@ -20,7 +20,7 @@ void DXMatrix::SetIdentity()
 
 bool DXMatrix::IsIdentity()
 {
-	return (bool)D3DXMatrixIsIdentity(this);
+	return static_cast<bool>(D3DXMatrixIsIdentity(this));
 }
 
 void DXMatrix::Inverse()

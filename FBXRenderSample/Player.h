@@ -10,15 +10,13 @@ public:
 	Player();
 	~Player();
 
-	void Initialize()override;
+	void Initialize(StatusField&pSetStatus)override;
 	void Update()override;
 	void Render()override;
 	void AddBullet();
-	StatusPlayer*GetStatus();
 private:
 	void InitStatus()override;
 private:
 	DXVector3 mCameraLen;
-	StatusPlayer mStatus;
 };
 

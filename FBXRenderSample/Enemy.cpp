@@ -13,19 +13,23 @@
 #include"DXMatrix.h"
 #include"Ball.h"
 #include"CharacterBase.h"
+#include"StatusBulletBase.h"
+#include"ChangeStates.hxx"
+#include"StatusField.h"
 Enemy::Enemy()
 {
 	mBulletNormal = std::make_unique<BulletNormal>();
+	mStatus = std::make_unique<EnemyStatus>();
 }
 Enemy::~Enemy()
 {
 }
-void Enemy::Initialize()
+void Enemy::Initialize(StatusField&pSetStatus)
 {
-	CharacterBase::Initialize();
+	CharacterBase::Initialize(pSetStatus);
 
 	mAI = std::make_unique<EnemyAI>();
-	mAI->CreateNodes();
+	mAI->CreateNodes(*mField);
 	
 
 	//ステータスの初期化
@@ -49,14 +53,9 @@ void Enemy::SetAI(NcgLuaManager * aAI)
 
 void Enemy::SetGoalIndex(int aIndex)
 {
-	mStatus.mGoalIndex = aIndex;
+	
+	GetStatus<EnemyStatus>()->mGoalIndex = aIndex;
 }
-
-EnemyStatus * Enemy::GetStatus()
-{
-	return &mStatus;
-}
-
 
 
 void Enemy::Update()
@@ -102,19 +101,34 @@ void Enemy::Update()
 
 void Enemy::InitStatus()
 {
-	mStatus.mEnergy = 1;
-	mStatus.mTargetting = false;
+	auto lStatus = GetStatus<EnemyStatus>();
+
+	lStatus->mTargetting = false;
+	lStatus->mBall = nullptr;
+	lStatus->mEnergy.Set(5.0f,0.0f,2.0f);
+	lStatus->mHp.Set(10.0f, .0f, 10.0f);
+	lStatus->mInitMoveToBall = false;
+	lStatus->mInitMoveToBallTarget = false;
+	lStatus->mInitMoveToGoal = false;
+	lStatus->mIsTargetingBall = false;
+	lStatus->mLive = CharaStateFlag::ALIVE;
+	lStatus->mTarget = nullptr;
+	lStatus->mTargetting = false;
 }
 
 void Enemy::UpdateAI()
 {
 	mAI->ClearRoot();
+
+	auto lStatus = GetStatus<EnemyStatus>();
+	auto lBulletStatus = mBulletNormal->GetStatus();
+
 	mAI->Update(
-		mStatus.mTargetting,
-		mStatus.mTarget!=nullptr, 
-		mStatus.mEnergy > 0,
-		mField->mBallHoldChara,
-		mStatus.mBall!=nullptr,
+		lStatus->mTargetting,
+		lStatus->mTarget!=nullptr,
+		lStatus->mEnergy.GetNow() > lBulletStatus->mCost,
+		mField->mBallHoldChara!=nullptr,
+		lStatus->mBall!=nullptr,
 		mField->mBallIsField
 		);
 }
@@ -138,7 +152,7 @@ void Enemy::UpdateMoveToTarget()
 	//最後に敵を見た位置をゴールとする
 	if (mAI->IsRootEmpty() == true) {
 		//最後に敵を見た位置から一番近いノードをゴールとする
-		auto lGoalID=mAI->GetNearNodeList(mStatus.mLastLookPosiion)[0]->GetID();
+		auto lGoalID=mAI->GetNearNodeList(GetStatus<EnemyStatus>()->mLastLookPosiion)[0]->GetID();
 
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
 		mAI->GenerateRoot();
@@ -154,9 +168,9 @@ void Enemy::UpdateMoveToTarget()
 			//発見したらシーケンスをすすめる
 			mAI->NextAI();
 			//敵を視認中
-			mStatus.mTargetting = true;
+			GetStatus<EnemyStatus>()->mTargetting = true;
 			//捉えたターゲットを記憶
-			mStatus.mTarget = lLookTarget;
+			GetStatus<EnemyStatus>()->mTarget = lLookTarget;
 			return;
 		}
 	}
@@ -168,7 +182,7 @@ void Enemy::UpdateMoveToTarget()
 		//次のAIへ
 		mAI->ClearAI();
 		
-		mStatus.mTarget = nullptr;
+		GetStatus<EnemyStatus>()->mTarget = nullptr;
 	}
 
 }
@@ -205,9 +219,9 @@ void Enemy::UpdateSearching()
 		//発見したらシーケンスをすすめる
 		mAI->NextAI();
 		//敵を視認中
-		mStatus.mTargetting = true;
+		GetStatus<EnemyStatus>()->mTargetting = true;
 		//捉えたターゲットを記憶
-		mStatus.mTarget = lLookTarget;				
+		GetStatus<EnemyStatus>()->mTarget = lLookTarget;				
 	}
 
 
@@ -223,7 +237,7 @@ void Enemy::UpdateSearching()
 void Enemy::UpdateChargeEnergy()
 {
 	mAI->NextAI();
-	mStatus.mEnergy = 100;
+	GetStatus<EnemyStatus>()->mEnergy.SetNowPer(1.0f);
 }
 
 //敵から隠れるため、近い順にノードを取得する
@@ -238,7 +252,7 @@ void Enemy::UpdateMovingHide()
 		auto lNearNodeList = mAI->GetNearNodeList(lPosition);
 
 		//レイ発射位置を設定(ターゲット座標)
-		mRayPick->SetFramePosition(*mStatus.mTarget->GetTransform());
+		mRayPick->SetFramePosition(*GetStatus<EnemyStatus>()->mTarget->GetTransform());
 
 		//一番近いノードをレイ発射位置とする
 		mAI->SetStartNode(lNearNodeList[0]->GetID());
@@ -269,9 +283,9 @@ void Enemy::UpdateMovingHide()
 		//移動ルートの確定
 		mAI->CreateRoot(lGoalNodePtr->GetID());
 		//最後にターゲットを見た位置を記憶する
-		mStatus.mTarget->GetTransform()->GetWorld().lock()->GetMatrix().lock()->GetT(mStatus.mLastLookPosiion);
+		GetStatus<EnemyStatus>()->mTarget->GetTransform()->GetWorld().lock()->GetMatrix().lock()->GetT(GetStatus<EnemyStatus>()->mLastLookPosiion);
 		//隠れるため、必然的に視界から見失う
-		mStatus.mTargetting = false;
+		GetStatus<EnemyStatus>()->mTargetting = false;
 	}
 	
 	//隠れれる位置まで移動
@@ -285,15 +299,16 @@ void Enemy::UpdateMovingHide()
 void Enemy::UpdateEnergyShot()
 {
 	//ターゲットの方向を向く
-	float lRotateY = MSHormingY(*mTransform, *mStatus.mTarget->GetTransform(), 3.0f);
+	float lRotateY = MSHormingY(*mTransform, *GetStatus<EnemyStatus>()->mTarget->GetTransform(), 3.0f);
 	if (IsZero(lRotateY, 0.001f)) {
 		//振り向ききれば攻撃
 		//弾の発射
-		mBulletNormal->Create(mBullets, *this);
-		//エネルギーを枯渇させる
-		mStatus.mEnergy = 0;
+		ChangeStates::BulletShot(mBullets, this, mBulletNormal.get());
+		//エネルギーがなくなった場合、
 		//次のAIへ移行する
-		mAI->NextAI();
+		if (!ChangeStates::IsAttackDo(this, mBulletNormal.get())) {
+			mAI->NextAI();
+		}
 	}
 	else {
 		//振り向き処理
@@ -305,28 +320,28 @@ void Enemy::UpdateEnergyShot()
 //ボールを手に入れているのでゴールまで移動する
 void Enemy::UpdateMoveToGoal()
 {
-	if (mStatus.mInitMoveToGoal == false) {
-		mStatus.mInitMoveToGoal = true;
+	if (GetStatus<EnemyStatus>()->mInitMoveToGoal == false) {
+		GetStatus<EnemyStatus>()->mInitMoveToGoal = true;
 		//移動先をゴールにする
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
 		mAI->GenerateRoot();
-		mAI->CreateRoot(mStatus.mGoalIndex);
+		mAI->CreateRoot(GetStatus<EnemyStatus>()->mGoalIndex);
 	}
 
 	//移動中に敵を発見した場合、現在のAIを破棄する
 	auto lLookTarget = IsCulling();
 	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
-		mStatus.mTargetting = true;
-		mStatus.mTarget = lLookTarget;
+		GetStatus<EnemyStatus>()->mTargetting = true;
+		GetStatus<EnemyStatus>()->mTarget = lLookTarget;
 		mAI->ClearAI();
-		mStatus.mInitMoveToGoal = false;
+		GetStatus<EnemyStatus>()->mInitMoveToGoal = false;
 	}
 
 	//ゴールに到着したらボールを手放す
 	if (!MoveNode()) {
 		mField->RespawnBall();
-		mStatus.mBall = nullptr;
-		mStatus.mInitMoveToGoal = false;
+		GetStatus<EnemyStatus>()->mBall = nullptr;
+		GetStatus<EnemyStatus>()->mInitMoveToGoal = false;
 		//AI再起動
 		mAI->ClearAI();
 	}
@@ -336,8 +351,8 @@ void Enemy::UpdateMoveToGoal()
 void Enemy::UpdateMoveToBall()
 {
 	//ボールの位置を取得する
-	if (mStatus.mInitMoveToBall == false) {
-		mStatus.mInitMoveToBall = true;
+	if (GetStatus<EnemyStatus>()->mInitMoveToBall == false) {
+		GetStatus<EnemyStatus>()->mInitMoveToBall = true;
 		DXVector3 lBallPos;
 		mField->mBall->GetWorld()->GetMatrix().lock()->GetT(lBallPos);
 		auto lGoalID = mAI->GetNearNodeList(lBallPos)[0]->GetID();
@@ -352,19 +367,19 @@ void Enemy::UpdateMoveToBall()
 	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
 		//追従対象をキャラクタに切り替えるので、
 		//ボール発見フラグを消す
-		mStatus.mIsTargetingBall = false;
+		GetStatus<EnemyStatus>()->mIsTargetingBall = false;
 
-		mStatus.mTargetting = true;
-		mStatus.mTarget = lLookTarget;
+		GetStatus<EnemyStatus>()->mTargetting = true;
+		GetStatus<EnemyStatus>()->mTarget = lLookTarget;
 		mAI->ClearAI();
-		mStatus.mInitMoveToBall = false;
+		GetStatus<EnemyStatus>()->mInitMoveToBall = false;
 		return;
 	}
 
-	if (mStatus.mIsTargetingBall|| dynamic_cast<Ball*>(lLookTarget)) {
+	if (GetStatus<EnemyStatus>()->mIsTargetingBall|| dynamic_cast<Ball*>(lLookTarget)) {
 		//ボールだった場合は追跡する
 		//視界に入ったのでボールを捉えておく
-		mStatus.mIsTargetingBall = true;
+		GetStatus<EnemyStatus>()->mIsTargetingBall = true;
 		float lRotateY;
 		lRotateY = MSHormingY(*mTransform, *mField->mBall->GetTransform(), 6.0f);
 		GetWorld()->AddRC(0, lRotateY, 0);
@@ -380,17 +395,17 @@ void Enemy::UpdateMoveToBall()
 		if (lChara) {
 			//追従対象をキャラクタに切り替えるので、
 			//ボール発見フラグを消す
-			mStatus.mIsTargetingBall = false;
+			GetStatus<EnemyStatus>()->mIsTargetingBall = false;
 
-			mStatus.mTargetting = true;
-			mStatus.mTarget = lChara;
+			GetStatus<EnemyStatus>()->mTargetting = true;
+			GetStatus<EnemyStatus>()->mTarget = lChara;
 			mAI->ClearAI();
-			mStatus.mInitMoveToBall = false;
+			GetStatus<EnemyStatus>()->mInitMoveToBall = false;
 		}
 		else {
 		//移動し終わってボールを手に取れなかった場合、再初期化
 			if (!MoveNode()) {
-				mStatus.mInitMoveToBall = false;
+				GetStatus<EnemyStatus>()->mInitMoveToBall = false;
 			}
 
 		}
@@ -400,7 +415,7 @@ void Enemy::UpdateMoveToBall()
 			if (mField->mBallHoldChara != nullptr) {
 				mAI->ClearAI();
 			
-				mStatus.mInitMoveToBall = false;
+				GetStatus<EnemyStatus>()->mInitMoveToBall = false;
 			}
 	//ボールと衝突したか調べる
 	auto lHitTargets = UpdateCollision(false);
@@ -409,7 +424,7 @@ void Enemy::UpdateMoveToBall()
 			//ボールに当たった場合、そのボールを回収する
 			Ball* lBall = dynamic_cast<Ball*>(lHitTarget);
 			if (lBall) {
-				mStatus.mBall = lBall;
+				GetStatus<EnemyStatus>()->mBall = lBall;
 				mField->SetBallHolder(this);
 				//回収後、AIを進める
 				mAI->NextAI();
@@ -424,8 +439,8 @@ void Enemy::UpdateMoveToBall()
 void Enemy::UpdateMoveToBallTarget()
 {
 	//ボールを持っている相手の位置を取得する
-	if (mStatus.mInitMoveToBallTarget == false) {
-		mStatus.mInitMoveToBallTarget = true;
+	if (GetStatus<EnemyStatus>()->mInitMoveToBallTarget == false) {
+		GetStatus<EnemyStatus>()->mInitMoveToBallTarget = true;
 		DXVector3 lBallPos;
 		mField->mBallHoldChara->GetWorld()->GetMatrix().lock()->GetT(lBallPos);
 		auto lGoalID = mAI->GetNearNodeList(lBallPos)[0]->GetID();
@@ -437,10 +452,10 @@ void Enemy::UpdateMoveToBallTarget()
 	auto lLookTarget = IsCulling();
 	//キャラクターであればロックオン
 	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
-		mStatus.mTargetting = true;
-		mStatus.mTarget = lLookTarget;
+		GetStatus<EnemyStatus>()->mTargetting = true;
+		GetStatus<EnemyStatus>()->mTarget = lLookTarget;
 		mAI->ClearAI();
-		mStatus.mInitMoveToBallTarget = false;
+		GetStatus<EnemyStatus>()->mInitMoveToBallTarget = false;
 		return;
 	}
 
@@ -448,13 +463,13 @@ void Enemy::UpdateMoveToBallTarget()
 	//ボールを落とした(フィールドに出現した場合)AIクリア
 	if (mField->mBallHoldChara == nullptr) {
 		mAI->ClearAI();
-		mStatus.mInitMoveToBallTarget = false;
+		GetStatus<EnemyStatus>()->mInitMoveToBallTarget = false;
 		return;
 	}
 	//移動し終わった場合(敵を発見できなかった場合)
 	if (!lMoveEnd) {
 		//再度敵を探す
-		mStatus.mInitMoveToBallTarget = false;
+		GetStatus<EnemyStatus>()->mInitMoveToBallTarget = false;
 	}
 
 

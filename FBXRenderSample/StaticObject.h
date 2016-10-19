@@ -1,5 +1,6 @@
 #pragma once
 #include"GameObjectBase.h"
+struct StatusField;
 class StaticObject :public GameObjectBase {
 public:
 	virtual ~StaticObject() {}

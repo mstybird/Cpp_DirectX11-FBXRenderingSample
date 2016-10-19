@@ -57,7 +57,7 @@ bool MSCullingOcculusion::IsCullingWorld(
 
 		//MS3DRender::Clear({ 1,1,1,1 });
 
-		float ClearColor[4] = { 0.2,0.2,0.2,1 };
+		float ClearColor[4] = { 0.2f,0.2f,0.2f,1.0f };
 		sDeviceContext->ClearRenderTargetView(sRTV, ClearColor);//レンダーターゲットクリア
 		sDeviceContext->ClearDepthStencilView(sDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度ステンシルバッファクリア
 
@@ -90,7 +90,7 @@ bool MSCullingOcculusion::IsCullingWorld(
 	
 
 	//見えたと判定する必要なピクセル数の計算
-	UINT64 lCheckPixels = (float)(640 * 480)*pPixelper;
+	UINT64 lCheckPixels = (UINT64)(640 * 480)*pPixelper;
 	if (lDrawPixels != 0) {
 		int a = 10;
 	}

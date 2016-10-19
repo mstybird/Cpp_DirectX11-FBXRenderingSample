@@ -89,7 +89,7 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 			D3DXVec3Normalize(&lDirection, &(lRayAfterPosition - *mPosBefore));
 
 			for (auto&lSubMesh : lMesh->subMesh) {
-				for (int i = 0; i < lSubMesh->PolygonCount; i++) {
+				for (uint32_t i = 0; i < lSubMesh->PolygonCount; i++) {
 					//判定を行うポリゴンを取得
 					FbxPtrPolygon lPtrPolygon;
 					lSubMesh->GetPolygon(lPtrPolygon, i);
@@ -101,9 +101,6 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 						lPositionMatrix[i] *= lGlobalMatrix;
 						lPositionMatrix[i].GetT(lPosition[i]);
 					}
-					int a, b;
-
-
 
 					//衝突判定を行う
 					//レイ判定
@@ -220,7 +217,7 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 				//一番近いポリゴンの距離
 				float lNearDistance = FLT_MAX;
 				//レイ判定
-				for (int i = 0; i < lHitPolygon.second.mesh.lock()->PolygonCount; ++i) {
+				for (uint32_t i = 0; i < lHitPolygon.second.mesh.lock()->PolygonCount; ++i) {
 					//判定を行うポリゴンの取得
 					FbxPtrPolygon lPtrPolygon;
 					lHitPolygon.second.mesh.lock()->GetPolygon(lPtrPolygon, i);
@@ -286,7 +283,7 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 				//反対方向にレイを飛ばせば、ポリゴンにヒットする
 				DXVector3 lDirection;
 				D3DXVec3Normalize(&lDirection, &(*mPosBefore - lRayAfterPosition));
-				for (int i = 0; i < lHitPolygon.second.mesh.lock()->PolygonCount; ++i) {
+				for (uint32_t i = 0; i < lHitPolygon.second.mesh.lock()->PolygonCount; ++i) {
 					//判定を行うポリゴンの取得
 					FbxPtrPolygon lPtrPolygon;
 					lHitPolygon.second.mesh.lock()->GetPolygon(lPtrPolygon, i);

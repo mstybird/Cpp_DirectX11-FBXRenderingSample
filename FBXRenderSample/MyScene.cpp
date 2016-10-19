@@ -34,6 +34,9 @@ void MyMSScene::Initialize()
 
 	{
 		mBall.Initialize();
+		mFieldStatus.CreateFieldNodes();
+		mFieldStatus.CreateSpawnCharaNodes();
+		mFieldStatus.CreateSpawnBallNodes();
 		mFieldStatus.mBallIsField = true;
 		mFieldStatus.mBall = &mBall;
 		mFieldStatus.RespawnBall();
@@ -57,28 +60,26 @@ void MyMSScene::Initialize()
 	enemy.push_back(make_unique<Enemy>());
 	//enemy.push_back(make_unique<Enemy>());
 
-
-
-	for (uint16_t i = 0; i < enemy.size(); ++i) {
-		enemy[i]->Initialize();
-		enemy[i]->SetAI(mLuaDb.GetManager(0));
-		enemy[i]->SetMesh(mdChara);
-		enemy[i]->SetCollisionMesh(mdBullet);
-		enemy[i]->SetRenderer(&render);
-		enemy[i]->SetShader(&shader);
-		enemy[i]->SetBulletMesh(mdBullet);
-		enemy[i]->SetField(mFieldStatus);
-
-	}
 	float scaleBall = 0.01f;
 	float scaleChara = 0.3f;
 	float scaleField = 0.1f;
+
+
+	for (uint16_t i = 0; i < enemy.size(); ++i) {
+		enemy[i]->Initialize(mFieldStatus);
+		enemy[i]->SetAI(mLuaDb.GetManager(0));
+		enemy[i]->SetMesh(mdChara);
+		enemy[i]->SetCollisionMesh(mdBullet);
+		enemy[i]->SetCollisionScale(scaleBall, scaleBall, scaleBall);
+		enemy[i]->SetRenderer(&render);
+		enemy[i]->SetShader(&shader);
+		enemy[i]->SetBulletMesh(mdBullet);
+		enemy[i]->Respawn();
+	}
 	mField.Initialize();
 	mField.SetMesh(mdField);
 	mField.SetCollisionMesh(mdField);
 	mField.SetCollisionScale(scaleField, scaleField, scaleField);
-
-
 	mField.SetRenderer(&render);
 	mField.SetShader(&shader);
 
@@ -90,14 +91,15 @@ void MyMSScene::Initialize()
 	mBall.GetWorld()->SetS(scaleBall, scaleBall, scaleBall);
 
 
-	mPlayer.Initialize();
+	mPlayer.Initialize(mFieldStatus);
 	mPlayer.SetMesh(mdChara);
 	mPlayer.SetCollisionMesh(mdBullet);
 	mPlayer.SetCollisionScale(scaleBall, scaleBall, scaleBall);
 	mPlayer.SetRenderer(&render);
 	mPlayer.SetShader(&shader);
 	mPlayer.SetBulletMesh(mdBullet);
-	mPlayer.SetField(mFieldStatus);
+	mPlayer.Respawn();
+	//mPlayer.SetField(mFieldStatus);
 
 	mPlayer.AddCollisionTarget(&mField);
 	mPlayer.AddCollisionTarget(&mBall);
@@ -120,9 +122,6 @@ void MyMSScene::Initialize()
 	render.SetShader(&shader);
 	render.SetRenderTarget(*mPlayer.GetTransform());
 
-
-	mPlayer.GetWorld()->SetRC({ 0,0,0 });
-	mPlayer.GetWorld()->SetT(-5, 0, -8);
 	mPlayer.GetWorld()->SetS(scaleChara, scaleChara, scaleChara);
 	mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
 	mPlayer.GetProj()->SetProjection(60, 0.1f, 500.0f);
@@ -134,7 +133,7 @@ void MyMSScene::Initialize()
 	mField.GetWorld()->SetS(scaleField, scaleField, scaleField);
 	mField.GetWorld()->SetT(-3, -1, 0);
 
-	enemy[0]->GetWorld()->SetT(-15, 0, 0);
+	//enemy[0]->GetWorld()->SetT(-15, 0, 0);
 	//enemy[1]->GetWorld()->SetT(-5, 0, 8);
 	//enemy[2]->GetWorld()->SetT(-10, 0, 10);
 	enemy[0]->SetGoalIndex(19);

@@ -17,7 +17,7 @@ public:
 	~Enemy();
 
 	//データの初期化(一回の呼び出しが必要)
-	void Initialize()override;
+	void Initialize(StatusField&pSetStatus)override;
 	//全ての初期化が終わった後に一度だけ呼ぶ
 	void InitFinal();
 
@@ -27,7 +27,7 @@ public:
 	void SetGoalIndex(int aIndex);
 
 	//ステータスの参照を取得する
-	EnemyStatus* GetStatus();
+	//EnemyStatus* GetStatus();
 
 	//毎フレーム行うエネミーの更新処理
 	void Update()override;
@@ -71,5 +71,5 @@ private:
 	std::unique_ptr<EnemyAI>mAI;
 
 
-	EnemyStatus mStatus;
+	//EnemyStatus mStatus;
 };

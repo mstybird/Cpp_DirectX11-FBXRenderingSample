@@ -8,10 +8,19 @@
 #include"Player.h"
 #include"Enemy.h"
 #include"StatusField.h"
+#include"StatusBulletNormal.h"
+#include"ChangeStates.hxx"
+
 #include<cassert>
 
 BulletNormal::BulletNormal()
 {
+	mStatus = std::make_unique<StatusBulletNormal>();
+	//弾のステータス設定
+	mStatus->mInterval.Set(100.0f, .0f, .0f);
+	mStatus->mAtk = 10.0f;
+	mStatus->mCost = 2;
+	mStatus->mType = BulletDamageType::NORMAL;
 }
 BulletNormal::~BulletNormal()
 {
@@ -30,6 +39,7 @@ void BulletNormal::Initialize()
 //弾の生成
 void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBulletList, CharacterBase & aShoter)
 {
+	printf("Create %s, From %s\n",typeid(aShoter).name(), typeid(*this).name());
 	std::unique_ptr<BulletNormal>lBullet = std::make_unique<BulletNormal>();
 	lBullet->Initialize();
 	//初期位置設定
@@ -82,36 +92,28 @@ void BulletNormal::Update()
 	//当たった場合
 	auto lHitTargets = UpdateCollision(false);
 	for (auto&lHitTarget : lHitTargets) {
-		if (lHitTarget) {
-			//弾を消すために非アクティブにする
-			SetActive(false);
-			//当たったのが(ターゲット)プレイヤーキャラクターだった場合
-			Player* lPlayer = dynamic_cast<Player*>(lHitTarget);
-			/*
-				ヒットしたキャラクターがボールを所持していた場合、
-				ボールをリスポーンさせる
-			*/
-			//プレイヤーヒット時の処理
-			if (lPlayer) {
-				if (lPlayer->GetStatus()->mBall != nullptr) {
-					lPlayer->GetField()->RespawnBall();
-					lPlayer->GetStatus()->mBall = nullptr;
-				}
-				break;
-			}
-			Enemy* lEnemy = dynamic_cast<Enemy*>(lHitTarget);
-			//自分以外の敵にヒットした場合
-			if (lEnemy) {
-				if (lEnemy->GetStatus()->mBall != nullptr) {
-					lEnemy->GetField()->RespawnBall();
-					lEnemy->GetStatus()->mBall = nullptr;
-				}
-			}
+		//弾を消すために非アクティブにする
+		SetActive(false);
+
+		//キャラクターに当たった時の処理
+		auto lChara = dynamic_cast<CharacterBase*>(lHitTarget);
+		//キャラクターでない場合は次へ
+		if (!lChara)continue;
+		//ダメージ処理
+		auto lIsDead = ChangeStates::Damage(this, lChara);
+		//死んだらそのターゲットに死亡フラグをセット
+		//死んでなければ処理しない
+		if (lIsDead == false)break;
+		auto lStatus = lChara->GetStatus();
+		lStatus->mLive = CharaStateFlag::DEAD;
+		//lChara->SetActive(false);
+		//ボールを持っていた場合、ボールをセット
+		if (lStatus->mBall != nullptr) {
+			lChara->GetField()->RespawnBall();
+			lStatus->mBall = nullptr;
 		}
+		break;
 	}
-
-
-	//UpdateCollision();
 }
 
 void BulletNormal::Render()
