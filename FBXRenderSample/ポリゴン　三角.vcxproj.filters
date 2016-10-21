@@ -188,6 +188,7 @@
       <Filter>MSDirect\MSUtility\Source</Filter>
     </ClCompile>
     <ClCompile Include="ChangeStates.cpp" />
+    <ClCompile Include="MSGravity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -408,6 +409,9 @@
     </ClInclude>
     <ClInclude Include="StatusBulletNormal.h">
       <Filter>Game\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="MSGravity.h">
+      <Filter>MSDirect\MSUtility\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -50,11 +50,12 @@ void MyMSScene::Initialize()
 	shader.InitVertex("Simple.hlsl");
 	shader.InitPixel("Simple.hlsl");
 
-	mdBullet.LoadFile("res/box.fbx", true);
+	mdBullet.LoadFile("res/box.fbx", false);
 	mdChara.LoadFile("res/SD_QUERY_01.fbx", true);
 
-	mdField.LoadFile("res/field3.fbx", true);
-	mdBall.LoadFile("res/ball.fbx", true);
+	mdField.LoadFile("res/main.fbx", false);
+	mdFieldCol.LoadFile("res/field3.fbx", false);
+	mdBall.LoadFile("res/ball.fbx", false);
 
 	//敵の初期化
 	enemy.push_back(make_unique<Enemy>());
@@ -78,7 +79,7 @@ void MyMSScene::Initialize()
 	}
 	mField.Initialize();
 	mField.SetMesh(mdField);
-	mField.SetCollisionMesh(mdField);
+	mField.SetCollisionMesh(mdFieldCol);
 	mField.SetCollisionScale(scaleField, scaleField, scaleField);
 	mField.SetRenderer(&render);
 	mField.SetShader(&shader);

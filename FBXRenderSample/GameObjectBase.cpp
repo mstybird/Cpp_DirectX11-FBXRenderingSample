@@ -4,6 +4,7 @@
 #include"DXMatrix.h"
 #include"DXWorld.h"
 #include"MSFbxObject.h"
+#include"MSGravity.h"
 GameObjectBase::GameObjectBase()
 {
 	mActive = true;
@@ -20,6 +21,7 @@ void GameObjectBase::Initialize()
 	mRayPick = std::make_unique<MSCollisionRayPicking>();
 	mRayPick = std::make_unique<MSCollisionRayPicking>();
 	mRayPick->SetSlipFlag(true);
+	mGravity = std::make_unique<MSGravity>();
 }
 void GameObjectBase::SetShader(MSBase3DShader * aShader)
 {

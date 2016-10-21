@@ -4,8 +4,10 @@
 #include"BulletNormal.h"
 #include"Ball.h"
 #include"StatusField.h"
+#include"MSGravity.h"
+#include"DXWorld.h"
 Player::Player():
-	mCameraLen{ 0,25,-10 }
+	mCameraLen{ 0,5,-10 }
 {
 	mBulletNormal = std::make_unique<BulletNormal>();
 	mStatus = std::make_unique<StatusPlayer>();
@@ -26,8 +28,8 @@ void Player::Update()
 
 	UpdateMesh();
 	UpdateBullets();
-	
-	
+	//UpdateGravity();
+
 	auto lHitTargets = UpdateCollision(true);
 	for (auto&lHitTarget : lHitTargets) {
 		if (lHitTarget) {
@@ -63,6 +65,17 @@ void Player::UpdateAlive()
 	}
 }
 
+void Player::UpdateGravity()
+{
+	mGravity->UpdateGravity();
+	float f = mGravity->GetGravity();
+	this->GetWorld()->AddT(
+		DXWorld::TYPE_PARALLEL,
+		f,
+		{0,-1,0}
+	);
+}
+
 void Player::Render()
 {
 	mRender->SetShader(mShader);
@@ -84,4 +97,12 @@ void Player::InitStatus()
 	lStatus->mHp.Set(10.0f, .0f, 10.0f);
 	lStatus->mLive = CharaStateFlag::ALIVE;
 	lStatus->mTarget = nullptr;
+	mGravity->Initialize(
+		true,
+		0.05f,
+		-0.05f,
+		0.0f,
+		0.1f,
+		0.01f
+	);
 }

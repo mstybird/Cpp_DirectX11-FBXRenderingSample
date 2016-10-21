@@ -27,7 +27,8 @@ public:
 	virtual void InitStatus() = 0;
 	//¶‘¶€–S‚È‚Ç‚Ìˆ—‚ğs‚¤
 	virtual void UpdateAlive() = 0;
-
+	//d—Íˆ—
+	virtual void UpdateGravity() {};
 	void SetField(StatusField&pSetStatus);
 	void SetBulletMesh(MSFbxManager&aSetMesh);
 	void AddSearchTarget(GameObjectBase*aCollisionTarget);

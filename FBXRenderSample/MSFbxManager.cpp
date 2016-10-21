@@ -125,7 +125,11 @@ std::string MSFbxManager::GetFileName()
 bool MSFbxManager::Update(FbxTime& mCurrentFrame)
 {
 	//アニメーションしない場合は更新処理不要
-	if (mAnimationFlag == false)return false;
+
+	if (mMeshData->size() != 0) {
+		if (mAnimationFlag == false)return false;
+	}
+
 	mMeshData = mLoader->GetGeometryData2(mCurrentFrame);
 
 	for (unsigned int i = 0; i < mVertexBuffer.size(); i++) {

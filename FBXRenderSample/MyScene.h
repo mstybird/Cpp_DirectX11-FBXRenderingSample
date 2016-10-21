@@ -28,6 +28,7 @@ private:
 	MSFbxManager mdBullet;
 	MSFbxManager mdChara;
 	MSFbxManager mdField;
+	MSFbxManager mdFieldCol;
 	MSFbxManager mdBall;
 	//描画に使うシェーダ
 	My3DShader shader;

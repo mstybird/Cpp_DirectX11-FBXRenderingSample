@@ -10,6 +10,8 @@ class MS3DRender;
 class MSBase3DShader;
 class MSFbxManager;
 class MSFbxObject;
+class MSProgress;
+class MSGravity;
 class GameObjectBase {
 public:
 	GameObjectBase();
@@ -54,6 +56,7 @@ protected:
 	MSBase3DShader* mShader;
 	//このオブジェクトがアクティブかどうか
 	bool mActive;
+	std::shared_ptr<MSGravity>mGravity;
 	//コリジョンのサイズ(拡大率)はメッシュのサイズと同じにするかどうか
 	//一度でもコリジョン用のサイズを設定した場合、フラグはfalseになる
 	bool mIsCollisionScaleDefault;

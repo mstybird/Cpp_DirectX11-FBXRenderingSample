@@ -1,9 +1,9 @@
 #include "MSProgressData.hxx"
 #include<cassert>
 MSProgress::MSProgress() :
-	mMax{},
-	mNow{},
-	mMin{}
+	mMax{0.0f},
+	mNow{0.0f},
+	mMin{0.0f}
 {
 }
 

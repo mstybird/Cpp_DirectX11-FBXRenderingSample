@@ -109,6 +109,7 @@
     <ClCompile Include="MSCullingFrustum.cpp" />
     <ClCompile Include="MSCullingOcclusion.cpp" />
     <ClCompile Include="MSFbxObject.cpp" />
+    <ClCompile Include="MSGravity.cpp" />
     <ClCompile Include="MSKeyCodeList.cpp" />
     <ClCompile Include="MSProgress\MSProgresData.cxx" />
     <ClCompile Include="MSUtility.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="MSCullingOcclusion.h" />
     <ClInclude Include="MSDebug.h" />
     <ClInclude Include="MSFbxObject.h" />
+    <ClInclude Include="MSGravity.h" />
     <ClInclude Include="MSKeyCodeList.h" />
     <ClInclude Include="MSProgress\MSProgressData.hxx" />
     <ClInclude Include="MSUtility.h" />

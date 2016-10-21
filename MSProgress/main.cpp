@@ -14,7 +14,7 @@ void printPer() {
 }
 
 int main() {
-	data.Set(200, 0, 150);
+	data.Set(5, -5, 0);
 	printPer();
 	data.AddFix(1);
 	printPer();
