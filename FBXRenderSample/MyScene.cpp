@@ -53,8 +53,8 @@ void MyMSScene::Initialize()
 	mdBullet.LoadFile("res/box.fbx", false);
 	mdChara.LoadFile("res/SD_QUERY_01.fbx", true);
 
-	mdField.LoadFile("res/main.fbx", false);
-	mdFieldCol.LoadFile("res/field3.fbx", false);
+	mdField.LoadFile("res/FieldDesign.fbx", false);
+	mdFieldCol.LoadFile("res/FieldCollision.fbx", false);
 	mdBall.LoadFile("res/ball.fbx", false);
 
 	//敵の初期化
@@ -63,7 +63,7 @@ void MyMSScene::Initialize()
 
 	float scaleBall = 0.01f;
 	float scaleChara = 0.3f;
-	float scaleField = 0.1f;
+	float scaleField = 1.0f;
 
 
 	for (uint16_t i = 0; i < enemy.size(); ++i) {
