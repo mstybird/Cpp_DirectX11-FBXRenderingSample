@@ -99,6 +99,7 @@
     <ClCompile Include="BulletObject.cpp" />
     <ClCompile Include="ChangeStates.cpp" />
     <ClCompile Include="CharacterBase.cpp" />
+    <ClCompile Include="Comform\TGALoader\TgaLoader.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="example_Sprite2D.cpp" />
     <ClCompile Include="GameObjectBase.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="BulletObject.h" />
     <ClInclude Include="ChangeStates.hxx" />
     <ClInclude Include="CharacterBase.h" />
+    <ClInclude Include="Comform\TGALoader\TgaLoader.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameObjectBase.h" />
     <ClInclude Include="MSCollisionBase.h" />

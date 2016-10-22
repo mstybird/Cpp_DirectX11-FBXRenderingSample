@@ -189,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="ChangeStates.cpp" />
     <ClCompile Include="MSGravity.cpp" />
+    <ClCompile Include="Comform\TGALoader\TgaLoader.cpp">
+      <Filter>Comform\TGALoader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -413,6 +416,9 @@
     <ClInclude Include="MSGravity.h">
       <Filter>MSDirect\MSUtility\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Comform\TGALoader\TgaLoader.h">
+      <Filter>Comform\TGALoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -593,6 +599,12 @@
     </Filter>
     <Filter Include="Game\Data\Include">
       <UniqueIdentifier>{c2fc2222-b0ff-49f5-a292-f522432cfaf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Comform">
+      <UniqueIdentifier>{b336122b-71d1-4956-b650-d8d975b907ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Comform\TGALoader">
+      <UniqueIdentifier>{fcec86cf-7b5f-4ba5-a43e-30087632d76d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -91,6 +91,9 @@ FbxDouble3 FbxMaterialCache::GetMaterialProperty(const FbxSurfaceMaterial * pMat
 				pTextureName = *(static_cast<std::string*>(lTexture->GetUserDataPtr()));
 			}
 			else {
+
+
+
 				pTextureName = lTexture->GetRelativeFileName();
 				
 				char *pStr;

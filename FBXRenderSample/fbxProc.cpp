@@ -235,8 +235,8 @@ void DX11FbxLoader::LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLa
 
 			//読み込めたらファイルテクスチャのアドレスを渡す
 			if (lStatus) {
-				//std::string*lTextureName = new std::string(filePath);
-				//lFileTexture->SetUserDataPtr(lTextureName);
+				std::string*lTextureName = new std::string(filePath);
+				lFileTexture->SetUserDataPtr(lTextureName);
 			}
 			
 		}

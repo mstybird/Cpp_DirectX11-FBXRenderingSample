@@ -1,5 +1,6 @@
 #include"DX11Texture.h"
 #include"DX11Resrouce.h"
+#include"Comform\TGALoader\TgaLoader.h"
 ID3D11Device * DXTexture::mDevice{ nullptr };
 DXTexture::DXTexture() :
 	mSampleLinear{ nullptr },
@@ -32,7 +33,15 @@ bool DXTexture::Create(const std::string & pFileName)
 		mIsTexture = true;
 	}
 	else {
-		mIsTexture = false;
+		Comfort::TGAImage tga;
+		if (tga.ReadTGA(pFileName.c_str())==true) {
+			if (tga.CreateTextureResource2D(mDevice, mTexture)) {
+				mIsTexture = true;
+			}
+		}
+		else {
+			mIsTexture = false;
+		}
 	}
 	return mIsTexture;
 }
