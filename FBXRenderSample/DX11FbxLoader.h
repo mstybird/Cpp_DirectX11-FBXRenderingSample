@@ -6,7 +6,7 @@
 #include<vector>
 #include<D3DX9.h>
 #ifdef _DEBUG
-#pragma comment(lib,"libfbxsdk-md.lib")
+#pragma comment(lib,"libfbxsdk-mt.lib")
 #else
 #pragma comment(lib,"libfbxsdk-md.lib")
 #endif

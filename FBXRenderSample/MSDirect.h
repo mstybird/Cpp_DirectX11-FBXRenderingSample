@@ -19,6 +19,7 @@ public:
 
 
 	static ID3D11Device*GetDevice();
+	static ID3D11DeviceContext*GetDeviceContext();
 	static IDXGISwapChain*GetSwapChain();
 	//ƒL[“ü—Íó‘Ô‚ğ‰Šú‰»‚·‚é
 	static void ResetKeyStateAll();

@@ -17,6 +17,21 @@ MyMSScene::MyMSScene()
 
 void MyMSScene::Initialize()
 {
+	//エフェクト初期化
+	{
+		using namespace Comfort;
+		mEfkRender.Initialize(MSDirect::GetDevice(), MSDirect::GetDeviceContext());
+		mEfkManager.Initialize(mEfkRender.GetRenderer());
+		mEfkDb.Initialize(mEfkManager.GetManager());
+		mEfkDb.Load("res/test.efk",0);
+
+		mEfkObj.SetManager(&mEfkManager);
+		decltype(auto) lEfk = mEfkDb.Get(0);
+		mEfkObj.SetEffect(lEfk);
+		mEfkObj.SetPosition({ 0.0f,0.0f,0.0f });
+
+	}
+
 	{
 		//スプライト初期化
 		m2DShader.Init();
@@ -148,10 +163,18 @@ void MyMSScene::Initialize()
 		enemy[i]->InitFinal();
 	}
 	
+	::Comfort::EffectCamera cam;
+	::Comfort::EffectProjection proj;
+	cam.SetDXCamera(mPlayer.GetView());
+	proj.SetDXProjection(mPlayer.GetProj());
+	mEfkRender.SetCamera(&cam);
+	mEfkRender.SetProjection(&proj);
+	mEfkObj.Play();
 
 }
 
 void MyMSScene::Update() {
+	mEfkManager.Update();
 	mPlayer.Update();
 	mField.Update();
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
@@ -224,6 +247,7 @@ void MyMSScene::Render()
 	mField.Render();
 	mPlayer.Render();
 	mBall.Render();
+	mEfkRender.RenderAll(&mEfkManager);
 	//m2DRender.Render(mImage);
 
 }

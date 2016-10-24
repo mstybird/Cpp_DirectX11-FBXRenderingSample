@@ -10,6 +10,7 @@
 #include"Ball.h"
 #include"StatusField.h"
 #include"NcgLua\NcgLua.hpp"
+#include"Comform\Effekseer\Effect.hxx"
 class MyMSScene :public MSSceneBase {
 public:
 	MyMSScene();
@@ -51,5 +52,10 @@ private:
 	MySprite2DShader m2DShader;
 	MSSprite2DRender m2DRender;
 	MSSprite2DResource mImage;
+
+	::Comfort::EfkRenderer mEfkRender;
+	::Comfort::EfkManager mEfkManager;
+	::Comfort::EffectDatabase mEfkDb;
+	::Comfort::EfkObject mEfkObj;
 
 };

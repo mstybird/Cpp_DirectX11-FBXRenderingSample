@@ -282,6 +282,11 @@ ID3D11Device * MSDirect::GetDevice()
 	return sMSDirect->m_pDevice;
 }
 
+ID3D11DeviceContext * MSDirect::GetDeviceContext()
+{
+	return sMSDirect->m_pDeviceContext;
+}
+
 IDXGISwapChain * MSDirect::GetSwapChain()
 {
 	return sMSDirect->m_pSwapChain;
