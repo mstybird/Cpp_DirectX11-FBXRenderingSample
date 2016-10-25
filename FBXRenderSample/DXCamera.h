@@ -28,6 +28,8 @@ public:
 	void SetCamera(const DXWorld&pEyePosition, const DXWorld& pLookAtPosition);
 	//ワールド座標から指定数ずらす場合
 	void SetCamera(DXWorld&pEyePosition, const DXVector3&pDistance);
+	//視点と注視点が確定している場合
+	void SetCamera(DXWorld&pEyePosition, DXVector3&pDistance, DXVector3&aDistanceOffset);
 	
 
 	void CreateRay(DXVector3&pOutRay, const DXVector3&pRayDirection)const;

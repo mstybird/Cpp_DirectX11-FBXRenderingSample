@@ -58,6 +58,37 @@ void DXCamera::SetCamera(DXWorld&pEyePosition, const DXVector3&pDistance)
 
 }
 
+void DXCamera::SetCamera(DXWorld&pEyePosition, DXVector3&pDistance, DXVector3&aDistanceOffset)
+{
+	DXMatrix lTmpMatrixTrans;
+	DXMatrix lTmpMatrixRotate;
+	//’‹“_‚ğİ’è
+	*mLookPosition = *pEyePosition.mPosition;
+	//’‹“_‚ğ‰ñ“]
+
+	//ˆÚ“®‰ñ“]s—ñ‚Ìì¬
+	lTmpMatrixTrans.Translation(*mLookPosition);
+	lTmpMatrixRotate.RotationXYZ(*pEyePosition.mRotationCenter, TYPE_ANGLE::DEGREE);
+	//’‹“_‚ğ‰ñ“]
+	DXVector3 lTmpLookOffset;
+	D3DXVec3TransformCoord(
+		&lTmpLookOffset,
+		&(aDistanceOffset),
+		&(lTmpMatrixRotate)
+	);
+
+	*mLookPosition += lTmpLookOffset;
+
+	//‹“_‚ğ‰ñ“]
+	D3DXVec3TransformCoord(
+		mEyePosition.get(),
+		&(pDistance+aDistanceOffset),
+		&(lTmpMatrixRotate*lTmpMatrixTrans)
+	);
+	//“ªã•ûŒü‚ÌŒvZ
+	CreateRay(*mUpVector.get(), sUpVector);
+}
+
 void DXCamera::CreateRay(DXVector3 & pOutRay, const DXVector3 & pRayDirection)const
 {
 	DXMatrix lMatrix;

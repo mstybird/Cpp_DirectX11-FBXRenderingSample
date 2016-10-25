@@ -7,7 +7,10 @@
 #include"MSGravity.h"
 #include"DXWorld.h"
 Player::Player():
-	mCameraLen{ 0,5,-10 }
+	//mCameraLen{ 0.0f,0.0f,0.0f },
+	//mCameraOffset{ -1.2f,1.5f,0.0f }
+	mCameraLen{ 0.0f,100.0f,-0.1f },
+	mCameraOffset{ 0.0f,0.0f,0.0f }
 {
 	mBulletNormal = std::make_unique<BulletNormal>();
 	mStatus = std::make_unique<StatusPlayer>();
@@ -41,8 +44,9 @@ void Player::Update()
 			}
 		}
 	}
-
-	GetView()->SetCamera(*GetWorld(), mCameraLen);
+	UpdateCamera();
+//	GetView()->SetCamera(*GetWorld(), mCameraLen);
+	//mCameraLen.y += 0.01f;
 }
 
 void Player::UpdateAlive()
@@ -74,6 +78,18 @@ void Player::UpdateGravity()
 		f,
 		{0,-1,0}
 	);
+}
+
+void Player::UpdateCamera()
+{
+	//座標を取得
+	auto lLookPosition = *GetWorld()->mPosition;
+	//差分計算
+	auto lEyePosition = lLookPosition + mCameraLen;
+	//カメラ位置をずらす
+	//lLookPosition += mCameraOffset;
+	//lEyePosition += mCameraOffset;
+	GetView()->SetCamera(*GetWorld(),mCameraLen,mCameraOffset);
 }
 
 void Player::Render()

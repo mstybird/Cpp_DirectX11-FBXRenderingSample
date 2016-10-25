@@ -129,7 +129,7 @@ void Comfort::EffectCamera::SetDXCamera(DXCamera * aCamera)
 
 ::Effekseer::Matrix44 Comfort::EffectCamera::GetLookAtRH()
 {
-	return ::Effekseer::Matrix44().LookAtRH(mEye, mLookAt, mUp);
+	return ::Effekseer::Matrix44().LookAtLH(mEye, mLookAt, mUp);
 }
 
 void Comfort::EffectProjection::SetDXProjection(DXProjection * aProjection)
@@ -144,7 +144,7 @@ void Comfort::EffectProjection::SetDXProjection(DXProjection * aProjection)
 
 ::Effekseer::Matrix44 Comfort::EffectProjection::GetPerspectiveFovRH()
 {
-	return ::Effekseer::Matrix44().PerspectiveFovRH(mAngle, mWidth / mHeight, mNear, mFar);
+	return ::Effekseer::Matrix44().PerspectiveFovLH(mAngle, mWidth / mHeight, mNear, mFar);
 }
 
 void Comfort::EffectDatabase::Initialize(::Effekseer::Manager *& aManager)

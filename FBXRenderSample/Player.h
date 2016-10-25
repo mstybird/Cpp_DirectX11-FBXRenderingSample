@@ -14,6 +14,7 @@ public:
 	void Update()override;
 	void UpdateAlive()override;
 	void UpdateGravity()override;
+	void UpdateCamera();
 
 	void Render()override;
 	void AddBullet();
@@ -21,5 +22,6 @@ private:
 	void InitStatus()override;
 private:
 	DXVector3 mCameraLen;
+	DXVector3 mCameraOffset;
 };
 

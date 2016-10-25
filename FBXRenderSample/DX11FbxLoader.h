@@ -5,15 +5,15 @@
 #include<string>
 #include<vector>
 #include<D3DX9.h>
+
 #ifdef _DEBUG
 #pragma comment(lib,"libfbxsdk-mt.lib")
 #else
-#pragma comment(lib,"libfbxsdk-md.lib")
+#pragma comment(lib,"libfbxsdk-mt.lib")
 #endif
 #include<unordered_map>
 #include<memory>
 typedef std::tr1::unordered_map<std::string, std::vector<std::string>> TextureName_ut;
-//using MeshVector = std::vector<std::shared_ptr<FBXMesh>>;
 #include"DX11FbxResource.h"
 
 

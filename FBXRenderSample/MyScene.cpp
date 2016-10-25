@@ -19,33 +19,33 @@ void MyMSScene::Initialize()
 {
 	//エフェクト初期化
 	{
-		using namespace Comfort;
+		//using namespace Comfort;
 		mEfkRender.Initialize(MSDirect::GetDevice(), MSDirect::GetDeviceContext());
 		mEfkManager.Initialize(mEfkRender.GetRenderer());
 		mEfkDb.Initialize(mEfkManager.GetManager());
-		mEfkDb.Load("res/test.efk",0);
+		mEfkDb.Load("res/test.efk", 0);
 
 		mEfkObj.SetManager(&mEfkManager);
 		decltype(auto) lEfk = mEfkDb.Get(0);
 		mEfkObj.SetEffect(lEfk);
-		mEfkObj.SetPosition({ 0.0f,0.0f,0.0f });
+		mEfkObj.SetPosition({ 11.0f,0.0f,7.5f });
 
 	}
 
 	{
-		//スプライト初期化
-		m2DShader.Init();
-		m2DShader.InitVertex("Sprite2D.hlsl");
-		m2DShader.InitPixel("Sprite2D.hlsl");
-		m2DRender.SetViewPort(MSDirect::GetViewPort());
-		m2DRender.SetShader(m2DShader);
+			//スプライト初期化
+			m2DShader.Init();
+			m2DShader.InitVertex("Sprite2D.hlsl");
+			m2DShader.InitPixel("Sprite2D.hlsl");
+			m2DRender.SetViewPort(MSDirect::GetViewPort());
+			m2DRender.SetShader(m2DShader);
 
-		mTexManager.RegisterFile("res/yutapon lumia.png", 0);
-		mImage.SetTexture(mTexManager, 0);
-		mImage.SetSize({ 150,100 });
-		mImage.SetPosition({50, 25});
-		mImage.SetSplitSizeX({ 0.5f,1.0f });
-	}
+			mTexManager.RegisterFile("res/Grass.png", 0);
+			mImage.SetTexture(mTexManager, 0);
+			mImage.SetSize({ 150,100 });
+			mImage.SetPosition({ 50, 25 });
+			mImage.SetSplitSizeX({ 0.5f,1.0f });
+		}
 
 	{
 		mBall.Initialize();
@@ -65,42 +65,43 @@ void MyMSScene::Initialize()
 	shader.InitVertex("Simple.hlsl");
 	shader.InitPixel("Simple.hlsl");
 
-	mdBullet.LoadFile("res/box.fbx", false);
-	mdChara.LoadFile("res/SD_QUERY_01.fbx", true);
 
-	mdField.LoadFile("res/FieldDesign.fbx", false);
-	mdFieldCol.LoadFile("res/FieldCollision.fbx", false);
-	mdBall.LoadFile("res/ball.fbx", false);
+	mdDB.Load("res/box.fbx", false, cbox);
+	mdDB.Load("res/SD_QUERY_01.fbx", true, cChara);
+
+	mdDB.Load("res/FieldDesign.fbx", false, cFieldD);
+	mdDB.Load("res/FieldCollision.fbx", false, cFieldC);
+	mdDB.Load("res/ball.fbx", false, cBall);
 
 	//敵の初期化
 	enemy.push_back(make_unique<Enemy>());
 	//enemy.push_back(make_unique<Enemy>());
 
 	float scaleBall = 0.01f;
-	float scaleChara = 0.3f;
+	float scaleChara = 0.25f;
 	float scaleField = 1.0f;
 
 
 	for (uint16_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->Initialize(mFieldStatus);
 		enemy[i]->SetAI(mLuaDb.GetManager(0));
-		enemy[i]->SetMesh(mdChara);
-		enemy[i]->SetCollisionMesh(mdBullet);
+		enemy[i]->SetMesh(*mdDB.Get(cChara));
+		enemy[i]->SetCollisionMesh(*mdDB.Get(cbox));
 		enemy[i]->SetCollisionScale(scaleBall, scaleBall, scaleBall);
 		enemy[i]->SetRenderer(&render);
 		enemy[i]->SetShader(&shader);
-		enemy[i]->SetBulletMesh(mdBullet);
+		enemy[i]->SetBulletMesh(*mdDB.Get(cbox));
 		enemy[i]->Respawn();
 	}
 	mField.Initialize();
-	mField.SetMesh(mdField);
-	mField.SetCollisionMesh(mdFieldCol);
+	mField.SetMesh(*mdDB.Get(cFieldD));
+	mField.SetCollisionMesh(*mdDB.Get(cFieldC));
 	mField.SetCollisionScale(scaleField, scaleField, scaleField);
 	mField.SetRenderer(&render);
 	mField.SetShader(&shader);
 
-	mBall.SetMesh(mdBall);
-	mBall.SetCollisionMesh(mdBall);
+	mBall.SetMesh(*mdDB.Get(cBall));
+	mBall.SetCollisionMesh(*mdDB.Get(cBall));
 	mBall.SetRenderer(&render);
 	mBall.SetShader(&shader);
 	mBall.GetWorld()->SetT(4, 0, 5);
@@ -108,12 +109,12 @@ void MyMSScene::Initialize()
 
 
 	mPlayer.Initialize(mFieldStatus);
-	mPlayer.SetMesh(mdChara);
-	mPlayer.SetCollisionMesh(mdBullet);
+	mPlayer.SetMesh(*mdDB.Get(cChara));
+	mPlayer.SetCollisionMesh(*mdDB.Get(cbox));
 	mPlayer.SetCollisionScale(scaleBall, scaleBall, scaleBall);
 	mPlayer.SetRenderer(&render);
 	mPlayer.SetShader(&shader);
-	mPlayer.SetBulletMesh(mdBullet);
+	mPlayer.SetBulletMesh(*mdDB.Get(cbox));
 	mPlayer.Respawn();
 	//mPlayer.SetField(mFieldStatus);
 
@@ -163,6 +164,7 @@ void MyMSScene::Initialize()
 		enemy[i]->InitFinal();
 	}
 	
+	
 	::Comfort::EffectCamera cam;
 	::Comfort::EffectProjection proj;
 	cam.SetDXCamera(mPlayer.GetView());
@@ -178,7 +180,7 @@ void MyMSScene::Update() {
 	mPlayer.Update();
 	mField.Update();
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
-		enemy[i]->Update();
+	//	enemy[i]->Update();
 	}
 }
 
@@ -226,10 +228,10 @@ void MyMSScene::KeyHold(MSKEY pKey)
 		mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
 		break;
 	case MSKEY::LEFT:
-		mPlayer.GetWorld()->AddRC({ 0,-5,0 });
+		//mPlayer.GetWorld()->AddRC({ 0,-5,0 });
 		break;
 	case MSKEY::RIGHT:
-		mPlayer.GetWorld()->AddRC({ 0,5,0 });
+		//mPlayer.GetWorld()->AddRC({ 0,5,0 });
 		break;
 	default:
 		break;
@@ -242,7 +244,7 @@ void MyMSScene::Render()
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	////画面クリア
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
-		enemy[i]->Render();
+		//enemy[i]->Render();
 	}
 	mField.Render();
 	mPlayer.Render();

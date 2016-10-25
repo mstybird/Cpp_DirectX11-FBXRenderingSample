@@ -11,6 +11,7 @@
 #include"StatusField.h"
 #include"NcgLua\NcgLua.hpp"
 #include"Comform\Effekseer\Effect.hxx"
+#include"MSFbxDatabase.h"
 class MyMSScene :public MSSceneBase {
 public:
 	MyMSScene();
@@ -26,11 +27,8 @@ private:
 
 private:
 
-	MSFbxManager mdBullet;
-	MSFbxManager mdChara;
-	MSFbxManager mdField;
-	MSFbxManager mdFieldCol;
-	MSFbxManager mdBall;
+	MSFbxDatabase mdDB;
+
 	//描画に使うシェーダ
 	My3DShader shader;
 	//シーンに一つ
@@ -57,5 +55,11 @@ private:
 	::Comfort::EfkManager mEfkManager;
 	::Comfort::EffectDatabase mEfkDb;
 	::Comfort::EfkObject mEfkObj;
+
+	const int cbox = 0;
+	const int cChara = 1;
+	const int cFieldD = 2;
+	const int cFieldC = 3;
+	const int cBall = 4;
 
 };

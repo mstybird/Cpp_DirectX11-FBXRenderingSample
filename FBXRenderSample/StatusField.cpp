@@ -137,7 +137,7 @@ void NodeControl::AddNodeSafe(std::vector<Dijkstra::Node*>& aNodeList, Dijkstra:
 {
 	//NULLチェック
 	assert(aAddNode != nullptr);
-
+	
 	//ID重複チェック
 	//本来あってはならないので、強制終了させる
 	for (const auto&lNode : aNodeList) {

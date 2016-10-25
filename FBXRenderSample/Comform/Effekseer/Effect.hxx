@@ -21,7 +21,7 @@ namespace Comfort {
 	
 
 
-	//Effekseerローダ
+	//Effekseer一元管理用データベース
 	class EffectDatabase {
 	public:
 		void Initialize(::Effekseer::Manager*&aManager);
