@@ -62,14 +62,14 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\Effekseer\include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\include\;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\include;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\Effekseer\include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\include\;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\lib;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\FBXRenderSample\NcgLua;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\x86\debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\FBXRenderSample\NcgLua;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\lib;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\lib;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\FBXRenderSample\NcgLua;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\x86\debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,7 +79,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\include;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -89,7 +89,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\lib;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\FBXRenderSample\NcgLua;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\x86\release</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\FBXRenderSample\NcgLua;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\lib;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\lib;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\FBXRenderSample\NcgLua;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\x86\release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

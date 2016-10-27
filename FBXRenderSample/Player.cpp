@@ -7,10 +7,10 @@
 #include"MSGravity.h"
 #include"DXWorld.h"
 Player::Player():
-	//mCameraLen{ 0.0f,0.0f,0.0f },
-	//mCameraOffset{ -1.2f,1.5f,0.0f }
-	mCameraLen{ 0.0f,100.0f,-0.1f },
-	mCameraOffset{ 0.0f,0.0f,0.0f }
+	mCameraLen{ 0.0f,10.0f,0.1f },
+	mCameraOffset{ -1.2f,1.5f,0.0f }
+	//mCameraLen{ 0.0f,50.0f,-0.1f },
+	//mCameraOffset{ 0.0f,0.0f,0.0f }
 {
 	mBulletNormal = std::make_unique<BulletNormal>();
 	mStatus = std::make_unique<StatusPlayer>();

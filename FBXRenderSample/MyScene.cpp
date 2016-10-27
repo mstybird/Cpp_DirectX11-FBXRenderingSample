@@ -69,7 +69,7 @@ void MyMSScene::Initialize()
 	mdDB.Load("res/box.fbx", false, cbox);
 	mdDB.Load("res/SD_QUERY_01.fbx", true, cChara);
 
-	mdDB.Load("res/FieldDesign.fbx", false, cFieldD);
+	mdDB.Load("res/main.fbx", false, cFieldD);
 	mdDB.Load("res/FieldCollision.fbx", false, cFieldC);
 	mdDB.Load("res/ball.fbx", false, cBall);
 
@@ -148,7 +148,7 @@ void MyMSScene::Initialize()
 
 
 	mField.GetWorld()->SetS(scaleField, scaleField, scaleField);
-	mField.GetWorld()->SetT(-3, -1, 0);
+	mField.GetWorld()->SetT(0, -1, 0);
 
 	//enemy[0]->GetWorld()->SetT(-15, 0, 0);
 	//enemy[1]->GetWorld()->SetT(-5, 0, 8);
@@ -196,7 +196,7 @@ void MyMSScene::KeyDown(MSKEY pKey)
 		{
 			DXVector3 Pos;
 			mPlayer.GetWorld()->GetMatrix().lock()->GetT(Pos);
-			printf("new MyNode{ %d,\"obj%d\",{%.2f,%.2f,%.2f}\n", count, count, Pos.x, Pos.y, Pos.z);
+			printf("%.2f,%.2f,%.2f\n", Pos.x, Pos.y, Pos.z);
 			++count;
 		}
 			break;

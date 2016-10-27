@@ -140,15 +140,15 @@ void DX11FbxLoader::FbxLoadFromFile()
 		//座標系の変換
 		FbxAxisSystem SceneAxisSystem = Scene->GetGlobalSettings().GetAxisSystem();
 		FbxAxisSystem OurAxisSystem(
-			FbxAxisSystem::eYAxis,
-			FbxAxisSystem::eParityOdd,
-			FbxAxisSystem::eRightHanded
-		);
+			FbxAxisSystem::EUpVector::eYAxis,
+			FbxAxisSystem::EFrontVector::eParityOdd,
+			FbxAxisSystem::ECoordSystem::eRightHanded);
 
-
+		
+		
 		//読み込んだファイルと座標系が異なる場合はシーンの座標系を変換
 		if (SceneAxisSystem != OurAxisSystem) {
-			OurAxisSystem.ConvertScene(Scene);
+			FbxAxisSystem::DirectX.ConvertScene(Scene);
 		}
 
 		Scene->FillAnimStackNameArray(AnimStackNameArray);
