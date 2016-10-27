@@ -429,6 +429,9 @@
     <ClInclude Include="MSFbxDatabase.h">
       <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
+    <ClInclude Include="..\AIMapImporter\Include\AIMapImport.hpp">
+      <Filter>Game\AI\MapImporter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -619,6 +622,9 @@
     </Filter>
     <Filter Include="Comform\Effekseer">
       <UniqueIdentifier>{c0583bac-ac6d-4591-9d5c-f4fc3df9dd68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AI\MapImporter">
+      <UniqueIdentifier>{d191c084-7b7d-47f8-925f-b60adb9f82a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

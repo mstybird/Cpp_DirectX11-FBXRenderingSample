@@ -4,8 +4,12 @@
 #include"AI\EnemyAI.h"
 #include"CharacterBase.h"
 #include<cassert>
+#include<AIMapImport.hpp>
 void StatusField::CreateFieldNodes()
 {
+	Comfort::AIMapImporter im;
+	im.Import("sample.anm");
+	auto v = im.GetList();
 	using NodeControl::AddNodeSafe;
 	AddNodeSafe(mFieldNodes,new MyNode{ 0,"obj0",{ 4.00,0.00,-6.75 } });
 	AddNodeSafe(mFieldNodes,new MyNode{ 1,"obj1",{ 6.75,0.00,-8.75 } });

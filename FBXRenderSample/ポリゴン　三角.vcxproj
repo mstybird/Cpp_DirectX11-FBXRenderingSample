@@ -1,8 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug(DLL)|Win32">
+      <Configuration>Debug(DLL)</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release(DLL)|Win32">
+      <Configuration>Release(DLL)</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
@@ -24,7 +32,18 @@
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release(DLL)|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug(DLL)|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -35,7 +54,13 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release(DLL)|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug(DLL)|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -47,7 +72,17 @@
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug(DLL)|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release(DLL)|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
@@ -62,14 +97,35 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\include;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\Effekseer\include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\include\;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\AIMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\include;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\Effekseer\include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\include\;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\FBXRenderSample\NcgLua;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\lib;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\lib;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\FBXRenderSample\NcgLua;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\x86\debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\AIMapImporter\Library;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\FBXRenderSample\NcgLua;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\lib;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\lib;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\FBXRenderSample\NcgLua;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\x86\debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug(DLL)|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\AIMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\include;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\Effekseer\include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\include\;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\AIMapImporter\Library;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\FBXRenderSample\NcgLua;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\lib;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\lib;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\FBXRenderSample\NcgLua;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\x86\debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,7 +135,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\include;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\AIMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\include;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -89,7 +145,28 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\FBXRenderSample\NcgLua;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\lib;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\lib;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\FBXRenderSample\NcgLua;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\x86\release</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\AIMapImporter\Library;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\FBXRenderSample\NcgLua;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\lib;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\lib;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\FBXRenderSample\NcgLua;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\x86\release</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release(DLL)|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\AIMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\include;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\AIMapImporter\Library;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\FBXRenderSample\NcgLua;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\Effekseer\lib;C:\Workspace\Github\Cpp_DirectX11-GameDevelop\Effekseer\lib;C:\WorkSpace\GitHub\Cpp_DirectX11-GameDevelop\FBXRenderSample\NcgLua;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\x86\release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -165,6 +242,7 @@
     <None Include="Sample.cxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\AIMapImporter\Include\AIMapImport.hpp" />
     <ClInclude Include="AI\Dijkstra.h" />
     <ClInclude Include="AI\EnemyAI.h" />
     <ClInclude Include="Ball.h" />
@@ -246,7 +324,9 @@
   <ItemGroup>
     <None Include="Simple.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug(DLL)|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug(DLL)|Win32'">5.0</ShaderModel>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
