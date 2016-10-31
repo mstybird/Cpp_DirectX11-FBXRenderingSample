@@ -7,7 +7,7 @@
 #include"MSGravity.h"
 #include"DXWorld.h"
 Player::Player():
-	mCameraLen{ 0.0f,10.0f,0.1f },
+	mCameraLen{ 0.0f,50.0f,-0.1f },
 	mCameraOffset{ -1.2f,1.5f,0.0f }
 	//mCameraLen{ 0.0f,50.0f,-0.1f },
 	//mCameraOffset{ 0.0f,0.0f,0.0f }
@@ -29,7 +29,7 @@ void Player::Update()
 	//€‚ñ‚Å‚½‚Æ‚«‚Ìˆ—
 	UpdateAlive();
 
-	UpdateMesh();
+	//UpdateMesh();
 	UpdateBullets();
 	//UpdateGravity();
 

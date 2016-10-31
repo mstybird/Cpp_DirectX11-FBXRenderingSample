@@ -5,88 +5,86 @@
 #include"CharacterBase.h"
 #include<cassert>
 #include<AIMapImport.hpp>
+#include<string>
 void StatusField::CreateFieldNodes()
 {
 	Comfort::AIMapImporter im;
 	im.Import("sample.anm");
 	auto v = im.GetList();
 	using NodeControl::AddNodeSafe;
-	AddNodeSafe(mFieldNodes,new MyNode{ 0,"obj0",{ 4.00,0.00,-6.75 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 1,"obj1",{ 6.75,0.00,-8.75 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 2,"obj2",{ 9.75,0.00,-5.75 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 3,"obj3",{ 11.75,0.00,-3.75 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 4,"obj4",{ 9.00,0.00,-0.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 5,"obj5",{ 6.25,0.00,2.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 6,"obj6",{ 2.75,0.00,0.25 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 7,"obj7",{ 0.50,0.00,-2.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 8,"obj8",{ -4.75,0.00,-2.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 9,"obj9",{ -8.25,0.00,-2.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 10,"obj10",{ -11.00,0.00,1.00 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 11,"obj11",{ -11.00,0.00,5.25 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 12,"obj12",{ -8.00,0.00,8.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 13,"obj13",{ -4.00,0.00,8.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 14,"obj14",{ -0.00,0.00,4.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 15,"obj15",{ 2.50,0.00,7.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 16,"obj16",{ 7.00,0.00,7.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 17,"obj17",{ 11.00,0.00,4.00 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 18,"obj18",{ 11.00,0.00,-8.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 19,"obj19",{ 11.00,0.00,7.50 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 20,"obj20",{ -16.25,0.00,5.25 } });
-	AddNodeSafe(mFieldNodes,new MyNode{ 21,"obj21",{ -16.25,0.00,-3.50 } });
+	//ノードの追加
+	DXVector3 lNodePosition{};
+	for (decltype(auto)lData : *v) {
+		lNodePosition.Set(-lData.mX, lData.mY, lData.mZ);
+		AddNodeSafe(
+			mFieldNodes,
+			new MyNode{
+				lData.mID, 
+				std::string("obj") +std::to_string(lData.mID),lNodePosition
+			}
+		);
+	}
 
 
-	using std::pair;
-	using NodeControl::LinkNodeSafe;
-	LinkNodeSafe(mFieldNodes,{ 0, 1 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 0, 7 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 0, 8 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 1, 2 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 2, 3 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 2, 18 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 3, 4 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 3, 17 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 3, 18 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 4, 5 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 4, 19 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 5, 6 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 5, 16 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 5, 19 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 6, 7 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 6, 14 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 7, 8 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 8, 9 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 8, 14 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 9, 10 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 9, 11 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 10, 21 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 11, 12 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 11, 20 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 11, 21 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 12, 13 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 12, 20 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 13, 14 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 13, 15 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 14, 15 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 15, 16 }, 1, true);
-	LinkNodeSafe(mFieldNodes,{ 16, 19 }, 1, true);
+	//AddNodeSafe(mFieldNodes,new MyNode{ 0,"obj0",{ 4.00,0.00,-6.75 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 1,"obj1",{ 6.75,0.00,-8.75 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 2,"obj2",{ 9.75,0.00,-5.75 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 3,"obj3",{ 11.75,0.00,-3.75 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 4,"obj4",{ 9.00,0.00,-0.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 5,"obj5",{ 6.25,0.00,2.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 6,"obj6",{ 2.75,0.00,0.25 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 7,"obj7",{ 0.50,0.00,-2.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 8,"obj8",{ -4.75,0.00,-2.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 9,"obj9",{ -8.25,0.00,-2.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 10,"obj10",{ -11.00,0.00,1.00 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 11,"obj11",{ -11.00,0.00,5.25 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 12,"obj12",{ -8.00,0.00,8.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 13,"obj13",{ -4.00,0.00,8.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 14,"obj14",{ -0.00,0.00,4.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 15,"obj15",{ 2.50,0.00,7.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 16,"obj16",{ 7.00,0.00,7.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 17,"obj17",{ 11.00,0.00,4.00 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 18,"obj18",{ 11.00,0.00,-8.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 19,"obj19",{ 11.00,0.00,7.50 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 20,"obj20",{ -16.25,0.00,5.25 } });
+	//AddNodeSafe(mFieldNodes,new MyNode{ 21,"obj21",{ -16.25,0.00,-3.50 } });
 
 
+	//ノード間固定コストは距離とする						
+	auto LinkNodeSafeCustom = [this](const int32_t aFromID, const int32_t aToID, const bool aIsBothFlag) {
+		using NodeControl::LinkNodeSafe;
+		//ノード間の距離を得る					
+		auto NodeLength = [this](const int32_t aFromID, const int32_t aToID) {
+			auto& lFromPos = static_cast<MyNode*>(mFieldNodes[aFromID])->Position;
+			auto& lToPos = static_cast<MyNode*>(mFieldNodes[aToID])->Position;
+			return (lFromPos - lToPos).GetDistance();
+		};
+		LinkNodeSafe(mFieldNodes, { aFromID,aToID }, NodeLength(aFromID, aToID), aIsBothFlag);
+	};
+
+	//リンクノードの追加
+	for (decltype(auto)lNode : *v) {
+		printf("%d\n", lNode.mID);
+		for (decltype(auto)lLink : lNode.mLinkList) {
+			LinkNodeSafeCustom(lNode.mID, lLink, true);
+		}
+	}
 
 
 }
 void StatusField::CreateSpawnCharaNodes()
 {
 	using NodeControl::AddNodeSafe;
-	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 8,"obj8",{ -4.75,0.00,-2.50 } });
-	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 19,"obj19",{ 11.00,0.00,7.50 } });
-	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 20,"obj20",{ -16.25,0.00,5.25 } });
+	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 8,"obj8",{ 10.21,0.00,-51.26 } });
+	//AddNodeSafe(mSpawnCharaNodes, new MyNode{ 19,"obj19",{ 11.00,0.00,7.50 } });
+	//AddNodeSafe(mSpawnCharaNodes, new MyNode{ 20,"obj20",{ -16.25,0.00,5.25 } });
 }
 void StatusField::CreateSpawnBallNodes()
 {
 	using NodeControl::AddNodeSafe;
-	AddNodeSafe(mSpawnBallNodes, new MyNode{ 0,"obj0",{ 4.00,0.00,-6.75 } });
-	AddNodeSafe(mSpawnBallNodes, new MyNode{ 5,"obj5",{ 6.25,0.00,2.50 } });
-	AddNodeSafe(mSpawnBallNodes, new MyNode{ 13,"obj13",{ -4.00,0.00,8.50 } });
+	AddNodeSafe(mSpawnBallNodes, new MyNode{ 0,"obj0",{ -16.40,0.00,- 47.00 } });
+	//AddNodeSafe(mSpawnBallNodes, new MyNode{ 5,"obj5",{ 6.25,0.00,2.50 } });
+	//AddNodeSafe(mSpawnBallNodes, new MyNode{ 13,"obj13",{ -4.00,0.00,8.50 } });
 }
 std::vector<Dijkstra::Node*> StatusField::GetFieldNodesClone()
 {

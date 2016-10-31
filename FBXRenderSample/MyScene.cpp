@@ -122,7 +122,7 @@ void MyMSScene::Initialize()
 	mPlayer.AddCollisionTarget(&mBall);
 
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
-		enemy[i]->AddSearchTarget(&mPlayer);
+		//enemy[i]->AddSearchTarget(&mPlayer);
 		enemy[i]->AddSearchTarget(&mBall);
 		//自分以外のエネミーを追加
 		for (auto&lEnemy : enemy) {
@@ -180,7 +180,7 @@ void MyMSScene::Update() {
 	mPlayer.Update();
 	mField.Update();
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
-	//	enemy[i]->Update();
+		enemy[i]->Update();
 	}
 }
 
@@ -228,10 +228,10 @@ void MyMSScene::KeyHold(MSKEY pKey)
 		mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
 		break;
 	case MSKEY::LEFT:
-		//mPlayer.GetWorld()->AddRC({ 0,-5,0 });
+		mPlayer.GetWorld()->AddRC({ 0,-5,0 });
 		break;
 	case MSKEY::RIGHT:
-		//mPlayer.GetWorld()->AddRC({ 0,5,0 });
+		mPlayer.GetWorld()->AddRC({ 0,5,0 });
 		break;
 	default:
 		break;
@@ -244,7 +244,7 @@ void MyMSScene::Render()
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	////画面クリア
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
-		//enemy[i]->Render();
+		enemy[i]->Render();
 	}
 	mField.Render();
 	mPlayer.Render();

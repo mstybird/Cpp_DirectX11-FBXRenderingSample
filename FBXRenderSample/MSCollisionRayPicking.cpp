@@ -251,7 +251,7 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 
 				if (lNearDistance < FLT_MAX) {
 					//当たった場合、滑り後の座標を計算する(少し多めに押し戻す
-					lAfterPos = lRayAfterPosition + polyNormal*(lDistance + 0.05f);
+					lAfterPos = lRayAfterPosition + polyNormal*(lNearDistance + 0.05f);
 					//すべての処理が終わればセットする
 					pResultPosition = lAfterPos;
 				}

@@ -131,6 +131,7 @@ std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosit
 		if (lCollision->IsActive() == false)continue;
 
 		if (mRayPick->Collision(lResult, *mTransform, *lCollision->GetTransform())) {
+			DXVector3 v = *GetWorld()->mPosition;
 			if (pIsUpdatePosition == true) {
 				GetWorld()->SetT(lResult);
 			}

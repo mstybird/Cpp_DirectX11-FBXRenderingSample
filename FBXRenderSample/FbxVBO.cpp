@@ -207,7 +207,7 @@ bool FbxVBO::Initialize(const FbxMesh * pMesh)
 			//頂点を取得
 			lCurrentVertex = lControlPoints[lIndex];
 
-			lVertices.SetAt(lIndex * VERTEX_STRIDE + 0, static_cast<float>(-lCurrentVertex[0]));
+			lVertices.SetAt(lIndex * VERTEX_STRIDE + 0, static_cast<float>(lCurrentVertex[0]));
 			lVertices.SetAt(lIndex * VERTEX_STRIDE + 1, static_cast<float>(lCurrentVertex[1]));
 			lVertices.SetAt(lIndex * VERTEX_STRIDE + 2, static_cast<float>(lCurrentVertex[2]));
 			lVertices.SetAt(lIndex * VERTEX_STRIDE + 3, 1.0f);
@@ -234,7 +234,7 @@ bool FbxVBO::Initialize(const FbxMesh * pMesh)
 					lNormalIndex = lNormalElement->GetIndexArray().GetAt(lIndex);
 				}
 				lCurrentNormal = lNormalElement->GetDirectArray().GetAt(lNormalIndex);
-				lNormals.SetAt(lIndex*NORMAL_STRIDE + 0, static_cast<float>(-lCurrentNormal[0]));
+				lNormals.SetAt(lIndex*NORMAL_STRIDE + 0, static_cast<float>(lCurrentNormal[0]));
 				lNormals.SetAt(lIndex*NORMAL_STRIDE + 1, static_cast<float>(lCurrentNormal[1]));
 				lNormals.SetAt(lIndex*NORMAL_STRIDE + 2, static_cast<float>(lCurrentNormal[2]));
 			}
@@ -288,7 +288,7 @@ bool FbxVBO::Initialize(const FbxMesh * pMesh)
 			else {
 				lIndices.SetAt(lIndexOffset + lVerticeIndex, static_cast<FbxUInt>(lVertexCount));
 				lCurrentVertex = lControlPoints[lControlPointIndex];
-				lVertices.SetAt(lVertexCount * VERTEX_STRIDE + 0, static_cast<float>(-lCurrentVertex[0]));
+				lVertices.SetAt(lVertexCount * VERTEX_STRIDE + 0, static_cast<float>(lCurrentVertex[0]));
 				lVertices.SetAt(lVertexCount * VERTEX_STRIDE + 1, static_cast<float>(lCurrentVertex[1]));
 				lVertices.SetAt(lVertexCount * VERTEX_STRIDE + 2, static_cast<float>(lCurrentVertex[2]));
 				lVertices.SetAt(lVertexCount * VERTEX_STRIDE + 3, 1);
@@ -296,7 +296,7 @@ bool FbxVBO::Initialize(const FbxMesh * pMesh)
 				if (mHasNormal)
 				{
 					pMesh->GetPolygonVertexNormal(lPolygonIndex, lVerticeIndex, lCurrentNormal);
-					lNormals.SetAt(lVertexCount * NORMAL_STRIDE + 0, static_cast<float>(-lCurrentNormal[0]));
+					lNormals.SetAt(lVertexCount * NORMAL_STRIDE + 0, static_cast<float>(lCurrentNormal[0]));
 					lNormals.SetAt(lVertexCount * NORMAL_STRIDE + 1, static_cast<float>(lCurrentNormal[1]));
 					lNormals.SetAt(lVertexCount * NORMAL_STRIDE + 2, static_cast<float>(lCurrentNormal[2]));
 				}
@@ -344,7 +344,7 @@ void FbxVBO::UpdateVertexPosition(const FbxMesh * pMesh, const FbxVector4 * pVer
 		lVertexCount = pMesh->GetControlPointsCount();
 		lVertices.Reserve(lVertexCount*VERTEX_STRIDE);
 		for (int lIndex = 0; lIndex < lVertexCount; lIndex++) {
-			lVertices.SetAt(lIndex*VERTEX_STRIDE + 0, static_cast<float>(-pVertices[lIndex][0]));
+			lVertices.SetAt(lIndex*VERTEX_STRIDE + 0, static_cast<float>(pVertices[lIndex][0]));
 			lVertices.SetAt(lIndex*VERTEX_STRIDE + 1, static_cast<float>(pVertices[lIndex][1]));
 			lVertices.SetAt(lIndex*VERTEX_STRIDE + 2, static_cast<float>(pVertices[lIndex][2]));
 			lVertices.SetAt(lIndex*VERTEX_STRIDE + 3, 1.0f);
@@ -361,7 +361,7 @@ void FbxVBO::UpdateVertexPosition(const FbxMesh * pMesh, const FbxVector4 * pVer
 				//指定したポリゴンの指定した頂点を取得
 				const int lControlPointIndex = pMesh->GetPolygonVertex(lPolygonIndex, lVerticeIndex);
 
-				lVertices.SetAt(lVertexCount*VERTEX_STRIDE + 0, static_cast<float>(-pVertices[lControlPointIndex][0]));
+				lVertices.SetAt(lVertexCount*VERTEX_STRIDE + 0, static_cast<float>(pVertices[lControlPointIndex][0]));
 				lVertices.SetAt(lVertexCount*VERTEX_STRIDE + 1, static_cast<float>(pVertices[lControlPointIndex][1]));
 				lVertices.SetAt(lVertexCount*VERTEX_STRIDE + 2, static_cast<float>(pVertices[lControlPointIndex][2]));
 				lVertices.SetAt(lVertexCount*VERTEX_STRIDE + 3, 1.0f);

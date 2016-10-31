@@ -450,6 +450,9 @@
       <Filter>Game\AI\HTN</Filter>
     </None>
     <None Include="NoCompile.cc" />
+    <None Include="sample.anm">
+      <Filter>Resource</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="HLSL">

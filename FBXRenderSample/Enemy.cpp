@@ -61,7 +61,7 @@ void Enemy::SetGoalIndex(int aIndex)
 void Enemy::Update()
 {
 	UpdateAlive();
-	UpdateMesh();
+	//UpdateMesh();
 	UpdateBullets();
 
 	switch (mAI->GetNowAI())
@@ -429,6 +429,7 @@ void Enemy::UpdateMoveToBall()
 		//移動し終わってボールを手に取れなかった場合、再初期化
 			if (!MoveNode()) {
 				GetStatus<EnemyStatus>()->mInitMoveToBall = false;
+				GetStatus<EnemyStatus>()->mIsTargetingBall = false;
 			}
 
 		}
@@ -437,8 +438,8 @@ void Enemy::UpdateMoveToBall()
 			//誰かがボールを取った場合、AIクリア
 			if (mField->mBallHoldChara != nullptr) {
 				mAI->ClearAI();
-			
 				GetStatus<EnemyStatus>()->mInitMoveToBall = false;
+				GetStatus<EnemyStatus>()->mIsTargetingBall = false;
 			}
 	//ボールと衝突したか調べる
 	auto lHitTargets = UpdateCollision(false);
@@ -451,6 +452,8 @@ void Enemy::UpdateMoveToBall()
 				mField->SetBallHolder(this);
 				//回収後、AIを進める
 				mAI->NextAI();
+				GetStatus<EnemyStatus>()->mInitMoveToBall = false;
+				GetStatus<EnemyStatus>()->mIsTargetingBall = false;
 			}
 		}
 	}
@@ -533,7 +536,7 @@ GameObjectBase * Enemy::IsCulling()
 	for (auto&lTarget : mSearchTargets) {
 		if (/*cf.IsCullingWorld(*mTransform, *lTarget)*/true) {
 			if (MSCullingOcculusion::IsCullingWorld(
-				*mRender, *mTransform, *lTarget->GetTransform(), 0.02f,
+				*mRender, *mTransform, *lTarget->GetTransform(), 0.2f,
 				[&,this]() {
 				for (auto&lCollision : mCollisionTargets) {
 					//登録済みコリジョンがカリングターゲットと同じだった場合は障害物として描画しない

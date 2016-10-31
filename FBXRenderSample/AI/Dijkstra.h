@@ -41,7 +41,7 @@ namespace Dijkstra {
 		vector<std::pair<Node*, int>>mEdgeNode;	//隣接ノードの配列
 		bool mSearched;			//走査済みかどうか
 		Node*mPreviousNode;		//前のノード
-		int mCost;				//ノード本体のコスト
+		float mCost;			//ノード本体のコスト
 		int mId;			//ノードID
 	};
 

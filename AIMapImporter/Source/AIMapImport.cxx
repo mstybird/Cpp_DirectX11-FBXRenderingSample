@@ -40,14 +40,16 @@ namespace Comfort {
 			//ノードID取得
 			lStream >> lNodeData.mID;
 			lStream >> lLinkListStr;
-			lStream >> lPositionStr;
 			//リンクノード取得
 			lNodeData.mLinkList = Split<int32_t>(lLinkListStr, ',');
+			//リンクノードがない場合
+			//サイズは0に固定する
+			if (lNodeData.mLinkList.size() == 0 || lNodeData.mLinkList[0] == -1) {
+				lNodeData.mLinkList.clear();
+			}
+
 			//座標取得
-			lPositionList = Split<float_t>(lPositionStr, ',');
-			lNodeData.mX = lPositionList[0];
-			lNodeData.mY = lPositionList[1];
-			lNodeData.mZ = lPositionList[2];
+			lStream >> lNodeData.mX >> lNodeData.mY >> lNodeData.mZ;
 			mNodeList.push_back(std::move(lNodeData));
 		}
 		mNodeList.pop_back();
