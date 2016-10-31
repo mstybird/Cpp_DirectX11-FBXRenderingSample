@@ -22,7 +22,7 @@ void MSFbxObject::Update()
 
 	//ƒƒbƒVƒ…‚ª‚È‚¯‚ê‚ÎŽæ“¾‚Å‚«‚È‚¢‚Ì‚Å¶¬‚·‚é
 	if (mManager->IsCreatedMeshData()==false) {
-		if (mManager->Update(mCurrentFrame) == false) {
+		if (mManager->Update(mCurrentFrame,mCurrentAnimation) == false) {
 			return;
 		}
 	}
@@ -43,6 +43,8 @@ void MSFbxObject::Update()
 
 void MSFbxObject::NextFrame()
 {
+	mStartFrame = mManager->mLoader->Start;
+	mStopFrame = mManager->mLoader->Stop;
 	mCurrentFrame += (mFrameTime*mFrameSpeed);
 	if (mCurrentFrame >= mStopFrame) {
 		mCurrentFrame = mStartFrame;

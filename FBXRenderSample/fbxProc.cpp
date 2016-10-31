@@ -75,6 +75,7 @@ void DX11FbxLoader::FbxInit(std::string vfileName, bool animationLoad) {
 	//アニメーションの初期化
 	SceneAnim = Scene;
 	LoadAnimationData();
+	EnableAnimation = animationLoad;
 }
 
 void DX11FbxLoader::FbxLoadAnimationFromFile(std::string vfileName)
@@ -437,7 +438,7 @@ void DX11FbxLoader::LoadAnimationData()
 		}
 	}
 	//設定されたアニメーションをセットする
-	EnableAnimation = lCurrentAnimStackIndex != -1 ? true : false;
+//	EnableAnimation = lCurrentAnimStackIndex != -1 ? true : false;
 	SetCurrentAnimStack(lCurrentAnimStackIndex);
 }
 

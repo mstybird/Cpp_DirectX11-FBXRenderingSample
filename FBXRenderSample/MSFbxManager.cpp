@@ -122,14 +122,14 @@ std::string MSFbxManager::GetFileName()
 	return mFileName;
 }
 
-bool MSFbxManager::Update(FbxTime& mCurrentFrame)
+bool MSFbxManager::Update(FbxTime& mCurrentFrame, const int pAnimationIndex)
 {
 	//アニメーションしない場合は更新処理不要
 
 	if (mMeshData->size() != 0) {
 		if (mAnimationFlag == false)return false;
 	}
-
+	mLoader->SetAnimation(pAnimationIndex);
 	mMeshData = mLoader->GetGeometryData2(mCurrentFrame);
 
 	for (unsigned int i = 0; i < mVertexBuffer.size(); i++) {

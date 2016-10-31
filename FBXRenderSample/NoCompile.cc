@@ -20,15 +20,14 @@
 
 /*
 	フラグ(AI)：
-		[Attribute]	:	[Name]			:	[Description]
-		Field		:	BallHoldField	:	フィールドにボールが落ちているか
-		Field		:	
-		Team		:	BallHoldAlly	:	味方がボールを持っているか
-		Team		:	BallHoldEnemy	:	敵がボールを持っているか
-		Character	:	BallHoldMe		:	自身が持っているか
-		Character	:	InSightEnemy	:	敵が視界にいるか
-		Character	:	InSightAlly		:	味方が視界にいるか
-		Character	:	ChargedEnergy	:	エネルギーがチャージ済みか
+		[Attribute]	:	[Type]	:		[Name]			:	[Description]
+		Field		:	bool	:	BallHoldField	:	フィールドにボールが落ちているか
+		Team		:	bool	:	BallHoldAlly	:	味方がボールを持っているか
+		Team		:	bool	:	BallHoldEnemy	:	敵がボールを持っているか
+		Character	:	bool	:	BallHoldMe		:	自身が持っているか
+		Character	:	bool	:	InSightEnemy	:	敵が視界にいるか
+		Character	:	bool	:	InSightAlly		:	味方が視界にいるか
+		Character	:	int		:	ChargedEnergy	:	エネルギーがあるか
 
 
 	Compound Task

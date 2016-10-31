@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "拡張機能の起動",
+            "type": "extensionHost",
+            "request": "launch",
+            
+           // "runtimeExecutable": "${execPath}",
+            
+            "args": [
+                "main.lua"
+            ],
+            "stopOnEntry": false,
+            "sourceMaps": true,
+            "outDir": "${workspaceRoot}/tracing",
+            "preLaunchTask": "lua64"
+        }
+    ]
+}

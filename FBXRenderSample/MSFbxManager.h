@@ -33,7 +33,7 @@ public:
 	void LoadAnimationFromFile(std::string vfileName);
 	std::string GetFileName();
 	//メッシュの更新(毎フレーム必要)
-	bool Update(FbxTime& mCurrentFrame);
+	bool Update(FbxTime& mCurrentFrame, const int pAnimationIndex);
 
 	//解放処理
 	void Release();

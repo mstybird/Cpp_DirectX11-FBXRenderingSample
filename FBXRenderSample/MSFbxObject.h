@@ -14,7 +14,7 @@ public:
 	//再生速度倍率を変更する
 	void SetSpeed(float aSpeed = 1.0f) {}
 	//モーションを変更する
-	void SetAnimation(int mIndex) {}
+	void SetAnimation(int mIndex) { mCurrentAnimation = mIndex; }
 	//バッファの取得
 	std::vector<std::shared_ptr<FBXMesh>>& GetMeshData();
 	ID3D11Buffer*GetVertexBuffer(int i, int j) {}
@@ -27,7 +27,7 @@ public:
 	MSFbxManager*mManager;
 
 	int mAnimationCount;
-	int mCurrentAnimation;
+	int mCurrentAnimation = -1;
 	FbxTime mStartFrame;
 	FbxTime mStopFrame;
 	FbxTime mFrameTime;
