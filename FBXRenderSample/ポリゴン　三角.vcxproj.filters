@@ -432,6 +432,9 @@
     <ClInclude Include="..\AIMapImporter\Include\AIMapImport.hpp">
       <Filter>Game\AI\MapImporter</Filter>
     </ClInclude>
+    <ClInclude Include="StatusTeam.h">
+      <Filter>Game\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">

@@ -45,6 +45,9 @@ namespace EnemyAIType {
 
 class EnemyAI :public Dijkstra::Manager {
 public:
+
+	virtual ~EnemyAI();
+
 	virtual void CreateNodes(StatusField&aField)override;
 	//近い順にノードを取得する
 	//第一引数、中心となる座標

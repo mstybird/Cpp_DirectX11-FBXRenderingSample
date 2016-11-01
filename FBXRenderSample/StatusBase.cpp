@@ -1,7 +1,7 @@
 #include "StatusBase.h"
 
 StatusBase::StatusBase() :
-	mTarget{ nullptr },
+	mTargetChara{ nullptr },
 	mEnergy{},
 	mBall{ nullptr },
 	mLive{CharaStateFlag::ALIVE}

@@ -14,7 +14,7 @@ class NcgLuaManager;
 class Enemy :public CharacterBase {
 public:
 	Enemy();
-	~Enemy();
+	virtual ~Enemy();
 
 	//データの初期化(一回の呼び出しが必要)
 	void Initialize(StatusField&pSetStatus)override;

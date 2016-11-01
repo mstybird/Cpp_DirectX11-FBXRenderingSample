@@ -15,6 +15,14 @@ MyMSScene::MyMSScene()
 {
 }
 
+MyMSScene::~MyMSScene()
+{
+	mEfkDb.Release();
+	mEfkManager.Release();
+	//音声破棄はこのタイミング
+	mEfkRender.Release();
+}
+
 void MyMSScene::Initialize()
 {
 	//エフェクト初期化
@@ -52,6 +60,7 @@ void MyMSScene::Initialize()
 		mFieldStatus.CreateFieldNodes();
 		mFieldStatus.CreateSpawnCharaNodes();
 		mFieldStatus.CreateSpawnBallNodes();
+		mFieldStatus.InitGoalIndex();
 		mFieldStatus.mBallIsField = true;
 		mFieldStatus.mBall = &mBall;
 		mFieldStatus.RespawnBall();
@@ -75,6 +84,7 @@ void MyMSScene::Initialize()
 
 	//敵の初期化
 	enemy.push_back(make_unique<Enemy>());
+	enemy.push_back(make_unique<Enemy>());
 	//enemy.push_back(make_unique<Enemy>());
 
 	float scaleBall = 0.01f;
@@ -93,6 +103,9 @@ void MyMSScene::Initialize()
 		enemy[i]->SetBulletMesh(*mdDB.Get(cbox));
 		enemy[i]->Respawn();
 	}
+	mFieldStatus.RegisterTeamMember(enemy[0].get(), eTeamType::Black);
+	mFieldStatus.RegisterTeamMember(enemy[1].get(), eTeamType::White);
+
 	mField.Initialize();
 	mField.SetMesh(*mdDB.Get(cFieldD));
 	mField.SetCollisionMesh(*mdDB.Get(cFieldC));
@@ -153,7 +166,7 @@ void MyMSScene::Initialize()
 	//enemy[0]->GetWorld()->SetT(-15, 0, 0);
 	//enemy[1]->GetWorld()->SetT(-5, 0, 8);
 	//enemy[2]->GetWorld()->SetT(-10, 0, 10);
-	enemy[0]->SetGoalIndex(19);
+	//enemy[0]->SetGoalIndex(19);
 	//enemy[1]->SetGoalIndex(20);
 
 	for (uint32_t i = 0; i < enemy.size(); ++i) {

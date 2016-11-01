@@ -147,6 +147,11 @@ void Comfort::EffectProjection::SetDXProjection(DXProjection * aProjection)
 	return ::Effekseer::Matrix44().PerspectiveFovLH(mAngle, mWidth / mHeight, mNear, mFar);
 }
 
+Comfort::EffectDatabase::~EffectDatabase()
+{
+	Release();
+}
+
 void Comfort::EffectDatabase::Initialize(::Effekseer::Manager *& aManager)
 {
 	mManagerPtr = aManager;
@@ -196,6 +201,18 @@ void Comfort::EffectDatabase::Clean(const int32_t aID)
 {
 }
 
+void Comfort::EffectDatabase::Release()
+{
+	for (decltype(auto)lPair : mDatabase) {
+		ES_SAFE_RELEASE(lPair.second);
+	}
+}
+
+Comfort::EfkManager::~EfkManager()
+{
+	Release();
+}
+
 void Comfort::EfkManager::Initialize(::EffekseerRenderer::Renderer *& aRenderer, const int aInstanceMax)
 {
 	mManager= ::Effekseer::Manager::Create(2000);
@@ -218,6 +235,14 @@ void Comfort::EfkManager::Initialize(::EffekseerRenderer::Renderer *& aRenderer,
 void Comfort::EfkManager::Update()
 {
 	mManager->Update();
+}
+
+void Comfort::EfkManager::Release()
+{
+	if (mManager) {
+		mManager->Destroy();
+		mManager = nullptr;
+	}
 }
 
 void Comfort::EfkObject::SetEffect(::Effekseer::Effect *& aEffect)
@@ -250,6 +275,11 @@ void Comfort::EfkObject::Stop()
 	mParentManager->StopEffect(mHandle);
 }
 
+Comfort::EfkRenderer::~EfkRenderer()
+{
+	Release();
+}
+
 void Comfort::EfkRenderer::Initialize(ID3D11Device * aDevice, ID3D11DeviceContext * aDeviceContext, const int aDrawMax)
 {
 	mRenderer = ::EffekseerRendererDX11::Renderer::Create(aDevice, aDeviceContext, 2000);
@@ -280,4 +310,12 @@ void Comfort::EfkRenderer::SetCamera(EffectCamera * aCamera)
 	mRenderer->SetCameraMatrix(
 		aCamera->GetLookAtRH()
 	);
+}
+
+void Comfort::EfkRenderer::Release()
+{
+	if (mRenderer) {
+		mRenderer->Destory();
+		mRenderer = nullptr;
+	}
 }

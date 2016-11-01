@@ -30,13 +30,14 @@ void Enemy::Initialize(StatusField&pSetStatus)
 
 	mAI = std::make_unique<EnemyAI>();
 	mAI->CreateNodes(*mField);
-	
 
 	//ステータスの初期化
 	InitStatus();
 }
 void Enemy::InitFinal()
 {
+	//ゴールの初期化
+	SetGoalIndex(mField->GetTeamAlly(this)->mGoalIndex);
 	
 	mRayPick->SetFramePosition(*mTransform);
 	//一番近いノードを初期座標としておく
@@ -62,7 +63,7 @@ void Enemy::SetGoalIndex(int aIndex)
 void Enemy::Update()
 {
 	UpdateAlive();
-	UpdateMesh();
+	//UpdateMesh();
 	UpdateBullets();
 
 	switch (mAI->GetNowAI())
@@ -112,10 +113,18 @@ void Enemy::UpdateAlive()
 		mStatus->mLive = CharaStateFlag::RESPAWNWAIT;
 		break;
 	case CharaStateFlag::RESPAWNWAIT:
+	{
 		//スポーン
-		InitStatus();
+		//InitStatus();
+		mAI->ClearAI();
 		Respawn();
+		GetWorld()->mPosition;
+		printf("%.2f,%.2f,%.2f\n", GetWorld()->mPosition->x, GetWorld()->mPosition->y, GetWorld()->mPosition->z);
+		auto lNowNode = mAI->GetNearNodeList(*GetWorld()->mPosition)[0];
+		mAI->SetNowNode(lNowNode);
+		mRayPick->SetFramePosition(*mTransform);
 
+	}
 		break;
 	default:
 		break;
@@ -136,7 +145,7 @@ void Enemy::InitStatus()
 	lStatus->mInitMoveToGoal = false;
 	lStatus->mIsTargetingBall = false;
 	lStatus->mLive = CharaStateFlag::ALIVE;
-	lStatus->mTarget = nullptr;
+	lStatus->mTargetChara = nullptr;
 	lStatus->mTargetting = false;
 }
 
@@ -149,7 +158,7 @@ void Enemy::UpdateAI()
 
 	mAI->Update(
 		lStatus->mTargetting,
-		lStatus->mTarget!=nullptr,
+		lStatus->mTargetChara!=nullptr,
 		lStatus->mEnergy.GetNow() > lBulletStatus->mCost,
 		mField->mBallHoldChara!=nullptr,
 		lStatus->mBall!=nullptr,
@@ -194,7 +203,7 @@ void Enemy::UpdateMoveToTarget()
 			//敵を視認中
 			GetStatus<EnemyStatus>()->mTargetting = true;
 			//捉えたターゲットを記憶
-			GetStatus<EnemyStatus>()->mTarget = lLookTarget;
+			GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
 			return;
 		}
 	}
@@ -206,7 +215,7 @@ void Enemy::UpdateMoveToTarget()
 		//次のAIへ
 		mAI->ClearAI();
 		
-		GetStatus<EnemyStatus>()->mTarget = nullptr;
+		GetStatus<EnemyStatus>()->mTargetChara = nullptr;
 	}
 
 }
@@ -245,7 +254,7 @@ void Enemy::UpdateSearching()
 		//敵を視認中
 		GetStatus<EnemyStatus>()->mTargetting = true;
 		//捉えたターゲットを記憶
-		GetStatus<EnemyStatus>()->mTarget = lLookTarget;				
+		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;				
 	}
 
 
@@ -276,7 +285,7 @@ void Enemy::UpdateMovingHide()
 		auto lNearNodeList = mAI->GetNearNodeList(lPosition);
 
 		//レイ発射位置を設定(ターゲット座標)
-		mRayPick->SetFramePosition(*GetStatus<EnemyStatus>()->mTarget->GetTransform());
+		mRayPick->SetFramePosition(*GetStatus<EnemyStatus>()->mTargetChara->GetTransform());
 
 		//一番近いノードをレイ発射位置とする
 		mAI->SetStartNode(lNearNodeList[0]->GetID());
@@ -287,12 +296,36 @@ void Enemy::UpdateMovingHide()
 			//ノードに移動したと仮定して処理
 			GetWorld()->SetT(lNode->Position);
 
+
+
 			//どれか一つでもヒットしていると隠れた判定
 			for (auto&lCollision : mCollisionTargets) {
+
+				auto lTmpMesh = lCollision->mTransform;
+				DXVector3 lTmpS;
+				//判定メッシュをコリジョン用に変更
+				lCollision->GetWorld()->GetMatrix().lock()->GetT(lTmpS);
+				lCollision->mCollisionMesh->GetWorld().lock()->SetT(lTmpS);
+				lCollision->mCollisionMesh->GetWorld().lock()->SetRC(*lCollision->GetWorld()->mRotationCenter);
+
+
+				//コリジョンスケールが別で設定されていない場合は
+				//メッシュのコリジョンスケールを使う
+				if (lCollision->mIsCollisionScaleDefault == true) {
+					lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
+					lCollision->mCollisionMesh->GetWorld().lock()->SetS(lTmpS);
+				}
+
+				lCollision->mTransform = lCollision->mCollisionMesh;
+
+				if (lCollision->IsActive() == false)continue;
+
 				if (mRayPick->Collision(lTmpVec3, *mTransform, *lCollision->GetTransform())) {
 					//ゴールノードの確定
 					lGoalNodePtr = lNode;
 				}
+				lCollision->mTransform = lTmpMesh;
+
 			}
 			if (lGoalNodePtr) {
 				break;
@@ -307,7 +340,7 @@ void Enemy::UpdateMovingHide()
 		//移動ルートの確定
 		mAI->CreateRoot(lGoalNodePtr->GetID());
 		//最後にターゲットを見た位置を記憶する
-		GetStatus<EnemyStatus>()->mTarget->GetTransform()->GetWorld().lock()->GetMatrix().lock()->GetT(GetStatus<EnemyStatus>()->mLastLookPosiion);
+		GetStatus<EnemyStatus>()->mTargetChara->GetTransform()->GetWorld().lock()->GetMatrix().lock()->GetT(GetStatus<EnemyStatus>()->mLastLookPosiion);
 		//隠れるため、必然的に視界から見失う
 		GetStatus<EnemyStatus>()->mTargetting = false;
 	}
@@ -323,7 +356,7 @@ void Enemy::UpdateMovingHide()
 void Enemy::UpdateEnergyShot()
 {
 	//ターゲットの方向を向く
-	float lRotateY = MSHormingY(*mTransform, *GetStatus<EnemyStatus>()->mTarget->GetTransform(), 3.0f);
+	float lRotateY = MSHormingY(*mTransform, *GetStatus<EnemyStatus>()->mTargetChara->GetTransform(), 3.0f);
 	if (IsZero(lRotateY, 0.001f)) {
 		//振り向ききれば攻撃
 		//弾の発射
@@ -356,7 +389,7 @@ void Enemy::UpdateMoveToGoal()
 	auto lLookTarget = IsCulling();
 	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
 		GetStatus<EnemyStatus>()->mTargetting = true;
-		GetStatus<EnemyStatus>()->mTarget = lLookTarget;
+		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
 		mAI->ClearAI();
 		GetStatus<EnemyStatus>()->mInitMoveToGoal = false;
 	}
@@ -394,7 +427,7 @@ void Enemy::UpdateMoveToBall()
 		GetStatus<EnemyStatus>()->mIsTargetingBall = false;
 
 		GetStatus<EnemyStatus>()->mTargetting = true;
-		GetStatus<EnemyStatus>()->mTarget = lLookTarget;
+		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
 		mAI->ClearAI();
 		GetStatus<EnemyStatus>()->mInitMoveToBall = false;
 		return;
@@ -422,7 +455,7 @@ void Enemy::UpdateMoveToBall()
 			GetStatus<EnemyStatus>()->mIsTargetingBall = false;
 
 			GetStatus<EnemyStatus>()->mTargetting = true;
-			GetStatus<EnemyStatus>()->mTarget = lChara;
+			GetStatus<EnemyStatus>()->mTargetChara = lChara;
 			mAI->ClearAI();
 			GetStatus<EnemyStatus>()->mInitMoveToBall = false;
 		}
@@ -480,7 +513,7 @@ void Enemy::UpdateMoveToBallTarget()
 	//キャラクターであればロックオン
 	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
 		GetStatus<EnemyStatus>()->mTargetting = true;
-		GetStatus<EnemyStatus>()->mTarget = lLookTarget;
+		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
 		mAI->ClearAI();
 		GetStatus<EnemyStatus>()->mInitMoveToBallTarget = false;
 		return;
@@ -537,12 +570,41 @@ GameObjectBase * Enemy::IsCulling()
 	for (auto&lTarget : mSearchTargets) {
 		if (/*cf.IsCullingWorld(*mTransform, *lTarget)*/true) {
 			if (MSCullingOcculusion::IsCullingWorld(
-				*mRender, *mTransform, *lTarget->GetTransform(), 0.2f,
+				*mRender, *mTransform, *lTarget->GetTransform(), 0.02f,
 				[&,this]() {
+
+
 				for (auto&lCollision : mCollisionTargets) {
+
+					auto lTmpMesh = lCollision->mTransform;
+					DXVector3 lTmpS;
+					//判定メッシュをコリジョン用に変更
+					lCollision->GetWorld()->GetMatrix().lock()->GetT(lTmpS);
+					lCollision->mCollisionMesh->GetWorld().lock()->SetT(lTmpS);
+					lCollision->mCollisionMesh->GetWorld().lock()->SetRC(*lCollision->GetWorld()->mRotationCenter);
+
+
+					//コリジョンスケールが別で設定されていない場合は
+					//メッシュのコリジョンスケールを使う
+					if (lCollision->mIsCollisionScaleDefault == true) {
+						lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
+						lCollision->mCollisionMesh->GetWorld().lock()->SetS(lTmpS);
+					}
+
+					lCollision->mTransform = lCollision->mCollisionMesh;
+
+					if (lCollision->IsActive() == false)continue;
+
 					//登録済みコリジョンがカリングターゲットと同じだった場合は障害物として描画しない
-					if (lTarget == lCollision)continue;
+					if (lTarget == lCollision) {
+						lCollision->mTransform = lTmpMesh;
+						continue;
+					}
 					mRender->Render(*lCollision->GetTransform());
+
+					lCollision->mTransform = lTmpMesh;
+
+
 				}
 			}
 			)) {

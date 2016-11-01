@@ -42,6 +42,7 @@ MSDirect::MSDirect() :
 }
 
 MSDirect::~MSDirect() {
+	scene.reset();
 	SAFE_RELEASE(m_pDevice);
 	SAFE_RELEASE(m_pDeviceContext);
 	SAFE_RELEASE(m_pSwapChain);

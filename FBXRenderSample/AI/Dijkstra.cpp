@@ -4,9 +4,7 @@
 const int Dijkstra::Node::cNotInitCost{ -1 };
 Dijkstra::Manager::~Manager()
 {
-	for (auto&lNode : mNodes) {
-		delete lNode;
-	}
+
 }
 
 void Dijkstra::Manager::CreateNodeSafe(Node * aAddNode)
@@ -59,6 +57,7 @@ void Dijkstra::Manager::RemoveNode(const int aRemoveID)
 		if (lNode->mId == aRemoveID) {
 			//解放処理
 			delete lNode;
+			lNode = nullptr;
 			//ベクタから削除するために削除フラグを立てる
 			return true;
 		}

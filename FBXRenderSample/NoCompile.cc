@@ -20,22 +20,23 @@
 
 /*
 	フラグ(AI)：
-		[Attribute]	:	[Type]	:		[Name]			:	[Description]
-		Field		:	bool	:	mBallHoldField	:	フィールドにボールが落ちているか
-		Team		:	bool	:	mBallHoldAlly	:	味方がボールを持っているか
-		Team		:	bool	:	mBallHoldEnemy	:	敵がボールを持っているか
-		Character	:	bool	:	mBallHoldMe		:	自身が持っているか
+		[ValueClass]:  [Attribute]	:	[Type]	:		[Name]		:	[Description]
+		StatusField		Field		:	bool	:	mBallHoldField	:	フィールドにボールが落ちているか
+		StatusField		Team		:	bool	:	mBallHoldAlly	:	味方がボールを持っているか
+		StatusField		Team		:	bool	:	mBallHoldEnemy	:	敵がボールを持っているか
+
+		StatusBase	:	Character	:	bool	:	mBallHoldMe		:	自身が持っているか
 		
-		Character	:	bool	:	mInSightEnemy	:	敵が視界にいるか
-		Character	:	bool	:	mLockonEnemy	:	敵を捕捉しているか
-		Character	:	bool	:	mBallHoldTarget	:	捉えた敵がボールを持っているか
+		StatusBase	:	Character	:	bool	:	mInSightEnemy	:	敵が視界にいるか
+		StatusBase	:	Character	:	bool	:	mLockonEnemy	:	敵を捕捉しているか
+		StatusBase	:	Character	:	bool	:	mBallHoldTarget	:	捉えた敵がボールを持っているか
 		
-		Character	:	bool	:	mInSightAlly	:	味方が視界にいるか
-		Character	:	bool	:	mAllyNear		:	味方付近にいるか
-		Character	:	bool	:	mBallAllyNear	:	ボール所持味方の付近にいるか
+						Character	:	bool	:	mInSightAlly	:	味方が視界にいるか
+		StatusBase		Character	:	bool	:	mAllyNear		:	味方付近にいるか
+		StatusBase		Character	:	bool	:	mBallAllyNear	:	ボール所持味方の付近にいるか
 		
 
-		Character	:	bool	:	mChargedEnergy	:	エネルギーがあるか
+		StatusBase	:	Character	:	bool	:	mChargedEnergy	:	エネルギーがあるか
 		
 	Compound Task
 		自身がボールを持っているとき

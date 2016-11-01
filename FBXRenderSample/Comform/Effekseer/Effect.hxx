@@ -24,6 +24,7 @@ namespace Comfort {
 	//Effekseer一元管理用データベース
 	class EffectDatabase {
 	public:
+		~EffectDatabase();
 		void Initialize(::Effekseer::Manager*&aManager);
 		//エフェクトファイルを登録する
 		bool Load(const char*aFileName, const int32_t aRegistID);
@@ -32,6 +33,9 @@ namespace Comfort {
 		bool IsExist(const int32_t aID)const;
 		void CleanAll();
 		void Clean(const int32_t aID);
+
+		void Release();
+
 	private:
 		//識別ID,エフェクト
 		std::unordered_map<int32_t, ::Effekseer::Effect*>mDatabase;
@@ -83,14 +87,19 @@ namespace Comfort {
 
 	class EfkManager {
 	public:
+		~EfkManager();
 		void Initialize( ::EffekseerRenderer::Renderer*&aRenderer, const int aInstanceMax = 2000);
 		::Effekseer::Manager*& GetManager();
 		::Effekseer::Manager* mManager;
 		void Update();
+
+		void Release();
 	};
 
 	class EfkRenderer {
 	public:
+		~EfkRenderer();
+		
 		void Initialize(ID3D11Device*aDevice, ID3D11DeviceContext*aDeviceContext, const int aDrawMax = 2000);
 
 		::EffekseerRenderer::Renderer*& GetRenderer();
@@ -100,6 +109,9 @@ namespace Comfort {
 
 		void SetProjection(EffectProjection* aProjection);
 		void SetCamera(EffectCamera* aProjection);
+
+		void Release();
+
 	private:
 		::EffekseerRenderer::Renderer* mRenderer;
 

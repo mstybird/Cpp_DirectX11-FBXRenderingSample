@@ -15,11 +15,11 @@ struct EnemyStatus:public StatusBase {
 	//最後にターゲットを見た位置
 	DXVector3 mLastLookPosiion;
 
-	int mGoalIndex;
-	bool mIsTargetingBall;
-	bool mInitMoveToGoal;
-	bool mInitMoveToBall;
-	bool mInitMoveToBallTarget;
+	int mGoalIndex;				//ゴールインデクス
+	bool mIsTargetingBall;		//ボールを捉えた(視野に入ったか)
+	bool mInitMoveToGoal;		//メソッド初期化用
+	bool mInitMoveToBall;		//メソッド初期化用
+	bool mInitMoveToBallTarget;	//メソッド初期化用
 
 
 	EnemyStatus();

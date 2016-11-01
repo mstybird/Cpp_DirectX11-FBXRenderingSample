@@ -15,8 +15,7 @@
 class MyMSScene :public MSSceneBase {
 public:
 	MyMSScene();
-	~MyMSScene() {
-	}
+	~MyMSScene();
 private:
 	void Initialize();
 	void Update()override;

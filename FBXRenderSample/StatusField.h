@@ -2,6 +2,7 @@
 #include<vector>
 #include"GameObjectBase.h"
 #include"AI/EnemyAI.h"
+#include"StatusTeam.h"
 class CharacterBase;
 namespace NodeControl {
 	void AddNodeSafe(std::vector<Dijkstra::Node*>&aNodeList, Dijkstra::Node*aAddNode);
@@ -21,6 +22,9 @@ namespace NodeControl {
 
 //フィールド情報
 struct StatusField {
+
+	virtual ~StatusField();
+
 	//誰がボールを所持しているか
 	GameObjectBase* mBallHoldChara;
 	//フィールドにボールがあるかどうか
@@ -38,13 +42,24 @@ struct StatusField {
 	void CreateFieldNodes();
 	void CreateSpawnCharaNodes();
 	void CreateSpawnBallNodes();
+	void InitGoalIndex();
 	std::vector<Dijkstra::Node*>GetFieldNodesClone();
 	//キャラクターをリスポーンさせる
 	void Respawn(CharacterBase* aSpawnChara);
 
+	//チームにメンバーを登録する
+	void RegisterTeamMember(CharacterBase*aRegistMember,eTeamType aType);
+
+	//所属しているチームを取得
+	StatusTeam* GetTeamAlly(CharacterBase*aMember);
+	//相手のチームを取得
+	StatusTeam* GetTeamEnemy(CharacterBase*aMember);
 
 	StatusField();
 	void SetBallHolder(GameObjectBase*pBallHolder);
 	void RespawnBall(DXVector3*pPosition = nullptr);
+
+	StatusTeam mTeamWhite;	//白チーム
+	StatusTeam mTeamBlack;	//黒チーム
 
 };

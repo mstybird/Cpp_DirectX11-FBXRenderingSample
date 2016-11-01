@@ -13,15 +13,19 @@ struct StatusBase {
 	StatusBase();
 
 	//現在捉えている敵
-	GameObjectBase* mTarget;
+	GameObjectBase* mTargetChara;//--[Lua]mLockonEnemy/mInsightEnemy/mBallHoldTarget
 	//ボールを所持しているか(所持していたらそのボールのアドレス)
-	GameObjectBase* mBall;
+	GameObjectBase* mBall;	//--[Lua]mBallHoldMe
 
+	//味方が近くにいるかどうか
+	bool mAllyNear;
+	//ボールを持っている味方が近くにいるか
+	bool mBallAllyNear;
 	//HP
 	MSProgress mHp;
 
 	//エネルギー残量
-	MSProgress mEnergy;
+	MSProgress mEnergy;		//--[Lua]mChargedEnergy
 
 	//生存関係フラグ
 	CharaStateFlag mLive;

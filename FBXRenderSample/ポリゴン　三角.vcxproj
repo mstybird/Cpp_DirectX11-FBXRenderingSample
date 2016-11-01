@@ -321,6 +321,7 @@
     <ClInclude Include="StatusField.h" />
     <ClInclude Include="StatusPlayer.h" />
     <ClInclude Include="StatusStatic.h" />
+    <ClInclude Include="StatusTeam.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Simple.hlsl">

@@ -112,7 +112,7 @@ void Player::InitStatus()
 	lStatus->mEnergy.Set(5.0f, 0.0f, 2.0f);
 	lStatus->mHp.Set(10.0f, .0f, 10.0f);
 	lStatus->mLive = CharaStateFlag::ALIVE;
-	lStatus->mTarget = nullptr;
+	lStatus->mTargetChara = nullptr;
 	mGravity->Initialize(
 		true,
 		0.05f,

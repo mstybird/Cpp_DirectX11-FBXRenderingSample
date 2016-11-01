@@ -72,7 +72,7 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 		//更新後のリソースから位置を取得
 		pRayPosition.GetWorld().lock()->GetMatrix().lock()->GetT(lRayAfterPosition);
 
-		
+
 		auto lMeshList = pRayTarget.mMesh->mMeshData;
 		//移動方向にポリゴンがあるかチェック
 		//ここでレイがヒットする一番近いポリゴンを取得する

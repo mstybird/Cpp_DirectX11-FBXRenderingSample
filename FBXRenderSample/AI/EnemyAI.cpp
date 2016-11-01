@@ -4,6 +4,10 @@
 #include<algorithm>
 #include<iterator>
 
+EnemyAI::~EnemyAI()
+{
+}
+
 void EnemyAI::CreateNodes(StatusField&aField)
 {
 	mNodes = std::move(aField.GetFieldNodesClone());

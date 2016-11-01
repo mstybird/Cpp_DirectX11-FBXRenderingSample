@@ -13,6 +13,7 @@ class MSFbxObject;
 class MSProgress;
 class MSGravity;
 class GameObjectBase {
+	friend class Enemy;
 public:
 	GameObjectBase();
 	virtual ~GameObjectBase();
