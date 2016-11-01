@@ -21,15 +21,22 @@
 /*
 	フラグ(AI)：
 		[Attribute]	:	[Type]	:		[Name]			:	[Description]
-		Field		:	bool	:	BallHoldField	:	フィールドにボールが落ちているか
-		Team		:	bool	:	BallHoldAlly	:	味方がボールを持っているか
-		Team		:	bool	:	BallHoldEnemy	:	敵がボールを持っているか
-		Character	:	bool	:	BallHoldMe		:	自身が持っているか
-		Character	:	bool	:	InSightEnemy	:	敵が視界にいるか
-		Character	:	bool	:	InSightAlly		:	味方が視界にいるか
-		Character	:	int		:	ChargedEnergy	:	エネルギーがあるか
+		Field		:	bool	:	mBallHoldField	:	フィールドにボールが落ちているか
+		Team		:	bool	:	mBallHoldAlly	:	味方がボールを持っているか
+		Team		:	bool	:	mBallHoldEnemy	:	敵がボールを持っているか
+		Character	:	bool	:	mBallHoldMe		:	自身が持っているか
+		
+		Character	:	bool	:	mInSightEnemy	:	敵が視界にいるか
+		Character	:	bool	:	mLockonEnemy	:	敵を捕捉しているか
+		Character	:	bool	:	mBallHoldTarget	:	捉えた敵がボールを持っているか
+		
+		Character	:	bool	:	mInSightAlly	:	味方が視界にいるか
+		Character	:	bool	:	mAllyNear		:	味方付近にいるか
+		Character	:	bool	:	mBallAllyNear	:	ボール所持味方の付近にいるか
+		
 
-
+		Character	:	bool	:	mChargedEnergy	:	エネルギーがあるか
+		
 	Compound Task
 		自身がボールを持っているとき
 		自身以外の味方がボールを持っているとき
@@ -52,6 +59,7 @@
 
 	//関数(AI)
 		[Attribute]	:		[Name]			:	[Description]
+		Compound	:	DecisionMake		:	AIエントリーポイント
 		Compound	:	BallHoldingMe		:	自分がボールを持っているとき
 		Compound	:	BallHoldingAlly		:	自分以外の味方がボールを持っているとき
 		Compound	:	BallHoldingEnemy	:	敵がボールを持っているとき

@@ -80,8 +80,15 @@ end
 function htn(domain, state, tasks)
 	return htn_internal(domain, state, tasks, {})
 end
-
+count=0
 function htn_internal(domain, state, tasks, plan)
+
+	count=count+1
+	if count>=100 then
+		print("TaskOverFlow")
+		return plan
+	end
+
 	if next(tasks) == nil then
 		return plan
 	end

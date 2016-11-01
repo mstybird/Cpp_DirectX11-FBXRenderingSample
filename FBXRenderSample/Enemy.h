@@ -58,6 +58,39 @@ private:
 	//ボールを持っている敵を攻撃しにいく
 	void UpdateMoveToBallTarget();
 
+	/*
+		最新AI
+	*/
+	//ボールを取りに行く
+	void BetaMoveToBall();
+	//ボールをゴールに持っていく
+	void BetaMoveToGoal();
+	//隠れる
+	void BetaMoveToHide();
+	//エネルギーチャージ
+	void BetaChargeEnergy();
+	//攻撃
+	void BetaInSightAttack();
+	//ボールを持っている味方の付近に移動する
+	void BetaMoveToBallHoldAlly();
+	//味方からあまり離れずに敵を探す
+	void BetaSearchEnemyShort();
+	//無心で敵を探す。無差別マン
+	void BetaSerachEnemyAll();
+	//捕捉済みの敵を追いかける
+	void BetaMoveToLookingTarget();
+	//ボールを所持している敵を追いかける
+	void BetaMoveToBallTarget();
+	//敵のエリアを探索する
+	void BetaSearchForEnemyArea();
+	//味方エリアを探索する
+	void BetaSearchForAllyArea();
+
+
+
+
+
+
 	//ノード間移動処理
 	bool MoveNode();
 	//視界処理

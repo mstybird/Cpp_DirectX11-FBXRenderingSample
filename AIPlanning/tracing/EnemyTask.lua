@@ -8,129 +8,127 @@
 package.path=package.path..";tracing/?.lua"
 require("htn")
 
---defined
---[[
-	実装部分：
-	
-		攻撃(attack):
-			遠距離攻撃：
-				攻撃準備(attackPrepare) > energyShot
-
-		攻撃準備(attackPrepare)：
-			エネルギーは溜まっているか(IsEnergy):false
-				敵が視界にいるか(IsTargeting):true
-					視界外に移動する movingHide > chargeEnergy > attackPrepare
-				:false
-					チャージ chargeEnergy > attackPrepare
-			:true
-				敵が視界にいるか(IsTargeting):true
-					準備オーケー {}
-				:false
-					ターゲットを探す searchTarget > attackPrepare
-
-
-]]
---[[
-	state:
-		bTargeting		--ターゲットを捉えているか
-		chargedEnergy	--エネルギーがチャージされているか
-
---utility:
-	IsEnergy
-	IsTargeting
-
---primitive:
-	energyShot
-	movingHide
-	chargeEnergy
-	searchTarget
-
---compound:
-	attack
-	attackPrepare
-
-
-]]
 
 
 domain = { primitive={}, compound={} }
 --------------------------------------------------
 -- primitive Task
---攻撃
-domain.primitive.energyShot = function(state)
-	--エネルギーが溜まっていてなおかつ敵を捉えていたら攻撃
-	if state.bTargeting == true and state.chargedEnergy ==true then
+
+--ボールを追っかける
+domain.primitive.MoveToBall = function(state)
+	--移動完了後
+	--ボールを所持状態とする
+	if state.mBallHoldMe == false then
+		state.mBallHoldMe = true
+		return true;
+	end
+	return false;
+end
+
+--ゴールへ移動する
+domain.primitive.MoveToGoal = function(state)
+	--ボールをもって言った場合はボールリセット
+	if state.mBallHoldMe == true then
+		state.mBallHoldMe = false 
 		return true
 	end
 	return false
 end
 
---物陰に隠れる
-domain.primitive.movingHide = function(state)
-	--ターゲットが視界にいた場合
-	if state.bTargeting == true then
-		state.bTargeting=false
-		state.bLockoned=true
+--隠れる
+domain.primitive.MoveToHide = function(state)
+	--敵を視認している状態だった場合、
+	--ロックオン状態にして、視界から外す
+	if state.mInSightEnemy == true then
+		state.mInSightEnemy = false
+		state.mLockonEnemy = true
 		return true
 	end
 	return false
 end
 
---エネルギーのチャージ
-domain.primitive.chargeEnergy = function(state)
-	--敵が視界にいなければチャージ
-	if state.chargedEnergy == false and state.bTargeting ==false then
-		state.chargedEnergy = true
+--エネルギーチャージ
+domain.primitive.ChargeEnergy = function(state)
+	--チャージされてない場合はチャージする
+	if state.mChargedEnergy == false then
+		state.mChargedEnergy = true
 		return true
 	end
 	return false
 end
 
---ターゲットを探す
-domain.primitive.searchTarget = function(state)
-	--敵を探す
-	if state.bTargeting == false then
-		state.bTargeting=true
+--視界に捉えている敵を攻撃する
+domain.primitive.InSightAttack = function(state)
+	if state.mInSightEnemy == true and state.mChargedEnergy == true then
+		state.mInSightEnemy=false
+		state.mLockonEnemy=false
 		return true
 	end
 	return false
 end
 
---ターゲットを追う
-domain.primitive.moveToTarget = function(state)
-	--敵を認識済みであれば追う
-	if state.bLockoned == true then
-		state.bLockoned=false
-		state.bTargeting=true
+--ボールを持っている味方を追いかける
+domain.primitive.MoveToBallHoldAlly = function(state)
+	if state.mBallAllyNear == false then
+		state.mBallAllyNear = true
 		return true
 	end
 	return false
 end
 
-domain.primitive.moveToGoal = function(state)
-	--ゴールに向かう
-	if state.bHoldBall == true and state.bTargeting == false then
-		state.bHoldBall=false
+--味方からあまり離れずに敵を探す
+domain.primitive.SearchEnemyShort = function(state)
+	if state.mInSightEnemy == false then
+		state.mInSightEnemy = true
 		return true
 	end
 	return false
 end
 
-domain.primitive.moveToBall = function(state)
-	--ボールを拾いに行く
-	if state.bBallIsField == true then
-		state.bBallIsField = false
-		state.bHoldBall =true
+--心を無にして何も考えず敵を探す
+domain.primitive.SearchEnemyAll = function(state)
+--敵を発見する
+	if state.mInSightEnemy == false then
+		state.mInSightEnemy = true
 		return true
 	end
 	return false
 end
 
-domain.primitive.moveToBallTarget = function(state)
-	--ボールを持っているターゲットを追いかける
-	if state.bBallIsField == false and state.bTargetHoldBall == true then
-		state.bLockoned = true
-		state.bTargeting=true
+--敵を捕捉済みの場合の場合、追いかける
+domain.primitive.MoveToLookingTarget = function(state)
+	if state.mLockonEnemy == true then
+		state.mInSightEnemy = true
+		return true
+	end
+	return false
+end
+
+--ボールを持っている敵を追いかける
+domain.primitive.MoveToBallTarget = function(state)
+	if state.mInSightEnemy == false then
+	--敵を発見する
+		state.mInSightEnemy = true
+		return true
+	end
+	return false
+end
+
+--敵エリアを探索する
+domain.primitive.SearchForEnemyArea = function(state)
+	if state.mInSightEnemy == false then
+	--敵を発見する
+		state.mInSightEnemy = true
+		return true
+	end
+	return false
+end
+
+--味方エリアを探索する
+domain.primitive.SearchForAllyArea = function(state)
+	--敵を発見する
+	if state.mInSightEnemy == false then
+		state.mInSightEnemy = true
 		return true
 	end
 	return false
@@ -138,67 +136,169 @@ end
 
 --------------------------------------------------
 -- compound Task
-
---攻撃
-domain.compound.attack={
+domain.compound.AttackPrepare = {
 	function(state)
-		return {{"attackPrepare"}}
+		--敵が視界にいた場合、隠れる
+		if state.mChargedEnergy == false then
+			if state.mInSightEnemy == true then
+				return {{"MoveToHide"},{"AttackPrepare"}}
+			else
+				return {{"ChargeEnergy"},{"AttackPrepare"}}
+			end
+		end		
+		return {}
+	end
+}
+--自分がボールを持っているとき
+--[[
+	優先順位：
+		1.	エネルギーチャージ
+		2.	ゴールへ移動
+		3.	敵の追尾
+		4.	攻撃
+]]
+domain.compound.BallHoldingMe={
+
+
+	function(state)
+
+	--ターゲットを捕捉済みで追跡する場合
+		if state.mLockonEnemy == true and state.mInSightEnemy == false then
+			return {{"MoveToLookingTarget"},{"BallHoldingMe"}}
+		--敵がいれば攻撃
+		elseif state.mInSightEnemy == true then
+			return {{"InSightAttack"}}
+		end
+		return {}
 	end
 }
 
---攻撃準備
-domain.compound.attackPrepare={
+
+--自分以外の味方がボールを持っているとき
+--[[
+	優先順位：
+		1.	エネルギーチャージ
+		2.	ボール所持者の追跡
+		3.	付近の敵の探索
+		4.	敵エリアの探索
+]]
+domain.compound.BallHoldingAlly={
 	function(state)
-		--エネルギーがなければチャージ
-		if state.chargedEnergy == false then
-			if state.bTargeting ==true then
-			--視界に敵がいた場合、物陰に隠れる
-				return {{"movingHide"},{"attackPrepare"}}
+		--ターゲットを捕捉済みの時
+		if state.mLockonEnemy == true and state.mInSightEnemy == false then
+			--味方と離れすぎてる場合は味方を追いかける
+			if state.mBallAllyNear == false then
+				return {{"MoveToBallHoldAlly"},{"BallHoldingAlly"}}
 			else
-			--視界に敵がいなかった場合、チャージ
-				return {{"chargeEnergy"},{"attackPrepare"}}
+				return {{"MoveToLookingTarget"},{"BallHoldingAlly"}}
 			end
-		--一度物陰に隠れてチャージした場合、隠れる前の位置に移動する
-		elseif state.bLockoned == true  then
-			return {{"moveToTarget"},{"energyShot"}}	
-		--チャージ後(もしくはチャージ済みでボールを持っていて敵が視界からいない場合)
-		elseif state.bHoldBall == true and state.bTargeting == false then
-			return {{"moveToGoal"},{"attackPrepare"}}
-		--ボールが落ちていて、それを追いかける場合
-		elseif state.bBallIsField == true and state.bTargeting == false then
-			return {{"moveToBall"},{"attackPrepare"}}
-		--ボールが落ちていない(誰かがボールを持っている場合)
-		elseif state.bBallIsField == false and state.bTargetHoldBall == true then
-			return {{"moveToBallTarget"},{"energyShot"}}
-		elseif state.bTargeting == true and state.bHoldBall == true then
-			return {{"energyShot"}}
-		--チャージ済みで視界に敵がいなかった場合、敵を探す
-		elseif state.bTargeting == false then
-			return {{"searchTarget"},{"attackPrepare"}}
+		--攻撃できる状態の時
+		elseif state.mInSightEnemy == true then
+			return {{"InSightAttack"},{"BallHoldingAlly"}}
+		--ボール所持者と離れているとき追跡
+		elseif state.mBallAllyNear == false then
+			return {{"MoveToBallHoldAlly"},{"BallHoldingAlly"}}
+		--ボール所持味方の近くまで来たとき
+		elseif state.mBallAllyNear == true then
+			--味方付近を探索する
+			return {{"SearchForAllyArea"}}
 		end
-		--ここまでくれば攻撃準備完了
-		return {}
-	end	
+		return {}	
+	end
 }
 
+
+--敵がボールを持っているとき
+--[[
+	優先順位：
+		1.	エネルギーチャージ
+		2.	敵エリアの探索
+		3.	敵ゴールへ行く
+]]
+domain.compound.BallHoldingEnemy={
+	function(state)
+		--ターゲットを捕捉済みの時
+		if state.mLockonEnemy == true and state.mInSightEnemy == false then
+			return {{"MoveToLookingTarget"},{"BallHoldingEnemy"}}
+		elseif state.mInSightEnemy == true then
+			--ターゲットがボール所持していた場合
+			if state.mBallHoldTarget == true then
+				return {{"InSightAttack"}}
+			else
+				return {{"InSightAttack"},{"MoveToBallTarget"}}
+			end
+		end
+		return {}
+	end
+}
+
+--フィールドにボールが落ちているとき
+--[[
+	優先順位：
+		1.	エネルギーチャージ
+		2.	ボールを拾いに行く
+		3.	敵エリアの探索
+]]
+domain.compound.BallHoldingField={
+	function(state)
+				--ターゲットを捕捉済みの時
+		if state.mLockonEnemy == true and state.mInSightEnemy == false then
+			return {{"MoveToLookingTarget"},{"BallHoldingField"}}
+		elseif state.mInSightEnemy == true then
+			return {{"InSightAttack"},{"BallHoldingField"}}
+		end
+		return {}
+	end
+}
+--AIエントリポイント
+domain.compound.DescisionMake={
+	function(state)
+		--自身がボールを持っている場合
+		if state.mBallHoldMe == true then
+			return {{"AttackPrepare"},{"BallHoldingMe"},{"MoveToGoal"}}
+		--自分以外の味方がボールを持っていた場合
+		elseif state.mBallHoldAlly == true then
+			return {{"AttackPrepare"},{"BallHoldingAlly"}}
+		--敵がボールを持っていた場合
+		elseif state.mBallHoldEnemy == true then
+			return {{"AttackPrepare"},{"BallHoldingEnemy"},{"MoveToBall"}}
+		--フィールドにボールが落ちている場合
+		elseif state.mBallHoldField == true then
+			return {{"AttackPrepare"},{"BallHoldingField"},{"MoveToBall"}}
+		end
+	end
+}
 --------------------------------------------------
 -- state
 
 --state.bLockoned=false		--敵を捕捉済みか？
 
-function GetPlan(aTargeting,aTarget,aChargedEnergy,aTargetHoldBall,aHoldingBall,aBallIsField)
-
-
+function GetPlan()
 	state={}
-	state.bTargeting=aTargeting				--敵が視界にいるかどうか？
-	state.bLockoned=aTarget					--敵を捉えていたかどうか
-	state.chargedEnergy=aChargedEnergy		--エネルギーがチャージ済みか？
-	state.bTargetHoldBall=aTargetHoldBall	--ターゲットがボールを持っているかどうか
-	state.bHoldBall=aHoldingBall			--ボールを所持しているかどうか
-	state.bBallIsField=aBallIsField			--ボールがフィールドに落ちているかどうか
-	plan = htn(domain, state, {{"attack"}})
-	print("EndEnemy")
+
+	--BallHolder--
+	state.mBallHoldField	=	true	--フィールドにボールが落ちているか
+	state.mBallHoldAlly		=	false	--自分以外の味方がボールを持っているか
+	state.mBallHoldEnemy	=	false	--敵がボールを持っているか
+	state.mBallHoldMe		=	false	--ボールを所持しているか
+
+	--EnemyState--
+	state.mInSightEnemy		=	true	--敵が視界にいるか
+	state.mLockonEnemy		=	false	--敵を捕捉済みか
+	state.mBallHoldTarget	=	false	--捉えた敵がボールを持っているか
+
+	--AllyState--
+	state.mInSightAlly	=	false	--味方が視界にいるか
+	state.mBallAllyNear	=	false	--ボールを持っている味方の近くにいるか
+	state.mAllyNear		=	false	--味方の近くにいるか
+
+	--Other
+	state.mChargedEnergy=	false	--エネルギーチャージ
+
+	print("*** Start ***")
+	plan = htn(domain, state, {{"DescisionMake"}})
 	print_plan(plan)
+	print("***  End  ***")
 	return GetPlanArray(plan)
 end
-GetPlan(false,false,true,true,false,false)
+GetPlan()
