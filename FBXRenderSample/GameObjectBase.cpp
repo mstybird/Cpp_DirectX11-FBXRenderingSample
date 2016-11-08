@@ -140,8 +140,10 @@ std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosit
 
 		lCollision->mTransform = lCollision->mCollisionMesh;
 		
-		if (lCollision->IsActive() == false)continue;
-
+		if (lCollision->IsActive() == false) {
+			lCollision->mTransform = lCollision->mCollisionMesh;
+			continue;
+		}
 		if (mRayPick->Collision(lResult, *mTransform, *lCollision->GetTransform())) {
 			DXVector3 v = *GetWorld()->mPosition;
 			if (pIsUpdatePosition == true) {

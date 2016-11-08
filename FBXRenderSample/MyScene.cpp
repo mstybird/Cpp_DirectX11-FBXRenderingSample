@@ -78,11 +78,13 @@ void MyMSScene::Initialize()
 	mdDB.Load("res/box.fbx", false, cbox);
 	mdDB.Load("res/SD_QUERY_01.fbx", true, cChara);
 
-	mdDB.Load("res/FieldCollision.fbx", false, cFieldD);
+	mdDB.Load("res/FieldDesign.fbx", false, cFieldD);
 	mdDB.Load("res/FieldCollision.fbx", false, cFieldC);
 	mdDB.Load("res/ball.fbx", false, cBall);
 
 	//敵の初期化
+	enemy.push_back(make_unique<Enemy>());
+	enemy.push_back(make_unique<Enemy>());
 	enemy.push_back(make_unique<Enemy>());
 	enemy.push_back(make_unique<Enemy>());
 	//enemy.push_back(make_unique<Enemy>());
@@ -105,6 +107,8 @@ void MyMSScene::Initialize()
 	}
 	mFieldStatus.RegisterTeamMember(enemy[0].get(), eTeamType::Black);
 	mFieldStatus.RegisterTeamMember(enemy[1].get(), eTeamType::White);
+	mFieldStatus.RegisterTeamMember(enemy[2].get(), eTeamType::Black);
+	mFieldStatus.RegisterTeamMember(enemy[3].get(), eTeamType::White);
 
 	mField.Initialize();
 	mField.SetMesh(*mdDB.Get(cFieldD));
@@ -140,7 +144,9 @@ void MyMSScene::Initialize()
 		//自分以外のエネミーを追加
 		for (auto&lEnemy : enemy) {
 			if (enemy[i] != lEnemy) {
-				enemy[i]->AddSearchTarget(&*lEnemy);
+				if (mFieldStatus.GetTeamAlly(lEnemy.get())->IsMember(enemy[i].get()) == false) {
+					enemy[i]->AddSearchTarget(&*lEnemy);
+				}
 			}
 		}
 		enemy[i]->AddCollisionTarget(&mField);

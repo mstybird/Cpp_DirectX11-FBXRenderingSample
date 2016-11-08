@@ -88,8 +88,9 @@ void StatusField::CreateSpawnCharaNodes()
 {
 	using NodeControl::AddNodeSafe;
 	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 8,"obj8",{ 10.21,0.00,-51.26 } });
-	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 79,"obj79",{- 3.67,0.00,- 44.17}
-	});
+	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 79,"obj79",{- 3.67,0.00,- 44.17} });
+	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 9,"obj9",{ 5.21,0.00,-51.26 } });
+	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 80,"obj80",{ -3.67,0.00,-48.17 } });
 	//AddNodeSafe(mSpawnCharaNodes, new MyNode{ 19,"obj19",{ 11.00,0.00,7.50 } });
 	//AddNodeSafe(mSpawnCharaNodes, new MyNode{ 20,"obj20",{ -16.25,0.00,5.25 } });
 }

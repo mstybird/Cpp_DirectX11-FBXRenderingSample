@@ -62,9 +62,9 @@ void Enemy::SetGoalIndex(int aIndex)
 
 void Enemy::Update()
 {
-	//UpdateMesh();
+	UpdateMesh();
 	UpdateBullets();
-
+	
 	if (mStatus->mLive == CharaStateFlag::ALIVE) {
 
 		switch (mAI->GetNowAI())
@@ -744,8 +744,10 @@ GameObjectBase * Enemy::IsCulling()
 
 					lCollision->mTransform = lCollision->mCollisionMesh;
 
-					if (lCollision->IsActive() == false)continue;
-
+					if (lCollision->IsActive() == false) {
+						lCollision->mTransform = lTmpMesh;
+						continue;
+					}
 					//“o˜^Ï‚ÝƒRƒŠƒWƒ‡ƒ“‚ªƒJƒŠƒ“ƒOƒ^[ƒQƒbƒg‚Æ“¯‚¶‚¾‚Á‚½ê‡‚ÍáŠQ•¨‚Æ‚µ‚Ä•`‰æ‚µ‚È‚¢
 					if (lTarget == lCollision) {
 						lCollision->mTransform = lTmpMesh;
@@ -853,9 +855,9 @@ void Enemy::BetaMoveToGoal()
 		“G‚Æ‚Ì‘˜‹ö
 	*/
 
-	if (GetStatus<EnemyStatus>()->mAIType != EnemyAIType::eMoveToHide) {
+	if (GetStatus<EnemyStatus>()->mAIType != EnemyAIType::eMoveToGoal) {
 		printf("Task:%s\n", "MoveToGoal");
-		GetStatus<EnemyStatus>()->mAIType = EnemyAIType::eMoveToHide;
+		GetStatus<EnemyStatus>()->mAIType = EnemyAIType::eMoveToGoal;
 
 		//ˆÚ“®æ‚ðƒS[ƒ‹‚É‚·‚é
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
@@ -1006,6 +1008,9 @@ void Enemy::BetaMoveToHide()
 			//“–‚½‚Á‚½ê‡A‰B‚ê‚Ä‚¢‚é‚Ì‚ÅŽŸ‚ÌAI‚ÉˆÚs
 			mAI->NextAI();
 		}
+
+		lCollision->mTransform = lTmpMesh;
+
 	}
 	
 
