@@ -78,6 +78,8 @@
 		Primitive	:	SearchForEnemyArea	:	敵エリアを探索する
 		Primitive	:	SearchForAllyArea	:	味方エリアを探索する
 
+		常に想定できる状況：
+			ボールを取得
 
 
 */

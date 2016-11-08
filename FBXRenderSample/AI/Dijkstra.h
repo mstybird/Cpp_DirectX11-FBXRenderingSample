@@ -10,7 +10,7 @@ namespace Dijkstra {
 	
 	class Manager;
 	struct Node {
-		static const int cNotInitCost;
+		static const float cNotInitCost;
 		friend class Manager;
 		Node(int id) {
 			this->mId = id;

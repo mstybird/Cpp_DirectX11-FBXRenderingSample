@@ -53,11 +53,11 @@ namespace ChangeStates {
 		if (lBulletStatus->mInterval.GetMaxRemainPer() > 0.0f)return false;
 
 		//エネルギーを減らす
-		lCharaStatus->mEnergy.SubFix(lBulletStatus->mCost);
+		lCharaStatus->mEnergy.SubFix(static_cast<float>(lBulletStatus->mCost));
 		//インターバルの初期化
 		lBulletStatus->mInterval.SetNowPer(0.0f);
 		//発射処理
-		aBullet->Create(aBulletList, *aAttakcer);
+		aBullet->Create(aBulletList, aAttakcer);
 
 		return true;
 	}

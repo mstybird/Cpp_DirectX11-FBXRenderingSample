@@ -96,6 +96,18 @@ DX11RenderResource * GameObjectBase::GetTransform()
 	return mTransform.get();
 }
 
+float GameObjectBase::GetDistance(GameObjectBase * aTarget)
+{
+	DXVector3 lBallHolderPos;
+	DXVector3 lThisPos;
+	float lDistance;
+	lBallHolderPos = *aTarget->GetWorld()->mPosition;
+	lThisPos = *GetWorld()->mPosition;
+	lDistance = (lBallHolderPos - lThisPos).GetDistance();
+
+	return lDistance;
+}
+
 void GameObjectBase::UpdateMesh()
 {
 	//メッシュの更新

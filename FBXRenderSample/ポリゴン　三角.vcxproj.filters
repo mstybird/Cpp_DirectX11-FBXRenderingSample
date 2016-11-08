@@ -196,6 +196,7 @@
       <Filter>Comform\Effekseer</Filter>
     </ClCompile>
     <ClCompile Include="MSFbxDatabase.cpp" />
+    <ClCompile Include="StatusTeam.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -456,6 +457,9 @@
     <None Include="sample.anm">
       <Filter>Resource</Filter>
     </None>
+    <None Include="EnemyAI\EnemyTask.lua">
+      <Filter>Game\AI\Enemy</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="HLSL">
@@ -631,6 +635,9 @@
     </Filter>
     <Filter Include="Game\AI\MapImporter">
       <UniqueIdentifier>{d191c084-7b7d-47f8-925f-b60adb9f82a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AI\Enemy">
+      <UniqueIdentifier>{6f867445-5d1a-4267-bc3c-c362c92f3423}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

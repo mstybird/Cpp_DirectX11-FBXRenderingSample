@@ -68,7 +68,7 @@ void MyMSScene::Initialize()
 
 
 	//AI読み込み
-	mLuaDb.Load("EnemyAI/htn_attack.lua", 0, "EnemyAI");
+	mLuaDb.Load("EnemyAI/EnemyTask.lua", 0, "EnemyAI");
 
 	shader.Init();
 	shader.InitVertex("Simple.hlsl");
@@ -78,7 +78,7 @@ void MyMSScene::Initialize()
 	mdDB.Load("res/box.fbx", false, cbox);
 	mdDB.Load("res/SD_QUERY_01.fbx", true, cChara);
 
-	mdDB.Load("res/main.fbx", false, cFieldD);
+	mdDB.Load("res/FieldCollision.fbx", false, cFieldD);
 	mdDB.Load("res/FieldCollision.fbx", false, cFieldC);
 	mdDB.Load("res/ball.fbx", false, cBall);
 
@@ -221,7 +221,7 @@ void MyMSScene::KeyDown(MSKEY pKey)
 void MyMSScene::KeyHold(MSKEY pKey)
 {
 	DXVector3 data;
-	float speed = 0.25;
+	float speed = 0.5;
 	switch (pKey)
 	{
 	case MSKEY::CH_W:

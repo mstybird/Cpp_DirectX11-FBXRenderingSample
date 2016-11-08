@@ -1,4 +1,5 @@
 #pragma once
+#include<cstdint>
 #include"MSProgress\MSProgressData.hxx"
 
 enum class CharaStateFlag {
@@ -11,7 +12,7 @@ class GameObjectBase;
 struct StatusBase {
 
 	StatusBase();
-
+	virtual ~StatusBase() {};
 	//現在捉えている敵
 	GameObjectBase* mTargetChara;//--[Lua]mLockonEnemy/mInsightEnemy/mBallHoldTarget
 	//ボールを所持しているか(所持していたらそのボールのアドレス)
@@ -29,6 +30,8 @@ struct StatusBase {
 
 	//生存関係フラグ
 	CharaStateFlag mLive;
+
+
 
 //	int mEnergy;
 

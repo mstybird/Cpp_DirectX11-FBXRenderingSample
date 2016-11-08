@@ -11,7 +11,7 @@ public:
 	virtual void Initialize() = 0;
 	//基本的に正面を基準に弾生成
 	//生成パターンは弾ごとに異なり、正整数も異なると仮定して、ベクタで管理することを前提にする
-	virtual void Create(std::vector<std::unique_ptr<BulletObject>>&aOutBulletList, CharacterBase& aShoter) = 0;
+	virtual void Create(std::vector<std::unique_ptr<BulletObject>>&aOutBulletList, CharacterBase* aShoter) = 0;
 	void SetBulletMesh(MSFbxManager&aSetMesh);
 	StatusBulletBase* GetStatus() {
 		return mStatus.get();
@@ -41,4 +41,5 @@ protected:
 	std::unique_ptr<StatusBulletBase>mStatus;
 	//弾のメッシュ
 	MSFbxManager* mBulletMesh;
+	CharacterBase* mParentPtr;
 };

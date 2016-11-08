@@ -3,7 +3,7 @@
 #include"StatusEnemy.h"
 class EnemyAI;
 class NcgLuaManager;
-
+class Ball;
 /*
 	タスク：
 	敵の必要な動き全て実装
@@ -42,21 +42,21 @@ private:
 	void UpdateAI();
 
 	//探索(無計画)
-	void UpdateSearching();
-	//ターゲットの位置に移動する
-	void UpdateMoveToTarget();
-	//エネルギーチャージ
-	void UpdateChargeEnergy();
-	//隠れる
-	void UpdateMovingHide();
-	//攻撃
-	void UpdateEnergyShot();
-	//ゴールへと移動する
-	void UpdateMoveToGoal();
-	//ボールを手に入れにいく
-	void UpdateMoveToBall();
-	//ボールを持っている敵を攻撃しにいく
-	void UpdateMoveToBallTarget();
+	//void UpdateSearching();
+	////ターゲットの位置に移動する
+	//void UpdateMoveToTarget();
+	////エネルギーチャージ
+	//void UpdateChargeEnergy();
+	////隠れる
+	//void UpdateMovingHide();
+	////攻撃
+	//void UpdateEnergyShot();
+	////ゴールへと移動する
+	//void UpdateMoveToGoal();
+	////ボールを手に入れにいく
+	//void UpdateMoveToBall();
+	////ボールを持っている敵を攻撃しにいく
+	//void UpdateMoveToBallTarget();
 
 	/*
 		最新AI
@@ -76,7 +76,7 @@ private:
 	//味方からあまり離れずに敵を探す
 	void BetaSearchEnemyShort();
 	//無心で敵を探す。無差別マン
-	void BetaSerachEnemyAll();
+	void BetaSearchEnemyAll();
 	//捕捉済みの敵を追いかける
 	void BetaMoveToLookingTarget();
 	//ボールを所持している敵を追いかける
@@ -87,7 +87,10 @@ private:
 	void BetaSearchForAllyArea();
 
 
+	//--Utility
 
+	//ボールとの衝突処理
+	Ball* UtlCollisionBall();
 
 
 

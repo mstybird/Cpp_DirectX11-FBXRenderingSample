@@ -231,6 +231,8 @@
     <ClCompile Include="NcgLua\NcgLuaHelper.cxx" />
     <ClCompile Include="NcgLua\NcgLuaManager.cxx" />
     <ClCompile Include="NcgLua\NcgUtility.cxx" />
+    <ClCompile Include="StatusTeam.cpp" />
+    <None Include="EnemyAI\EnemyTask.lua" />
     <None Include="NoCompile.cc" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StaticObject.cpp" />

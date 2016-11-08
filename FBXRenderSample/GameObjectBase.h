@@ -43,6 +43,10 @@ public:
 	std::vector<GameObjectBase*>*GetCollisionTargets() {
 		return &mCollisionTargets;
 	};
+
+	//自身ともう一つのオブジェクトの距離を計算する
+	float GetDistance(GameObjectBase*aTarget);
+
 protected:
 	virtual void UpdateMesh();
 	virtual std::vector<GameObjectBase*> UpdateCollision(bool pIsUpdatePosition);

@@ -12,4 +12,7 @@ struct StatusTeam {
 	int mGoalIndex = -1;
 	//チームメンバーリスト
 	std::vector<GameObjectBase*> mMembers;
+	//所属メンバーか調べる
+	bool IsMember(const GameObjectBase*aMember);
+
 };

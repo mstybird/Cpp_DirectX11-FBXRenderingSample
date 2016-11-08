@@ -43,15 +43,46 @@ std::vector<MyNode*> EnemyAI::GetNearNodeList(const DXVector3 & pCenter)
 }
 
 void EnemyAI::Update(
-	bool aTargeting,
-	bool aTarget,
-	bool aChargedEnergy,
-	bool aTargetHoldBall,
-	bool aHoldingBall,
-	bool aBallIsField)
+	bool aBallHoldField,
+	bool aBallHoldAlly,
+	bool aBallHoldEnemy,
+	bool aBallHoldMe,
+
+	//EnemyState
+	bool aInSigntEnemy,
+	bool aLockonEnemy,
+	bool aBallHoldTarget,
+
+	//AllyState
+	bool aInSightAlly,
+	bool aBallAllyNear,
+	bool aAllyNear,
+
+	//Other
+	bool aChargedEnergy)
 {
 	assert(mLuaAI);
-	mLuaAI->Call(aTargeting,aTarget, aChargedEnergy,aTargetHoldBall,aHoldingBall,aBallIsField);
+
+	mLuaAI->Call(
+		aBallHoldField,
+		aBallHoldAlly,
+		aBallHoldEnemy,
+		aBallHoldMe,
+
+		//EnemyState
+		aInSigntEnemy,
+		aLockonEnemy,
+		aBallHoldTarget,
+
+		//AllyState
+		aInSightAlly,
+		aBallAllyNear,
+		aAllyNear,
+
+		//Other
+		aChargedEnergy
+	);
+
 	std::vector<std::string>lTmpPlan;
 	mLuaAI->Return(lTmpPlan, 0);
 	mAIType.clear();
@@ -92,29 +123,44 @@ EnemyAIType::Type EnemyAIType::ConvertString(const std::string & aStr)
 {
 	Type lType{ eUnKnown };
 
-	if (aStr == sEnergyShot) {
-		lType = eEnergyShot;
-	}else if (aStr == sMovingHide) {
-		lType = eMovingHide;
-	}
-	else if (aStr == sChargeEnergy) {
-		lType = eChargeEnergy;
-	}
-	else if (aStr == sSearchTarget) {
-		lType = eSearchTarget;
-	}
-	else if (aStr == sMoveToTarget) {
-		lType = eMoveToTarget;
-	}
-	else if (aStr == sMoveToBall) {
+	if (aStr == sMoveToBall) {
 		lType = eMoveToBall;
-	}
-	else if (aStr == sMoveToBallTarget) {
-		lType = eMoveToBallTarget;
 	}
 	else if (aStr == sMoveToGoal) {
 		lType = eMoveToGoal;
 	}
+	else if (aStr == sMoveToHide) {
+		lType = eMoveToHide;
+	}
+	else if (aStr == sChargeEnergy) {
+		lType = eChargeEnergy;
+	}
+	else if (aStr == sInSightAttack) {
+		lType = eInSightAttack;
+	}
+	else if (aStr == sMoveToBallHoldAlly) {
+		lType = eMoveToBallHoldAlly;
+	}
+	else if (aStr == sSearchEnemyShort) {
+		lType = eSearchEnemyShort;
+	}
+	else if (aStr == sSerachEnemyAll) {
+		lType = eSerachEnemyAll;
+	}
+	else if (aStr == sMoveToLookingTarget) {
+		lType = eMoveToLookingTarget;
+	}
+	else if (aStr == sMoveToBallTarget) {
+		lType = eMoveToBallTarget;
+	}
+	else if (aStr == sSearchForEnemyArea) {
+		lType = eSearchForEnemyArea;
+	}
+	else if (aStr == sSearchForAllyArea) {
+		lType = eSearchForAllyArea;
+	}
+
+
 
 	return lType;
 }

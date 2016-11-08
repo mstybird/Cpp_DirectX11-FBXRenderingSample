@@ -8,7 +8,7 @@ public:
 	~BulletNormal();
 
 	void Initialize()override;
-	void Create(std::vector<std::unique_ptr<BulletObject>>&aOutBulletList, CharacterBase& aShoter)override;
+	void Create(std::vector<std::unique_ptr<BulletObject>>&aOutBulletList, CharacterBase* aShoter)override;
 	//’e‚ÌXV
 	void Update()override;
 	void Render()override;

@@ -2,9 +2,10 @@
 
 EnemyStatus::EnemyStatus() :
 	mTargetting{ false },
-	mIsTargetingBall{false},
-	mInitMoveToBall{false},
-	mInitMoveToGoal{false},
-	mInitMoveToBallTarget{false}
-{};
+	mIsTargetingBall{false}
+{}
+EnemyStatus::~EnemyStatus()
+{
+}
+;
 

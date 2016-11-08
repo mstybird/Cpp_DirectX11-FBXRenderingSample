@@ -30,10 +30,11 @@ INT WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR,INT)
 	AllocConsole();
 	freopen_s(&fp, "CON", "w", stdout);
 //#endif
+
+	
 	g_pMain=new MSWindow;
 	g_pMain->_Run(hInstance, 0, 0, WINDOW_WIDTH,
 		WINDOW_HEIGHT, APP_NAME);
-
 	delete g_pMain;
 
 //#ifdef _DEBUG

@@ -1,7 +1,7 @@
 #include "Dijkstra.h"
 #include <algorithm>
 #include<cassert>
-const int Dijkstra::Node::cNotInitCost{ -1 };
+const float Dijkstra::Node::cNotInitCost{ -1 };
 Dijkstra::Manager::~Manager()
 {
 

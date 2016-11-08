@@ -37,13 +37,13 @@ void BulletNormal::Initialize()
 }
 
 //弾の生成
-void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBulletList, CharacterBase & aShoter)
+void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBulletList, CharacterBase* aShoter)
 {
 	printf("Create %s, From %s\n",typeid(aShoter).name(), typeid(*this).name());
 	std::unique_ptr<BulletNormal>lBullet = std::make_unique<BulletNormal>();
 	lBullet->Initialize();
 	//初期位置設定
-	auto& lShotPos = *aShoter.GetWorld()->GetMatrix().lock();
+	auto& lShotPos = *aShoter->GetWorld()->GetMatrix().lock();
 	//弾発射方向の確定
 	DXVector3 lDir;
 	auto v = lBullet->mDirection;
@@ -56,7 +56,7 @@ void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBullet
 	lBullet->mVelocity = 0.25f;
 	//トランスフォームの設定
 	MS3DRender*lRender;
-	aShoter.GetRenderer(lRender);
+	aShoter->GetRenderer(lRender);
 	lBullet->SetRenderer(lRender);
 	DXVector3 lSpwanPos;
 	lShotPos.GetT(lSpwanPos);
@@ -66,19 +66,22 @@ void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBullet
 	lBullet->GetWorld()->SetS(lSpwanPos);
 	//衝突対象を登録
 	//壁を登録
-	for (auto& lCollision : *aShoter.GetCollisionTargets()) {
+	for (auto& lCollision : *aShoter->GetCollisionTargets()) {
 		lBullet->AddCollisionTarget(lCollision);
 	}
 
 
 
 	//捜索対象(ターゲットを登録)
-	for (auto&lTarget : *aShoter.GetSearchTargets()) {
+	for (auto&lTarget : *aShoter->GetSearchTargets()) {
 		lBullet->AddCollisionTarget(lTarget);
 	}
 
 	//レイピックの初期化
 	lBullet->mRayPick->SetFramePosition(*lBullet->mTransform);
+
+	//発射主の登録
+	lBullet->mParentPtr = aShoter;
 
 	aOutBulletList.push_back(std::move(lBullet));
 	return;
@@ -104,6 +107,8 @@ void BulletNormal::Update()
 		//死んだらそのターゲットに死亡フラグをセット
 		//死んでなければ処理しない
 		if (lIsDead == false)break;
+
+		//死んだキャラのステータスを取得
 		auto lStatus = lChara->GetStatus();
 		lStatus->mLive = CharaStateFlag::DEAD;
 		//ボールを持っていた場合、ボールをフィールドにセット
@@ -113,6 +118,12 @@ void BulletNormal::Update()
 			lChara->GetField()->RespawnBall(&lPosition);
 			lStatus->mBall = nullptr;
 		}
+
+		//発射主の攻撃対象を空にする
+
+		auto parent = this->mParentPtr;
+		this->mParentPtr->GetStatus()->mTargetChara = nullptr;
+
 		break;
 	}
 }

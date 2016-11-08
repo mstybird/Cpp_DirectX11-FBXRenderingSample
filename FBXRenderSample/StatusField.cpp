@@ -144,6 +144,9 @@ void StatusField::RegisterTeamMember(CharacterBase * aRegistMember, eTeamType aT
 }
 StatusTeam * StatusField::GetTeamAlly(CharacterBase * aMember)
 {
+	if (aMember == nullptr)return nullptr;
+
+
 	for (decltype(auto)lMember : mTeamBlack.mMembers) {
 		if (lMember == aMember) {
 			return &mTeamBlack;
@@ -158,6 +161,8 @@ StatusTeam * StatusField::GetTeamAlly(CharacterBase * aMember)
 }
 StatusTeam * StatusField::GetTeamEnemy(CharacterBase * aMember)
 {
+	if (aMember == nullptr)return nullptr;
+
 	for (decltype(auto)lMember : mTeamBlack.mMembers) {
 		if (lMember == aMember) {
 			return &mTeamWhite;
@@ -177,7 +182,7 @@ StatusField::StatusField():
 {
 }
 
-void StatusField::SetBallHolder(GameObjectBase * pBallHolder)
+void StatusField::SetBallHolder(CharacterBase * pBallHolder)
 {
 	mBallHoldChara = pBallHolder;
 	mBallIsField = false;

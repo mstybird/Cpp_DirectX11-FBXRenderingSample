@@ -26,7 +26,7 @@ struct StatusField {
 	virtual ~StatusField();
 
 	//誰がボールを所持しているか
-	GameObjectBase* mBallHoldChara;
+	CharacterBase* mBallHoldChara;
 	//フィールドにボールがあるかどうか
 	bool mBallIsField;
 	//ボール情報
@@ -55,8 +55,10 @@ struct StatusField {
 	//相手のチームを取得
 	StatusTeam* GetTeamEnemy(CharacterBase*aMember);
 
+
+
 	StatusField();
-	void SetBallHolder(GameObjectBase*pBallHolder);
+	void SetBallHolder(CharacterBase*pBallHolder);
 	void RespawnBall(DXVector3*pPosition = nullptr);
 
 	StatusTeam mTeamWhite;	//白チーム
