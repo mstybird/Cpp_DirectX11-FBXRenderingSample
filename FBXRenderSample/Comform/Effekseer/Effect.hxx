@@ -4,8 +4,7 @@
 #include <EffekseerSoundXAudio2.h>
 #include<string>
 #include<unordered_map>
-#include"../../DXCamera.h"
-#include"../../DXProjection.h"
+#include"DXMath.hpp"
 
 #if _DEBUG
 #pragma comment(lib, "VS2015/Debug/Effekseer.lib" )

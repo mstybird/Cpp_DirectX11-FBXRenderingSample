@@ -46,6 +46,7 @@ void MSFbxObject::NextFrame()
 	mStartFrame = mManager->mLoader->Start;
 	mStopFrame = mManager->mLoader->Stop;
 	mCurrentFrame += (mFrameTime*mFrameSpeed);
+	
 	if (mCurrentFrame >= mStopFrame) {
 		mCurrentFrame = mStartFrame;
 	}
@@ -64,6 +65,9 @@ unsigned int * MSFbxObject::GetIndexBufferCount(int i, int j)
 
 void MSFbxObject::CreateCollision()
 {
+	if (mCollisionSphere.size() != 0) {
+		return;
+	}
 	mCollisionSphere.clear();
 	mCollisionSphere.resize(mMeshData.size());
 	mCollisionSphere.resize(mMeshData.size());

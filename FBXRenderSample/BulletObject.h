@@ -1,6 +1,6 @@
 #pragma once
 #include"GameObjectBase.h"
-#include"DXVector3.h"
+#include"DXMath.hpp"
 //’e‚ÌŠî’êƒNƒ‰ƒX
 class CharacterBase;
 struct StatusBulletBase;

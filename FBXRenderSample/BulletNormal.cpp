@@ -1,8 +1,7 @@
 #include"BulletNormal.h"
 #include"My3DShader.h"
 #include"CharacterBase.h"
-#include"DXWorld.h"
-#include"DXMatrix.h"
+#include"DXMath.hpp"
 #include"MS3DRender.h"
 #include"DX11RenderResource.h"
 #include"Player.h"
@@ -10,6 +9,7 @@
 #include"StatusField.h"
 #include"StatusBulletNormal.h"
 #include"ChangeStates.hxx"
+#include<DX11FBXLoader.hpp>
 
 #include<cassert>
 
@@ -122,7 +122,7 @@ void BulletNormal::Update()
 		//”­ŽËŽå‚ÌUŒ‚‘ÎÛ‚ð‹ó‚É‚·‚é
 
 		auto parent = this->mParentPtr;
-		this->mParentPtr->GetStatus()->mTargetChara = nullptr;
+		//this->mParentPtr->GetStatus()->mTargetChara = nullptr;
 
 		break;
 	}

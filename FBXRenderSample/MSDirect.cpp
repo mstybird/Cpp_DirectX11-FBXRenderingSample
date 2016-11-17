@@ -12,8 +12,8 @@
 //FBX
 #include"MSFbxManager.h"
 //Other
-#include"DXProjection.h"
-#include"DX11Texture.h"
+#include"DXMath.hpp"
+#include"DX11TextureManager.hpp"
 #include"MSKeyCodeList.h"
 
 //ƒJƒŠƒ“ƒO

@@ -1,6 +1,6 @@
 #pragma once
 #include"CharacterBase.h"
-#include"DXVector3.h"
+#include"DXMath.hpp"
 #include"StatusPlayer.h"
 
 

@@ -1,14 +1,8 @@
 #include "MSSprite2DResource.h"
 #include"DX11Resrouce.h"
-#include"DXVector2.h"
-#include"DXVector3.h"
-#include"DXMatrix.h"
-#include"DXCamera.h"
-#include"DXProjection.h"
-#include"DX11TextureManager.h"
-#include"DXDisplay.h"
+#include"DXMath.hpp"
+#include"DX11TextureManager.hpp"
 #include"MSBase2DSpriteShader.h"
-#include"DX11Texture.h"
 #include<cassert>
 ID3D11Device* MSSpriteBaseResource::sDevice{ nullptr };
 MSSpriteBaseResource::MSSpriteBaseResource():

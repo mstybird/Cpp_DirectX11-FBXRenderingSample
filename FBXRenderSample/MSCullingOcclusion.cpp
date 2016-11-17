@@ -1,11 +1,7 @@
 #include "MSCullingOcclusion.h"
 #include"DX11Resrouce.h"
-#include"DXMatrix.h"
-#include"DXWorld.h"
-#include"DXCamera.h"
-#include"DXVector3.h"
+#include"DXMath.hpp"
 #include"MSDirect.h"
-#include"DXDisplay.h"
 ID3D11RenderTargetView* MSCullingOcculusion::sRTV;
 ID3D11DepthStencilView* MSCullingOcculusion::sDSV;
 ID3D11Texture2D* MSCullingOcculusion::sDS2D;
@@ -70,7 +66,11 @@ bool MSCullingOcculusion::IsCullingWorld(
 
 		//レンダリング判定をする描画
 		BeginOcclusionQuery();
+
 		pRender.Render(pTargetResource);
+		
+		
+		
 		EndOcclusionQuery();
 		pRender.SetRenderTarget(lTmpDisplay);
 		//カメラと視野をもとに戻す
@@ -90,7 +90,7 @@ bool MSCullingOcculusion::IsCullingWorld(
 	
 
 	//見えたと判定する必要なピクセル数の計算
-	UINT64 lCheckPixels = (UINT64)(640 * 480)*pPixelper;
+	UINT64 lCheckPixels = (UINT64)((640 * 480)*pPixelper);
 	if (lDrawPixels != 0) {
 		int a = 10;
 	}

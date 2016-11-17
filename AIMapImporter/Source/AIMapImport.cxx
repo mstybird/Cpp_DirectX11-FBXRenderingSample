@@ -50,6 +50,7 @@ namespace Comfort {
 
 			//À•WŽæ“¾
 			lStream >> lNodeData.mX >> lNodeData.mY >> lNodeData.mZ;
+			lStream >> lNodeData.mTeamIDType;
 			mNodeList.push_back(std::move(lNodeData));
 		}
 		mNodeList.pop_back();

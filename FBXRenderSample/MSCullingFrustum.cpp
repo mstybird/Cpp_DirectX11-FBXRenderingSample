@@ -1,15 +1,11 @@
 #include "MSCullingFrustum.h"
 #include"DX11RenderResource.h"
 #include"MSFbxManager.h"
-#include"DXVector3.h"
-#include"DXMatrix.h"
-#include"DXWorld.h"
-#include"DXCamera.h"
-#include"DXProjection.h"
+#include"DXMath.hpp"
+#include"MSCollisionSphere.h"
 #include<d3dx9.h>
 #include<memory>
 #include<cassert>
-#include"MSCollisionSphere.h"
 bool MSCullingFrustum::IsCullingWorld(
 	DX11RenderResource & pCameraResource, 
 	DX11RenderResource & pTargetResource)

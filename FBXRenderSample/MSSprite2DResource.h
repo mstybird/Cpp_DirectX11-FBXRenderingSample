@@ -1,6 +1,6 @@
 #pragma once
 #include<memory>
-#include"DXVector2.h"
+#include"DXMath.hpp"
 
 //2D•`‰æ—p
 //using std::weak_ptr;

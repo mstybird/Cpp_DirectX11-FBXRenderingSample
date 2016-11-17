@@ -22,7 +22,7 @@ void Dijkstra::Manager::CreateNodeSafe(Node * aAddNode)
 
 }
 
-void Dijkstra::Manager::LinkNode(std::pair<int, int>aFromTo, int aCost, bool aBothFlag)
+void Dijkstra::Manager::LinkNode(std::pair<int, int>aFromTo, float aCost, bool aBothFlag)
 {
 	assert(IsBetweenIndex(aFromTo.first));
 	assert(IsBetweenIndex(aFromTo.second));
@@ -90,7 +90,7 @@ void Dijkstra::Manager::SetNowNode(Node * const aNowNode)
 
 int Dijkstra::Manager::GetNodeCount() const
 {
-	return mNodes.size();
+	return (int)mNodes.size();
 }
 
 int Dijkstra::Manager::GetRandomNodeIndex(bool aIncludeNowNodeFlag)
@@ -244,7 +244,7 @@ Dijkstra::Node * Dijkstra::Manager::GetNowNode()
 int Dijkstra::Manager::GetEdgeNodeCount(const Node * aRootNode)
 {
 	assert(aRootNode);
-	return aRootNode->mEdgeNode.size();
+	return (int)aRootNode->mEdgeNode.size();
 }
 
 bool Dijkstra::Manager::IsEdgeIntoNode(const Node * IntoNodes, const Node * aSearchNode)
@@ -300,7 +300,7 @@ void Dijkstra::Manager::ResetNodes()
 
 bool Dijkstra::Manager::IsBetweenIndex(const int aNodeIndex)
 {
-	const auto& lNodeSize = mNodes.size();
+	const int& lNodeSize = (int)mNodes.size();
 	return (aNodeIndex >= 0) & (aNodeIndex < lNodeSize);
 }
 

@@ -1,5 +1,5 @@
 #include "EnemyAI.h"
-#include"../NcgLua/NcgLua.hpp"
+#include"NcgLua.hpp"
 #include"../StatusField.h"
 #include<algorithm>
 #include<iterator>
@@ -40,6 +40,11 @@ std::vector<MyNode*> EnemyAI::GetNearNodeList(const DXVector3 & pCenter)
 
 	return std::move(lNearNodeList);
 
+}
+
+MyNode * EnemyAI::GetNodeRandom()
+{
+	return static_cast<MyNode*>(mNodes[rand()%mNodes.size()]);
 }
 
 void EnemyAI::Update(

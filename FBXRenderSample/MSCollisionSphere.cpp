@@ -1,11 +1,7 @@
 #include "MSCollisionSphere.h"
-#include"DXVector3.h"
 #include"MSFbxManager.h"
-#include"DX11FbxResource.h"
-#include"DXVector3.h"
-#include"DXMatrix.h"
-#include"DXWorld.h"
-#include"DXCamera.h"
+#include<DX11FBXLoader.hpp>
+#include"DXMath.hpp"
 #include"DX11RenderResource.h"
 #include<array>
 #include<vector>
@@ -21,7 +17,7 @@ MSCollisionSphere::MSCollisionSphere() :
 
 void MSCollisionSphere::CreateCollision(const FBXModelData&pMesh, const DXMatrix&pGlobalPosition)
 {
-	D3DXComputeBoundingSphere((const D3DXVECTOR3*)pMesh.Data.data(), pMesh.Data.size(), sizeof(FbxVertex), mCenter.get(), &mRadius);
+	D3DXComputeBoundingSphere((const D3DXVECTOR3*)pMesh.Data.data(), (DWORD)pMesh.Data.size(), sizeof(FbxVertex), mCenter.get(), &mRadius);
 	//îªíËògèkè¨
 	DXVector3 lScale, lTrans;
 	pGlobalPosition.GetS(lScale);

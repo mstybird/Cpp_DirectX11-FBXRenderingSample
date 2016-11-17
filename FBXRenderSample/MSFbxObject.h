@@ -1,5 +1,5 @@
 #pragma once
-#include"DX11FbxLoader.h"
+#include<DX11FBXLoader.hpp>
 #include"MSFbxManager.h"
 //FBXメッシュを管理するクラス
 #include"MSCollisionSphere.h"

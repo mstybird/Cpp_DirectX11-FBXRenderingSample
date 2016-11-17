@@ -2,7 +2,7 @@
 
 #include"MSBase2DSpriteShader.h"
 #include"MSSprite2DResource.h"
-#include"DX11Texture.h"
+#include"DX11TextureManager.hpp"
 #include"DXDisplay.h"
 #include"DX11RenderResource.h"
 ID3D11Device*MSSpriteBaseRender::sDevice;

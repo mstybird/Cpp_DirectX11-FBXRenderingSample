@@ -1,11 +1,7 @@
 #include "MSCollisionRay.h"
-#include"DXVector3.h"
 #include"MSFbxManager.h"
-#include"DX11FbxResource.h"
-#include"DXVector3.h"
-#include"DXMatrix.h"
-#include"DXWorld.h"
-#include"DXCamera.h"
+#include<DX11FBXLoader.hpp>
+#include"DXMath.hpp"
 #include"DX11RenderResource.h"
 #include<array>
 #include<vector>

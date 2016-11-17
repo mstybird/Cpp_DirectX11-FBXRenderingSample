@@ -1,11 +1,9 @@
 #include"MS3DRender.h"
-#include"DX11Texture.h"
+#include"DX11TextureManager.hpp"
 #include"DX11RenderResource.h"
 #include"MSFbxManager.h"
-#include"DX11FbxResource.h"
-#include"DXDisplay.h"
-#include"DXCamera.h"
-#include"DXProjection.h"
+#include<DX11FBXLoader.hpp>
+#include"DXMath.hpp"
 #include"MSBase3DShader.h"
 #include<vector>
 ID3D11Device*MS3DRender::sDevice;				//DirectX11デバイス

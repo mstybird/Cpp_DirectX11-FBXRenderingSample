@@ -4,50 +4,8 @@
     <ClCompile Include="DX11RenderResource.cpp">
       <Filter>MSDirect\DX11\DX11Render\Source</Filter>
     </ClCompile>
-    <ClCompile Include="DXCamera.cpp">
-      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DXVector3.cpp">
-      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DXProjection.cpp">
-      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DXWorld.cpp">
-      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DX11Texture.cpp">
-      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Helper.cpp">
       <Filter>Helper</Filter>
-    </ClCompile>
-    <ClCompile Include="DX11FbxResource.cpp">
-      <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="FbxComputeDeformer.cpp">
-      <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="FbxMaterialCache.cpp">
-      <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="fbxProc.cpp">
-      <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="FbxVBO.cpp">
-      <Filter>MSDirect\DX11\DX11FbxLoader\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DXVector2.cpp">
-      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DXDisplay.cpp">
-      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DX11TextureManager.cpp">
-      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DXMatrix.cpp">
-      <Filter>MSDirect\DX11\DXHelper\Source</Filter>
     </ClCompile>
     <ClCompile Include="MSWindow.cpp">
       <Filter>MSDirect\System\Source</Filter>
@@ -127,21 +85,6 @@
     <ClCompile Include="AI\EnemyAI.cpp">
       <Filter>Game\AI</Filter>
     </ClCompile>
-    <ClCompile Include="NcgLua\NcgLuaBase.cxx">
-      <Filter>NcgLua</Filter>
-    </ClCompile>
-    <ClCompile Include="NcgLua\NcgLuaDatabase.cpp">
-      <Filter>NcgLua</Filter>
-    </ClCompile>
-    <ClCompile Include="NcgLua\NcgLuaHelper.cxx">
-      <Filter>NcgLua</Filter>
-    </ClCompile>
-    <ClCompile Include="NcgLua\NcgLuaManager.cxx">
-      <Filter>NcgLua</Filter>
-    </ClCompile>
-    <ClCompile Include="NcgLua\NcgUtility.cxx">
-      <Filter>NcgLua</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Game\Object\Source</Filter>
     </ClCompile>
@@ -189,66 +132,25 @@
     </ClCompile>
     <ClCompile Include="ChangeStates.cpp" />
     <ClCompile Include="MSGravity.cpp" />
-    <ClCompile Include="Comform\TGALoader\TgaLoader.cpp">
-      <Filter>Comform\TGALoader</Filter>
-    </ClCompile>
     <ClCompile Include="Comform\Effekseer\Effect.cxx">
       <Filter>Comform\Effekseer</Filter>
     </ClCompile>
-    <ClCompile Include="MSFbxDatabase.cpp" />
     <ClCompile Include="StatusTeam.cpp" />
+    <ClCompile Include="UIBase.cpp" />
+    <ClCompile Include="BarGauge.cpp" />
+    <ClCompile Include="MSFbxDatabase.cpp">
+      <Filter>MSDirect\DX11\DX11Render\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
       <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
-    <ClInclude Include="DXCamera.h">
-      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DXProjection.h">
-      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DXVector3.h">
-      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DXWorld.h">
-      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11Texture.h">
-      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
-    </ClInclude>
     <ClInclude Include="Helper.h">
       <Filter>Helper</Filter>
     </ClInclude>
-    <ClInclude Include="DX11FbxLoader.h">
-      <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11FbxResource.h">
-      <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="FbxComputeDeformer.h">
-      <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="FbxMaterialCache.h">
-      <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="FbxVBO.h">
-      <Filter>MSDirect\DX11\DX11FbxLoader\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DXDisplay.h">
-      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
-    </ClInclude>
     <ClInclude Include="DX11Resrouce.h">
       <Filter>MSDirect\DX11\DX11Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DX11TextureManager.h">
-      <Filter>MSDirect\DX11\DX11Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DXVector2.h">
-      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DXMatrix.h">
-      <Filter>MSDirect\DX11\DXHelper\Header</Filter>
     </ClInclude>
     <ClInclude Include="MSWindow.h">
       <Filter>MSDirect\System\Header</Filter>
@@ -349,24 +251,6 @@
     <ClInclude Include="MSFbxObject.h">
       <Filter>MSDirect\DX11\DX11Render\Header</Filter>
     </ClInclude>
-    <ClInclude Include="NcgLua\NcgLua.hpp">
-      <Filter>NcgLua</Filter>
-    </ClInclude>
-    <ClInclude Include="NcgLua\NcgLuaBase.hxx">
-      <Filter>NcgLua</Filter>
-    </ClInclude>
-    <ClInclude Include="NcgLua\NcgLuaDatabase.h">
-      <Filter>NcgLua</Filter>
-    </ClInclude>
-    <ClInclude Include="NcgLua\NcgLuaHelper.hxx">
-      <Filter>NcgLua</Filter>
-    </ClInclude>
-    <ClInclude Include="NcgLua\NcgLuaManager.hxx">
-      <Filter>NcgLua</Filter>
-    </ClInclude>
-    <ClInclude Include="NcgLua\NcgUtility.hxx">
-      <Filter>NcgLua</Filter>
-    </ClInclude>
     <ClInclude Include="BulletNormal.h">
       <Filter>Game\Object\Header</Filter>
     </ClInclude>
@@ -421,9 +305,6 @@
     <ClInclude Include="MSGravity.h">
       <Filter>MSDirect\MSUtility\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Comform\TGALoader\TgaLoader.h">
-      <Filter>Comform\TGALoader</Filter>
-    </ClInclude>
     <ClInclude Include="Comform\Effekseer\Effect.hxx">
       <Filter>Comform\Effekseer</Filter>
     </ClInclude>
@@ -435,6 +316,21 @@
     </ClInclude>
     <ClInclude Include="StatusTeam.h">
       <Filter>Game\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="MySceneUI.h">
+      <Filter>Game\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreView.h">
+      <Filter>Game\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusFrame.h">
+      <Filter>Game\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBase.h">
+      <Filter>Game\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="BarGauge.h">
+      <Filter>Game\Scene\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -460,6 +356,9 @@
     <None Include="EnemyAI\EnemyTask.lua">
       <Filter>Game\AI\Enemy</Filter>
     </None>
+    <None Include="ClassDiagram.cd">
+      <Filter>Resource</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="HLSL">
@@ -477,15 +376,6 @@
     <Filter Include="MSDirect\DX11">
       <UniqueIdentifier>{6c83f339-a51a-498d-80bd-1e9a054cedf2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MSDirect\DX11\DXHelper">
-      <UniqueIdentifier>{8ff38007-295f-4ff5-927e-7fa91685fcfe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\DXHelper\Header">
-      <UniqueIdentifier>{3562b482-68e3-4118-93b3-7ee2d4460bb5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\DXHelper\Source">
-      <UniqueIdentifier>{c30e4d31-2ba1-4657-bdbc-00000abb7f53}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MSDirect\DX11\DX11Render">
       <UniqueIdentifier>{525a8f17-1b67-45c5-b451-6a4b51158593}</UniqueIdentifier>
     </Filter>
@@ -494,15 +384,6 @@
     </Filter>
     <Filter Include="MSDirect\DX11\DX11Render\Source">
       <UniqueIdentifier>{6f3242ee-6351-4d36-9ccb-94df8c450e32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\DX11FbxLoader">
-      <UniqueIdentifier>{be0449cb-e4e1-42cd-b924-a8c644f2088d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\DX11FbxLoader\Header">
-      <UniqueIdentifier>{3f1e32be-58a9-48cc-9a7a-10e14779329f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MSDirect\DX11\DX11FbxLoader\Source">
-      <UniqueIdentifier>{c6a0ef1d-11b8-4838-b70e-ea8f36c58063}</UniqueIdentifier>
     </Filter>
     <Filter Include="MSDirect\DX11\Shader">
       <UniqueIdentifier>{f8dab8cc-9d35-4943-9b68-210a648dc740}</UniqueIdentifier>
@@ -585,9 +466,6 @@
     <Filter Include="Game\Object">
       <UniqueIdentifier>{89a6d1b5-bf01-49a2-bd80-ba238b0c8fd9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NcgLua">
-      <UniqueIdentifier>{82f15a6b-737d-4782-8d1f-ccd485d99f39}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Object\Header">
       <UniqueIdentifier>{490de960-5c54-4197-bad4-cce2fd871eb9}</UniqueIdentifier>
     </Filter>
@@ -627,9 +505,6 @@
     <Filter Include="Comform">
       <UniqueIdentifier>{b336122b-71d1-4956-b650-d8d975b907ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Comform\TGALoader">
-      <UniqueIdentifier>{fcec86cf-7b5f-4ba5-a43e-30087632d76d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Comform\Effekseer">
       <UniqueIdentifier>{c0583bac-ac6d-4591-9d5c-f4fc3df9dd68}</UniqueIdentifier>
     </Filter>
@@ -638,6 +513,9 @@
     </Filter>
     <Filter Include="Game\AI\Enemy">
       <UniqueIdentifier>{6f867445-5d1a-4267-bc3c-c362c92f3423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\UI">
+      <UniqueIdentifier>{9c8fa03a-46cf-41e9-aff8-986ecb3bf679}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

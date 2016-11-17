@@ -9,7 +9,7 @@ namespace NodeControl {
 	void LinkNodeSafe(
 		std::vector<Dijkstra::Node*>&aNodeList,
 		std::pair<int, int>aFromTo,
-		int aCost,
+		float aCost,
 		bool aBothFlag
 	);
 	template<typename T>
@@ -23,6 +23,7 @@ namespace NodeControl {
 //フィールド情報
 struct StatusField {
 
+	StatusField();
 	virtual ~StatusField();
 
 	//誰がボールを所持しているか
@@ -35,7 +36,7 @@ struct StatusField {
 	//フィールドのAI用ノードリスト
 	std::vector<Dijkstra::Node*>mFieldNodes;
 	//フィールドのスポーン用ノードリスト
-	std::vector<Dijkstra::Node*>mSpawnCharaNodes;
+	//std::vector<Dijkstra::Node*>mSpawnCharaNodes;
 	//ボールオブジェクトスポーン用ノードリスト
 	std::vector<Dijkstra::Node*>mSpawnBallNodes;
 
@@ -57,7 +58,6 @@ struct StatusField {
 
 
 
-	StatusField();
 	void SetBallHolder(CharacterBase*pBallHolder);
 	void RespawnBall(DXVector3*pPosition = nullptr);
 

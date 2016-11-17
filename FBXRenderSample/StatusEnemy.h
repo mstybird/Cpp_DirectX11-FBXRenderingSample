@@ -1,5 +1,5 @@
 #pragma once
-#include"DXVector3.h"
+#include"DXMath.hpp"
 #include"StatusBase.h"
 #include"AI\EnemyAI.h"
 enum class EnemyLockOnType {

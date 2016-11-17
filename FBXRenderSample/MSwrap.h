@@ -7,33 +7,19 @@ FBX関係
 
 ************************************/
 //FBXローダー
-#include"DX11FbxLoader.h"
+#include<DX11FBXLoader.hpp>
 //FBXマネージャ
 #include"MSFbxManager.h"
 
 
 
-/************************************
-
-行列関係関係
-
-************************************/
-//ワールド行列管理クラス
-#include"DXWorld.h"
-//ビュー行列管理クラス
-#include"DXCamera.h"
-//射影行列管理クラス
-#include"DXProjection.h"
 
 /************************************
 
 テクスチャ関係
 
 ************************************/
-//2Dテクスチャクラス
-#include"DX11Texture.h"
-//2Dテクスチャ管理クラス
-#include"DX11TextureManager.h"
+#include"DX11TextureManager.hpp"
 
 
 /************************************
@@ -67,13 +53,10 @@ FBX関係
 
 /************************************
 
-ベクトル管理クラス
+数学関係クラス
 
 ************************************/
-//二次元ベクトル管理クラス
-#include"DXVector2.h"
-//三次元ベクトル管理クラス
-#include"DXVector3.h"
+#include"DXMath.hpp"
 
 //マクロリソース
 #include"DX11Resrouce.h"

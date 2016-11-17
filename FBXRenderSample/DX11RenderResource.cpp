@@ -62,11 +62,19 @@ void DX11RenderResource::SetWorld(const DXWorld & pWorld)
 
 void DX11RenderResource::SetCamera(const DXCamera & pCamera)
 {
+
+	if (!mView) {
+		mView = std::make_shared<DXCamera>();
+	}
 	*mView = pCamera;
 }
 
 void DX11RenderResource::SetProjection(const DXProjection & pProjection)
 {
+	if (!mProj) {
+		mProj = std::make_shared<DXProjection>();
+	}
+
 	*mProj = pProjection;
 }
 

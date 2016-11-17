@@ -20,7 +20,7 @@ namespace Dijkstra {
 		}
 		virtual ~Node() {}
 
-		void addNode(Node*const aNode, const int aCost) {
+		void addNode(Node*const aNode, const float aCost) {
 			mEdgeNode.push_back({ aNode, aCost });
 		};
 
@@ -28,7 +28,7 @@ namespace Dijkstra {
 			return this->mId;
 		}
 
-		int GetCost() {
+		float GetCost() {
 			return this->mCost;
 		}
 
@@ -38,7 +38,7 @@ namespace Dijkstra {
 			this->mCost = cNotInitCost;
 		}
 	private:
-		vector<std::pair<Node*, int>>mEdgeNode;	//隣接ノードの配列
+		vector<std::pair<Node*, float>>mEdgeNode;	//隣接ノードの配列
 		bool mSearched;			//走査済みかどうか
 		Node*mPreviousNode;		//前のノード
 		float mCost;			//ノード本体のコスト
@@ -54,7 +54,7 @@ namespace Dijkstra {
 		//安全なノード生成
 		void CreateNodeSafe(Node* aAddNode);
 		//ノードのリンクを作成
-		void LinkNode(std::pair<int,int>aFromTo, int aCost, bool aBothFlag);
+		void LinkNode(std::pair<int,int>aFromTo, float aCost, bool aBothFlag);
 
 		//ノードデータの作成
 		virtual void CreateNodes(StatusField&aField) = 0;

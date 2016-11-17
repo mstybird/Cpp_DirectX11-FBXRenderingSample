@@ -17,6 +17,7 @@ namespace Comfort {
 			};
 			float_t mPosition[3];
 		};
+		int32_t mTeamIDType;
 	};
 
 	class AIMapImporter {

@@ -1,8 +1,8 @@
 #include"My3DShader.h"
 #include"DX11Resrouce.h"
 #include"DX11RenderResource.h"
-#include"DX11FbxResource.h"
-#include"DX11Texture.h"
+#include<DX11FBXLoader.hpp>
+#include"DX11TextureManager.hpp"
 #include<vector>
 #include<iostream>
 My3DShader::My3DShader() :

@@ -1,6 +1,5 @@
 #include "MSFbxManager.h"
-#include"DX11FbxResource.h"
-#include"DX11FbxLoader.h"
+#include<DX11FBXLoader.hpp>
 #include"DX11Resrouce.h"
 #include"MSCollisionSphere.h"
 #include"DXMatrix.h"

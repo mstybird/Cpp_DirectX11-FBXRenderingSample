@@ -3,15 +3,13 @@
 #include"DXMatrix.h"
 #include"AI\EnemyAI.h"
 #include"CharacterBase.h"
-#include<cassert>
+#include<SpawnMapImporter.hpp>
 #include<AIMapImport.hpp>
+#include<cassert>
 #include<string>
 StatusField::~StatusField()
 {
 	for (decltype(auto)lNode : mFieldNodes) {
-		delete lNode;
-	}
-	for (decltype(auto)lNode : mSpawnCharaNodes) {
 		delete lNode;
 	}
 	for (decltype(auto)lNode : mSpawnBallNodes) {
@@ -32,34 +30,10 @@ void StatusField::CreateFieldNodes()
 			mFieldNodes,
 			new MyNode{
 				lData.mID, 
-				std::string("obj") +std::to_string(lData.mID),lNodePosition
+				std::string("obj") +std::to_string(lData.mID),lNodePosition,lData.mTeamIDType
 			}
 		);
 	}
-
-
-	//AddNodeSafe(mFieldNodes,new MyNode{ 0,"obj0",{ 4.00,0.00,-6.75 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 1,"obj1",{ 6.75,0.00,-8.75 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 2,"obj2",{ 9.75,0.00,-5.75 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 3,"obj3",{ 11.75,0.00,-3.75 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 4,"obj4",{ 9.00,0.00,-0.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 5,"obj5",{ 6.25,0.00,2.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 6,"obj6",{ 2.75,0.00,0.25 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 7,"obj7",{ 0.50,0.00,-2.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 8,"obj8",{ -4.75,0.00,-2.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 9,"obj9",{ -8.25,0.00,-2.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 10,"obj10",{ -11.00,0.00,1.00 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 11,"obj11",{ -11.00,0.00,5.25 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 12,"obj12",{ -8.00,0.00,8.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 13,"obj13",{ -4.00,0.00,8.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 14,"obj14",{ -0.00,0.00,4.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 15,"obj15",{ 2.50,0.00,7.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 16,"obj16",{ 7.00,0.00,7.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 17,"obj17",{ 11.00,0.00,4.00 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 18,"obj18",{ 11.00,0.00,-8.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 19,"obj19",{ 11.00,0.00,7.50 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 20,"obj20",{ -16.25,0.00,5.25 } });
-	//AddNodeSafe(mFieldNodes,new MyNode{ 21,"obj21",{ -16.25,0.00,-3.50 } });
 
 
 	//ノード間固定コストは距離とする						
@@ -86,18 +60,73 @@ void StatusField::CreateFieldNodes()
 }
 void StatusField::CreateSpawnCharaNodes()
 {
-	using NodeControl::AddNodeSafe;
-	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 8,"obj8",{ 10.21,0.00,-51.26 } });
-	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 79,"obj79",{- 3.67,0.00,- 44.17} });
-	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 9,"obj9",{ 5.21,0.00,-51.26 } });
-	AddNodeSafe(mSpawnCharaNodes, new MyNode{ 80,"obj80",{ -3.67,0.00,-48.17 } });
+	//黒チームのスポーンデータ
+	{
+		Comfort::SpawnMapImporter lImport;
+		lImport.Import("res/NodeMap/spawnTeamBlack.anm");
+
+
+		using NodeControl::AddNodeSafe;
+
+		for (const auto& lNode : *lImport.GetList()) {
+			AddNodeSafe(
+				mTeamBlack.mSpawnCharaNodes,
+				new MyNode{
+				lNode.mID,
+				std::string("obj") + std::to_string(lNode.mID),
+				{ -lNode.mX,lNode.mY,lNode.mZ },
+				0
+			}
+			);
+		}
+	}
+
+
+	//黒チームのスポーンデータ
+	{
+		Comfort::SpawnMapImporter lImport;
+		lImport.Import("res/NodeMap/spawnTeamWhite.anm");
+
+
+		using NodeControl::AddNodeSafe;
+
+		for (const auto& lNode : *lImport.GetList()) {
+			AddNodeSafe(
+				mTeamWhite.mSpawnCharaNodes,
+				new MyNode{
+				lNode.mID,
+				std::string("obj") + std::to_string(lNode.mID),
+				{ -lNode.mX,lNode.mY,lNode.mZ },
+				0
+			}
+			);
+		}
+	}
+
 	//AddNodeSafe(mSpawnCharaNodes, new MyNode{ 19,"obj19",{ 11.00,0.00,7.50 } });
 	//AddNodeSafe(mSpawnCharaNodes, new MyNode{ 20,"obj20",{ -16.25,0.00,5.25 } });
 }
 void StatusField::CreateSpawnBallNodes()
 {
+	Comfort::SpawnMapImporter lImport;
+	lImport.Import("res/NodeMap/spawnBall.anm");
+
+
 	using NodeControl::AddNodeSafe;
-	AddNodeSafe(mSpawnBallNodes, new MyNode{ 0,"obj0",{ -16.40,0.00,- 47.00 } });
+
+	for (const auto& lNode : *lImport.GetList()) {
+		AddNodeSafe(
+			mSpawnBallNodes,
+			new MyNode{
+				lNode.mID,
+				std::string("obj") + std::to_string(lNode.mID),
+				{-lNode.mX,lNode.mY,lNode.mZ},
+				0
+			}
+		);
+	}
+
+	//AddNodeSafe(mSpawnBallNodes, new MyNode{ 0,"obj0",{ -16.40,0.00,- 47.00 }  ,0 });
 	//AddNodeSafe(mSpawnBallNodes, new MyNode{ 5,"obj5",{ 6.25,0.00,2.50 } });
 	//AddNodeSafe(mSpawnBallNodes, new MyNode{ 13,"obj13",{ -4.00,0.00,8.50 } });
 }
@@ -114,15 +143,19 @@ void StatusField::Respawn(CharacterBase * aSpawnChara)
 {
 	printf("%s is Respawn\n", typeid(aSpawnChara).name());
 
-	auto lCount = rand() % mSpawnCharaNodes.size();
+	//チームのスポーンリスト取得
+	const auto& lSpawnNodeList = GetTeamAlly(aSpawnChara)->mSpawnCharaNodes;
+
+	auto lCount = rand() % lSpawnNodeList.size();
+;
 
 	static int sCount = 0;
 
 	//ランダムなノードから座標を取り出す
-	auto& lPosition = static_cast<MyNode*>(mSpawnCharaNodes[sCount])->Position;
+	auto& lPosition = static_cast<MyNode*>(lSpawnNodeList[sCount])->Position;
 
 	++sCount;
-	sCount %= mSpawnCharaNodes.size();
+	sCount %= lSpawnNodeList.size();
 
 	aSpawnChara->GetWorld()->SetT(lPosition);
 	aSpawnChara->SetActive(true);
@@ -179,7 +212,9 @@ StatusTeam * StatusField::GetTeamEnemy(CharacterBase * aMember)
 StatusField::StatusField():
 	mBallHoldChara{nullptr},
 	mBallIsField{false},
-	mBall{nullptr}
+	mBall{nullptr},
+	mTeamBlack(eTeamType::Black),
+	mTeamWhite(eTeamType::White)
 {
 }
 
@@ -221,7 +256,7 @@ void NodeControl::AddNodeSafe(std::vector<Dijkstra::Node*>& aNodeList, Dijkstra:
 	aNodeList.push_back(aAddNode);
 }
 
-void NodeControl::LinkNodeSafe(std::vector<Dijkstra::Node*>& aNodeList, std::pair<int, int> aFromTo, int aCost, bool aBothFlag)
+void NodeControl::LinkNodeSafe(std::vector<Dijkstra::Node*>& aNodeList, std::pair<int, int> aFromTo, float aCost, bool aBothFlag)
 {
 	assert(IsBetweenIndex<Dijkstra::Node*>(aNodeList,aFromTo.first));
 	assert(IsBetweenIndex<Dijkstra::Node*>(aNodeList,aFromTo.second));

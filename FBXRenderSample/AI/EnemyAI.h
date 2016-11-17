@@ -1,29 +1,35 @@
 #pragma once
 #include"Dijkstra.h"
-#include"../DXVector3.h"
+#include"DXMath.hpp"
+#include"../StatusTeam.h"
 class NcgLuaManager;
 struct StatusField;
 struct MyNode :public Dijkstra::Node
 {
 	std::string mName = "Empty";
 	DXVector3 Position;
-	MyNode(int id, const std::string& name,const DXVector3&position) :Node(id) {
+	eTeamType mTeamType;
+	MyNode(int id, const std::string& name,const DXVector3&position,const int&aTeamTypeID) :Node(id) {
 		mName = name;
 		Position = { position };
+
+		switch (aTeamTypeID)
+		{
+		case 0:
+			mTeamType = eTeamType::Black;
+			break;
+		case 1:
+			mTeamType = eTeamType::White;
+			break;
+		default:
+			break;
+		}
 	}
 
 };
 
 namespace EnemyAIType {
 	enum Type {
-		//eEnergyShot,
-		//eMovingHide,
-		//eChargeEnergy,
-		//eSearchTarget,
-		//eMoveToTarget,
-		//eMoveToGoal,
-		//eMoveToBall,
-		//eMoveToBallTarget
 		eUnKnown,
 		eMoveToBall,
 		eMoveToGoal,
@@ -81,6 +87,10 @@ public:
 	//近い順にノードを取得する
 	//第一引数、中心となる座標
 	std::vector<MyNode*> GetNearNodeList(const DXVector3&pCenter);
+
+	//ランダムにノードを取得する
+	MyNode* GetNodeRandom();
+
 	//AIの更新
 	void Update(
 		bool aBallHoldField,

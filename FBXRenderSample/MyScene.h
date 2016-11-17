@@ -9,9 +9,10 @@
 #include"StaticObject.h"
 #include"Ball.h"
 #include"StatusField.h"
-#include"NcgLua\NcgLua.hpp"
+#include<NcgLua.hpp>
 #include"Comform\Effekseer\Effect.hxx"
 #include"MSFbxDatabase.h"
+#include"StatusFrame.h"
 class MyMSScene :public MSSceneBase {
 public:
 	MyMSScene();
@@ -23,11 +24,9 @@ private:
 	void KeyHold(MSKEY pKey)override;
 	void Render();
 	void Destroy() override {}
-
 private:
 
 	MSFbxDatabase mdDB;
-
 	//描画に使うシェーダ
 	My3DShader shader;
 	//シーンに一つ

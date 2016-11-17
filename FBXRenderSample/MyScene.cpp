@@ -48,7 +48,7 @@ void MyMSScene::Initialize()
 			m2DRender.SetViewPort(MSDirect::GetViewPort());
 			m2DRender.SetShader(m2DShader);
 
-			mTexManager.RegisterFile("res/Grass.png", 0);
+			mTexManager.RegisterFile("res/Chips_Cover.png", 0);
 			mImage.SetTexture(mTexManager, 0);
 			mImage.SetSize({ 150,100 });
 			mImage.SetPosition({ 50, 25 });
@@ -87,6 +87,14 @@ void MyMSScene::Initialize()
 	enemy.push_back(make_unique<Enemy>());
 	enemy.push_back(make_unique<Enemy>());
 	enemy.push_back(make_unique<Enemy>());
+
+	mFieldStatus.RegisterTeamMember(enemy[0].get(), eTeamType::Black);
+	mFieldStatus.RegisterTeamMember(enemy[1].get(), eTeamType::White);
+	mFieldStatus.RegisterTeamMember(enemy[2].get(), eTeamType::Black);
+	mFieldStatus.RegisterTeamMember(enemy[3].get(), eTeamType::White);
+
+	mFieldStatus.RegisterTeamMember(&mPlayer, eTeamType::White);
+
 	//enemy.push_back(make_unique<Enemy>());
 
 	float scaleBall = 0.01f;
@@ -105,11 +113,6 @@ void MyMSScene::Initialize()
 		enemy[i]->SetBulletMesh(*mdDB.Get(cbox));
 		enemy[i]->Respawn();
 	}
-	mFieldStatus.RegisterTeamMember(enemy[0].get(), eTeamType::Black);
-	mFieldStatus.RegisterTeamMember(enemy[1].get(), eTeamType::White);
-	mFieldStatus.RegisterTeamMember(enemy[2].get(), eTeamType::Black);
-	mFieldStatus.RegisterTeamMember(enemy[3].get(), eTeamType::White);
-
 	mField.Initialize();
 	mField.SetMesh(*mdDB.Get(cFieldD));
 	mField.SetCollisionMesh(*mdDB.Get(cFieldC));
