@@ -1,6 +1,7 @@
 #include "DXVector2.h"
 
 
+
 const DXVector2 DXVector2::sZeroVector{};
 
 DXVector2::DXVector2()
@@ -88,11 +89,12 @@ float DXVector2::GetDistance(DXVector2 & pPosition2)
 	return D3DXVec2Length(&mixedPosition);
 }
 
-DXVector2 & DXVector2::operator+(float pXY)
+DXVector2 DXVector2::operator+(float pXY)const
 {
-	x += pXY;
-	y += pXY;
-	return *this;
+	DXVector2 lClone{ *this };
+	lClone.x += pXY;
+	lClone.y += pXY;
+	return lClone;
 }
 
 DXVector2 & DXVector2::operator+=(float pXY)
@@ -102,11 +104,12 @@ DXVector2 & DXVector2::operator+=(float pXY)
 	return *this;
 }
 
-DXVector2 & DXVector2::operator+(const D3DXVECTOR2 & pAddVector)
+DXVector2 DXVector2::operator+(const D3DXVECTOR2 & pAddVector)const
 {
-	x += pAddVector.x;
-	y += pAddVector.y;
-	return *this;
+	DXVector2 lClone{ *this };
+	lClone.x += pAddVector.x;
+	lClone.y += pAddVector.y;
+	return lClone;
 }
 
 DXVector2 & DXVector2::operator+=(const D3DXVECTOR2 & pAddVector)
@@ -118,11 +121,12 @@ DXVector2 & DXVector2::operator+=(const D3DXVECTOR2 & pAddVector)
 
 
 
-DXVector2 & DXVector2::operator-(float pXY)
+DXVector2 DXVector2::operator-(float pXY)const
 {
-	x -= pXY;
-	y -= pXY;
-	return *this;
+	DXVector2 lClone{ *this };
+	lClone.x -= pXY;
+	lClone.y -= pXY;
+	return lClone;
 }
 
 DXVector2 & DXVector2::operator-=(float pXY)
@@ -132,11 +136,12 @@ DXVector2 & DXVector2::operator-=(float pXY)
 	return *this;
 }
 
-DXVector2 & DXVector2::operator-(const D3DXVECTOR2 & pSubVector)
+DXVector2 DXVector2::operator-(const D3DXVECTOR2 & pSubVector)const
 {
-	x -= pSubVector.x;
-	y -= pSubVector.y;
-	return *this;
+	DXVector2 lClone{ *this };
+	lClone.x -= pSubVector.x;
+	lClone.y -= pSubVector.y;
+	return lClone;
 }
 
 DXVector2 & DXVector2::operator-=(const D3DXVECTOR2 & pSubVector)
@@ -146,11 +151,12 @@ DXVector2 & DXVector2::operator-=(const D3DXVECTOR2 & pSubVector)
 	return *this;
 }
 
-DXVector2 & DXVector2::operator*(float pXY)
+DXVector2 DXVector2::operator*(float pXY)const
 {
-	x *= pXY;
-	y *= pXY;
-	return *this;
+	DXVector2 lClone{ *this };
+	lClone.x *= pXY;
+	lClone.y *= pXY;
+	return lClone;
 }
 
 DXVector2 & DXVector2::operator*=(float pXY)
@@ -160,11 +166,12 @@ DXVector2 & DXVector2::operator*=(float pXY)
 	return *this;
 }
 
-DXVector2 & DXVector2::operator*(const D3DXVECTOR2 & pMulVector)
+DXVector2 DXVector2::operator*(const D3DXVECTOR2 & pMulVector)const
 {
-	x *= pMulVector.x;
-	y *= pMulVector.y;
-	return *this;
+	DXVector2 lClone{ *this };
+	lClone.x *= pMulVector.x;
+	lClone.y *= pMulVector.y;
+	return lClone;
 }
 
 DXVector2 & DXVector2::operator*=(const D3DXVECTOR2 & pMulVector)
@@ -174,25 +181,28 @@ DXVector2 & DXVector2::operator*=(const D3DXVECTOR2 & pMulVector)
 	return *this;
 }
 
-DXVector2 & DXVector2::operator/(float pXY)
+DXVector2 DXVector2::operator/(float pXY)const
 {
-	x /= pXY;
-	y /= pXY;
-	return *this;
+	DXVector2 lClone{ *this };
+	lClone.x /= pXY;
+	lClone.y /= pXY;
+	return lClone;
 }
 
 DXVector2 & DXVector2::operator/=(float pXY)
 {
-	x /= pXY;
-	y /= pXY;
+	this->x /= pXY;
+	this->y /= pXY;
 	return *this;
 }
 
-DXVector2 & DXVector2::operator/(const D3DXVECTOR2 & pMulVector)
+DXVector2 DXVector2::operator/(const D3DXVECTOR2 & pMulVector)const
 {
-	x /= pMulVector.x;
-	y /= pMulVector.y;
-	return *this;
+	DXVector2 lClone{ *this };
+	lClone.x /= pMulVector.x;
+	lClone.y /= pMulVector.y;
+	return lClone;
+
 }
 
 DXVector2 & DXVector2::operator/=(const D3DXVECTOR2 & pMulVector)

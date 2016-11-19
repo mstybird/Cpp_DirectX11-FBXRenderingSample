@@ -2,7 +2,7 @@
 #include"UIBase.h"
 #include"MSProgress\MSProgressData.hxx"
 #include"MSSprite2DResource.h"
-#include"DXVector2.h"
+#include<DXMath.hpp>
 #include<unordered_map>
 /*
 	UIのゲージ管理用クラス
@@ -28,9 +28,13 @@ public:
 	void SetOffset(const float&aOffsetLeft,const float&aOffsetTop);
 	void SetOffset(const DXVector2&aOffset);
 	
+	//ゲージ用のステータスを設定する
+	void SetParam(MSProgress&aParam);
+
 	//設定された値でリソースを更新する
 	virtual void Update()override;
-	virtual void Render(MSSprite2DRender aRender)override;
+	//親UIを渡して子要素に適用させる
+	virtual void Render(MSSprite2DRender& aRender, UIBase*aParent = nullptr)override;
 	
 
 

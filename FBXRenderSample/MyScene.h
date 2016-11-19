@@ -13,6 +13,7 @@
 #include"Comform\Effekseer\Effect.hxx"
 #include"MSFbxDatabase.h"
 #include"StatusFrame.h"
+#include"MySceneUI.h"
 class MyMSScene :public MSSceneBase {
 public:
 	MyMSScene();
@@ -24,6 +25,10 @@ private:
 	void KeyHold(MSKEY pKey)override;
 	void Render();
 	void Destroy() override {}
+
+private:
+	void InitializeUI();
+
 private:
 
 	MSFbxDatabase mdDB;
@@ -32,7 +37,7 @@ private:
 	//シーンに一つ
 	MS3DRender render;
 
-	MSCollisionRayPicking lRayPick;
+	//MSCollisionRayPicking lRayPick;
 
 
 	std::vector<unique_ptr<Enemy>> enemy;
@@ -45,10 +50,15 @@ private:
 
 	DX11TextureManager mTexManager;
 
+	//2Dスプライト関係
 	MySprite2DShader m2DShader;
 	MSSprite2DRender m2DRender;
 	MSSprite2DResource mImage;
 
+	//UI
+	MySceneUI ui;
+
+	//Effekseer関係
 	::Comfort::EfkRenderer mEfkRender;
 	::Comfort::EfkManager mEfkManager;
 	::Comfort::EffectDatabase mEfkDb;

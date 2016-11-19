@@ -352,6 +352,7 @@
     <ClCompile Include="AI\Dijkstra.cpp" />
     <ClCompile Include="AI\EnemyAI.cpp" />
     <ClCompile Include="BarGauge.cpp" />
+    <ClCompile Include="BarGaugeVS.cpp" />
     <ClCompile Include="BulletNormal.cpp" />
     <ClCompile Include="BulletObject.cpp" />
     <ClCompile Include="ChangeStates.cpp" />
@@ -389,8 +390,10 @@
     <ClCompile Include="MSVertexShader.cpp" />
     <ClCompile Include="MSWindow.cpp" />
     <ClCompile Include="MyScene.cpp" />
+    <ClCompile Include="MySceneUI.cpp" />
     <ClCompile Include="MySprite2DShader.cpp" />
     <ClCompile Include="MySprite3DShader.cpp" />
+    <ClCompile Include="StatusFrame.cpp" />
     <ClCompile Include="StatusTeam.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <None Include="ClassDiagram.cd" />
@@ -412,6 +415,7 @@
     <ClInclude Include="AI\EnemyAI.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="BarGauge.h" />
+    <ClInclude Include="BarGaugeVS.h" />
     <ClInclude Include="BulletNormal.h" />
     <ClInclude Include="BulletObject.h" />
     <ClInclude Include="ChangeStates.hxx" />

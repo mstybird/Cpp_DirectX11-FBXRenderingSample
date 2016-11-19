@@ -1,6 +1,6 @@
 ﻿#include"MyScene.h"
 #include"MSUtility.h"
-
+#include"BarGauge.h"
 /*
 	タスク：
 	攻撃を受けるとダメージ
@@ -48,12 +48,16 @@ void MyMSScene::Initialize()
 			m2DRender.SetViewPort(MSDirect::GetViewPort());
 			m2DRender.SetShader(m2DShader);
 
-			mTexManager.RegisterFile("res/Chips_Cover.png", 0);
+			mTexManager.RegisterFile("res/Chips_Cover.jpg", 0);
+			mTexManager.RegisterFile("res/Grass.png", 1);
+			
 			mImage.SetTexture(mTexManager, 0);
 			mImage.SetSize({ 150,100 });
 			mImage.SetPosition({ 50, 25 });
 			mImage.SetSplitSizeX({ 0.5f,1.0f });
 		}
+
+	InitializeUI();
 
 	{
 		mBall.Initialize();
@@ -78,7 +82,7 @@ void MyMSScene::Initialize()
 	mdDB.Load("res/box.fbx", false, cbox);
 	mdDB.Load("res/SD_QUERY_01.fbx", true, cChara);
 
-	mdDB.Load("res/FieldDesign.fbx", false, cFieldD);
+	mdDB.Load("res/FieldCollision.fbx", false, cFieldD);
 	mdDB.Load("res/FieldCollision.fbx", false, cFieldC);
 	mdDB.Load("res/ball.fbx", false, cBall);
 
@@ -272,7 +276,54 @@ void MyMSScene::Render()
 	mPlayer.Render();
 	mBall.Render();
 	mEfkRender.RenderAll(&mEfkManager);
-	//m2DRender.Render(mImage);
+
+	ui.Render(m2DRender);
+
+
+//	m2DRender.Render(mImage);
+
+}
+
+void MyMSScene::InitializeUI()
+{
+	ui.SetGlobalPosition({50,50 });
+	
+	
+
+	auto& mStatusFrame = *ui.mStatusFrame;
+	mStatusFrame.SetGlobalPosition({ 20.0f,20.0f });
+	mStatusFrame.SetGlobalScale({ 1.0f,1.0f });
+	mStatusFrame.SetTexture(mTexManager, 1);
+	mStatusFrame.SetSize(300, 300);
+	
+
+	auto lHPBar = mStatusFrame.GetHPBar();
+	MSProgress data;
+	data.Set(100, 0, 30);
+	lHPBar->SetGlobalPosition(20, 10);
+	lHPBar->SetSize(100, 20);
+	lHPBar->SetScale(0.9, 0.5);
+	lHPBar->SetParam(data);
+	lHPBar->SetTextures(
+	{ mTexManager,0 },
+	{mTexManager,1}
+	);
+	lHPBar->Update();
+	
+	
+	
+	auto lEPBar = mStatusFrame.GetEPBar();
+
+	lEPBar->SetGlobalPosition(20, 100);
+	lEPBar->SetSize(100, 20);
+	lEPBar->SetScale(0.5, 0.9);
+	lEPBar->SetParam(data);
+	lEPBar->SetTextures(
+	{ mTexManager,0 },
+	{ mTexManager,1 }
+	);
+	lEPBar->Update();
+
 
 }
 

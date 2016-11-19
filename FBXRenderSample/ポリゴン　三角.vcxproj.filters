@@ -136,11 +136,18 @@
       <Filter>Comform\Effekseer</Filter>
     </ClCompile>
     <ClCompile Include="StatusTeam.cpp" />
-    <ClCompile Include="UIBase.cpp" />
-    <ClCompile Include="BarGauge.cpp" />
     <ClCompile Include="MSFbxDatabase.cpp">
       <Filter>MSDirect\DX11\DX11Render\Source</Filter>
     </ClCompile>
+    <ClCompile Include="BarGauge.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBase.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusFrame.cpp" />
+    <ClCompile Include="MySceneUI.cpp" />
+    <ClCompile Include="BarGaugeVS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -318,19 +325,22 @@
       <Filter>Game\Data</Filter>
     </ClInclude>
     <ClInclude Include="MySceneUI.h">
-      <Filter>Game\Scene\UI</Filter>
+      <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="ScoreView.h">
-      <Filter>Game\Scene\UI</Filter>
+      <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="StatusFrame.h">
-      <Filter>Game\Scene\UI</Filter>
+      <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="UIBase.h">
-      <Filter>Game\Scene\UI</Filter>
+      <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="BarGauge.h">
-      <Filter>Game\Scene\UI</Filter>
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="BarGaugeVS.h">
+      <Filter>Game\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -514,7 +524,7 @@
     <Filter Include="Game\AI\Enemy">
       <UniqueIdentifier>{6f867445-5d1a-4267-bc3c-c362c92f3423}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Scene\UI">
+    <Filter Include="Game\UI">
       <UniqueIdentifier>{9c8fa03a-46cf-41e9-aff8-986ecb3bf679}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

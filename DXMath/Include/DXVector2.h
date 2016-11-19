@@ -28,23 +28,23 @@ public:
 	//ê≥ãKâªÇµÇΩÉxÉNÉgÉãÇéÊìæÇ∑ÇÈ
 	void GetNormalize();
 
-	DXVector2&operator+(float pXY);
+	DXVector2 operator+(float pXY)const;
 	DXVector2&operator+=(float pXY);
-	DXVector2&operator+(const D3DXVECTOR2&pAddVector);
+	DXVector2 operator+(const D3DXVECTOR2&pAddVector)const;
 	DXVector2&operator+=(const D3DXVECTOR2&pAddVector);
 
-	DXVector2&operator-(float pXY);
+	DXVector2 operator-(float pXY)const;
 	DXVector2&operator-=(float pXY);
-	DXVector2&operator-(const D3DXVECTOR2&pSubVector);
+	DXVector2 operator-(const D3DXVECTOR2&pSubVector)const;
 	DXVector2&operator-=(const D3DXVECTOR2&pSubVector);
 
-	DXVector2&operator*(float pXY);
+	DXVector2 operator*(float pXY)const;
 	DXVector2&operator*=(float pXY);
-	DXVector2&operator*(const D3DXVECTOR2&pMulVector);
+	DXVector2 operator*(const D3DXVECTOR2&pMulVector)const;
 	DXVector2&operator*=(const D3DXVECTOR2&pMulVector);
 
-	DXVector2&operator/(float pXY);
+	DXVector2 operator/(float pXY)const;
 	DXVector2&operator/=(float pXY);
-	DXVector2&operator/(const D3DXVECTOR2&pMulVector);
+	DXVector2 operator/(const D3DXVECTOR2&pMulVector)const;
 	DXVector2&operator/=(const D3DXVECTOR2&pMulVector);
 };
