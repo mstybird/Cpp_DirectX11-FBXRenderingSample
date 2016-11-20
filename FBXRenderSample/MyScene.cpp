@@ -325,6 +325,21 @@ void MyMSScene::InitializeUI()
 	lEPBar->Update();
 
 
+	MSProgress m1, m2;
+	m1.Set(10, 0, 2);
+	m2.Set(10, 0, 1);
+	auto& mGauge = *ui.bar;
+	mGauge.SetGlobalPosition({ 20.0f,20.0f });
+	mGauge.SetGlobalScale({ 1.0f,1.0f });
+	mGauge.SetTextures(
+	{ mTexManager,0 },
+	{ mTexManager,1 },
+	{ mTexManager,0 }
+	);
+	mGauge.SetScale(0.9, 0.8);
+	mGauge.SetParam(m1, m2);
+	mGauge.SetSize(300, 100);
+
 }
 
 /*

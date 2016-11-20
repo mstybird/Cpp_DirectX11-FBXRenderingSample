@@ -4,6 +4,7 @@
 class BarGauge;
 class StatusFrame;
 class ScoreView;
+class BarGaugeVS;
 class MySceneUI:public UIBase {
 public:
 	MySceneUI();
@@ -13,6 +14,7 @@ public:
 	StatusFrame* GetStatusFrame();
 //private:
 	std::unique_ptr<StatusFrame> mStatusFrame;
+	std::unique_ptr<BarGaugeVS> bar;
 	//std::unique_ptr<ScoreView>mScoreView;
 
 };

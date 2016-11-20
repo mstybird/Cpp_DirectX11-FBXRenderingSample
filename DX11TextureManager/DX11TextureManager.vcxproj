@@ -163,7 +163,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\TGALoader\Include;$(ProjectDir)Include\DX11TextureManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectX%28June 2010%29\Include;$(SolutionDir)TGALoader\Include;$(ProjectDir)Include\DX11TextureManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -172,7 +172,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName);$(SolutionDir)TGALoader\Library</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3dx11.lib;TGALoader-md_$(PlatformShortName).lib</AdditionalDependencies>
+      <AdditionalDependencies>d3dx11d.lib;TGALoader-md_$(PlatformShortName).lib</AdditionalDependencies>
     </Lib>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -186,7 +186,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\TGALoader\Include;$(ProjectDir)Include\DX11TextureManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectX%28June 2010%29\Include;$(SolutionDir)TGALoader\Include;$(ProjectDir)Include\DX11TextureManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -251,7 +251,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\TGALoader\Include;$(ProjectDir)Include\DX11TextureManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectX%28June 2010%29\Include;$(SolutionDir)TGALoader\Include;$(ProjectDir)Include\DX11TextureManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -278,7 +278,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\TGALoader\Include;$(ProjectDir)Include\DX11TextureManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectX%28June 2010%29\Include;$(SolutionDir)TGALoader\Include;$(ProjectDir)Include\DX11TextureManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>

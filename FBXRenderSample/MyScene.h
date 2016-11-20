@@ -13,6 +13,7 @@
 #include"Comform\Effekseer\Effect.hxx"
 #include"MSFbxDatabase.h"
 #include"StatusFrame.h"
+#include"BarGaugeVS.h"
 #include"MySceneUI.h"
 class MyMSScene :public MSSceneBase {
 public:

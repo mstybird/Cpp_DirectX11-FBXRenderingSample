@@ -1,5 +1,6 @@
 #include "BarGaugeVS.h"
 #include<DX11TextureManager.hpp>
+#include"MSSprite2DRender.h"
 BarGaugeVS::BarGaugeVS()
 {
 	mGaugeLeftImg.SetPivot({ 0.5f,0.5f });
@@ -59,15 +60,49 @@ void BarGaugeVS::Render(MSSprite2DRender & aRender, UIBase * aParent)
 		mGaugePos = mGlobalPosition + (mGaugeSize * *aParent->GetGlobalScale() / 2);
 
 	}
-
+	//ゲージフレームの設定
 	mFrameImg.SetSize(mGaugeSize);
 	mFrameImg.SetPosition(mGlobalPosition);
 	mFrameImg.SetScale(mGlobalScale);
+
+	//ゲージ中身のスケール
+	auto lGaugeScale = mGaugeScale*mGlobalScale;
+
+	mGaugeLeftImg.SetSize(mGaugeSize);
+	mGaugeLeftImg.SetPosition(mGaugePos);
+	mGaugeLeftImg.SetScale(lGaugeScale);
+
+	mGaugeRightImg.SetSize(mGaugeSize);
+	mGaugeRightImg.SetPosition(mGaugePos);
+	mGaugeRightImg.SetScale(lGaugeScale);
+
+	//左右合計スコア
+	auto totalScore = mStatusLeft.GetNow() + mStatusRight.GetNow();
+	float left{ 0 };
+	float right{ 0 };
+
+	if (totalScore != 0) {
+		//左ゲージ幅
+		left = mStatusRight.GetNow() / totalScore;
+		right = mStatusLeft.GetNow() / totalScore;
+	}
+
+	//右から左へ
+	mGaugeLeftImg.SetSplitSizeX(
+	{0,left}
+	);
+	mGaugeRightImg.SetSplitSizeX(
+	{ 1.0f-right,1.0f }
+	);
 
 	/*
 		やること
 		ゲージ部分のリソース設定からの描画処理
 	*/
+
+	aRender.Render(mGaugeLeftImg);
+	aRender.Render(mGaugeRightImg);
+	aRender.Render(mFrameImg);
 
 	if (aParent != nullptr) {
 		LoadGlobalData();
