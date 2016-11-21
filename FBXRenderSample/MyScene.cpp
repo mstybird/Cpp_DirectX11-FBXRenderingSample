@@ -82,7 +82,7 @@ void MyMSScene::Initialize()
 	mdDB.Load("res/box.fbx", false, cbox);
 	mdDB.Load("res/SD_QUERY_01.fbx", true, cChara);
 
-	mdDB.Load("res/FieldCollision.fbx", false, cFieldD);
+	mdDB.Load("res/FieldDesign.fbx", false, cFieldD);
 	mdDB.Load("res/FieldCollision.fbx", false, cFieldC);
 	mdDB.Load("res/ball.fbx", false, cBall);
 

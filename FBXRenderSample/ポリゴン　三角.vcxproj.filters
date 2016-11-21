@@ -156,6 +156,9 @@
     <ClCompile Include="StatusTeam.cpp">
       <Filter>Game\Data</Filter>
     </ClCompile>
+    <ClCompile Include="Graphic_Text.cpp">
+      <Filter>MSDirect\DX11\TextRenderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -350,6 +353,9 @@
     <ClInclude Include="BarGaugeVS.h">
       <Filter>Game\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Graphic_Text.h">
+      <Filter>MSDirect\DX11\TextRenderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -534,6 +540,9 @@
     </Filter>
     <Filter Include="Game\UI">
       <UniqueIdentifier>{9c8fa03a-46cf-41e9-aff8-986ecb3bf679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\TextRenderer">
+      <UniqueIdentifier>{323bfe0c-b427-42fa-ba2b-04fc2522cff5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

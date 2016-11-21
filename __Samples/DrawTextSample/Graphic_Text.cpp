@@ -91,7 +91,7 @@ void CreateTxtureChar(
 		*pTexWidGet	= GM.gmCellIncX;//GM.gmCellIncXは指定したフォントサイズ通りにならないので、幅を別に覚えておく。
 
 		//内容確認 透過で文字書いてるのでpngで保存
-		//D3DXSaveTextureToFileW(TEXT("c:\\test.png"),D3DXIFF_PNG, pTex, NULL);
+		D3DXSaveTextureToFileW((L"test.png"),D3DXIFF_PNG, pTex, NULL);
 
 	} catch(...) {
 		if ( pTex ) {

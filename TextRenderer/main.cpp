@@ -1,4 +1,5 @@
 #include "MAIN.h"
+#include"Graphic_Text.h"
 //グローバル変数
 MAIN* g_pMain = NULL;
 //関数プロトタイプの宣言
@@ -202,6 +203,10 @@ HRESULT MAIN::InitD3D()
 	//m_pDevice->CreateRasterizerState(&rdc,&pIr);
 	//m_pDeviceContext->RSSetState(pIr);
 	SAFE_RELEASE(pIr);
+
+	TextGraphic::SetDevice(this->m_pDevice);
+	TextGraphic::SetDeviceContext(this->m_pDeviceContext);
+
 	//シェーダー初期化
 	if (FAILED(InitShader()))
 	{
@@ -302,6 +307,32 @@ HRESULT MAIN::InitShader()
 //
 HRESULT MAIN::InitPolygon()
 {
+
+	//フォントの準備
+	LOGFONT	logFont;
+	::ZeroMemory(&logFont, sizeof(logFont));
+	logFont.lfHeight = 20;	//フォントサイズ
+	logFont.lfWidth = 0;
+	logFont.lfEscapement = 0;
+	logFont.lfOrientation = 0;
+	logFont.lfWeight = FW_EXTRABOLD;
+	logFont.lfItalic = 0;
+	logFont.lfUnderline = 0;
+	logFont.lfStrikeOut = 0;
+	logFont.lfCharSet = SHIFTJIS_CHARSET;
+	logFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+	logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+	logFont.lfQuality = PROOF_QUALITY;
+	logFont.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
+#ifdef UNICODE
+	//wcscpy_sの第二引数は文字(配列)数(バッファサイズだとデバッガが終了しなかったりする)
+	wcscpy_s(logFont.lfFaceName, LF_FACESIZE, _T("ＭＳ 明朝"));
+#else
+	strcpy_s(logFont.lfFaceName, LF_FACESIZE, ("ＭＳ 明朝"));
+#endif	
+	TextGraphic t;
+	t.Create("こ", 0, 20, 120, 60, logFont);
+
 	//バーテックスバッファー作成
 	SimpleVertex vertices[] =
 	{

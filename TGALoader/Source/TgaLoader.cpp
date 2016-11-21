@@ -89,7 +89,9 @@ namespace Comfort {
 
 		D3D11_SUBRESOURCE_DATA lInitData;
 		lInitData.pSysMem = mImageData.data();
+		//1行分の使用メモリ
 		lInitData.SysMemPitch = mWidth*(mBpp / 8);
+		//テクスチャの色情報に使うメモリ
 		lInitData.SysMemSlicePitch = mWidth*mHeight*(mBpp / 8);
 		ID3D11Texture2D* lTempTexture;
 		auto lHr = aDevice->CreateTexture2D(&lDesc, &lInitData, &lTempTexture);
@@ -114,7 +116,8 @@ namespace Comfort {
 		if (lTempTexture) {
 			lTempTexture->Release();
 		}
-		return true;
+		
+			return true;
 	}
 
 }

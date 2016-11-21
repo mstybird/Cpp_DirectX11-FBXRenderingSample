@@ -361,6 +361,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="example_Sprite2D.cpp" />
     <ClCompile Include="GameObjectBase.cpp" />
+    <ClCompile Include="Graphic_Text.cpp" />
     <ClCompile Include="MSCollisionBase.cpp" />
     <ClCompile Include="MSCollisionRay.cpp" />
     <ClCompile Include="MSCollisionRayPicking.cpp" />
@@ -423,6 +424,7 @@
     <ClInclude Include="Comform\Effekseer\Effect.hxx" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameObjectBase.h" />
+    <ClInclude Include="Graphic_Text.h" />
     <ClInclude Include="MSCollisionBase.h" />
     <ClInclude Include="MSCollisionRay.h" />
     <ClInclude Include="MSCollisionRayPicking.h" />
