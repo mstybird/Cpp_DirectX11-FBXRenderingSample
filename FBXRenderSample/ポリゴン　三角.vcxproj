@@ -502,6 +502,11 @@
     <Text Include="2DSprite.txt" />
     <Text Include="Task.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Text2D.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

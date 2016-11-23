@@ -6,7 +6,7 @@ int main() {
 	DX11FbxLoader l;
 	l.FbxInit("sample.txt");
 	DX11TextureManager m;
-	m.RegisterFile("Sample.txt", 0);
+	m.RegistFromFile("Sample.txt", 0);
 /*	Comfort::TGAImage image;
 	image.ReadTGA("Sample.tga");
 	ID3D11ShaderResourceView*p;

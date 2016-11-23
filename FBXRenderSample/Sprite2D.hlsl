@@ -25,9 +25,8 @@ PS_INPUT VS( float4 Pos : POSITION ,float2 UV : TEXCOORD)
 
 	Out.Pos=mul(Pos,g_W);
 
-	Out.Pos.x=(Out.Pos.x/g_ViewPortWidth)*2-1;
-	Out.Pos.y=1-(Out.Pos.y/g_ViewPortHeight)*2;
-
+	Out.Pos.x=(Out.Pos.x/960)*2-1;
+	Out.Pos.y=1-(Out.Pos.y/720)*2;
 	Out.UV=UV;
 
 	return Out;

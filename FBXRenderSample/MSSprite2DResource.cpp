@@ -117,7 +117,7 @@ const std::weak_ptr<DXMatrix> MSSpriteBaseResource::GetMatrix()
 	lTrans.Translation(*mPosition);
 	lScale.Scaling({ mScale->x,mScale->y });
 	
-	*mMatrix = lScale * lTrans;
+	*mMatrix =  lTrans;
 	return mMatrix;
 }
 
@@ -171,24 +171,18 @@ void MSSprite2DResource::CreatePolygon(SpriteVertex pPolygon[4])
 	//Pivotの値を使用して中心位置を調整する
 	DXVector2 lPivotPos{ mSize->x*mPivot->x,mSize->y*mPivot->y };
 	pPolygon[0] = {
-		{ 0 - lPivotPos.x, 0 - lPivotPos.y }, { mSplitImageX.x,mSplitImageY.x }	//左上
+		{ 0 - lPivotPos.x, 0 - lPivotPos.y ,0}, { mSplitImageX.x,mSplitImageY.x }	//左上
 	};
 	pPolygon[1] = {
-	{ mSize->x - lPivotPos.x,0 - lPivotPos.y },{ mSplitImageX.y,mSplitImageY.x }	//右上
+	{ mSize->x - lPivotPos.x,0 - lPivotPos.y ,0 },{ mSplitImageX.y,mSplitImageY.x }	//右上
 	};
 	pPolygon[2] = {
-	{ 0 - lPivotPos.x,mSize->y - lPivotPos.y },{ mSplitImageX.x,mSplitImageX.y }	//左下
+	{ 0 - lPivotPos.x,mSize->y - lPivotPos.y ,0 },{ mSplitImageX.x,mSplitImageX.y }	//左下
 	};
 	pPolygon[3] = {
-	{ mSize->x - lPivotPos.x,mSize->y - lPivotPos.y },{ mSplitImageX.y,mSplitImageX.y }	//右下
+	{ mSize->x - lPivotPos.x,mSize->y - lPivotPos.y,0 },{ mSplitImageX.y,mSplitImageX.y }	//右下
 	};
 
-	/*
-	splitX.x=left
-	splitX.y=right
-	splitY.x=top
-	splitY.y=bottom
-	*/
 
 	//位置が確定
 	//位置をずらす
@@ -212,15 +206,15 @@ void MSSprite3DResource::CreatePolygon(SpriteVertex pPolygon[4])
 
 	//Direct3D空間上ではY軸は上
 	pPolygon[0] = {
-		{ 0 - lPivotPos.x, mSize->y - lPivotPos.y },{ 0,0 }
+		{ 0 - lPivotPos.x, mSize->y - lPivotPos.y,0 },{ 0,0 }
 	};
 	pPolygon[1] = {
-		{ mSize->x - lPivotPos.x,mSize->y - lPivotPos.y },{ 1,0 }
+		{ mSize->x - lPivotPos.x,mSize->y - lPivotPos.y,0 },{ 1,0 }
 	};
 	pPolygon[2] = {
-		{ 0 - lPivotPos.x,0 - lPivotPos.y },{ 0,1 }
+		{ 0 - lPivotPos.x,0 - lPivotPos.y,0 },{ 0,1 }
 	};
 	pPolygon[3] = {
-		{ mSize->x - lPivotPos.x,0 - lPivotPos.y },{ 1,1 }
+		{ mSize->x - lPivotPos.x,0 - lPivotPos.y,0 },{ 1,1 }
 	};
 }

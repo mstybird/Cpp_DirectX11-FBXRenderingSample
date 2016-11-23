@@ -1,7 +1,10 @@
 #pragma once
 #include<vector>
 #include<D3DX11.h>
-
+#include"MSSprite2DResource.h"
+#include"MySprite2DShader.h"
+#include"MSSprite2DRender.h"
+#include<DX11TextureManager.hpp>
 //テクスチャはA8R8G8B8の32ビットとする
 
 struct IRECT {
@@ -18,13 +21,13 @@ struct IRECT {
 		bottom = b;
 	}
 	int GetWidth() { return right - left; }
-	int GetHeigt() { return bottom - top; }
+	int GetHeight() { return bottom - top; }
 
 };
 
-struct TextureChar {
-	ID3D11SamplerState* m_pSampleLinear;//テクスチャーのサンプラー
-	ID3D11ShaderResourceView* m_pTexture;//テクスチャー
+struct TextureChar:public MSSpriteBaseResource {
+	//テキスト描画を行う範囲のポリゴンを生成
+	virtual void CreatePolygon(SpriteVertex pPolygon[4])override;
 	int mWidth;	//文字幅
 };
 
@@ -55,13 +58,16 @@ public:
 class TextGraphic {
 private:
 	void CreateTextureChar(
-		ID3D11ShaderResourceView*& aTexture,
+		TextureChar& aTexture,
 		int& aTexWidGet,
 		uint32_t aUChar,
 		HFONT aFont,
 		DWORD aBaseColor
 	);
 public:
+
+
+
 	TextGraphic();
 	virtual ~TextGraphic();
 
@@ -70,13 +76,15 @@ public:
 
 	//テキスト画像作成
 	void Create(LPCSTR aTxt, int aLeft, int aTop, int aRight, int aBottom, LOGFONT&aLogFont);
+
 	//行揃えの指定
 	void SetTextAlign(TextAlign aAlign);
 	void SetTextAlign(uint32_t aLineIdx, uint32_t aLineIdxTo, TextAlign aAlign);
 	//テキストのアルファ値(描画ポリゴンディフューズ変更)
 	void SetTextAlpha(DWORD aAlpha);
 	void Release();
-	void Draw();
+	void Render(MSSprite2DRender&aRender);
+
 private:
 	std::vector<TextureTextLine*>mLineAry;//行ごとのデータ
 	IRECT mRect;	//描画範囲
@@ -84,5 +92,8 @@ private:
 	DWORD mAlphaColor;	//アルファ色(描画するポリゴンのディフューズ)
 	static ID3D11Device *sDevice;
 	static ID3D11DeviceContext *sDeviceContext;
+
+	//文字テクスチャマネージャ
+	DX11TextureManager mTextManager;
 
 };

@@ -44,9 +44,10 @@ public:
 protected:
 	//ピボット、サイズが変更された際にポリゴンを再生成する
 	void CreateBuffer();
-	virtual void CreatePolygon(SpriteVertex pPolygon[4]) = 0;;
+	virtual void CreatePolygon(SpriteVertex pPolygon[4]) = 0;
 	//描画するテクスチャ
 	DXTexture* mTexture;
+	//このインスタンスがテクスチャの実態を保持しているかどうか
 	
 	std::shared_ptr<DXVector3>mPosition;	//描画位置
 	std::shared_ptr<DXVector2> mPivot;		//中心となる位置

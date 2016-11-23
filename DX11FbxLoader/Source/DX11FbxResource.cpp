@@ -51,7 +51,7 @@ ColorChannel::~ColorChannel()
 void ColorChannel::CreateTexture()
 {
 	if (!TextureName.empty() == true) {
-		if (sTextureManager->RegisterFile(TextureName, sTextureCounter)==true) {
+		if (sTextureManager->RegistFromFile(TextureName, sTextureCounter)==true) {
 			//テクスチャIDを記憶
 			mTextureID = sTextureCounter;
 			//テクスチャカウンタが重複しないようにインクリメント

@@ -553,4 +553,9 @@
       <Filter>Resource</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Text2D.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>

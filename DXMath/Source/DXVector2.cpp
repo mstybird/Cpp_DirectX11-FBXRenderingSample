@@ -10,6 +10,7 @@ DXVector2::DXVector2()
 	y = 0.0f;
 }
 
+
 DXVector2::DXVector2(float pX, float pY):D3DXVECTOR2(pX,pY)
 {
 }

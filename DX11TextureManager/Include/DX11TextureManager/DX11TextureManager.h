@@ -3,7 +3,7 @@
 #include<memory>
 #include<random>
 class DXTexture;
-
+struct ID3D11Texture2D;
 //テクスチャ管理クラス
 class DX11TextureManager {
 public:
@@ -17,7 +17,11 @@ public:
 	//テクスチャ登録
 	//既にファイルが存在した場合、登録しない
 	//デバッグ時はassetチェック
-	bool RegisterFile(const std::string&pFileName, const int pID);
+	bool RegistFromFile(const std::string&pFileName, const int pID);
+
+	//テクスチャ登録
+	//メモリ内のテクスチャをそのまま登録する
+	bool RegistFromMemory(ID3D11Texture2D*&pTexture, const int pID);
 
 	//テクスチャの一括登録
 	//既にファイルが存在した場合、登録しない
@@ -29,6 +33,8 @@ public:
 	//デバッグ時はassetチェック
 	bool Load(DXTexture*&pDstTexture,const int pID)const;
 
+	//指定したIDにテクスチャが登録されているかどうか
+	bool IsRegisterd(const int pID);
 	//登録したファイルを削除する
 	void UnRegisterFile(const int pID);
 	//登録したファイルすべてを削除する

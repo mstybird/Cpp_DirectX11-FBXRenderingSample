@@ -19,6 +19,9 @@
 //カリング
 #include"MSCullingOcclusion.h"
 
+//テキスト
+#include"Graphic_Text.h"
+
 #include<D3DX11.h>
 
 std::shared_ptr<MSDirect> MSDirect::sMSDirect{ std::make_shared<MSDirect>() };
@@ -240,6 +243,9 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 	DXTexture::Initialize(m_pDevice);
 
 	MSCullingOcculusion::Initialize(m_pDevice, m_pDeviceContext,m_pSwapChain);
+
+	TextGraphic::SetDevice(m_pDevice);
+	TextGraphic::SetDeviceContext(m_pDeviceContext);
 
 	this->KeyList = MSKeyList;
 

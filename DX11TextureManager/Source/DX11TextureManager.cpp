@@ -9,7 +9,7 @@ DX11TextureManager::~DX11TextureManager()
 	UnRegisterFileAll();
 	mTextureMap.clear();
 }
-bool DX11TextureManager::RegisterFile(const string & pFileName, const int pID)
+bool DX11TextureManager::RegistFromFile(const string & pFileName, const int pID)
 {
 	bool lResult = true;
 	//既にテクスチャが存在した場合は読み込まない
@@ -32,6 +32,34 @@ bool DX11TextureManager::RegisterFile(const string & pFileName, const int pID)
 			//assert(0 && pFileName.c_str());
 		}
 		
+	}
+
+	return lResult;
+}
+
+bool DX11TextureManager::RegistFromMemory(ID3D11Texture2D *& pTexture, const int pID)
+{
+	bool lResult = true;
+	//既にテクスチャが存在した場合は読み込まない
+	if (mTextureMap[pID].use_count() != 0) {
+		lResult = false;
+		assert(0 && pID);
+	}
+	else {
+		shared_ptr<DXTexture>texture;
+		//指定したIDにテクスチャがなければ読み込み
+		//		texture.reset(new DXTexture);
+		texture = std::make_shared<DXTexture>();
+		//読み込めたら登録
+		if (texture->Create(pTexture)) {
+			mTextureMap[pID] = texture;
+		}
+		else {
+			//読み込めなければ登録しない
+			lResult = false;
+			//assert(0 && pFileName.c_str());
+		}
+
 	}
 
 	return lResult;
@@ -75,6 +103,12 @@ bool DX11TextureManager::Load(DXTexture*& pDstTexture, const int pID)const
 	pDstTexture = mTextureMap.at(pID).get();
 	//読み込めたらtrueを返す
 	return !pDstTexture;
+}
+
+bool DX11TextureManager::IsRegisterd(const int pID)
+{
+	//0以上なら登録済み
+	return mTextureMap.count(pID) > 0;
 }
 
 void DX11TextureManager::UnRegisterFile(const int pID)

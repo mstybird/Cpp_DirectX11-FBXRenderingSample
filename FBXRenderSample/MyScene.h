@@ -15,6 +15,7 @@
 #include"StatusFrame.h"
 #include"BarGaugeVS.h"
 #include"MySceneUI.h"
+#include"Graphic_Text.h"
 class MyMSScene :public MSSceneBase {
 public:
 	MyMSScene();
@@ -58,6 +59,9 @@ private:
 
 	//UI
 	MySceneUI ui;
+
+	//テキスト
+	TextGraphic text;
 
 	//Effekseer関係
 	::Comfort::EfkRenderer mEfkRender;

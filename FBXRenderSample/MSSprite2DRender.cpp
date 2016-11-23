@@ -24,11 +24,16 @@ void MSSprite2DRender::Render(MSSpriteBaseResource&pSprite)
 	shader->mVertexShader.SetShader();
 	shader->mPixelShader.SetShader();
 	//頂点インプットレイアウトをセット
-	//sDeviceContext->IASetInputLayout(m_pVertexLayout);
 	sDeviceContext->IASetPrimitiveTopology(mPrimitiveTopology);
 	shader->SetConstantBuffer(pSprite, *mViewPort);
 	sDeviceContext->VSSetConstantBuffers(0, 1, &shader->mConstantBuffer);
 	sDeviceContext->PSSetConstantBuffers(0, 1, &shader->mConstantBuffer);
+	sDeviceContext->HSSetShader(nullptr, nullptr, 0);
+	sDeviceContext->DSSetShader(nullptr, nullptr, 0);
+	sDeviceContext->GSSetShader(nullptr, nullptr, 0);
+	sDeviceContext->CSSetShader(nullptr, nullptr, 0);
+
+	
 
 	UINT lStride = sizeof(SpriteVertex);
 	UINT lOffset = 0;
@@ -36,6 +41,8 @@ void MSSprite2DRender::Render(MSSpriteBaseResource&pSprite)
 	;
 	sDeviceContext->PSSetSamplers(0, 1, &pSprite.GetTexture()->mSampleLinear);
 	sDeviceContext->PSSetShaderResources(0, 1, &pSprite.GetTexture()->mTexture);
+
+	sDeviceContext->OMSetBlendState(pSprite.GetTexture()->mBlendState, nullptr, 0xFFFF'FFFF);
 	sDeviceContext->Draw(4, 0);
 }
 

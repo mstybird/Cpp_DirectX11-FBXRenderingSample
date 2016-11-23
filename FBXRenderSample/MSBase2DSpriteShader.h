@@ -9,7 +9,7 @@ class MSSpriteBaseResource;
 class DXDisplay;
 struct SpriteVertex
 {
-	D3DXVECTOR2 Pos; //位置
+	D3DXVECTOR3 Pos; //位置
 	D3DXVECTOR2 UV; //テクスチャー座標
 };
 

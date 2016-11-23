@@ -32,7 +32,7 @@ void MSBaseSpriteShader::Init()
 
 void MSBaseSpriteShader::SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>& pLayout)
 {
-	pLayout.push_back(INPUTLAYOUT_POSITION2D(0));
-	pLayout.push_back(INPUTLAYOUT_TEXCOORD2D(8));
+	pLayout.push_back(INPUTLAYOUT_POSITION3D(0));
+	pLayout.push_back(INPUTLAYOUT_TEXCOORD2D(12));
 }
 

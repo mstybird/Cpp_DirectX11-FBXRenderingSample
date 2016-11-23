@@ -48,13 +48,42 @@ void MyMSScene::Initialize()
 			m2DRender.SetViewPort(MSDirect::GetViewPort());
 			m2DRender.SetShader(m2DShader);
 
-			mTexManager.RegisterFile("res/Chips_Cover.jpg", 0);
-			mTexManager.RegisterFile("res/Grass.png", 1);
+			mTexManager.RegistFromFile("res/Chips_Cover.jpg", 0);
+			mTexManager.RegistFromFile("res/Grass.png", 1);
 			
 			mImage.SetTexture(mTexManager, 0);
 			mImage.SetSize({ 150,100 });
 			mImage.SetPosition({ 50, 25 });
 			mImage.SetSplitSizeX({ 0.5f,1.0f });
+
+
+			//フォントの準備
+			LOGFONT	logFont;
+			::ZeroMemory(&logFont, sizeof(logFont));
+			logFont.lfHeight = 40;	//フォントサイズ
+			logFont.lfWidth = 0;
+			logFont.lfEscapement = 0;
+			logFont.lfOrientation = 0;
+			logFont.lfWeight = FW_EXTRABOLD;
+			logFont.lfItalic = 0;
+			logFont.lfUnderline = 0;
+			logFont.lfStrikeOut = 0;
+			logFont.lfCharSet = SHIFTJIS_CHARSET;
+			logFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+			logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+			logFont.lfQuality = PROOF_QUALITY;
+			logFont.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
+
+#ifdef UNICODE
+			//wcscpy_sの第二引数は文字(配列)数(バッファサイズだとデバッガが終了しなかったりする)
+			wcscpy_s(logFont.lfFaceName, LF_FACESIZE, _T("ＭＳ 明朝"));
+#else
+			strcpy_s(logFont.lfFaceName, LF_FACESIZE, ("ＭＳ 明朝"));
+#endif	
+
+			text.Create("abcdefghijklmn魔材ンゴ", 0, 0, 300, 600, logFont);
+
+
 		}
 
 	InitializeUI();
@@ -78,13 +107,19 @@ void MyMSScene::Initialize()
 	shader.InitVertex("Simple.hlsl");
 	shader.InitPixel("Simple.hlsl");
 
-
 	mdDB.Load("res/box.fbx", false, cbox);
-	mdDB.Load("res/SD_QUERY_01.fbx", true, cChara);
+	mdDB.Load("res/box.fbx", false, cChara);
 
-	mdDB.Load("res/FieldDesign.fbx", false, cFieldD);
-	mdDB.Load("res/FieldCollision.fbx", false, cFieldC);
+	mdDB.Load("res/box.fbx", false, cFieldD);
+	mdDB.Load("res/box.fbx", false, cFieldC);
 	mdDB.Load("res/ball.fbx", false, cBall);
+
+	//mdDB.Load("res/box.fbx", false, cbox);
+	//mdDB.Load("res/SD_QUERY_01.fbx", true, cChara);
+	// 
+	//mdDB.Load("res/FieldCollision.fbx", false, cFieldD);
+	//mdDB.Load("res/FieldCollision.fbx", false, cFieldC);
+	//mdDB.Load("res/ball.fbx", false, cBall);
 
 	//敵の初期化
 	enemy.push_back(make_unique<Enemy>());
@@ -197,11 +232,12 @@ void MyMSScene::Initialize()
 	proj.SetDXProjection(mPlayer.GetProj());
 	mEfkRender.SetCamera(&cam);
 	mEfkRender.SetProjection(&proj);
-	mEfkObj.Play();
+	//mEfkObj.Play();
 
 }
 
 void MyMSScene::Update() {
+	return;
 	mEfkManager.Update();
 	mPlayer.Update();
 	mField.Update();
@@ -269,24 +305,24 @@ void MyMSScene::Render()
 {
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	////画面クリア
-	for (uint32_t i = 0; i < enemy.size(); ++i) {
-		enemy[i]->Render();
-	}
-	mField.Render();
-	mPlayer.Render();
-	mBall.Render();
-	mEfkRender.RenderAll(&mEfkManager);
+	//for (uint32_t i = 0; i < enemy.size(); ++i) {
+	//	enemy[i]->Render();
+	//}
+	//mField.Render();
+	//mPlayer.Render();
+	//mBall.Render();
+	//mEfkRender.RenderAll(&mEfkManager);
 
-	ui.Render(m2DRender);
+	//ui.Render(m2DRender);
 
-
+	text.Render(m2DRender);
 //	m2DRender.Render(mImage);
 
 }
 
 void MyMSScene::InitializeUI()
 {
-	ui.SetGlobalPosition({50,50 });
+	ui.SetGlobalPosition({50,250 });
 	
 	
 
