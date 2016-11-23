@@ -162,11 +162,11 @@ void TextGraphic::Create(LPCSTR aTxt, int aLeft, int aTop, int aRight, int aBott
 	mRect.bottom = aBottom;
 	mFontSize = aLogFont.lfHeight;
 	HFONT lFont = CreateFontIndirect(&aLogFont);
+	
 	if (!lFont)return;
 
 	TCHAR* t = (TCHAR*)aTxt;
 	TextureTextLine* lAddLine = new TextureTextLine();
-	TextureChar lAdd;
 #ifdef UNICODE
 	uint32_t lStrNum = wcslen(aTxt);
 	int lLen = 1;	//1文字が使用している配列数
@@ -180,6 +180,7 @@ void TextGraphic::Create(LPCSTR aTxt, int aLeft, int aTop, int aRight, int aBott
 	uint32_t lCode;
 
 	for (uint32_t c = 0; c < lStrNum; ++c) {
+		TextureChar lAdd;
 		if (*t == TEXT('\n')) {
 			mLineAry.push_back(lAddLine);
 			lAddLine = new TextureTextLine();
@@ -216,7 +217,7 @@ void TextGraphic::Create(LPCSTR aTxt, int aLeft, int aTop, int aRight, int aBott
 			lAddLine = new TextureTextLine();
 		}
 
-		lAddLine->push_back(lAdd);
+		lAddLine->push_back(std::move(lAdd));
 		lAddLine->mWidth += lAdd.mWidth;
 		t += lLen;
 
@@ -232,6 +233,8 @@ void TextGraphic::Create(LPCSTR aTxt, int aLeft, int aTop, int aRight, int aBott
 		delete lAddLine;
 	}
 	DeleteObject(lFont);
+
+
 }
 
 
@@ -297,8 +300,7 @@ void TextGraphic::Render(MSSprite2DRender & aRender)
 		//文字単位で描画
 		for (auto&lChar : *lLine) {
 			lChar.SetPosition({ lStX,lStY });
-			lChar.SetSize({ 21,40 });
-			//lChar.SetSplitSizeX({ 0.0f,1.0f });
+//			lChar.SetSplitSizeX({ 0.0f,1.0f });
 
 			aRender.Render(lChar);
 			lStX += lChar.mWidth;

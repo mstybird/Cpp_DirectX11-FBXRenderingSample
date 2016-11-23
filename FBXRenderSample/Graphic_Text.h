@@ -45,6 +45,7 @@ public:
 	using std::vector<TextureChar>::size;
 	using std::vector<TextureChar>::begin;
 	using std::vector<TextureChar>::end;
+	using std::vector<TextureChar>::back;
 	using std::vector<TextureChar>::clear;
 	TextAlign mAlign;	//行揃え
 	int mWidth;			//1行の幅
@@ -95,5 +96,29 @@ private:
 
 	//文字テクスチャマネージャ
 	DX11TextureManager mTextManager;
+
+};
+
+/*
+	テキスト関係はここから生成させるようにする
+*/
+
+//LOGFONTの拡張。
+class FontDesc :public LOGFONT{
+};
+
+//論理フォントを管理する
+class FontDatabase {
+
+};
+
+//読み込んだテキストテクスチャを記憶(キャッシュ)する
+class CharDatabase {
+
+};
+
+//論理フォント、テキストテクスチャの管理、
+//TextGraphicの生成を行う
+class TextManager {
 
 };
