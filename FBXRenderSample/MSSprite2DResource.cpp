@@ -28,6 +28,12 @@ void MSSpriteBaseResource::SetTexture(DX11TextureManager& pTextureManager, const
 	CreateBuffer();
 }
 
+void MSSpriteBaseResource::SetTexture(DXTexture*& pTexture)
+{
+	mTexture = pTexture;
+	CreateBuffer();
+}
+
 DXTexture* MSSpriteBaseResource::GetTexture()
 {
 	return mTexture;

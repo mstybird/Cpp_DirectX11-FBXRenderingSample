@@ -61,7 +61,8 @@ private:
 	MySceneUI ui;
 
 	//テキスト
-	TextGraphic text;
+	TextManager textMan;
+	std::shared_ptr<TextGraphic> text;
 
 	//Effekseer関係
 	::Comfort::EfkRenderer mEfkRender;

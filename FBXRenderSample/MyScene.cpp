@@ -25,6 +25,39 @@ MyMSScene::~MyMSScene()
 
 void MyMSScene::Initialize()
 {
+	//テキスト初期化
+	{
+		//フォントの準備
+		FontLog	logFont;
+		::ZeroMemory(&logFont, sizeof(logFont));
+		logFont.lfHeight = 40;	//フォントサイズ
+		logFont.lfWidth = 0;
+		logFont.lfEscapement = 0;
+		logFont.lfOrientation = 0;
+		logFont.lfWeight = FW_EXTRABOLD;
+		logFont.lfItalic = 0;
+		logFont.lfUnderline = 0;
+		logFont.lfStrikeOut = 0;
+		logFont.lfCharSet = SHIFTJIS_CHARSET;
+		logFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+		logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+		logFont.lfQuality = PROOF_QUALITY;
+		logFont.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
+
+#ifdef UNICODE
+		//wcscpy_sの第二引数は文字(配列)数(バッファサイズだとデバッガが終了しなかったりする)
+		wcscpy_s(logFont.lfFaceName, LF_FACESIZE, _T("ＭＳ 明朝"));
+#else
+		strcpy_s(logFont.lfFaceName, LF_FACESIZE, ("ＭＳ 明朝"));
+#endif	
+		textMan.RegisterFont(logFont, 0);
+		textMan.SetDefaultSize(300, 300);
+		textMan.SetFont(0);
+		//text.Create("Hello", 0, 0, 720, 960, logFont);
+
+	}
+
+
 	//エフェクト初期化
 	{
 		//using namespace Comfort;
@@ -216,12 +249,12 @@ void MyMSScene::Initialize()
 
 void MyMSScene::Update() {
 	return;
-	mEfkManager.Update();
-	mPlayer.Update();
-	mField.Update();
-	for (uint32_t i = 0; i < enemy.size(); ++i) {
-		enemy[i]->Update();
-	}
+	//mEfkManager.Update();
+	//mPlayer.Update();
+	//mField.Update();
+	//for (uint32_t i = 0; i < enemy.size(); ++i) {
+	//	enemy[i]->Update();
+	//}
 }
 
 void MyMSScene::KeyDown(MSKEY pKey)
@@ -281,46 +314,37 @@ void MyMSScene::KeyHold(MSKEY pKey)
 
 void MyMSScene::Render()
 {
-	//フォントの準備
-	LOGFONT	logFont;
-	::ZeroMemory(&logFont, sizeof(logFont));
-	logFont.lfHeight = 40;	//フォントサイズ
-	logFont.lfWidth = 0;
-	logFont.lfEscapement = 0;
-	logFont.lfOrientation = 0;
-	logFont.lfWeight = FW_EXTRABOLD;
-	logFont.lfItalic = 0;
-	logFont.lfUnderline = 0;
-	logFont.lfStrikeOut = 0;
-	logFont.lfCharSet = SHIFTJIS_CHARSET;
-	logFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
-	logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
-	logFont.lfQuality = PROOF_QUALITY;
-	logFont.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
-
-#ifdef UNICODE
-	//wcscpy_sの第二引数は文字(配列)数(バッファサイズだとデバッガが終了しなかったりする)
-	wcscpy_s(logFont.lfFaceName, LF_FACESIZE, _T("ＭＳ 明朝"));
-#else
-	strcpy_s(logFont.lfFaceName, LF_FACESIZE, ("ＭＳ 明朝"));
-#endif	
 
 
-	text.Create("◯×☓abcdefghijklmn魔材ンゴ👀＼(^o^)／〆\nlfPitchAndFamily = FIXED_PITCH | FF_MODERN;\nEnemyAI/EnemyTask.lua\n登録は10秒で終わる簡単なものです。\n応募ステータスにつきまして、メール等の行き違いにより、ステータスの更新にタイムラグが生じる場合ございます。 ", 0, 0, 720, 960, logFont);
+	//text.Create("Hello", 0, 0, 720, 960, logFont);
 
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	////画面クリア
-	for (uint32_t i = 0; i < enemy.size(); ++i) {
-		enemy[i]->Render();
-	}
-	mField.Render();
-	mPlayer.Render();
-	mBall.Render();
-	mEfkRender.RenderAll(&mEfkManager);
+	//for (uint32_t i = 0; i < enemy.size(); ++i) {
+	//	enemy[i]->Render();
+	//}
+	//mField.Render();
+	//mPlayer.Render();
+	//mBall.Render();
+	//mEfkRender.RenderAll(&mEfkManager);
 
-	ui.Render(m2DRender);
 
-	text.Render(m2DRender);
+	//ui.Render(m2DRender);
+
+	static float f = 1.0f;
+
+	f *= 1.1f;
+	
+	auto s = std::to_string(f);
+
+	clock_t start, end;
+	start = clock();
+	text.reset();
+	text = textMan.Create("012345678900123456789001234567890012345678900123456789001234567890");
+	end = clock();
+	//printf("%d\n", end - start);
+
+	//text->Render(m2DRender);
 //	m2DRender.Render(mImage);
 
 }

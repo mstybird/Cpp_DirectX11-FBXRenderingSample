@@ -19,6 +19,7 @@ public:
 	static void sInitialize(ID3D11Device*pDevice);
 	//描画するテクスチャの設定
 	void SetTexture(DX11TextureManager&pTextureManager, const int pID);
+	void SetTexture(DXTexture*&pTexture);
 	DXTexture* GetTexture();
 	virtual void SetPosition(const DXVector2&pPosition);
 	virtual void SetPosition(const DXVector3&pPosition);

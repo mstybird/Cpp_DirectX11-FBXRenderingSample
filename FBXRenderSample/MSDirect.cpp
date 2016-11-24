@@ -247,6 +247,12 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 	TextGraphic::SetDevice(m_pDevice);
 	TextGraphic::SetDeviceContext(m_pDeviceContext);
 
+	TextManager::SetDevice(m_pDevice);
+	TextManager::SetDeviceContext(m_pDeviceContext);
+
+	CharDatabase::SetDevice(m_pDevice);
+	CharDatabase::SetDeviceContext(m_pDeviceContext);
+
 	this->KeyList = MSKeyList;
 
 	return S_OK;
