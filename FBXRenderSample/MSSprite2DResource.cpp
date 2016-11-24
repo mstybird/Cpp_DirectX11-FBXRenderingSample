@@ -22,16 +22,20 @@ void MSSpriteBaseResource::sInitialize(ID3D11Device * pDevice)
 {
 	sDevice = pDevice;
 }
-void MSSpriteBaseResource::SetTexture(DX11TextureManager& pTextureManager, const int pID)
+void MSSpriteBaseResource::SetTexture(DX11TextureManager& pTextureManager, const int pID, const bool IsCreateBuffer)
 {
 	pTextureManager.Load(mTexture, pID);
-	CreateBuffer();
+	if (IsCreateBuffer) {
+		CreateBuffer();
+	}
 }
 
-void MSSpriteBaseResource::SetTexture(DXTexture*& pTexture)
+void MSSpriteBaseResource::SetTexture(DXTexture*& pTexture, const bool IsCreateBuffer)
 {
 	mTexture = pTexture;
-	CreateBuffer();
+	if (IsCreateBuffer) {
+		CreateBuffer();
+	}
 }
 
 DXTexture* MSSpriteBaseResource::GetTexture()
@@ -49,16 +53,20 @@ void MSSpriteBaseResource::SetPosition(const DXVector3 & pPosition)
 	*mPosition = pPosition;
 }
 
-void MSSpriteBaseResource::SetPivot(const DXVector2 & pPivot)
+void MSSpriteBaseResource::SetPivot(const DXVector2 & pPivot, const bool IsCreateBuffer)
 {
 	*mPivot = pPivot;
-	CreateBuffer();
+	if (IsCreateBuffer) {
+		CreateBuffer();
+	}
 }
 
-void MSSpriteBaseResource::SetSize(const DXVector2 & pSize)
+void MSSpriteBaseResource::SetSize(const DXVector2 & pSize, const bool IsCreateBuffer)
 {
 	*mSize = pSize;
-	CreateBuffer();
+	if (IsCreateBuffer) {
+		CreateBuffer();
+	}
 }
 
 void MSSpriteBaseResource::SetScale(const DXVector2 & pScale)
@@ -66,34 +74,42 @@ void MSSpriteBaseResource::SetScale(const DXVector2 & pScale)
 	*mScale = pScale;
 }
 
-void MSSpriteBaseResource::SetSplitSize(const float pLeft, const float pRight, const float pTop, const float pBottom)
+void MSSpriteBaseResource::SetSplitSize(const float pLeft, const float pRight, const float pTop, const float pBottom, const bool IsCreateBuffer)
 {
 	mSplitPolygonX.Set(pLeft, pRight);
 	mSplitPolygonY.Set(pTop, pBottom);
 	mSplitImageX.Set(pLeft, pRight);
 	mSplitImageY.Set(pTop, pBottom);
-	CreateBuffer();
+	if (IsCreateBuffer) {
+		CreateBuffer();
+	}
 }
 
-void MSSpriteBaseResource::SetSplitSizeX(const DXVector2 & pSizeX)
+void MSSpriteBaseResource::SetSplitSizeX(const DXVector2 & pSizeX, const bool IsCreateBuffer)
 {
 	mSplitPolygonX = pSizeX;
 	mSplitImageX = pSizeX;
-	CreateBuffer();
+	if (IsCreateBuffer) {
+		CreateBuffer();
+	}
 }
 
-void MSSpriteBaseResource::SetSplitSizeY(const DXVector2 & pSizeY)
+void MSSpriteBaseResource::SetSplitSizeY(const DXVector2 & pSizeY, const bool IsCreateBuffer)
 {
 	mSplitPolygonY = pSizeY;
-	mSplitImageX = pSizeY;
-	CreateBuffer();
+	mSplitImageY = pSizeY;
+	if (IsCreateBuffer) {
+		CreateBuffer();
+	}
 }
 
-void MSSpriteBaseResource::SetSplitImage(const float pLeft, const float pRight, const float pTop, const float pBottom)
+void MSSpriteBaseResource::SetSplitImage(const float pLeft, const float pRight, const float pTop, const float pBottom, const bool IsCreateBuffer)
 {
 	mSplitImageX.Set(pLeft, pRight);
 	mSplitImageY.Set(pTop, pBottom);
-	CreateBuffer();
+	if (IsCreateBuffer) {
+		CreateBuffer();
+	}
 }
 
 const std::weak_ptr<DXVector3>  MSSpriteBaseResource::GetPosition() const
@@ -123,7 +139,7 @@ const std::weak_ptr<DXMatrix> MSSpriteBaseResource::GetMatrix()
 	lTrans.Translation(*mPosition);
 	lScale.Scaling({ mScale->x,mScale->y });
 	
-	*mMatrix =  lTrans;
+	*mMatrix = lScale*lTrans;
 	return mMatrix;
 }
 

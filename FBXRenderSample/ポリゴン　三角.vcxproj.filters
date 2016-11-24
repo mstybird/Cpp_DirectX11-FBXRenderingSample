@@ -159,6 +159,7 @@
     <ClCompile Include="Graphic_Text.cpp">
       <Filter>MSDirect\DX11\TextRenderer</Filter>
     </ClCompile>
+    <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -356,6 +357,9 @@
     <ClInclude Include="Graphic_Text.h">
       <Filter>MSDirect\DX11\TextRenderer</Filter>
     </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="hand_tex.fbx">
@@ -383,6 +387,7 @@
     <None Include="ClassDiagram.cd">
       <Filter>Resource</Filter>
     </None>
+    <None Include="Text2D.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="HLSL">
@@ -552,10 +557,5 @@
     <Text Include="Task.txt">
       <Filter>Resource</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Text2D.hlsl">
-      <Filter>HLSL</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

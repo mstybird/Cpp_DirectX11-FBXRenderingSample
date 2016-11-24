@@ -1,5 +1,6 @@
 #include "MSWindow.h"
 #include"MyScene.h"
+#include"Title.h"
 #include"Helper.h"
 #include"MSDirect.h"
 #include"DX11Resrouce.h"

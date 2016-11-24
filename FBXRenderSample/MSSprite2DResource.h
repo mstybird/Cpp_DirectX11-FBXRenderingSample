@@ -18,21 +18,27 @@ public:
 	MSSpriteBaseResource();
 	static void sInitialize(ID3D11Device*pDevice);
 	//描画するテクスチャの設定
-	void SetTexture(DX11TextureManager&pTextureManager, const int pID);
-	void SetTexture(DXTexture*&pTexture);
+	void SetTexture(DX11TextureManager&pTextureManager, const int pID, const bool IsCreateBuffer);
+	void SetTexture(DXTexture*&pTexture, const bool IsCreateBuffer);
 	DXTexture* GetTexture();
 	virtual void SetPosition(const DXVector2&pPosition);
 	virtual void SetPosition(const DXVector3&pPosition);
-	void SetPivot(const DXVector2&pPivot);
-	void SetSize(const DXVector2&pSize);
+	//ピボットを設定する
+	void SetPivot(const DXVector2&pPivot, const bool IsCreateBuffer);
+	//ポリゴンサイズを設定する
+	void SetSize(const DXVector2&pSize, const bool IsCreateBuffer);
+	//拡大率を設定する
 	void SetScale(const DXVector2&pScale);
 	//画像のサイズも含めて切り取る
-	void SetSplitSize(const float pLeft, const float pRight, const float pTop, const float pBottom);
-	void SetSplitSizeX(const DXVector2&pSizeX);
-	void SetSplitSizeY(const DXVector2&pSizeY);
+	void SetSplitSize(const float pLeft, const float pRight, const float pTop, const float pBottom, const bool IsCreateBuffer);
+	void SetSplitSizeX(const DXVector2&pSizeX, const bool IsCreateBuffer);
+	void SetSplitSizeY(const DXVector2&pSizeY, const bool IsCreateBuffer);
 
 	//画像サイズはそのままで切り取る
-	void SetSplitImage(const float pLeft, const float pRight, const float pTop, const float pBottom);
+	void SetSplitImage(const float pLeft, const float pRight, const float pTop, const float pBottom, const bool IsCreateBuffer);
+
+	//ポリゴン生成
+	void CreateBuffer();
 
 	const std::weak_ptr<DXVector3> GetPosition()const;
 	const std::weak_ptr<DXVector2> GetPivot()const;
@@ -43,8 +49,7 @@ public:
 	//頂点バッファ
 	ID3D11Buffer*mVertexBuffer;
 protected:
-	//ピボット、サイズが変更された際にポリゴンを再生成する
-	void CreateBuffer();
+	//ポリゴン生成用
 	virtual void CreatePolygon(SpriteVertex pPolygon[4]) = 0;
 	//描画するテクスチャ
 	DXTexture* mTexture;

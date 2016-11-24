@@ -11,6 +11,8 @@
 	UI設計
 */
 
+//const int ValueMyScene::UI::cUILuaID = 100;
+
 MyMSScene::MyMSScene()
 {
 }
@@ -25,38 +27,7 @@ MyMSScene::~MyMSScene()
 
 void MyMSScene::Initialize()
 {
-	//テキスト初期化
-	{
-		//フォントの準備
-		FontLog	logFont;
-		::ZeroMemory(&logFont, sizeof(logFont));
-		logFont.lfHeight = 40;	//フォントサイズ
-		logFont.lfWidth = 0;
-		logFont.lfEscapement = 0;
-		logFont.lfOrientation = 0;
-		logFont.lfWeight = FW_EXTRABOLD;
-		logFont.lfItalic = 0;
-		logFont.lfUnderline = 0;
-		logFont.lfStrikeOut = 0;
-		logFont.lfCharSet = SHIFTJIS_CHARSET;
-		logFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
-		logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
-		logFont.lfQuality = PROOF_QUALITY;
-		logFont.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
-
-#ifdef UNICODE
-		//wcscpy_sの第二引数は文字(配列)数(バッファサイズだとデバッガが終了しなかったりする)
-		wcscpy_s(logFont.lfFaceName, LF_FACESIZE, _T("ＭＳ 明朝"));
-#else
-		strcpy_s(logFont.lfFaceName, LF_FACESIZE, ("ＭＳ 明朝"));
-#endif	
-		textMan.RegisterFont(logFont, 0);
-		textMan.SetDefaultSize(300, 300);
-		textMan.SetFont(0);
-		//text.Create("Hello", 0, 0, 720, 960, logFont);
-
-	}
-
+	InitializeFont();
 
 	//エフェクト初期化
 	{
@@ -329,7 +300,7 @@ void MyMSScene::Render()
 	//mEfkRender.RenderAll(&mEfkManager);
 
 
-	//ui.Render(m2DRender);
+	ui.Render(m2DRender);
 
 	static float f = 1.0f;
 
@@ -349,61 +320,130 @@ void MyMSScene::Render()
 
 }
 
+void MyMSScene::InitializeFont()
+{
+	//フォントの準備
+	FontLog	logFont;
+	::ZeroMemory(&logFont, sizeof(logFont));
+	logFont.lfHeight = 40;	//フォントサイズ
+	logFont.lfWidth = 0;
+	logFont.lfEscapement = 0;
+	logFont.lfOrientation = 0;
+	logFont.lfWeight = FW_EXTRABOLD;
+	logFont.lfItalic = 0;
+	logFont.lfUnderline = 0;
+	logFont.lfStrikeOut = 0;
+	logFont.lfCharSet = SHIFTJIS_CHARSET;
+	logFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+	logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+	logFont.lfQuality = PROOF_QUALITY;
+	logFont.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
+
+#ifdef UNICODE
+	//wcscpy_sの第二引数は文字(配列)数(バッファサイズだとデバッガが終了しなかったりする)
+	wcscpy_s(logFont.lfFaceName, LF_FACESIZE, _T("ＭＳ 明朝"));
+#else
+	strcpy_s(logFont.lfFaceName, LF_FACESIZE, ("ＭＳ 明朝"));
+#endif	
+	textMan.RegisterFont(logFont, 0);
+	textMan.SetDefaultSize(640, 960);
+	textMan.SetFont(0);
+}
+
 void MyMSScene::InitializeUI()
 {
-	ui.SetGlobalPosition({50,250 });
-	
-	
-
-	auto& mStatusFrame = *ui.mStatusFrame;
-	mStatusFrame.SetGlobalPosition({ 20.0f,20.0f });
-	mStatusFrame.SetGlobalScale({ 1.0f,1.0f });
-	mStatusFrame.SetTexture(mTexManager, 1);
-	mStatusFrame.SetSize(300, 300);
-	
-
-	auto lHPBar = mStatusFrame.GetHPBar();
-	MSProgress data;
-	data.Set(100, 0, 30);
-	lHPBar->SetGlobalPosition(20, 10);
-	lHPBar->SetSize(100, 20);
-	lHPBar->SetScale(0.9, 0.5);
-	lHPBar->SetParam(data);
-	lHPBar->SetTextures(
-	{ mTexManager,0 },
-	{mTexManager,1}
-	);
-	lHPBar->Update();
-	
-	
-	
-	auto lEPBar = mStatusFrame.GetEPBar();
-
-	lEPBar->SetGlobalPosition(20, 100);
-	lEPBar->SetSize(100, 20);
-	lEPBar->SetScale(0.5, 0.9);
-	lEPBar->SetParam(data);
-	lEPBar->SetTextures(
-	{ mTexManager,0 },
-	{ mTexManager,1 }
-	);
-	lEPBar->Update();
+	using namespace ValueMyScene::UI;
+	mLuaDb.Load("res/UI/GamePlayUI.lua", cUILuaID, "GamePlayUI");
+	auto lManager = mLuaDb.GetManager(cUILuaID);
 
 
-	MSProgress m1, m2;
-	m1.Set(10, 0, 2);
-	m2.Set(10, 0, 1);
-	auto& mGauge = *ui.bar;
-	mGauge.SetGlobalPosition({ 20.0f,20.0f });
-	mGauge.SetGlobalScale({ 1.0f,1.0f });
-	mGauge.SetTextures(
-	{ mTexManager,0 },
-	{ mTexManager,1 },
-	{ mTexManager,0 }
-	);
-	mGauge.SetScale(0.9, 0.8);
-	mGauge.SetParam(m1, m2);
-	mGauge.SetSize(300, 100);
+	//テクスチャ一括登録
+	{
+		std::unordered_map<int,std::string>lFileNameMap;
+		std::string lFileName;
+		lManager->GetGlobal(cStatusFrameTexturePath, lFileName);
+		lFileNameMap[cStatusFrameID] = lFileName;
+		lManager->GetGlobal(cHPBarOutTexturePath, lFileName);
+		lFileNameMap[cHPBarOutID] = lFileName;
+		lManager->GetGlobal(cHPBarInTexturePath, lFileName);
+		lFileNameMap[cHPBarInID] = lFileName;
+		lManager->GetGlobal(cEPBarOutTexturePath, lFileName);
+		lFileNameMap[cEPBarOutID] = lFileName;
+		lManager->GetGlobal(cEPBarInTexturePath, lFileName);
+		lFileNameMap[cEPBarInID] = lFileName;
+		mTexManager.RegisterFileList(lFileNameMap);
+	}
+
+
+	std::vector<float>lPosition;
+	std::vector<float>lSize;
+	std::vector<float>lScale;
+	//解放用
+	auto ClearTemp = [&]() {
+		lPosition.clear();
+		lSize.clear();
+		lScale.clear();
+	};
+
+	{
+		lManager->GetGlobal(cStatusFramePositionName, lPosition);
+		lManager->GetGlobal(cStatusFrameSize, lSize);
+		lManager->GetGlobal(cStatusFrameScale, lScale);
+
+		auto mStatusFrame = ui.mStatusFrame.get();
+		mStatusFrame->SetGlobalPosition(lPosition[0], lPosition[1]);
+		mStatusFrame->SetGlobalScale(lScale[0], lScale[1]);
+		mStatusFrame->SetSize(lSize[0], lSize[1]);
+		mStatusFrame->SetTexture(mTexManager, cStatusFrameID);
+
+		ClearTemp();
+	}
+
+	{
+		auto lHPBar = ui.mStatusFrame->GetHPBar();
+		MSProgress data;
+		data.Set(100, 0, 30);
+
+		lManager->GetGlobal(cHPBarPosition, lPosition);
+		lManager->GetGlobal(cHPBarSize, lSize);
+		lManager->GetGlobal(cHPBarInScale, lScale);
+
+		lHPBar->SetGlobalPosition(lPosition[0], lPosition[1]);
+		lHPBar->SetGaugeScale(lScale[0], lScale[1]);
+		lHPBar->SetSize(lSize[0], lSize[1]);
+		lHPBar->SetParam(data);
+		lHPBar->SetTextures(
+		{ mTexManager,cHPBarOutID },
+		{ mTexManager,cHPBarInID }
+		);
+		lHPBar->Update();
+		ClearTemp();
+
+	}
+	
+	
+	{
+		auto lEPBar = ui.mStatusFrame->GetEPBar();
+		MSProgress data;
+		data.Set(100, 0, 50);
+
+		lManager->GetGlobal(cEPBarPosition, lPosition);
+		lManager->GetGlobal(cEPBarSize, lSize);
+		lManager->GetGlobal(cEPBarInScale, lScale);
+
+		lEPBar->SetGlobalPosition(lPosition[0], lPosition[1]);
+		lEPBar->SetGaugeScale(lScale[0], lScale[1]);
+		lEPBar->SetSize(lSize[0], lSize[1]);
+		lEPBar->SetParam(data);
+		lEPBar->SetTextures(
+		{ mTexManager,cEPBarOutID },
+		{ mTexManager,cEPBarInID }
+		);
+		lEPBar->Update();
+		ClearTemp();
+
+	}
+
 
 }
 

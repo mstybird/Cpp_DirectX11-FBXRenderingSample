@@ -58,14 +58,7 @@ public:
 //Graphic機能が扱うテキストデータ
 class TextGraphic {
 	friend class TextManager;
-private:
-	void CreateTextureChar(
-		TextureChar& aTexture,
-		int& aTexWidGet,
-		uint32_t aUChar,
-		HFONT aFont,
-		DWORD aBaseColor
-	);
+
 public:
 
 
@@ -75,9 +68,6 @@ public:
 
 	static void SetDevice(ID3D11Device*&aDevice);
 	static void SetDeviceContext(ID3D11DeviceContext*&aDeviceContext);
-
-	//テキスト画像作成
-	void Create(LPCSTR aTxt, int aLeft, int aTop, int aRight, int aBottom, LOGFONT&aLogFont);
 
 	//行揃えの指定
 	void SetTextAlign(TextAlign aAlign);
@@ -109,8 +99,8 @@ class FontLog :public LOGFONT{
 };
 
 struct FontDesc {
-	float Width;
-	float Height;
+	int Width;
+	int Height;
 };
 
 enum class RegisterFlag {

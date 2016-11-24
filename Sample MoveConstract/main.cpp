@@ -26,10 +26,6 @@ int main() {
 
 
 
-	float a = 1.00000000000000000000000000000000000000000f;
-	int b = a;
-	float c = a;
-	B* pA = new B;
-	delete pA;
+
 
 }

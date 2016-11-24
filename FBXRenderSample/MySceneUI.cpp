@@ -14,8 +14,8 @@ MySceneUI::~MySceneUI()
 
 void MySceneUI::Render(MSSprite2DRender & aRender, UIBase * aParent)
 {
-	bar->Render(aRender, this);
-//	mStatusFrame->Render(aRender, this);
+//	bar->Render(aRender, this);
+	mStatusFrame->Render(aRender, this);
 }
 
 StatusFrame * MySceneUI::GetStatusFrame()

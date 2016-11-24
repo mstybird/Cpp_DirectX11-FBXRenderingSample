@@ -22,7 +22,7 @@ public:
 	void SetSize(const float&aWidth, const float&aHeight);
 
 	//ゲージ中身の拡大率
-	void SetScale(const float&aX, const float&aY);
+	void SetGaugeScale(const float&aX, const float&aY);
 
 	//ゲージのオフセットを設定する(0.0~1.0
 	void SetOffset(const float&aOffsetLeft,const float&aOffsetTop);

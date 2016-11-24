@@ -16,7 +16,7 @@ void BarGauge::SetSize(const float & aWidth, const float & aHeight)
 	mGaugeSize = { aWidth,aHeight };
 }
 
-void BarGauge::SetScale(const float & aX, const float & aY)
+void BarGauge::SetGaugeScale(const float & aX, const float & aY)
 {
 	mGaugeScale.x = aX;
 	mGaugeScale.y = aY;
@@ -60,23 +60,50 @@ void BarGauge::Update()
 
 void BarGauge::Render(MSSprite2DRender& aRender, UIBase*aParent)
 {
-	//親がある場合、親の要素を計算する
+	//親UIがあれば現在の値を一時退避
+	DXVector2 mGaugePos;
 	if (aParent != nullptr) {
+		StoreGlobalData();
 
-		mOutImage.SetSize(mGaugeSize);
-		mOutImage.SetPosition(mGlobalPosition + *aParent->GetGlobalPosition());
-		mOutImage.SetScale(mGlobalScale * *aParent->GetGlobalScale());
+		mGlobalPosition += *aParent->GetGlobalPosition();
+		mGlobalScale *= *aParent->GetGlobalScale();
 
-		//中身のサイズと拡大率、オフセットを設定
-		auto mInPos = mGlobalPosition + *aParent->GetGlobalPosition();
-		mInPos += (mGaugeSize * *aParent->GetGlobalScale() / 2);
-		mInImage.SetSize(mGaugeSize);
-
-		mInImage.SetPosition(mInPos);
-
-		mInImage.SetScale(mGaugeScale * mGlobalScale * *aParent->GetGlobalScale());
+		mGaugePos = mGlobalPosition + (mGaugeSize * *aParent->GetGlobalScale() / 2);
 
 	}
+	//ゲージフレームの設定
+	mOutImage.SetSize(mGaugeSize);
+	mOutImage.SetPosition(mGlobalPosition);
+	mOutImage.SetScale(mGlobalScale);
+	//ゲージ中身のスケール
+	auto lGaugeScale = mGaugeScale*mGlobalScale;
+	mInImage.SetSize(mGaugeSize);
+	mInImage.SetPosition(mGaugePos);
+	mInImage.SetScale(lGaugeScale);
+	//右から左に減ると仮定
+	mInImage.SetSplitSizeX(
+	{ 0, mResource.GetNowPer() }
+	);
+	if (aParent != nullptr) {
+		LoadGlobalData();
+	}
+	////親がある場合、親の要素を計算する
+	//if (aParent != nullptr) {
+
+	//	mOutImage.SetSize(mGaugeSize);
+	//	mOutImage.SetPosition(mGlobalPosition + *aParent->GetGlobalPosition());
+	//	mOutImage.SetScale(mGlobalScale * *aParent->GetGlobalScale());
+
+	//	//中身のサイズと拡大率、オフセットを設定
+	//	auto mInPos = mGlobalPosition + *aParent->GetGlobalPosition();
+	//	mInPos += (mGaugeSize * *aParent->GetGlobalScale() / 2);
+	//	mInImage.SetSize(mGaugeSize);
+
+	//	mInImage.SetPosition(mInPos);
+
+	//	mInImage.SetScale(mGaugeScale * mGlobalScale * *aParent->GetGlobalScale());
+
+	//}
 
 	aRender.Render(mInImage);
 	aRender.Render(mOutImage);

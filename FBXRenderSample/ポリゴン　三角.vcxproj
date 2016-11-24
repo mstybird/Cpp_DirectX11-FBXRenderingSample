@@ -396,6 +396,7 @@
     <ClCompile Include="MySprite3DShader.cpp" />
     <ClCompile Include="StatusFrame.cpp" />
     <ClCompile Include="StatusTeam.cpp" />
+    <ClCompile Include="Title.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <None Include="ClassDiagram.cd" />
     <None Include="EnemyAI\EnemyTask.lua" />
@@ -475,6 +476,7 @@
     <ClInclude Include="StatusPlayer.h" />
     <ClInclude Include="StatusStatic.h" />
     <ClInclude Include="StatusTeam.h" />
+    <ClInclude Include="Title.h" />
     <ClInclude Include="UIBase.h" />
   </ItemGroup>
   <ItemGroup>
