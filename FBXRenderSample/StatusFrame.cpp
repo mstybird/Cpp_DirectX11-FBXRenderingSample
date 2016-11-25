@@ -37,7 +37,6 @@ void StatusFrame::Render(MSSprite2DRender& aRender, UIBase*aParent)
 	
 	mHpBar->Render(aRender,this);
 	mEpBar->Render(aRender,this);
-
 	aRender.Render(mFrame);
 	//バッファから値を復帰
 	mGlobalPosition = mGlobalPositionBuffer;

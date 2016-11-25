@@ -103,10 +103,10 @@ void BulletNormal::Update()
 		//キャラクターでない場合は次へ
 		if (!lChara)continue;
 		//ダメージ処理
-		auto lIsDead = ChangeStates::Damage(this, lChara);
+		//auto lIsDead = ChangeStates::Damage(this, lChara);
 		//死んだらそのターゲットに死亡フラグをセット
 		//死んでなければ処理しない
-		if (lIsDead == false)break;
+	//	if (lIsDead == false)break;
 
 		//死んだキャラのステータスを取得
 		auto lStatus = lChara->GetStatus();

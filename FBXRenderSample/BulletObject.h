@@ -42,4 +42,7 @@ protected:
 	//’e‚ÌƒƒbƒVƒ…
 	MSFbxManager* mBulletMesh;
 	CharacterBase* mParentPtr;
+
+
+
 };

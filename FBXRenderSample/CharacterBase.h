@@ -3,7 +3,7 @@
 #include<vector>
 #include<type_traits>
 #include"GameObjectBase.h"
-#include"StatusBase.h"
+
 class MSFbxManager;
 class MSBase3DShader;
 class MSFbxManager;
@@ -15,9 +15,11 @@ class DXWorld;
 class DXCamera;
 class DXProjection;
 class MS3DRender;
-
 class BulletObject;
 struct StatusField;
+class NBullet;
+struct StatusBase;
+class BulletManager;
 class CharacterBase:public GameObjectBase {
 	friend class BulletObject;
 public:
@@ -30,7 +32,7 @@ public:
 	//èdóÕèàóù
 	virtual void UpdateGravity() {};
 	void SetField(StatusField&pSetStatus);
-	void SetBulletMesh(MSFbxManager&aSetMesh);
+	//void SetBulletMesh(MSFbxManager&aSetMesh);
 	void AddSearchTarget(GameObjectBase*aCollisionTarget);
 	void ClearSearchTarget();
 	std::vector<GameObjectBase*>*GetSearchTargets() {
@@ -48,13 +50,14 @@ public:
 	}
 
 	void Respawn();
+	BulletManager* mBltManager;
 
 protected:
 	void UpdateBullets();
 	void RenderBullets();
-
-	std::vector<std::unique_ptr<BulletObject>> mBullets;
-	std::unique_ptr<BulletObject>mBulletNormal;
+	int mActiveBulletID = 0;
+	std::vector<std::unique_ptr<NBullet>> mBullets;
+	//std::unique_ptr<BulletObject>mBulletNormal;
 	std::vector<GameObjectBase*>mSearchTargets;
 	StatusField*mField;
 	std::unique_ptr<StatusBase>mStatus;

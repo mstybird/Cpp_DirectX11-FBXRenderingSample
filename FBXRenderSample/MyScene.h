@@ -16,7 +16,7 @@
 #include"BarGaugeVS.h"
 #include"MySceneUI.h"
 #include"Graphic_Text.h"
-
+#include"BulletManager.h"
 namespace ValueMyScene {
 	namespace UI {
 
@@ -95,6 +95,9 @@ private:
 	//テキスト
 	TextManager textMan;
 	std::shared_ptr<TextGraphic> text;
+
+	BulletManager bltManager;
+	std::vector<std::unique_ptr<NBullet>> blts;
 
 	//Effekseer関係
 	::Comfort::EfkRenderer mEfkRender;

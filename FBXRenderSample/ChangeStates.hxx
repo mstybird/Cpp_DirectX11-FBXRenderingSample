@@ -6,6 +6,7 @@
 */
 class BulletObject;
 class CharacterBase;
+class NBullet;
 namespace ChangeStates {
 	/*
 		É_ÉÅÅ[ÉWèàóù
@@ -17,9 +18,9 @@ namespace ChangeStates {
 
 	*/
 
-	bool Damage(BulletObject* aAttackObj, CharacterBase*aDamageChara);
-	bool IsAttackDo(CharacterBase*lAttackChara, BulletObject*aBullet);
-	bool BulletShot(std::vector<std::unique_ptr<BulletObject>>&aBulletList, CharacterBase*lAttakcer, BulletObject* lBullet);
+	bool Damage(NBullet* aAttackObj, CharacterBase*aDamageChara);
+	bool IsAttackDo(CharacterBase*lAttackChara, NBullet*aBullet);
+	bool BulletShot(std::vector<std::unique_ptr<NBullet>>&aBulletList, CharacterBase*lAttakcer, NBullet* lBullet);
 
 }
 

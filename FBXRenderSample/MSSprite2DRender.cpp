@@ -20,7 +20,9 @@ void MSSpriteBaseRender::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext 
 
 void MSSprite2DRender::Render(MSSpriteBaseResource&pSprite)
 {
-
+	if (pSprite.IsUpdateBuffering()) {
+		pSprite.CreateBuffer();
+	}
 	shader->mVertexShader.SetShader();
 	shader->mPixelShader.SetShader();
 	//頂点インプットレイアウトをセット

@@ -248,8 +248,8 @@ std::shared_ptr<TextGraphic> TextManager::Create(const std::string& aText)
 		auto& lResource = lCharResource.second;
 
 		//内部でのポリゴン生成を必須にしないようにする
-		lChar.SetTexture(lTexture,false);
-		lChar.SetSize({ static_cast<float>(lResource->Width),static_cast<float>(lResource->Height) },true);
+		lChar.SetTexture(lTexture);
+		lChar.SetSize({ static_cast<float>(lResource->Width),static_cast<float>(lResource->Height) });
 		lChar.mWidth = lResource->Width;
 		//文字加算をしてはみ出すかチェック
 		if (lTextLine->mWidth + lResource->Width > mSize.x) {

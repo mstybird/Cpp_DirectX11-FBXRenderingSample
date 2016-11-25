@@ -353,6 +353,7 @@
     <ClCompile Include="AI\EnemyAI.cpp" />
     <ClCompile Include="BarGauge.cpp" />
     <ClCompile Include="BarGaugeVS.cpp" />
+    <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="BulletNormal.cpp" />
     <ClCompile Include="BulletObject.cpp" />
     <ClCompile Include="ChangeStates.cpp" />
@@ -394,6 +395,7 @@
     <ClCompile Include="MySceneUI.cpp" />
     <ClCompile Include="MySprite2DShader.cpp" />
     <ClCompile Include="MySprite3DShader.cpp" />
+    <ClCompile Include="NBullet.cpp" />
     <ClCompile Include="StatusFrame.cpp" />
     <ClCompile Include="StatusTeam.cpp" />
     <ClCompile Include="Title.cpp" />
@@ -418,6 +420,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="BarGauge.h" />
     <ClInclude Include="BarGaugeVS.h" />
+    <ClInclude Include="BulletManager.h" />
     <ClInclude Include="BulletNormal.h" />
     <ClInclude Include="BulletObject.h" />
     <ClInclude Include="ChangeStates.hxx" />
@@ -464,6 +467,7 @@
     <ClInclude Include="MySceneUI.h" />
     <ClInclude Include="MySprite2DShader.h" />
     <ClInclude Include="MySprite3DShader.h" />
+    <ClInclude Include="NBullet.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScoreView.h" />
     <ClInclude Include="StaticObject.h" />

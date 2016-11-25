@@ -15,26 +15,29 @@ MSSpriteBaseResource::MSSpriteBaseResource():
 	mSplitPolygonY{ 0.0f,1.0f },
 	mSplitImageX{ 0.0f,1.0f },
 	mSplitImageY{ 0.0f,1.0f },
-	mMatrix{ std::make_shared<DXMatrix>() }
+	mMatrix{ std::make_shared<DXMatrix>() },
+	mUpdateFlag{false}
 {
 }
 void MSSpriteBaseResource::sInitialize(ID3D11Device * pDevice)
 {
 	sDevice = pDevice;
 }
-void MSSpriteBaseResource::SetTexture(DX11TextureManager& pTextureManager, const int pID, const bool IsCreateBuffer)
+void MSSpriteBaseResource::SetTexture(DX11TextureManager& pTextureManager, const int pID)
 {
+	auto lBeforeTexture = mTexture;
 	pTextureManager.Load(mTexture, pID);
-	if (IsCreateBuffer) {
-		CreateBuffer();
+	if (lBeforeTexture!=mTexture) {
+		mUpdateFlag = true;
 	}
 }
 
-void MSSpriteBaseResource::SetTexture(DXTexture*& pTexture, const bool IsCreateBuffer)
+void MSSpriteBaseResource::SetTexture(DXTexture*& pTexture)
 {
+	auto lBeforeTexture = mTexture;
 	mTexture = pTexture;
-	if (IsCreateBuffer) {
-		CreateBuffer();
+	if (lBeforeTexture != mTexture) {
+		mUpdateFlag = true;
 	}
 }
 
@@ -53,20 +56,18 @@ void MSSpriteBaseResource::SetPosition(const DXVector3 & pPosition)
 	*mPosition = pPosition;
 }
 
-void MSSpriteBaseResource::SetPivot(const DXVector2 & pPivot, const bool IsCreateBuffer)
+void MSSpriteBaseResource::SetPivot(const DXVector2 & pPivot)
 {
+	if (*mPivot == pPivot)return;
 	*mPivot = pPivot;
-	if (IsCreateBuffer) {
-		CreateBuffer();
-	}
+	mUpdateFlag = true;
 }
 
-void MSSpriteBaseResource::SetSize(const DXVector2 & pSize, const bool IsCreateBuffer)
+void MSSpriteBaseResource::SetSize(const DXVector2 & pSize)
 {
+	if (*mSize == pSize)return;
 	*mSize = pSize;
-	if (IsCreateBuffer) {
-		CreateBuffer();
-	}
+	mUpdateFlag = true;
 }
 
 void MSSpriteBaseResource::SetScale(const DXVector2 & pScale)
@@ -74,42 +75,62 @@ void MSSpriteBaseResource::SetScale(const DXVector2 & pScale)
 	*mScale = pScale;
 }
 
-void MSSpriteBaseResource::SetSplitSize(const float pLeft, const float pRight, const float pTop, const float pBottom, const bool IsCreateBuffer)
+void MSSpriteBaseResource::SetSplitSize(const float pLeft, const float pRight, const float pTop, const float pBottom)
 {
+
+	if (mSplitPolygonX.x == pLeft&&
+		mSplitPolygonX.y == pRight&&
+		mSplitPolygonY.x == pTop&&
+		mSplitPolygonY.y == pBottom&&
+		mSplitImageX.x == pLeft&&
+		mSplitImageX.y == pRight&&
+		mSplitImageY.x == pTop&&
+		mSplitImageY.y == pBottom
+		)return;
+
 	mSplitPolygonX.Set(pLeft, pRight);
 	mSplitPolygonY.Set(pTop, pBottom);
 	mSplitImageX.Set(pLeft, pRight);
 	mSplitImageY.Set(pTop, pBottom);
-	if (IsCreateBuffer) {
-		CreateBuffer();
-	}
+	mUpdateFlag = true;
 }
 
-void MSSpriteBaseResource::SetSplitSizeX(const DXVector2 & pSizeX, const bool IsCreateBuffer)
+void MSSpriteBaseResource::SetSplitSizeX(const DXVector2 & pSizeX)
 {
+	if(	mSplitPolygonX == pSizeX &&
+		mSplitImageX == pSizeX
+	)return;
+
 	mSplitPolygonX = pSizeX;
 	mSplitImageX = pSizeX;
-	if (IsCreateBuffer) {
-		CreateBuffer();
-	}
+	mUpdateFlag = true;
 }
 
-void MSSpriteBaseResource::SetSplitSizeY(const DXVector2 & pSizeY, const bool IsCreateBuffer)
+void MSSpriteBaseResource::SetSplitSizeY(const DXVector2 & pSizeY)
 {
+
+	if (mSplitPolygonY == pSizeY &&
+		mSplitImageY == pSizeY
+		)return;
+
 	mSplitPolygonY = pSizeY;
 	mSplitImageY = pSizeY;
-	if (IsCreateBuffer) {
-		CreateBuffer();
-	}
+
+	mUpdateFlag = true;
 }
 
-void MSSpriteBaseResource::SetSplitImage(const float pLeft, const float pRight, const float pTop, const float pBottom, const bool IsCreateBuffer)
+void MSSpriteBaseResource::SetSplitImage(const float pLeft, const float pRight, const float pTop, const float pBottom)
 {
+	if (
+		mSplitImageX.x == pLeft&&
+		mSplitImageX.y == pRight&&
+		mSplitImageY.x == pTop&&
+		mSplitImageY.y == pBottom
+		)return;
+
 	mSplitImageX.Set(pLeft, pRight);
 	mSplitImageY.Set(pTop, pBottom);
-	if (IsCreateBuffer) {
-		CreateBuffer();
-	}
+	mUpdateFlag = true;
 }
 
 const std::weak_ptr<DXVector3>  MSSpriteBaseResource::GetPosition() const
@@ -152,8 +173,14 @@ DXMatrix MSSpriteBaseResource::GetMatrixWVP(DXDisplay& pDisplay)
 	return std::move(lResult);
 }
 
+bool MSSpriteBaseResource::IsUpdateBuffering()
+{
+	return mUpdateFlag;
+}
+
 void MSSpriteBaseResource::CreateBuffer()
 {
+	if (mUpdateFlag == false)return;
 	SAFE_RELEASE(mVertexBuffer);
 
 	//Pivotの値を使用して中心位置を調整する
@@ -175,7 +202,7 @@ void MSSpriteBaseResource::CreateBuffer()
 	if (FAILED(sDevice->CreateBuffer(&bd, &InitData, &mVertexBuffer))) {
 		assert(0);
 	};
-
+	mUpdateFlag = true;
 }
 
 void MSSprite2DResource::SetPosition(const DXVector2 & pPosition)

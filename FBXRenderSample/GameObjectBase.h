@@ -36,6 +36,7 @@ public:
 	void SetActive(bool aActive);
 	bool IsActive();
 
+	MSFbxManager* GetMesh();
 	DXWorld* GetWorld();
 	DXCamera* GetView();
 	DXProjection* GetProj();
@@ -54,7 +55,7 @@ protected:
 protected:
 	std::shared_ptr<DX11RenderResource>mTransform;
 	std::shared_ptr<DX11RenderResource>mCollisionMesh;
-	std::unique_ptr<MSCollisionRayPicking>mRayPick;
+	std::shared_ptr<MSCollisionRayPicking>mRayPick;
 	std::vector<GameObjectBase*>mCollisionTargets;
 	MS3DRender*mRender;
 	//このオブジェクトの描画に使うシェーダ

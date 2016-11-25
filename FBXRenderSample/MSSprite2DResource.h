@@ -18,24 +18,24 @@ public:
 	MSSpriteBaseResource();
 	static void sInitialize(ID3D11Device*pDevice);
 	//描画するテクスチャの設定
-	void SetTexture(DX11TextureManager&pTextureManager, const int pID, const bool IsCreateBuffer);
-	void SetTexture(DXTexture*&pTexture, const bool IsCreateBuffer);
+	void SetTexture(DX11TextureManager&pTextureManager, const int pID);
+	void SetTexture(DXTexture*&pTexture);
 	DXTexture* GetTexture();
 	virtual void SetPosition(const DXVector2&pPosition);
 	virtual void SetPosition(const DXVector3&pPosition);
 	//ピボットを設定する
-	void SetPivot(const DXVector2&pPivot, const bool IsCreateBuffer);
+	void SetPivot(const DXVector2&pPivot);
 	//ポリゴンサイズを設定する
-	void SetSize(const DXVector2&pSize, const bool IsCreateBuffer);
+	void SetSize(const DXVector2&pSize);
 	//拡大率を設定する
 	void SetScale(const DXVector2&pScale);
 	//画像のサイズも含めて切り取る
-	void SetSplitSize(const float pLeft, const float pRight, const float pTop, const float pBottom, const bool IsCreateBuffer);
-	void SetSplitSizeX(const DXVector2&pSizeX, const bool IsCreateBuffer);
-	void SetSplitSizeY(const DXVector2&pSizeY, const bool IsCreateBuffer);
+	void SetSplitSize(const float pLeft, const float pRight, const float pTop, const float pBottom);
+	void SetSplitSizeX(const DXVector2&pSizeX);
+	void SetSplitSizeY(const DXVector2&pSizeY);
 
 	//画像サイズはそのままで切り取る
-	void SetSplitImage(const float pLeft, const float pRight, const float pTop, const float pBottom, const bool IsCreateBuffer);
+	void SetSplitImage(const float pLeft, const float pRight, const float pTop, const float pBottom);
 
 	//ポリゴン生成
 	void CreateBuffer();
@@ -46,6 +46,9 @@ public:
 	const std::weak_ptr<DXVector2> GetScale()const;
 	const std::weak_ptr<DXMatrix>GetMatrix();
 	DXMatrix GetMatrixWVP(DXDisplay& pDisplay);
+	//頂点バッファの更新が必要か調べる
+	bool IsUpdateBuffering();
+
 	//頂点バッファ
 	ID3D11Buffer*mVertexBuffer;
 protected:
@@ -64,6 +67,7 @@ protected:
 	DXVector2 mSplitImageX;					//イマージの切り取り(水平)
 	DXVector2 mSplitImageY;					//イマージの切り取り(垂直)
 	std::shared_ptr<DXMatrix> mMatrix;		//位置、拡大率を合成する用の行列
+	bool mUpdateFlag;	//ポリゴン再生成が必要な変更があった場合にtrueとなる
 	static ID3D11Device* sDevice;
 };
 

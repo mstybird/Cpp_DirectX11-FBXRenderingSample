@@ -148,11 +148,17 @@ void Comfort::EfkObject::SetManager(EfkManager * aManager)
 void Comfort::EfkObject::SetPosition(const::Effekseer::Vector3D & aPosition)
 {
 	mPosition = aPosition;
+	if (mHandle != -1) {
+		mParentManager->SetLocation(mHandle, mPosition);
+	}
 }
 
 void Comfort::EfkObject::AddPosition(const::Effekseer::Vector3D & aPosition)
 {
 	mPosition += aPosition;
+	if (mHandle != -1) {
+		mParentManager->SetLocation(mHandle, mPosition);
+	}
 }
 
 void Comfort::EfkObject::Play()

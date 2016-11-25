@@ -16,9 +16,10 @@
 #include"StatusBulletBase.h"
 #include"ChangeStates.hxx"
 #include"StatusField.h"
+#include"BulletManager.h"
 Enemy::Enemy()
 {
-	mBulletNormal = std::make_unique<BulletNormal>();
+	//mBulletNormal = std::make_unique<BulletNormal>();
 	mStatus = std::make_unique<EnemyStatus>();
 }
 Enemy::~Enemy()
@@ -175,7 +176,7 @@ void Enemy::UpdateAI()
 	mAI->ClearRoot();
 
 	auto lStatus = GetStatus<EnemyStatus>();
-	auto lBulletStatus = mBulletNormal->GetStatus();
+	auto lBulletStatus = &mBltManager->mStatusMap[this];
 
 	struct tAIStatus {
 		//BallHolder
@@ -743,10 +744,12 @@ void Enemy::BetaInSightAttack()
 	if (IsZero(lRotateY, 0.25f)) {
 		//振り向ききれば攻撃
 		//弾の発射
-		ChangeStates::BulletShot(mBullets, this, mBulletNormal.get());
+		auto lActiveBullet = mBltManager->GetActiveBullet(this);
+
+		ChangeStates::BulletShot(mBullets, this, lActiveBullet);
 		//エネルギーがなくなった場合、
 		//次のAIへ移行する
-		if (!ChangeStates::IsAttackDo(this, mBulletNormal.get())) {
+		if (!ChangeStates::IsAttackDo(this, lActiveBullet)) {
 			mAI->NextAI();
 		}
 	}
@@ -944,19 +947,19 @@ void Enemy::BetaSearchEnemyAll()
 
 	}
 
-	auto lLookTarget = IsCulling();
-	if (lLookTarget) {
-		//ボール以外の場合
-		if (!dynamic_cast<Ball*>(lLookTarget)) {
-			//発見したらシーケンスをすすめる
-			mAI->NextAI();
-			//敵を視認中
-			GetStatus<EnemyStatus>()->mTargetting = true;
-			//捉えたターゲットを記憶
-			GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
-			return;
-		}
-	}
+	//auto lLookTarget = IsCulling();
+	//if (lLookTarget) {
+	//	//ボール以外の場合
+	//	if (!dynamic_cast<Ball*>(lLookTarget)) {
+	//		//発見したらシーケンスをすすめる
+	//		mAI->NextAI();
+	//		//敵を視認中
+	//		GetStatus<EnemyStatus>()->mTargetting = true;
+	//		//捉えたターゲットを記憶
+	//		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
+	//		return;
+	//	}
+	//}
 
 
 }

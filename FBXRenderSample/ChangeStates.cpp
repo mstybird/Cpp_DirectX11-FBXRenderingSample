@@ -1,10 +1,10 @@
 #include "ChangeStates.hxx"
 #include"CharacterBase.h"
 #include"StatusBase.h"
-#include"BulletObject.h"
+#include"NBullet.h"
 #include"StatusBulletBase.h"
 namespace ChangeStates {
-	bool Damage(BulletObject * aAttackObj, CharacterBase * aDamageChara)
+	bool Damage(NBullet * aAttackObj, CharacterBase * aDamageChara)
 	{
 		//ダメージ処理。
 		//死んだらtrueを返す
@@ -31,7 +31,7 @@ namespace ChangeStates {
 		return lResultFlag==MSPRogressFlag::LESSMIN;
 	}
 
-	bool IsAttackDo(CharacterBase * lAttackChara, BulletObject * aBullet)
+	bool IsAttackDo(CharacterBase * lAttackChara, NBullet * aBullet)
 	{
 		//キャラクタの所持エネルギーを計算
 		auto lStatus = lAttackChara->GetStatus();
@@ -42,7 +42,7 @@ namespace ChangeStates {
 		return lHoldEnergy.GetNow() >= lBulletCost;
 	}
 
-	bool BulletShot(std::vector<std::unique_ptr<BulletObject>>& aBulletList, CharacterBase * aAttakcer, BulletObject * aBullet)
+	bool BulletShot(std::vector<std::unique_ptr<NBullet>>& aBulletList, CharacterBase * aAttakcer, NBullet * aBullet)
 	{
 		//エネルギーが足りなければfalseを返す
 		if (!IsAttackDo(aAttakcer, aBullet))return false;

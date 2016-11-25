@@ -6,15 +6,12 @@
 #include"MS3DRender.h"
 #include"My3DShader.h"
 #include"MSFbxObject.h"
-
+#include"StatusBase.h"
 #include"StaticObject.h"
-#include"BulletNormal.h"
-#include"BulletObject.h"
 #include"StatusField.h"
 #include"StatusBulletBase.h"
 #include<cassert>
-
-
+#include"BulletManager.h"
 CharacterBase::CharacterBase(){
 
 }
@@ -28,7 +25,7 @@ void CharacterBase::Initialize(StatusField&pSetStatus)
 	GameObjectBase::Initialize();
 	mField = &pSetStatus;
 	//ノーマル弾
-	mBulletNormal->Initialize();
+//	mBulletNormal->Initialize();
 }
 
 void CharacterBase::SetField(StatusField&pSetStatus)
@@ -36,11 +33,11 @@ void CharacterBase::SetField(StatusField&pSetStatus)
 	mField = &pSetStatus;
 }
 
-void CharacterBase::SetBulletMesh(MSFbxManager & aSetMesh)
-{
-	mBulletNormal->SetBulletMesh(aSetMesh);
-
-}
+//void CharacterBase::SetBulletMesh(MSFbxManager & aSetMesh)
+//{
+////	mBulletNormal->SetBulletMesh(aSetMesh);
+//
+//}
 
 StatusField * CharacterBase::GetField()
 {
@@ -59,7 +56,7 @@ void CharacterBase::UpdateBullets()
 	{
 		auto lBegin = mBullets.begin();
 		auto lEnd = mBullets.end();
-		auto lRemoveFunc = [this](std::unique_ptr<BulletObject>&aBullet) {
+		auto lRemoveFunc = [this](std::unique_ptr<NBullet>&aBullet) {
 			return aBullet->IsActive() == false;
 		};
 		auto lRemoveIt = std::remove_if(lBegin, lEnd, lRemoveFunc);
@@ -71,7 +68,8 @@ void CharacterBase::UpdateBullets()
 		lBullet->Update();
 	}
 	//弾のインターバル更新
-	mBulletNormal->UpdateStatus();
+
+//	mBulletNormal->UpdateStatus();
 }
 
 void CharacterBase::RenderBullets()

@@ -160,6 +160,8 @@
       <Filter>MSDirect\DX11\TextRenderer</Filter>
     </ClCompile>
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="BulletManager.cpp" />
+    <ClCompile Include="NBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">
@@ -359,6 +361,12 @@
     </ClInclude>
     <ClInclude Include="Title.h">
       <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletManager.h">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="NBullet.h">
+      <Filter>Game\Object\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

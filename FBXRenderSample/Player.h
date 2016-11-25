@@ -2,7 +2,7 @@
 #include"CharacterBase.h"
 #include"DXMath.hpp"
 #include"StatusPlayer.h"
-
+#include"BulletManager.h"
 
 class Player :public CharacterBase{
 
