@@ -92,8 +92,8 @@ void MyMSScene::Initialize()
 	shader.InitPixel("Simple.hlsl");
 
 	mdDB.Load("res/box.fbx", false, cbox);
-	mdDB.Load("res/box.fbx", false, cChara);
-	//mdDB.Load("res/Character/FoxyGirl_Static.fbx", true, cChara);
+	//mdDB.Load("res/box.fbx", false, cChara);
+	mdDB.Load("res/Character/FoxyGirl_Static.fbx", true, cChara);
 
 	mdDB.Load("res/FieldCollision.fbx", false, cFieldD);
 	mdDB.Load("res/FieldCollision.fbx", false, cFieldC);
@@ -181,7 +181,10 @@ void MyMSScene::Initialize()
 	//バレットマネージャの初期化
 	{
 		bltManager.Initialize();
-		bltManager.RegisterMesh(mdDB.Get(cbox));
+		bltManager.RegisterMesh(mdDB.Get(cbox),0);
+		bltManager.RegisterShader(&shader, 0);
+		bltManager.RegisterChara(&mPlayer, 0);
+		
 		mPlayer.mBltManager = &bltManager;
 		for (auto&lEnemy : enemy) {
 			lEnemy->mBltManager = &bltManager;
@@ -225,7 +228,9 @@ void MyMSScene::Initialize()
 		mEfkRender.SetCamera(&cam);
 		mEfkRender.SetProjection(&proj);
 		mEfkObj.Play();
-
+		
+		auto b = bltManager.GetActiveStatus(&mPlayer);
+		
 		mPlayer.AddBullet();
 
 	}
@@ -314,7 +319,7 @@ void MyMSScene::Render()
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	//画面クリア
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
-		//enemy[i]->Render();
+		enemy[i]->Render();
 	}
 	mField.Render();
 	mPlayer.Render();

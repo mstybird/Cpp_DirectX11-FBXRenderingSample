@@ -174,9 +174,16 @@ void Enemy::InitStatus()
 void Enemy::UpdateAI()
 {
 	mAI->ClearRoot();
-
+	//敵そのもののステータス
 	auto lStatus = GetStatus<EnemyStatus>();
-	auto lBulletStatus = &mBltManager->mStatusMap[this];
+
+
+
+	//現在セットされている弾のステータスを取得
+	auto lBulletStatus = mBltManager->GetActiveStatus(this);
+
+
+
 
 	struct tAIStatus {
 		//BallHolder
@@ -245,6 +252,10 @@ void Enemy::UpdateAI()
 			lAIStatus.mAllyNear = true;
 		}
 	}
+
+	//キャラクターが保持するアクティブID
+	auto ID = mBltManager->GetActiveBulletID(this);
+	
 	lAIStatus.mChargedEnergy = lStatus->mEnergy.GetNow() > lBulletStatus->mCost;
 
 	mAI->Update(

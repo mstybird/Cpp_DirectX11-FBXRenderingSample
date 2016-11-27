@@ -3,7 +3,7 @@
 	弾の情報
 */
 #include"MSProgress\MSProgressData.hxx"
-
+#include<DXMath.hpp>
 //ダメージタイプ
 enum class BulletDamageType {
 	NORMAL,	//通常(防御が実装されれば防御に関係する
@@ -11,9 +11,15 @@ enum class BulletDamageType {
 	FIXED	//固定ダメージ
 };
 
+//バレット固有の能力の基底クラス
 struct StatusBulletBase {
-	int mCost;
-	float mAtk;
-	MSProgress mInterval;
-	BulletDamageType mType;
+	int mCost;				//使用コスト
+	float mAtk;				//攻撃力
+	MSProgress mInterval;	//発射間隔
+	BulletDamageType mType;	//ダメージタイプ
+	float mFiringRange;		//射程
+	float mVelocity;		//速度
+	DXVector3 mDirection;	//方向ベクトル
+
+
 };

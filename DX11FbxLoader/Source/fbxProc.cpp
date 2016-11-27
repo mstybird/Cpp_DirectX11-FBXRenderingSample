@@ -994,6 +994,24 @@ void DX11FbxLoader::ComputeClusterDeformation(FbxAMatrix & pGlobalPosition, FbxM
 	}
 	else {
 
+		//pCluster->GetTransformMatrix(lReferenceGlobalInitPosition);
+		//lReferenceGlobalCurrentPosition = pGlobalPosition;
+		//// Multiply lReferenceGlobalInitPosition by Geometric Transformation
+		//GetGeometry(lReferenceGeometry, pMesh->GetNode());
+		//lReferenceGlobalInitPosition *= lReferenceGeometry;
+
+		//// Get the link initial global position and the link current global position.
+		//pCluster->GetTransformLinkMatrix(lClusterGlobalInitPosition);
+		//GetGlobalPosition(lClusterGlobalCurrentPosition, pCluster->GetLink(), pTime, pPose);
+		//// Compute the initial position of the link relative to the reference.
+		//lClusterRelativeInitPosition = lClusterGlobalInitPosition.Inverse() * lReferenceGlobalInitPosition;
+
+		//// Compute the current position of the link relative to the reference.
+		//lClusterRelativeCurrentPositionInverse = lReferenceGlobalCurrentPosition.Inverse() * lClusterGlobalCurrentPosition;
+
+		//// Compute the shift of the link relative to the reference.
+		//pVertexTransformMatrix = lClusterRelativeCurrentPositionInverse * lClusterRelativeInitPosition;
+
 		pCluster->GetTransformMatrix(lReferenceGlobalInitPosition);
 		lReferenceGlobalCurrentPosition = pGlobalPosition;
 		// Multiply lReferenceGlobalInitPosition by Geometric Transformation
@@ -1011,6 +1029,7 @@ void DX11FbxLoader::ComputeClusterDeformation(FbxAMatrix & pGlobalPosition, FbxM
 
 		// Compute the shift of the link relative to the reference.
 		pVertexTransformMatrix = lClusterRelativeCurrentPositionInverse * lClusterRelativeInitPosition;
+
 	}
 
 

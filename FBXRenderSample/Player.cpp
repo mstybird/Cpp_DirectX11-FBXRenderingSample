@@ -102,7 +102,7 @@ void Player::Render()
 
 void Player::AddBullet()
 {
-	mBltManager->Create(mBullets, 0, this);
+	mBltManager->Create(mBullets, this);
 	//mBulletNormal->Create(mBullets, this);
 }
 

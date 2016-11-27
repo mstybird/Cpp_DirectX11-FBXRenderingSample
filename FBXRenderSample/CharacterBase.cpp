@@ -63,11 +63,12 @@ void CharacterBase::UpdateBullets()
 		mBullets.erase(lRemoveIt, lEnd);
 	}
 
-	
+	//アクティブな弾の更新
 	for (auto&lBullet : mBullets) {
 		lBullet->Update();
 	}
-	//弾のインターバル更新
+	//弾そのもののステータスの更新
+	
 
 //	mBulletNormal->UpdateStatus();
 }

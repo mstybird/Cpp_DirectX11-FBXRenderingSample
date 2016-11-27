@@ -9,14 +9,17 @@ NBullet::~NBullet()
 {
 }
 
-void NBullet::InitShader()
-{
-	//弾の描画に使うシェーダの設定
-	mBulletShader = std::make_unique<My3DShader>();
-	mBulletShader->Init();
-	mBulletShader->InitVertex("Simple.hlsl");
-	mBulletShader->InitPixel("Simple.hlsl");
 
+void NBullet::InitStatus()
+{
+	GameObjectBase::Initialize();
+	mStatus.mAtk = 10;
+	mStatus.mCost = 2;
+	mStatus.mDirection = { 0,0,1 };
+	mStatus.mFiringRange = 20.0f;
+	mStatus.mInterval.Set(1.0f, 0.0f, 1.0f);
+	mStatus.mType = BulletDamageType::NORMAL;
+	mStatus.mVelocity = 0.25f;
 }
 
 void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, CharacterBase * aShoter)
@@ -25,7 +28,7 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 	std::unique_ptr<NBullet>bullet=std::make_unique<NBullet>();
 //	bullet->mShader = mShader;
 	//シェーダの設定
-	bullet->SetShader(mBulletShader.get());
+	bullet->SetShader(mShader);
 	//リソースの初期化
 	bullet->Initialize();
 	bullet->InitStatus();
@@ -36,14 +39,14 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 	//初期位置設定
 	auto& lShotPos = *aShoter->GetWorld()->GetMatrix().lock();
 	//弾発射方向の確定
-	D3DXVec3TransformNormal(&bullet->mDirection, &D3DXVECTOR3(0, 0, 1), &lShotPos);
+	D3DXVec3TransformNormal(&bullet->mStatus.mDirection, &D3DXVECTOR3(0, 0, 1), &lShotPos);
 
-	bullet->mDirection.Normalize();
+	bullet->mStatus.mDirection.Normalize();
 	bullet->SetMesh(*GetMesh());
 	bullet->SetCollisionMesh(*GetMesh());
 
 	//発射速度の設定
-	bullet->mVelocity = 0.25f;
+	bullet->mStatus.mVelocity = mStatus.mVelocity;
 	//トランスフォームの設定
 
 	DXVector3 lSpwanPos;
@@ -83,7 +86,7 @@ void NBullet::Update()
 {
 	if (!mActive)return;
 
-	GetWorld()->AddT(mDirection*mVelocity);
+	GetWorld()->AddT(this->mStatus.mDirection*this->mStatus.mVelocity);
 	//当たった場合
 	auto lHitTargets = UpdateCollision(false);
 	for (auto&lHitTarget : lHitTargets) {
