@@ -16,14 +16,14 @@ public:
 	//モーションを変更する
 	void SetAnimation(int mIndex) { mCurrentAnimation = mIndex; }
 	//バッファの取得
-	std::vector<std::shared_ptr<FBXMesh>>& GetMeshData();
-	ID3D11Buffer*GetVertexBuffer(int i, int j) {}
-	ID3D11Buffer*GetIndexBuffer(int i, int j) {}
-	unsigned int*GetIndexBufferCount(int i, int j);
+	std::vector<std::shared_ptr<FBXMesh>>* GetCurrentMeshData();
+	std::vector<std::vector<ID3D11Buffer*>>*GetCurrentVertexBuffer();
+	std::vector<std::vector<ID3D11Buffer*>>*GetCurrentIndexBuffer();
+	std::vector<std::vector<uint32_t>>*GetCurrentIndexBufferCount();
+	std::vector<std::vector<MSCollisionSphere>>*GetCurrentCollisionSpheres();
+	MSFbxManager*GetManager();
 
-	//コリジョンの作成
-	void CreateCollision();
-
+private:
 	MSFbxManager*mManager;
 
 	int mAnimationCount;
@@ -35,8 +35,9 @@ public:
 	FbxTime mCurrentFrame;
 	bool mFirstInit{ false };
 
-	std::vector<std::shared_ptr<FBXMesh>> mMeshData;
-	std::vector<std::vector<ID3D11Buffer*>>mVertexBuffer;
-	std::vector<std::vector<ID3D11Buffer*>>mIndexBuffer;
-	std::vector<std::vector<MSCollisionSphere>>mCollisionSphere;
+	std::vector<std::shared_ptr<FBXMesh>>* mMeshData;
+	std::vector<std::vector<ID3D11Buffer*>>* mVertexBuffer;
+	std::vector<std::vector<ID3D11Buffer*>>* mIndexBuffer;
+	std::vector<std::vector<uint32_t>>* mIndexBufferLength;
+	std::vector<std::vector<MSCollisionSphere>>* mCollisionSphere;
 };

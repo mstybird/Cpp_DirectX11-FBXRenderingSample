@@ -19,26 +19,13 @@ void MSFbxObject::Initialize(MSFbxManager & aFbxMesh)
 void MSFbxObject::Update()
 {
 	//現在のアニメーションで更新
+	mManager->Update(mCurrentFrame, mCurrentAnimation);	//生成したメッシュデータを取得
 
-	//メッシュがなければ取得できないので生成する
-	if (mManager->IsCreatedMeshData()==false) {
-		if (mManager->Update(mCurrentFrame,mCurrentAnimation) == false) {
-			return;
-		}
-	}
-	//生成したメッシュデータを取得
-
-	for (unsigned int i = 0; i < mVertexBuffer.size(); i++) {
-		for (unsigned int j = 0; j < mVertexBuffer.at(i).size(); j++) {
-			SAFE_RELEASE(mVertexBuffer[i][j]);
-			SAFE_RELEASE(mIndexBuffer[i][j]);
-		}
-	}
-
-	mMeshData = mManager->MoveMeshData();
-	mVertexBuffer = mManager->MoveVertexBuffer();
-	mIndexBuffer = mManager->MoveIndexBuffer();
-	CreateCollision();
+	mMeshData = mManager->GetMeshData(mCurrentAnimation, mCurrentFrame);
+	mVertexBuffer = mManager->GetVertexBuffer(mCurrentAnimation, mCurrentFrame);
+	mIndexBuffer = mManager->GetIndexBuffer(mCurrentAnimation, mCurrentFrame);
+	mIndexBufferLength = mManager->GetIndexBufferCount(mCurrentAnimation, mCurrentFrame);
+	mCollisionSphere = mManager->GetCollisionSphere(mCurrentAnimation, mCurrentFrame);
 }
 
 void MSFbxObject::NextFrame()
@@ -52,32 +39,53 @@ void MSFbxObject::NextFrame()
 	}
 }
 
-std::vector<std::shared_ptr<FBXMesh>>& MSFbxObject::GetMeshData()
+std::vector<std::shared_ptr<FBXMesh>>* MSFbxObject::GetCurrentMeshData()
 {
 	return mMeshData;
 	// TODO: return ステートメントをここに挿入します
 }
 
-unsigned int * MSFbxObject::GetIndexBufferCount(int i, int j)
+std::vector<std::vector<ID3D11Buffer*>> * MSFbxObject::GetCurrentVertexBuffer()
 {
-	return &mMeshData.at(i)->subMesh.at(j)->IndexLength;
+	return mVertexBuffer;
 }
 
-void MSFbxObject::CreateCollision()
+std::vector<std::vector<ID3D11Buffer*>> * MSFbxObject::GetCurrentIndexBuffer()
 {
-	if (mCollisionSphere.size() != 0) {
-		return;
-	}
-	mCollisionSphere.clear();
-	mCollisionSphere.resize(mMeshData.size());
-	mCollisionSphere.resize(mMeshData.size());
-	for (unsigned int i = 0; i < mMeshData.size(); i++) {
-		mCollisionSphere.at(i).resize(mCollisionSphere.size());
-		for (unsigned int j = 0; j < mMeshData.at(i)->subMesh.size(); j++) {
-			mCollisionSphere.at(i).at(j).CreateCollision(
-				*mMeshData.at(i)->subMesh.at(j),
-				*mMeshData.at(i)->mWorld
-				);
-		}
-	}
+	return mIndexBuffer;
 }
+
+std::vector<std::vector<uint32_t>> * MSFbxObject::GetCurrentIndexBufferCount()
+{
+	return mIndexBufferLength;
+}
+
+std::vector<std::vector<MSCollisionSphere>>* MSFbxObject::GetCurrentCollisionSpheres()
+{
+	return mCollisionSphere;
+}
+
+MSFbxManager * MSFbxObject::GetManager()
+{
+	return mManager;
+}
+
+//void MSFbxObject::CreateCollision()
+//{
+//
+//	if (mCollisionSphere.size() != 0) {
+//		return;
+//	}
+//	mCollisionSphere.clear();
+//	mCollisionSphere.resize(mMeshData.size());
+//	mCollisionSphere.resize(mMeshData.size());
+//	for (unsigned int i = 0; i < mMeshData.size(); i++) {
+//		mCollisionSphere.at(i).resize(mCollisionSphere.size());
+//		for (unsigned int j = 0; j < mMeshData.at(i)->subMesh.size(); j++) {
+//			mCollisionSphere.at(i).at(j).CreateCollision(
+//				*mMeshData.at(i)->subMesh.at(j),
+//				*mMeshData.at(i)->mWorld
+//				);
+//		}
+//	}
+//}

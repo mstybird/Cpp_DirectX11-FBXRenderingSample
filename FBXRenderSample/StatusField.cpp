@@ -147,15 +147,9 @@ void StatusField::Respawn(CharacterBase * aSpawnChara)
 	const auto& lSpawnNodeList = GetTeamAlly(aSpawnChara)->mSpawnCharaNodes;
 
 	auto lCount = rand() % lSpawnNodeList.size();
-;
-
-	static int sCount = 0;
 
 	//ランダムなノードから座標を取り出す
-	auto& lPosition = static_cast<MyNode*>(lSpawnNodeList[sCount])->Position;
-
-	++sCount;
-	sCount %= lSpawnNodeList.size();
+	auto& lPosition = static_cast<MyNode*>(lSpawnNodeList[lCount])->Position;
 
 	aSpawnChara->GetWorld()->SetT(lPosition);
 	aSpawnChara->SetActive(true);

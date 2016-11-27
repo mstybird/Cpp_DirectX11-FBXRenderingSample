@@ -60,3 +60,15 @@ StatusBulletBase * BulletManager::GetActiveStatus(CharacterBase * aChara)
 {
 	return &mStatusMap[aChara][mActiveIDMap[aChara]];
 }
+
+std::vector<StatusBulletBase*> BulletManager::GetStatusArray(CharacterBase * aChara)
+{
+	std::vector<StatusBulletBase*> lStatusArray;
+
+	lStatusArray.reserve(mStatusMap.count(aChara));
+	for (auto&lStatus : mStatusMap[aChara]) {
+		lStatusArray.push_back(&lStatus.second);
+	}
+
+	return std::move(lStatusArray);
+}

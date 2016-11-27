@@ -18,6 +18,7 @@ void NBullet::InitStatus()
 	mStatus.mDirection = { 0,0,1 };
 	mStatus.mFiringRange = 20.0f;
 	mStatus.mInterval.Set(1.0f, 0.0f, 1.0f);
+	mStatus.mIntervalRecovery = 0.01f;
 	mStatus.mType = BulletDamageType::NORMAL;
 	mStatus.mVelocity = 0.25f;
 }

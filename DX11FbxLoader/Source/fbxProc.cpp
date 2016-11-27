@@ -92,6 +92,7 @@ void GetGlobalPosition(FbxAMatrix&pDstMatrix, FbxNode*pNode, const FbxTime&pTime
 DX11FbxLoader::DX11FbxLoader() :
 	mMesh{ std::make_shared<std::vector<std::shared_ptr<FBXMesh>>>() }
 {
+	mDefaultAnimation = 0;
 }
 
 DX11FbxLoader::~DX11FbxLoader()
@@ -525,6 +526,7 @@ void DX11FbxLoader::LoadAnimationData()
 	//設定されたアニメーションをセットする
 	//	EnableAnimation = lCurrentAnimStackIndex != -1 ? true : false;
 	SetCurrentAnimStack(lCurrentAnimStackIndex);
+	mDefaultAnimation = lCurrentAnimStackIndex;
 }
 
 void DX11FbxLoader::ReadVertexCacheData(FbxMesh * pMesh, FbxTime & pTime, FbxVector4 * pVertexArray)
@@ -1042,6 +1044,7 @@ void DX11FbxLoader::SetAnimation(std::string pName)
 
 void DX11FbxLoader::SetAnimation(int pIndex)
 {
+	mDefaultAnimation = pIndex;
 	SetCurrentAnimStack(pIndex);
 }
 
@@ -1049,7 +1052,7 @@ void DX11FbxLoader::SetAnimation(int pIndex)
 std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometryData2(FbxTime&aCurrentTime)
 {
 	//メッシュデータの解放
-	ReleaseGeometryData();
+	//ReleaseGeometryData();
 
 	FbxPose*lPose{ nullptr };
 	if (PoseIndex != -1)
@@ -1204,7 +1207,9 @@ std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometr
 
 				//ジオメトリバッファ作成
 				auto loopCount = lMeshCache->mSubMeshes[lIndex]->TriangleCount * 3;
-				md->IndexLength = loopCount;
+
+				md->Index = lMeshCache->lIndices.GetArray();
+				md->IndexLength = lMeshCache->lIndices.Size();
 
 				auto vertexCount = lMeshCache->lVertices.Size();
 				md->PosLength = vertexCount / 4;
@@ -1236,8 +1241,9 @@ std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> DX11FbxLoader::GetGeometr
 						memcpy(&md->Data[i].UV, &lMeshCache->lUVs.GetArray()[i * 2], sizeof(D3DXVECTOR2));
 					}
 				}
-
+				
 				for (int i = 0; i < count; ++i) {
+					
 					int idx = lMeshCache->lIndices.GetArray()[i];
 					int a = idx;
 				}
@@ -1402,9 +1408,9 @@ bool DX11FbxLoader::SetCurrentAnimStack(int pIndex)
 	if (Cache_Start < Start)
 		Start = Cache_Start;
 
+
 	if (Cache_Stop  > Stop)
 		Stop = Cache_Stop;
-
 	return true;
 }
 

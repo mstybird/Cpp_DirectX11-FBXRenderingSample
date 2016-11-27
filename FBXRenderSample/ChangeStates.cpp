@@ -3,6 +3,7 @@
 #include"StatusBase.h"
 #include"NBullet.h"
 #include"StatusBulletBase.h"
+#include"BulletManager.h"
 namespace ChangeStates {
 	bool Damage(NBullet * aAttackObj, CharacterBase * aDamageChara)
 	{
@@ -31,24 +32,29 @@ namespace ChangeStates {
 		return lResultFlag==MSPRogressFlag::LESSMIN;
 	}
 
-	bool IsAttackDo(CharacterBase * lAttackChara, NBullet * aBullet)
+	bool IsAttackDo(CharacterBase * lAttackChara, BulletManager*aBulletManager)
 	{
+		//アクティブなバレットを取得
+		auto lBullet = aBulletManager->GetActiveBullet(lAttackChara);
+
 		//キャラクタの所持エネルギーを計算
 		auto lStatus = lAttackChara->GetStatus();
 		auto lHoldEnergy = lStatus->mEnergy;
 		//バレットのコストを取得
-		auto lBulletCost = aBullet->GetStatus()->mCost;
+		auto lBulletCost = lBullet->GetStatus()->mCost;
 		//所持エネルギーがバレットコスト以上であれば発射可能
 		return lHoldEnergy.GetNow() >= lBulletCost;
 	}
 
-	bool BulletShot(std::vector<std::unique_ptr<NBullet>>& aBulletList, CharacterBase * aAttakcer, NBullet * aBullet)
+	bool BulletShot(std::vector<std::unique_ptr<NBullet>>& aBulletList, CharacterBase * aAttakcer, BulletManager*aBulletManager)
 	{
+		auto lBullet = aBulletManager->GetActiveBullet(aAttakcer);
+
 		//エネルギーが足りなければfalseを返す
-		if (!IsAttackDo(aAttakcer, aBullet))return false;
+		if (!IsAttackDo(aAttakcer, aBulletManager))return false;
 
 		auto lCharaStatus = aAttakcer->GetStatus();
-		auto lBulletStatus = aBullet->GetStatus();
+		auto lBulletStatus = aBulletManager->GetActiveStatus(aAttakcer);
 		//インターバルが残っていれば発射できない
 		if (lBulletStatus->mInterval.GetMaxRemainPer() > 0.0f)return false;
 
@@ -57,7 +63,7 @@ namespace ChangeStates {
 		//インターバルの初期化
 		lBulletStatus->mInterval.SetNowPer(0.0f);
 		//発射処理
-		aBullet->Create(aBulletList, aAttakcer);
+		lBullet->Create(aBulletList, aAttakcer);
 
 		return true;
 	}

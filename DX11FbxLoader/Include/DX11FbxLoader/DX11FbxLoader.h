@@ -108,6 +108,9 @@ public:
 	//アニメーションの切り替え
 	void SetAnimation(std::string pName);
 	void SetAnimation(int pIndex);
+	int GetDefaultAnimation() {
+		return mDefaultAnimation;
+	}
 
 	FbxTime GetStartFrame() {
 		return Start;
@@ -176,7 +179,7 @@ private:
 	bool EnableAnimation;	//アニメーションが有効かどうか
 	FbxAnimLayer * CurrentAnimLayer;	//FBXアニメーション
 	FbxTime FrameTime, Start, Stop;
-
+	int mDefaultAnimation;	//デフォルトアニメーション
 
 	std::unordered_map<std::string, int>AnimData;		//アニメーションスタック
 	//std::vector<std::vector<FBXModelData*>> Geometry;	//メッシュデータ

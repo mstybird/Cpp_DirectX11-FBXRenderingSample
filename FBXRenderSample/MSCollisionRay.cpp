@@ -3,6 +3,7 @@
 #include<DX11FBXLoader.hpp>
 #include"DXMath.hpp"
 #include"DX11RenderResource.h"
+#include"MSFbxObject.h"
 #include<array>
 #include<vector>
 #include<map>
@@ -25,7 +26,7 @@ void MSCollisionRay::SetRay(const DXCamera & pRayCamera)
 	pRayCamera.CreateRay(*mRayDirection.get(), { 0.0f,0.0f,1.0f });
 }
 
-bool MSCollisionRay::Collision(const MSCollisionRay & pRay, DX11RenderResource&pRayPosition, DX11RenderResource & pResource, MSFbxManager & pFbxManager)
+bool MSCollisionRay::Collision(const MSCollisionRay & pRay, DX11RenderResource&pRayPosition, DX11RenderResource & pResource, MSFbxObject & pFbxObject)
 {
 	//1‚Â‚Ìƒ|ƒŠƒSƒ“‚Ì3‚Â‚Ì’¸“_
 	std::array<FbxVertex*, 3>lPolygon;
@@ -39,7 +40,7 @@ bool MSCollisionRay::Collision(const MSCollisionRay & pRay, DX11RenderResource&p
 
 
 
-	auto lmeshList = pFbxManager.GetMeshData();
+	auto lmeshList = pFbxObject.GetCurrentMeshData();
 	DXMatrix lResourceMatrix = *pResource.GetWorld().lock()->GetMatrix().lock();
 	for (auto&lMesh : *lmeshList) {
 

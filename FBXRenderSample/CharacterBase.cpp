@@ -68,7 +68,9 @@ void CharacterBase::UpdateBullets()
 		lBullet->Update();
 	}
 	//弾そのもののステータスの更新
-	
+	for (auto& lBullet : mBltManager->GetStatusArray(this)) {
+		lBullet->mInterval.AddFix(lBullet->mIntervalRecovery);
+	}
 
 //	mBulletNormal->UpdateStatus();
 }

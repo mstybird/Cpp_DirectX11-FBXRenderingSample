@@ -188,6 +188,7 @@ void MyMSScene::Initialize()
 		mPlayer.mBltManager = &bltManager;
 		for (auto&lEnemy : enemy) {
 			lEnemy->mBltManager = &bltManager;
+			bltManager.RegisterChara(lEnemy.get(), 0);
 		}
 
 
@@ -231,7 +232,7 @@ void MyMSScene::Initialize()
 		
 		auto b = bltManager.GetActiveStatus(&mPlayer);
 		
-		mPlayer.AddBullet();
+		//mPlayer.AddBullet();
 
 	}
 }

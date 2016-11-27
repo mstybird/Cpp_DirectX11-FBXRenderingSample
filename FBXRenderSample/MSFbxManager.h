@@ -5,6 +5,7 @@
 #include<string>
 #include<vector>
 #include<memory>
+#include<unordered_map>
 /*
 	モデルデータとしての機能のみ
 	描画に必要な座標などの行列は一切残さない
@@ -15,6 +16,17 @@ class DXVector3;
 class MSCollisionSphere;
 class DX11RenderResource;
 class MSFbxObject;
+
+struct MeshBuffer {
+	std::vector<std::vector<ID3D11Buffer*>>mVertexBuffer;
+	std::vector<std::vector<ID3D11Buffer*>>mIndexBuffer;
+	std::vector<std::vector<uint32_t>>mIndexLength;
+	//コリジョンデータ
+	std::vector<std::vector<MSCollisionSphere>>mCollisions;
+	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>>mMeshData;//メッシュデータ
+	~MeshBuffer();
+};
+
 class MSFbxManager {
 public:
 	friend class MSFbxObject;
@@ -30,6 +42,9 @@ public:
 	void Initialize();
 	//ファイル読み込み
 	void LoadFile(std::string pFileName, bool animationLoad = false);
+	//メッシュ情報をキャッシュする
+	void RegisterMesh(FbxTime& mCurrentFrame, const int pAnimationIndex);
+
 	void LoadAnimationFromFile(std::string vfileName);
 	std::string GetFileName();
 	//メッシュの更新(毎フレーム必要)
@@ -37,25 +52,24 @@ public:
 
 	//解放処理
 	void Release();
-	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>> &GetMeshData();
-
 
 	//現在のメッシュを使ってコリジョン作成
-	void CreateCollisionSphere();
+	void CreateCollisionSphere(FbxTime& mCurrentFrame, const int pAnimationIndex);
 	//作成済みのコリジョンをリソースに登録する
-	void RegisterCollision(const std::shared_ptr<DX11RenderResource>&pResource);
+	//void RegisterCollision(const std::shared_ptr<DX11RenderResource>&pResource);
 
-	ID3D11Buffer*GetVertexBuffer(int i, int j);
-	ID3D11Buffer*GetIndexBuffer(int i, int j);
-	unsigned int*GetIndexBufferCount(int i,int j);
+	std::vector<std::shared_ptr<FBXMesh>>*GetMeshData(int aAnimation, FbxTime aTime);
+	std::vector<std::vector<ID3D11Buffer*>>*GetVertexBuffer(int aAnimation,FbxTime aTime);
+	std::vector<std::vector<ID3D11Buffer*>>*GetIndexBuffer(int aAnimation, FbxTime aTime);
+	std::vector<std::vector<uint32_t>>*GetIndexBufferCount(int aAnimation, FbxTime aTime);
+	std::vector<std::vector<MSCollisionSphere>>*GetCollisionSphere(int aAnimation, FbxTime aTime);
 
 	//これらのメソッドはムーブするので使用後、このクラスの各インスタンスは空になる
-	std::vector<std::shared_ptr<FBXMesh>> MoveMeshData();
-	std::vector<std::vector<ID3D11Buffer*>>MoveVertexBuffer();
-	std::vector<std::vector<ID3D11Buffer*>>MoveIndexBuffer();
+	//キャッシュするため不要となる
+	//std::vector<std::shared_ptr<FBXMesh>> MoveMeshData();
+	//std::vector<std::vector<ID3D11Buffer*>>MoveVertexBuffer();
+	//std::vector<std::vector<ID3D11Buffer*>>MoveIndexBuffer();
 
-	//生成済みのメッシュがあるかどうか
-	bool IsCreatedMeshData();
 private:
 	//バッファリソースを確保する
 	void CreateBuffer();
@@ -69,20 +83,21 @@ private:
 	//ベクタ要素数	=	メッシュ数
 	//要素の値		=	サブメッシュ数)
 	std::vector<int>mMeshCount;
+
+	//アニメーションとアニメーションタイムごとのバッファ
+	std::unordered_map<int,std::unordered_map<LONG64, MeshBuffer>> mMeshBuffer;
 	std::vector<std::vector<int>>mMeshVertexCount;
 	std::vector<std::vector<int>>mMeshIndexCount;
-	std::vector<std::vector<D3D11_BUFFER_DESC>>mMeshVBDesc;
-	std::vector<std::vector<D3D11_BUFFER_DESC>>mMeshIBDesc;
-	std::vector<std::vector<ID3D11Buffer*>>mVertexBuffer;
-	std::vector<std::vector<ID3D11Buffer*>>mIndexBuffer;
-	D3D11_BUFFER_DESC mVBDesc;
-	D3D11_BUFFER_DESC mIBDesc;
+	//std::vector<std::vector<D3D11_BUFFER_DESC>>mMeshVBDesc;
+	//std::vector<std::vector<D3D11_BUFFER_DESC>>mMeshIBDesc;
+	//D3D11_BUFFER_DESC mVBDesc;
+	//D3D11_BUFFER_DESC mIBDesc;
 
-	//コリジョンデータ
-	std::shared_ptr<std::vector<std::vector<MSCollisionSphere>>>mCollisions;
 	
 
-	std::shared_ptr<std::vector<std::shared_ptr<FBXMesh>>>mMeshData;//メッシュデータ
+
+
+
 	bool mAnimationFlag;	//アニメーションする場合はtrue
 
 private:

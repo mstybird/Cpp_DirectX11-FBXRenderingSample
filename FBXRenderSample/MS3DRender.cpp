@@ -39,33 +39,36 @@ void MS3DRender::Render(DX11RenderResource&resource)
 	//プリミティブトポロジーの登録
 	sDeviceContext->IASetPrimitiveTopology(mPrimitiveTopology);
 
-	auto& meshData = resource.mMesh->mMeshData;
+	
+
+	auto meshData = resource.mMesh->GetCurrentMeshData();
+	auto lVertexBufferArray = resource.mMesh->GetCurrentVertexBuffer();
+	auto lIndexBufferArray = resource.mMesh->GetCurrentIndexBuffer();
+	auto lIndexBufferLengthArray = resource.mMesh->GetCurrentIndexBufferCount();
 
 	//auto meshData = fbxManager.lock()->GetMeshData();
 	//メッシュの個数分
-	for (unsigned int i = 0; i < meshData.size(); i++) {
+	for (unsigned int i = 0; i < lVertexBufferArray->size(); i++) {
 		//メッシュ単位の設定
-		shader->SetConstantBuffer1(*meshData.at(i), resource, *display);
+		shader->SetConstantBuffer1(*meshData->at(i), resource, *display);
 		//全てのメッシュに対して共通のデータを登録
 		sDeviceContext->VSSetConstantBuffers(0, 1, shader->GetCB1());
 		sDeviceContext->PSSetConstantBuffers(0, 1, shader->GetCB1());
 		//サブメッシュの個数分
-		for (unsigned int j = 0; j < meshData.at(i)->subMesh.size(); j++) {
-			shader->SetConstantBuffer2(meshData.at(i)->subMesh.at(j));
+		for (unsigned int j = 0; j < meshData->at(i)->subMesh.size(); j++) {
+			shader->SetConstantBuffer2(meshData->at(i)->subMesh.at(j));
 			sDeviceContext->VSSetConstantBuffers(1, 1, shader->GetCB2());
 			sDeviceContext->PSSetConstantBuffers(1, 1, shader->GetCB2());
 			UINT stride = shader->GetVertexSize();
 			UINT offset = 0;
-			ID3D11Buffer* lVertexBuffer = resource.mMesh->mVertexBuffer[i][j];
-			ID3D11Buffer* lIndexBuffer = resource.mMesh->mIndexBuffer[i][j];
-			unsigned int* indexLength = resource.mMesh->GetIndexBufferCount(i, j);
+			ID3D11Buffer* lVertexBuffer = lVertexBufferArray->at(i)[j];
 
 			sDeviceContext->IASetVertexBuffers(0, 1, &lVertexBuffer, &stride, &offset);
 			stride = sizeof(int);
 			offset = 0;
-			sDeviceContext->IASetIndexBuffer(lIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-			sDeviceContext->DrawIndexed(*indexLength, 0, 0);
-
+			sDeviceContext->IASetIndexBuffer(lIndexBufferArray->at(i)[j], DXGI_FORMAT_R32_UINT, 0);
+			sDeviceContext->DrawIndexed(lIndexBufferLengthArray->at(i)[j], 0, 0);
+			
 		}
 	}
 

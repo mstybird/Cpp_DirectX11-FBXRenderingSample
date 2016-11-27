@@ -755,12 +755,11 @@ void Enemy::BetaInSightAttack()
 	if (IsZero(lRotateY, 0.25f)) {
 		//U‚èŒü‚«‚«‚ê‚ÎUŒ‚
 		//’e‚Ì”­ŽË
-		auto lActiveBullet = mBltManager->GetActiveBullet(this);
 
-		ChangeStates::BulletShot(mBullets, this, lActiveBullet);
+		ChangeStates::BulletShot(mBullets, this, mBltManager);
 		//ƒGƒlƒ‹ƒM[‚ª‚È‚­‚È‚Á‚½ê‡A
 		//ŽŸ‚ÌAI‚ÖˆÚs‚·‚é
-		if (!ChangeStates::IsAttackDo(this, lActiveBullet)) {
+		if (!ChangeStates::IsAttackDo(this, mBltManager)) {
 			mAI->NextAI();
 		}
 	}

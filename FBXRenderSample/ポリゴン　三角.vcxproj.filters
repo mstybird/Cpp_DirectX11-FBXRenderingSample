@@ -130,7 +130,6 @@
     <ClCompile Include="MSProgress\MSProgresData.cxx">
       <Filter>MSDirect\MSUtility\Source</Filter>
     </ClCompile>
-    <ClCompile Include="ChangeStates.cpp" />
     <ClCompile Include="MSGravity.cpp" />
     <ClCompile Include="Comform\Effekseer\Effect.cxx">
       <Filter>Comform\Effekseer</Filter>
@@ -162,6 +161,9 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="NBullet.cpp" />
+    <ClCompile Include="ChangeStates.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11RenderResource.h">

@@ -1,5 +1,6 @@
 #pragma once
 #include"MSCollisionBase.h"
+class MSFbxObject;
 //ƒŒƒC”»’èŠî’ê—p
 class MSCollisionRay :public MSCollisionBase {
 public:
@@ -20,7 +21,7 @@ public:
 		const MSCollisionRay&pRay,
 		DX11RenderResource&pRayPosition,
 		DX11RenderResource&pResource,
-		MSFbxManager&pFbxManager
+		MSFbxObject&pFbxManager
 		);
 
 private:

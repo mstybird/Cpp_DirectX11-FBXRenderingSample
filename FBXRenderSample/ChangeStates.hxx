@@ -7,6 +7,7 @@
 class BulletObject;
 class CharacterBase;
 class NBullet;
+class BulletManager;
 namespace ChangeStates {
 	/*
 		ダメージ処理
@@ -17,10 +18,12 @@ namespace ChangeStates {
 
 
 	*/
-
+	//弾、当たったキャラ
 	bool Damage(NBullet* aAttackObj, CharacterBase*aDamageChara);
-	bool IsAttackDo(CharacterBase*lAttackChara, NBullet*aBullet);
-	bool BulletShot(std::vector<std::unique_ptr<NBullet>>&aBulletList, CharacterBase*lAttakcer, NBullet* lBullet);
+	//発射可能かどうか
+	//発射予定キャラ、
+	bool IsAttackDo(CharacterBase*lAttackChara, BulletManager*aBulletManager);
+	bool BulletShot(std::vector<std::unique_ptr<NBullet>>&aBulletList, CharacterBase*lAttakcer, BulletManager*aBulletManager);
 
 }
 

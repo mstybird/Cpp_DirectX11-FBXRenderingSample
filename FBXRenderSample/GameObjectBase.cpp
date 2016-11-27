@@ -78,7 +78,7 @@ bool GameObjectBase::IsActive()
 
 MSFbxManager * GameObjectBase::GetMesh()
 {
-	return mTransform->mMesh->mManager;
+	return mTransform->mMesh->GetManager();;
 }
 
 DXWorld * GameObjectBase::GetWorld()

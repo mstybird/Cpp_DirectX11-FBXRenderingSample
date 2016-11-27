@@ -16,6 +16,7 @@ struct StatusBulletBase {
 	int mCost;				//使用コスト
 	float mAtk;				//攻撃力
 	MSProgress mInterval;	//発射間隔
+	float mIntervalRecovery;//発射間隔回復量
 	BulletDamageType mType;	//ダメージタイプ
 	float mFiringRange;		//射程
 	float mVelocity;		//速度
