@@ -67,3 +67,4 @@ public:
 
 };
 
+#include"DXVector3.inl"

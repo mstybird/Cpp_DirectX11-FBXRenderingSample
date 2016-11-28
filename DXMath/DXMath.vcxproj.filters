@@ -33,10 +33,10 @@
     <ClCompile Include="Source\DXVector2.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\DXVector3.cpp">
+    <ClCompile Include="Source\DXWorld.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\DXWorld.cpp">
+    <ClCompile Include="Source\DXVector3.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,5 +68,10 @@
     <ClInclude Include="Include\DXMath.hh">
       <Filter>Header</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Include\DXVector3.inl">
+      <Filter>Header</Filter>
+    </None>
   </ItemGroup>
 </Project>

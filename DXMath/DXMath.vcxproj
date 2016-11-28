@@ -375,6 +375,9 @@
     <ClInclude Include="Include\DXVector3.h" />
     <ClInclude Include="Include\DXWorld.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Include\DXVector3.inl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Comfort\Effekseer\Effect.cxx" />
+    <ClCompile Include="Source\Example\example_Sprite2D.cpp" />
+    <ClCompile Include="Source\Game\AI\Dijkstra.cpp" />
+    <ClCompile Include="Source\Game\AI\EnemyAI.cpp" />
+    <ClCompile Include="Source\Game\Bullet\BulletManager.cpp" />
+    <ClCompile Include="Source\Game\Bullet\BulletNormal.cpp" />
+    <ClCompile Include="Source\Game\Bullet\BulletObject.cpp" />
+    <ClCompile Include="Source\Game\Bullet\ChangeStates.cpp" />
+    <ClCompile Include="Source\Game\Bullet\NBullet.cpp" />
+    <ClCompile Include="Source\Game\Character\CharacterBase.cpp" />
+    <ClCompile Include="Source\Game\Character\Enemy.cpp" />
+    <ClCompile Include="Source\Game\Character\Player.cpp" />
+    <ClCompile Include="Source\Game\Object\GameObjectBase.cpp" />
+    <ClCompile Include="Source\Game\Object\StaticObject.cpp" />
+    <ClCompile Include="Source\Game\Scene\MyScene.cpp" />
+    <ClCompile Include="Source\Game\Scene\Title.cpp" />
+    <ClCompile Include="Source\Game\Shader\My3DShader.cpp" />
+    <ClCompile Include="Source\Game\Shader\MySprite2DShader.cpp" />
+    <ClCompile Include="Source\Game\Shader\MySprite3DShader.cpp" />
+    <ClCompile Include="Source\Game\Status\StatusBase.cpp" />
+    <ClCompile Include="Source\Game\Status\StatusEnemy.cpp" />
+    <ClCompile Include="Source\Game\Status\StatusField.cpp" />
+    <ClCompile Include="Source\Game\Status\StatusFrame.cpp" />
+    <ClCompile Include="Source\Game\Status\StatusPlayer.cpp" />
+    <ClCompile Include="Source\Game\Status\StatusTeam.cpp" />
+    <ClCompile Include="Source\Game\UI\BarGauge.cpp" />
+    <ClCompile Include="Source\Game\UI\BarGaugeVS.cpp" />
+    <ClCompile Include="Source\Game\UI\MySceneUI.cpp" />
+    <ClCompile Include="Source\Game\UI\UIBase.cpp" />
+    <ClCompile Include="Source\Helper\Helper.cpp" />
+    <ClCompile Include="Source\MSDirect\Collision\MSCollisionBase.cpp" />
+    <ClCompile Include="Source\MSDirect\Collision\MSCollisionRay.cpp" />
+    <ClCompile Include="Source\MSDirect\Collision\MSCollisionRayPicking.cpp" />
+    <ClCompile Include="Source\MSDirect\Collision\MSCollisionSphere.cpp" />
+    <ClCompile Include="Source\MSDirect\Culling\MSCullingFrustum.cpp" />
+    <ClCompile Include="Source\MSDirect\Culling\MSCullingOcclusion.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Fbx\MSFbxDatabase.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Fbx\MSFbxManager.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Fbx\MSFbxObject.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Render\DX11RenderResource.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Render\MS3DRender.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Shader\3D\MSBase3DShader.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSBaseShader.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSBaseShaderResource.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSPixelShader.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSVertexShader.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Sprite\MSBase2DSpriteShader.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Sprite\MSSprite2DRender.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Sprite\MSSprite2DResource.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\TextRender\Graphic_Text.cpp" />
+    <ClCompile Include="Source\MSDirect\System\MSDirect.cpp" />
+    <ClCompile Include="Source\MSDirect\System\MSKeyCodeList.cpp" />
+    <ClCompile Include="Source\MSDirect\System\MSSceneBase.cpp" />
+    <ClCompile Include="Source\MSDirect\System\MSWindow.cpp" />
+    <ClCompile Include="Source\MSDirect\Utility\MSGravity.cpp" />
+    <ClCompile Include="Source\MSDirect\Utility\MSProgresData.cxx" />
+    <ClCompile Include="Source\MSDirect\Utility\MSUtility.cpp" />
+    <ClInclude Include="Source\NoUse\NoCompile.cc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Source\NoUse\Sample.cxx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\NoUse\2DSprite.txt" />
+    <Text Include="Source\NoUse\Task.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\BarGauge.h" />
+    <ClInclude Include="Include\BarGaugeVS.h" />
+    <ClInclude Include="Include\BulletManager.h" />
+    <ClInclude Include="Include\BulletNormal.h" />
+    <ClInclude Include="Include\BulletObject.h" />
+    <ClInclude Include="Include\ChangeStates.hxx" />
+    <ClInclude Include="Include\CharacterBase.h" />
+    <ClInclude Include="Include\Dijkstra.h" />
+    <ClInclude Include="Include\DX11RenderResource.h" />
+    <ClInclude Include="Include\Effect.hxx" />
+    <ClInclude Include="Include\Enemy.h" />
+    <ClInclude Include="Include\EnemyAI.h" />
+    <ClInclude Include="Include\Graphic_Text.h" />
+    <ClInclude Include="Include\IncludeForward.h" />
+    <ClInclude Include="Include\IncludeInstance.h" />
+    <ClInclude Include="Include\MS3DRender.h" />
+    <ClInclude Include="Include\MSBase2DSpriteShader.h" />
+    <ClInclude Include="Include\MSBase3DShader.h" />
+    <ClInclude Include="Include\MSBaseShader.h" />
+    <ClInclude Include="Include\MSBaseShaderResource.h" />
+    <ClInclude Include="Include\MSCollisionBase.h" />
+    <ClInclude Include="Include\MSCollisionRay.h" />
+    <ClInclude Include="Include\MSCollisionRayPicking.h" />
+    <ClInclude Include="Include\MSCollisionSphere.h" />
+    <ClInclude Include="Include\MSCullingFrustum.h" />
+    <ClInclude Include="Include\MSCullingOcclusion.h" />
+    <ClInclude Include="Include\MSDebug.h" />
+    <ClInclude Include="Include\MSDirect.h" />
+    <ClInclude Include="Include\MSFbxDatabase.h" />
+    <ClInclude Include="Include\MSFbxManager.h" />
+    <ClInclude Include="Include\MSFbxObject.h" />
+    <ClInclude Include="Include\MSGravity.h" />
+    <ClInclude Include="Include\MSKeyCodeList.h" />
+    <ClInclude Include="Include\MSPixelShader.h" />
+    <ClInclude Include="Include\MSProgressData.hxx" />
+    <ClInclude Include="Include\MSSceneBase.h" />
+    <ClInclude Include="Include\MSSprite2DRender.h" />
+    <ClInclude Include="Include\MSSprite2DResource.h" />
+    <ClInclude Include="Include\MSUtility.h" />
+    <ClInclude Include="Include\MSVertexShader.h" />
+    <ClInclude Include="Include\MSWindow.h" />
+    <ClInclude Include="Include\My3DShader.h" />
+    <ClInclude Include="Include\MyScene.h" />
+    <ClInclude Include="Include\MySceneUI.h" />
+    <ClInclude Include="Include\MySprite2DShader.h" />
+    <ClInclude Include="Include\MySprite3DShader.h" />
+    <ClInclude Include="Include\NBullet.h" />
+    <ClInclude Include="Include\Player.h" />
+    <ClInclude Include="Include\Title.h" />
+    <ClInclude Include="Include\UIBase.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C433557F-113C-4D21-B652-F6AF721C2101}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>MainGameProject</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)x86_$(PlatformShortName)</TargetName>
+    <OutDir>$(ProjectDir)exe\</OutDir>
+    <IncludePath>$(ProjectDir)Include;$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)x86_$(PlatformShortName)</TargetName>
+    <OutDir>$(ProjectDir)exe\</OutDir>
+    <IncludePath>$(ProjectDir)Include;$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DXMath\Library;$(SolutionDir)CppBuiltInLua\Library;$(SolutionDir)SpawnMapImporter\Library;$(SolutionDir)AIMapImporter\Library;$(SolutionDir)FBXRenderSample\NcgLua;$(SolutionDir)Effekseer\lib;$(SolutionDir)DX11FbxLoader\FBXSDK\$(PlatformShortName)\debug;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DXMath\Library;$(SolutionDir)CppBuiltInLua\Library;$(SolutionDir)SpawnMapImporter\Library;$(SolutionDir)AIMapImporter\Library;$(SolutionDir)FBXRenderSample\NcgLua;$(SolutionDir)Effekseer\lib;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

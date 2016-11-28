@@ -91,7 +91,7 @@ void MyMSScene::Initialize()
 	shader.InitVertex("Simple.hlsl");
 	shader.InitPixel("Simple.hlsl");
 
-	mdDB.Load("res/box.fbx", false, cbox);
+	mdDB.Load("res/box.fbx", false, cbullet);
 	//mdDB.Load("res/box.fbx", false, cChara);
 	mdDB.Load("res/Character/FoxyGirl_Static.fbx", true, cChara);
 
@@ -125,7 +125,7 @@ void MyMSScene::Initialize()
 		enemy[i]->Initialize(mFieldStatus);
 		enemy[i]->SetAI(mLuaDb.GetManager(0));
 		enemy[i]->SetMesh(*mdDB.Get(cChara));
-		enemy[i]->SetCollisionMesh(*mdDB.Get(cbox));
+		enemy[i]->SetCollisionMesh(*mdDB.Get(cbullet));
 		enemy[i]->SetCollisionScale(scaleBall, scaleBall, scaleBall);
 		enemy[i]->SetRenderer(&render);
 		enemy[i]->SetShader(&shader);
@@ -152,7 +152,7 @@ void MyMSScene::Initialize()
 
 	mPlayer.Initialize(mFieldStatus);
 	mPlayer.SetMesh(*mdDB.Get(cChara));
-	mPlayer.SetCollisionMesh(*mdDB.Get(cbox));
+	mPlayer.SetCollisionMesh(*mdDB.Get(cbullet));
 	mPlayer.SetCollisionScale(scaleBall, scaleBall, scaleBall);
 	mPlayer.SetRenderer(&render);
 	mPlayer.SetShader(&shader);
@@ -181,7 +181,7 @@ void MyMSScene::Initialize()
 	//バレットマネージャの初期化
 	{
 		bltManager.Initialize();
-		bltManager.RegisterMesh(mdDB.Get(cbox),0);
+		bltManager.RegisterMesh(mdDB.Get(cbullet),0);
 		bltManager.RegisterShader(&shader, 0);
 		bltManager.RegisterChara(&mPlayer, 0);
 		

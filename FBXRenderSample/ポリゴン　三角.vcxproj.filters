@@ -130,7 +130,6 @@
     <ClCompile Include="MSProgress\MSProgresData.cxx">
       <Filter>MSDirect\MSUtility\Source</Filter>
     </ClCompile>
-    <ClCompile Include="MSGravity.cpp" />
     <ClCompile Include="Comform\Effekseer\Effect.cxx">
       <Filter>Comform\Effekseer</Filter>
     </ClCompile>
@@ -158,10 +157,19 @@
     <ClCompile Include="Graphic_Text.cpp">
       <Filter>MSDirect\DX11\TextRenderer</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp" />
-    <ClCompile Include="BulletManager.cpp" />
-    <ClCompile Include="NBullet.cpp" />
     <ClCompile Include="ChangeStates.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletManager.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MSGravity.cpp">
+      <Filter>MSDirect\MSUtility\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="NBullet.cpp">
       <Filter>Game\Object\Source</Filter>
     </ClCompile>
   </ItemGroup>

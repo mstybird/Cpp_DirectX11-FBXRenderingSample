@@ -1,0 +1,569 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Comfort">
+      <UniqueIdentifier>{d04896d9-b3c1-4296-9d64-09826478082a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Example">
+      <UniqueIdentifier>{51aebfb1-8c88-4f37-9ba4-6581a8144b65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{395e186b-fc38-4556-8af6-97687a2d5b30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper">
+      <UniqueIdentifier>{f0855ea6-0b9e-485b-82e0-3a3c71fbea8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect">
+      <UniqueIdentifier>{ef7a7906-fd99-43bb-b8cf-5c5f84995694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NoUse">
+      <UniqueIdentifier>{0a9c06a5-af39-4902-b059-826a651b6eaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{30becb91-d12e-4f5d-b588-005045b304ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Comfort\Effekseer">
+      <UniqueIdentifier>{d1f67a16-7ac3-4b4c-9624-d70226d1285d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Comfort\Effekseer\Header">
+      <UniqueIdentifier>{89b01872-ee9a-4a1e-9368-c761ed6eadfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Comfort\Effekseer\Source">
+      <UniqueIdentifier>{361b0476-5225-4b7c-9f2a-c299c0bce629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Example\Header">
+      <UniqueIdentifier>{f7b36a35-b661-4e82-8271-b3f1bc711132}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Example\Source">
+      <UniqueIdentifier>{69f82364-2d56-4e79-9986-386146843c44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AI">
+      <UniqueIdentifier>{0c2f1a1c-3a70-41a5-9ada-7134877abc40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Bullet">
+      <UniqueIdentifier>{bab32002-0174-409e-88cc-3f40580e1e33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Character">
+      <UniqueIdentifier>{d7b1ce67-ec13-45f7-98e5-b3e28ac229f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameIncludes">
+      <UniqueIdentifier>{9a526f05-ee77-47d6-92bc-7bda90c88052}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object">
+      <UniqueIdentifier>{d0981959-5f33-4bde-a39a-4b34c607f185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{92e99433-4bde-4116-83aa-bfd574383176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader">
+      <UniqueIdentifier>{260f1f9d-47d2-41e0-b07c-ab045d8b1660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Status">
+      <UniqueIdentifier>{ab7febf3-4096-4447-973e-45f55b0ee2a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI">
+      <UniqueIdentifier>{648ba709-8f97-40b4-adae-9e40bf958014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11">
+      <UniqueIdentifier>{06763a6d-731f-406d-92c0-4d7eb2fca966}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\Collision">
+      <UniqueIdentifier>{f960aa23-d8ea-41a1-bdd4-d3e9bb8c22c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\Culling">
+      <UniqueIdentifier>{ddfbd23d-6468-4b28-b9b0-453d3d624f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\System">
+      <UniqueIdentifier>{828c4b59-24b4-445d-8e88-6ed643503f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\Utility">
+      <UniqueIdentifier>{3c1bf00e-f62c-4643-8952-b97f0be1a64e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Fbx">
+      <UniqueIdentifier>{6f6ce737-f1bd-4f6e-a605-6ea7e3888603}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Render">
+      <UniqueIdentifier>{9728de2a-d821-4a74-8ec6-eef11ad583ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader">
+      <UniqueIdentifier>{3e735de2-19b4-4c5d-8d3d-8141138ddca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\TextRender">
+      <UniqueIdentifier>{4bf3720b-e14d-4a0a-8b90-de0d9067f6ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\3D">
+      <UniqueIdentifier>{b7102259-d535-4986-92c9-784686a76e35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Base">
+      <UniqueIdentifier>{57a079ec-528d-403a-a538-9df80eb61c85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Sprite">
+      <UniqueIdentifier>{4edd74ee-3909-41ac-a28a-716a04798da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AI\Header">
+      <UniqueIdentifier>{dd3ca226-64ce-45bd-9c7c-524b7b395a26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AI\Source">
+      <UniqueIdentifier>{e91e154d-40f1-4d47-94fe-7a2239c93946}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Bullet\Header">
+      <UniqueIdentifier>{9be617d4-03b7-4be6-ad5a-36d0879f66a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Bullet\Source">
+      <UniqueIdentifier>{82199141-fe4b-4c49-9372-c40d768a055f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Character\Header">
+      <UniqueIdentifier>{5a80d889-8d7f-42d5-8668-fc44d330a1f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Character\Source">
+      <UniqueIdentifier>{fafca655-fa6f-426e-840a-b757afad1532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameIncludes\Header">
+      <UniqueIdentifier>{c4473e4d-c039-4a9c-b751-5a63059763a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI\Header">
+      <UniqueIdentifier>{a8d887de-13e0-48ae-ab0b-0ce01e24c518}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI\Source">
+      <UniqueIdentifier>{6339b68f-1e65-49e9-b039-647b2667e854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Status\Header">
+      <UniqueIdentifier>{cbdb95c5-8e49-4f4c-9076-1151f36e3125}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Status\Source">
+      <UniqueIdentifier>{73ab0f23-2cd2-4fd4-a8dc-bf529996c736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader\Header">
+      <UniqueIdentifier>{4cf53074-49dc-4891-b278-a0811cb6ae95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shader\Source">
+      <UniqueIdentifier>{0103475f-b102-4cf5-b3a5-3f5d65d39d22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\Header">
+      <UniqueIdentifier>{1d1fdc51-c7c9-4bd2-8a6d-713c0425ec63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\Source">
+      <UniqueIdentifier>{f8d2fc4c-bdf4-43e3-9293-045427aff363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Header">
+      <UniqueIdentifier>{32f62a1b-664b-4a96-9c0b-51092d792550}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Source">
+      <UniqueIdentifier>{c259cfb0-0f7a-4dfe-afea-2726b8f0ba37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameIncludes\Source">
+      <UniqueIdentifier>{cbc2fe1d-744b-4615-9428-b3c9e4abe7e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Fbx\Header">
+      <UniqueIdentifier>{5db6cd31-219d-49cd-a73f-90b1640ff056}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Fbx\Source">
+      <UniqueIdentifier>{1fd3aa54-4d80-4753-a1a2-9ab1261a479c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\TextRender\Header">
+      <UniqueIdentifier>{9e04b7c0-6fbd-4164-bbb5-02b4abb8b165}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\TextRender\Source">
+      <UniqueIdentifier>{0bd30372-1fad-4477-ad6f-8e7e2646acf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\3D\Header">
+      <UniqueIdentifier>{b0cbe427-01df-4edd-85a8-1c9481bb9df9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\3D\Source">
+      <UniqueIdentifier>{514d3afa-7a02-4bba-a276-76dd60d5cc24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Base\Header">
+      <UniqueIdentifier>{b205056d-8271-43ac-a9c3-53e644263bd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Base\Source">
+      <UniqueIdentifier>{b000635e-aa93-4884-b273-6fd5c962eb51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Sprite\Header">
+      <UniqueIdentifier>{6321902f-6821-467f-b292-0ec1a56cd753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Shader\Sprite\Source">
+      <UniqueIdentifier>{597dfeb8-ee43-4ec9-a429-61d5da0d1059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Render\Header">
+      <UniqueIdentifier>{dfeaf4bc-258c-4426-a8a4-88bfaea330f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\DX11\Render\Source">
+      <UniqueIdentifier>{ab2a9f03-c15f-457b-8aed-4876f9d4b64e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\Collision\Header">
+      <UniqueIdentifier>{b0170de3-2e40-4ea1-ab17-0a735f0a1b35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\Collision\Source">
+      <UniqueIdentifier>{4ac71b25-7a59-4c3c-9537-0c1dab4272b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\Culling\Header">
+      <UniqueIdentifier>{42041251-8e81-4608-a045-6a43cb1cde47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\Culling\Source">
+      <UniqueIdentifier>{e041d818-36e7-4c13-a7d6-54bd2e2e6eb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\Utility\Header">
+      <UniqueIdentifier>{226294f4-07bf-4fe5-9ada-34094f90598b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\Utility\Source">
+      <UniqueIdentifier>{58d4d8f6-590b-4def-a7ba-5357ae4062c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\System\Header">
+      <UniqueIdentifier>{3181eafd-a03f-498e-8fea-f6a7c9a47715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\System\Souce">
+      <UniqueIdentifier>{288e9bf4-7ca2-4d00-a751-fdfb62d99802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NoUse\Header">
+      <UniqueIdentifier>{77e75a5c-c05a-4ebb-8325-e8a9430d6581}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NoUse\Source">
+      <UniqueIdentifier>{ac0f149e-06c8-4da0-bbbe-a5b62c001ff2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Header">
+      <UniqueIdentifier>{0dc50dd6-025a-47e7-a2da-0b57e67f2537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Source">
+      <UniqueIdentifier>{0e0bcf6d-5835-47de-98c9-d4884a04951c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Comfort\Effekseer\Effect.cxx">
+      <Filter>Comfort\Effekseer\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Example\example_Sprite2D.cpp">
+      <Filter>Example\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\AI\Dijkstra.cpp">
+      <Filter>Game\AI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\AI\EnemyAI.cpp">
+      <Filter>Game\AI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Bullet\BulletManager.cpp">
+      <Filter>Game\Bullet\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Bullet\BulletNormal.cpp">
+      <Filter>Game\Bullet\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Bullet\BulletObject.cpp">
+      <Filter>Game\Bullet\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Bullet\ChangeStates.cpp">
+      <Filter>Game\Bullet\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Bullet\NBullet.cpp">
+      <Filter>Game\Bullet\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Character\CharacterBase.cpp">
+      <Filter>Game\Character\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Character\Enemy.cpp">
+      <Filter>Game\Character\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Character\Player.cpp">
+      <Filter>Game\Character\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\UI\BarGauge.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\UI\BarGaugeVS.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\UI\MySceneUI.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\UI\UIBase.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Status\StatusBase.cpp">
+      <Filter>Game\Status\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Status\StatusEnemy.cpp">
+      <Filter>Game\Status\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Status\StatusField.cpp">
+      <Filter>Game\Status\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Status\StatusFrame.cpp">
+      <Filter>Game\Status\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Status\StatusPlayer.cpp">
+      <Filter>Game\Status\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Status\StatusTeam.cpp">
+      <Filter>Game\Status\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Shader\My3DShader.cpp">
+      <Filter>Game\Shader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Shader\MySprite2DShader.cpp">
+      <Filter>Game\Shader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Shader\MySprite3DShader.cpp">
+      <Filter>Game\Shader\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\MyScene.cpp">
+      <Filter>Game\Scene\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\Title.cpp">
+      <Filter>Game\Scene\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Object\GameObjectBase.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Object\StaticObject.cpp">
+      <Filter>Game\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Helper\Helper.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Fbx\MSFbxDatabase.cpp">
+      <Filter>MSDirect\DX11\Fbx\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Fbx\MSFbxManager.cpp">
+      <Filter>MSDirect\DX11\Fbx\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Fbx\MSFbxObject.cpp">
+      <Filter>MSDirect\DX11\Fbx\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\TextRender\Graphic_Text.cpp">
+      <Filter>MSDirect\DX11\TextRender\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Shader\3D\MSBase3DShader.cpp">
+      <Filter>MSDirect\DX11\Shader\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSBaseShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSBaseShaderResource.cpp">
+      <Filter>MSDirect\DX11\Shader\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSPixelShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSVertexShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Base\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Sprite\MSBase2DSpriteShader.cpp">
+      <Filter>MSDirect\DX11\Shader\Sprite\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Sprite\MSSprite2DRender.cpp">
+      <Filter>MSDirect\DX11\Shader\Sprite\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Shader\Sprite\MSSprite2DResource.cpp">
+      <Filter>MSDirect\DX11\Shader\Sprite\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Render\DX11RenderResource.cpp">
+      <Filter>MSDirect\DX11\Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Render\MS3DRender.cpp">
+      <Filter>MSDirect\DX11\Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\Collision\MSCollisionBase.cpp">
+      <Filter>MSDirect\Collision\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\Collision\MSCollisionRay.cpp">
+      <Filter>MSDirect\Collision\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\Collision\MSCollisionRayPicking.cpp">
+      <Filter>MSDirect\Collision\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\Culling\MSCullingFrustum.cpp">
+      <Filter>MSDirect\Culling\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\Culling\MSCullingOcclusion.cpp">
+      <Filter>MSDirect\Culling\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\Utility\MSGravity.cpp">
+      <Filter>MSDirect\Utility\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\Utility\MSProgresData.cxx">
+      <Filter>MSDirect\Utility\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\Utility\MSUtility.cpp">
+      <Filter>MSDirect\Utility\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\System\MSDirect.cpp">
+      <Filter>MSDirect\System\Souce</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\System\MSKeyCodeList.cpp">
+      <Filter>MSDirect\System\Souce</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\System\MSSceneBase.cpp">
+      <Filter>MSDirect\System\Souce</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\System\MSWindow.cpp">
+      <Filter>MSDirect\System\Souce</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\Collision\MSCollisionSphere.cpp">
+      <Filter>MSDirect\Collision\Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\NoUse\2DSprite.txt">
+      <Filter>NoUse\Source</Filter>
+    </Text>
+    <Text Include="Source\NoUse\Task.txt">
+      <Filter>NoUse\Source</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\Effect.hxx">
+      <Filter>Comfort\Effekseer\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dijkstra.h">
+      <Filter>Game\AI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\EnemyAI.h">
+      <Filter>Game\AI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\BulletManager.h">
+      <Filter>Game\Bullet\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\BulletNormal.h">
+      <Filter>Game\Bullet\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\BulletObject.h">
+      <Filter>Game\Bullet\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CharacterBase.h">
+      <Filter>Game\Character\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy.h">
+      <Filter>Game\Character\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player.h">
+      <Filter>Game\Character\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\IncludeForward.h">
+      <Filter>Game\GameIncludes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\IncludeInstance.h">
+      <Filter>Game\GameIncludes\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MySceneUI.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\UIBase.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\BarGauge.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\BarGaugeVS.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ChangeStates.hxx">
+      <Filter>Game\Bullet\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NBullet.h">
+      <Filter>Game\Bullet\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\My3DShader.h">
+      <Filter>Game\Shader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MySprite2DShader.h">
+      <Filter>Game\Shader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MySprite3DShader.h">
+      <Filter>Game\Shader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MyScene.h">
+      <Filter>Game\Scene\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Title.h">
+      <Filter>Game\Scene\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSFbxDatabase.h">
+      <Filter>MSDirect\DX11\Fbx\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSFbxManager.h">
+      <Filter>MSDirect\DX11\Fbx\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSFbxObject.h">
+      <Filter>MSDirect\DX11\Fbx\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphic_Text.h">
+      <Filter>MSDirect\DX11\TextRender\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSBase3DShader.h">
+      <Filter>MSDirect\DX11\Shader\3D\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSBaseShader.h">
+      <Filter>MSDirect\DX11\Shader\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSBaseShaderResource.h">
+      <Filter>MSDirect\DX11\Shader\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSPixelShader.h">
+      <Filter>MSDirect\DX11\Shader\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSVertexShader.h">
+      <Filter>MSDirect\DX11\Shader\Base\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSBase2DSpriteShader.h">
+      <Filter>MSDirect\DX11\Shader\Sprite\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSSprite2DRender.h">
+      <Filter>MSDirect\DX11\Shader\Sprite\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSSprite2DResource.h">
+      <Filter>MSDirect\DX11\Shader\Sprite\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\DX11RenderResource.h">
+      <Filter>MSDirect\DX11\Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MS3DRender.h">
+      <Filter>MSDirect\DX11\Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSCollisionBase.h">
+      <Filter>MSDirect\Collision\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSCollisionRay.h">
+      <Filter>MSDirect\Collision\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSCollisionRayPicking.h">
+      <Filter>MSDirect\Collision\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSCollisionSphere.h">
+      <Filter>MSDirect\Collision\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSCullingFrustum.h">
+      <Filter>MSDirect\Culling\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSCullingOcclusion.h">
+      <Filter>MSDirect\Culling\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSGravity.h">
+      <Filter>MSDirect\Utility\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSKeyCodeList.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSSceneBase.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSWindow.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSProgressData.hxx">
+      <Filter>MSDirect\Utility\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSUtility.h">
+      <Filter>MSDirect\Utility\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSDirect.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSDebug.h">
+      <Filter>MSDirect\System\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NoUse\NoCompile.cc">
+      <Filter>NoUse\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NoUse\Sample.cxx">
+      <Filter>NoUse\Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

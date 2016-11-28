@@ -39,7 +39,7 @@
     <RootNamespace>PolygonTriangle</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>MainGame</ProjectName>
+    <ProjectName>MainGameBefore</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -118,10 +118,10 @@
     <_ProjectFileVersion>11.0.60610.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)exe\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>$(ProjectName)x86</TargetName>
+    <TargetName>$(ProjectName)x86_$(PlatformShortName)</TargetName>
     <IncludePath>$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include;$(ProjectDir)Include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -142,10 +142,10 @@
     <IncludePath>$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include;$(ProjectDir)Include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)exe\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>$(ProjectName)x86</TargetName>
+    <TargetName>$(ProjectName)x86_$(PlatformShortName)</TargetName>
     <IncludePath>$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include;$(ProjectDir)Include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

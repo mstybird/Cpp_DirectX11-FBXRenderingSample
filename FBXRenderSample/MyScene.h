@@ -105,7 +105,7 @@ private:
 	::Comfort::EffectDatabase mEfkDb;
 	::Comfort::EfkObject mEfkObj;
 
-	const int cbox = 0;
+	const int cbullet = 0;
 	const int cChara = 1;
 	const int cFieldD = 2;
 	const int cFieldC = 3;
