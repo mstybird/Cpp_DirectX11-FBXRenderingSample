@@ -226,6 +226,15 @@
     <Filter Include="Reference\Source">
       <UniqueIdentifier>{0e0bcf6d-5835-47de-98c9-d4884a04951c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference\Dictionary">
+      <UniqueIdentifier>{a1ad152c-d000-4bdb-88fb-9663b1af5b36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Title">
+      <UniqueIdentifier>{1c5152be-d221-4ada-8e2d-04223e1c915d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Title\UI">
+      <UniqueIdentifier>{546e3665-a1a3-4eff-9426-49f179575520}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Comfort\Effekseer\Effect.cxx">
@@ -399,6 +408,12 @@
     <ClCompile Include="Source\MSDirect\Collision\MSCollisionSphere.cpp">
       <Filter>MSDirect\Collision\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Status\StatusBulletBase.cpp">
+      <Filter>Game\Status\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\UI\Button.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\NoUse\2DSprite.txt">
@@ -406,6 +421,9 @@
     </Text>
     <Text Include="Source\NoUse\Task.txt">
       <Filter>NoUse\Source</Filter>
+    </Text>
+    <Text Include="IDRangeDefine.txt">
+      <Filter>Reference\Dictionary</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
@@ -565,5 +583,40 @@
     <ClInclude Include="Source\NoUse\Sample.cxx">
       <Filter>NoUse\Source</Filter>
     </ClInclude>
+    <ClInclude Include="Include\statusbulletbase.h">
+      <Filter>Game\Status\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\StatusBulletNormal.h">
+      <Filter>Game\Status\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\StatusEnemy.h">
+      <Filter>Game\Status\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\StatusField.h">
+      <Filter>Game\Status\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\StatusFrame.h">
+      <Filter>Game\Status\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\StatusPlayer.h">
+      <Filter>Game\Status\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\StatusStatic.h">
+      <Filter>Game\Status\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\statusbase.h">
+      <Filter>Game\Status\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Button.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="NatvisFile.natvis">
+      <Filter>Reference\Dictionary</Filter>
+    </Natvis>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PropertySheet.props" />
   </ItemGroup>
 </Project>

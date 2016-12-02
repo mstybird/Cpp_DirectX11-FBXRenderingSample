@@ -83,6 +83,14 @@ float MSHormingY(DX11RenderResource & pEyeResource, DXVector3 & pTargetPos, cons
 	lEyePos = lEyePos - lTargetPos;
 	lEyePos.Normalize();
 	float lToTargetRot = D3DXVec3Dot(&DXVector3(0, 0, 1), &lEyePos);
+	
+	if (lToTargetRot >1.0f) {
+		lToTargetRot = 1.0f;
+	}
+	else if (lToTargetRot < -1.0f) {
+		lToTargetRot = -1.0f;
+	}
+
 	lToTargetRot = D3DXToDegree(acos(lToTargetRot));
 	if (lEyePos.x < 0) { lToTargetRot *= -1; }
 

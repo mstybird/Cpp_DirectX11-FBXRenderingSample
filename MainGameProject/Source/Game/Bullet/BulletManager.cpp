@@ -1,10 +1,11 @@
 #include "BulletManager.h"
+#include"MSFbxDatabase.h"
 
-void BulletManager::Initialize()
+void BulletManager::Initialize(StatusBulletBase* aBullet1)
 {
 	nBullet = std::make_unique<NBullet>();
 	nBullet->Initialize();
-	nBullet->InitStatus();
+	nBullet->InitStatus(aBullet1);
 
 	mBulletMap[BulletUniqueID::NBullet] = nBullet.get();
 
@@ -29,10 +30,23 @@ bool BulletManager::RegisterChara(CharacterBase * aChara, const int aActiveID)
 	return true;
 }
 
-void BulletManager::RegisterMesh(MSFbxManager * aMesh, MSFbxManager*aCollisionMesh, const int aID)
+void BulletManager::RegisterMesh(MSFbxDatabase*aModelDb, std::unordered_map<int,float>*aScaleMap,const int aDesignID, const int aCollisionID, const int aBulletID)
 {
-	mBulletMap[aID]->SetMesh(*aMesh);
-	mBulletMap[aID]->SetCollisionMesh(*aCollisionMesh);
+	mBulletMap[aBulletID]->SetMesh(*aModelDb->Get(aDesignID));
+	mBulletMap[aBulletID]->SetMeshScale(
+		aScaleMap->at(aDesignID),
+		aScaleMap->at(aDesignID),
+		aScaleMap->at(aDesignID)
+		);
+
+
+	mBulletMap[aBulletID]->SetCollisionMesh(*aModelDb->Get(aCollisionID));
+	mBulletMap[aBulletID]->SetCollisionScale(
+		aScaleMap->at(aCollisionID),
+		aScaleMap->at(aCollisionID),
+		aScaleMap->at(aCollisionID)
+	);
+
 }
 
 void BulletManager::RegisterShader(MSBase3DShader * aShader, const int aID)

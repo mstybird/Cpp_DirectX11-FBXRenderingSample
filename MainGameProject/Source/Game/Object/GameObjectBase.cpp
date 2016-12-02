@@ -21,7 +21,6 @@ void GameObjectBase::Initialize()
 	mRayPick = std::make_unique<MSCollisionRayPicking>();
 	mRayPick = std::make_unique<MSCollisionRayPicking>();
 	mRayPick->SetSlipFlag(true);
-	mGravity = std::make_unique<MSGravity>();
 }
 void GameObjectBase::SetShader(MSBase3DShader * aShader)
 {
@@ -155,9 +154,11 @@ std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosit
 			continue;
 		}
 		if (mRayPick->Collision(lResult, *mTransform, *lCollision->GetTransform())) {
-			DXVector3 v = *GetWorld()->mPosition;
 			if (pIsUpdatePosition == true) {
 				GetWorld()->SetT(lResult);
+				if (mRayPick->Collision(lResult, *mTransform, *lCollision->GetTransform())) {
+					GetWorld()->SetT(lResult);
+				}
 			}
 			lHitTargets.push_back(lCollision);
 		}

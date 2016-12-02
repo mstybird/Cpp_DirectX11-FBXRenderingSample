@@ -58,8 +58,14 @@ namespace ValueMyScene {
 		static const int cCharaBlackDesignID = 520;
 		static const int cCharaBlackCollisionID = 521;
 
+		static const int cBaseBlackDesignID = 522;
+		static const int cBaseBlackCollisionID = 523;
+
 		static const int cCharaWhiteDesignID = 530;
 		static const int cCharaWhiteCollisionID = 531;
+
+		static const int cBaseWhiteDesignID = 532;
+		static const int cBaseWhiteCollisionID = 533;
 
 		static const int cFieldDesignID = 540;
 		static const int cFieldCollisionID = 541;
@@ -81,12 +87,27 @@ namespace ValueMyScene {
 		static const char* cCharaBlackCollisionScale = "CharaBlackCollisionScale";
 		static const char* cCharaBlackCollisionAnimation = "CharaBlackCollisionAnimation";
 
+		static const char* cBaseBlackDesignModel = "BaseBlackDesignModel";
+		static const char* cBaseBlackDesignScale = "BaseBlackDesignScale";
+		static const char* cBaseBlackDesignAnimation = "BaseBlackDesignAnimation";
+		static const char* cBaseBlackCollisionModel = "BaseBlackCollisionModel";
+		static const char* cBaseBlackCollisionScale = "BaseBlackCollisionScale";
+		static const char* cBaseBlackCollisionAnimation = "BaseBlackCollisionAnimation";
+
+
 		static const char* cCharaWhiteDesignModel = "CharaWhiteDesignModel";
 		static const char* cCharaWhiteDesignScale = "CharaWhiteDesignScale";
 		static const char* cCharaWhiteDesignAnimation = "CharaWhiteDesignAnimation";
 		static const char* cCharaWhiteCollisionModel = "CharaWhiteCollisionModel";
 		static const char* cCharaWhiteCollisionScale = "CharaWhiteCollisionScale";
 		static const char* cCharaWhiteCollisionAnimation = "CharaWhiteCollisionAnimation";
+
+		static const char* cBaseWhiteDesignModel = "BaseWhiteDesignModel";
+		static const char* cBaseWhiteDesignScale = "BaseWhiteDesignScale";
+		static const char* cBaseWhiteDesignAnimation = "BaseWhiteDesignAnimation";
+		static const char* cBaseWhiteCollisionModel = "BaseWhiteCollisionModel";
+		static const char* cBaseWhiteCollisionScale = "BaseWhiteCollisionScale";
+		static const char* cBaseWhiteCollisionAnimation = "BaseWhiteCollisionAnimation";
 
 		static const char* cFieldDesignModel = "FieldDesignModel";
 		static const char* cFieldDesignScale = "FieldDesignScale";
@@ -104,6 +125,12 @@ namespace ValueMyScene {
 
 	}
 
+	//CharaBase値:1500~1999
+	namespace Chara {
+		static const int cStatusID = 1500;
+	}
+
+
 }
 
 class MyMSScene :public MSSceneBase {
@@ -111,7 +138,7 @@ public:
 	MyMSScene();
 	~MyMSScene();
 private:
-	void Initialize();
+	void Initialize()override;
 	void Update()override;
 	void KeyDown(MSKEY pKey)override;
 	void KeyHold(MSKEY pKey)override;
@@ -119,12 +146,23 @@ private:
 	void Destroy() override {}
 
 private:
+	//フォントの初期化
 	void InitializeFont();
+	//UIの初期化
 	void InitializeUI();
+	//Effectの初期化
 	void InitializeEffect();
 	void InitializeModel();
-
+	void InitializeFieldStatus();
+	void InitializeBulletManager();
+	void InitializeCharaFirst();
+	void InitializeEnemy();
+	void InitializePlayer();
+	void InitializeBall();
 	void SetMeshResouce(GameObjectBase*aObject, const int aDesignID, const int aCollisionID);
+	StatusBulletBase LoadBulletStatus(const std::string& aFileName, const int aBulletID);
+
+	void UpdateUI();
 
 private:
 
@@ -150,7 +188,6 @@ private:
 	//2Dスプライト関係
 	MySprite2DShader m2DShader;
 	MSSprite2DRender m2DRender;
-	MSSprite2DResource mImage;
 
 	//UI
 	MySceneUI ui;
@@ -170,5 +207,8 @@ private:
 
 	//ID,拡大率
 	std::unordered_map<int, float>mFbxScaleMap;
+
+	//デフォルトステータス
+	StatusBase mDefaultStatus;
 
 };

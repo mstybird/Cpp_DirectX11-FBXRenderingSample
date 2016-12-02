@@ -16,7 +16,7 @@ class NBullet :public GameObjectBase {
 public:
 	virtual ~NBullet();
 	//主に弾ごとのステータスの初期化
-	virtual void InitStatus();
+	virtual void InitStatus(StatusBulletBase* aBulletStatus);
 	void Create(std::vector<std::unique_ptr<NBullet>>&aOutBulletList, CharacterBase* aShoter);
 
 	StatusBulletBase* GetStatus() {

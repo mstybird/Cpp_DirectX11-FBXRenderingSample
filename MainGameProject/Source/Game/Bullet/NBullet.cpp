@@ -10,17 +10,9 @@ NBullet::~NBullet()
 }
 
 
-void NBullet::InitStatus()
+void NBullet::InitStatus(StatusBulletBase* aBulletStatus)
 {
-	GameObjectBase::Initialize();
-	mStatus.mAtk = 10;
-	mStatus.mCost = 2;
-	mStatus.mDirection = { 0,0,1 };
-	mStatus.mFiringRange = 20.0f;
-	mStatus.mInterval.Set(1.0f, 0.0f, 1.0f);
-	mStatus.mIntervalRecovery = 0.01f;
-	mStatus.mType = BulletDamageType::NORMAL;
-	mStatus.mVelocity = 0.25f;
+	mStatus = *aBulletStatus;
 }
 
 void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, CharacterBase * aShoter)
@@ -32,7 +24,7 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 	bullet->SetShader(mShader);
 	//ƒŠƒ\[ƒX‚Ì‰Šú‰»
 	bullet->Initialize();
-	bullet->InitStatus();
+	bullet->InitStatus(&mStatus);
 	MS3DRender* lRender;
 	aShoter->GetRenderer(lRender);
 	bullet->SetRenderer(lRender);
@@ -55,8 +47,7 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 
 	lShotPos.GetT(lSpwanPos);
 	bullet->GetWorld()->SetT(lSpwanPos);
-
-	lScaling = { 0.01f ,0.01f ,0.01f };
+	lScaling = *GetWorld()->mScale;
 	bullet->GetWorld()->SetS(lScaling);
 
 	//Õ“Ë‘ÎÛ‚ð“o˜^
@@ -129,5 +120,5 @@ void NBullet::Render()
 	if (!mActive)return;
 	assert(mRender);
 	mRender->SetShader(mShader);
-	mRender->Render(*mTransform);
+	mRender->Render(mTransform.get());
 }

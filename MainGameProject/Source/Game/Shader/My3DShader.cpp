@@ -16,16 +16,16 @@ My3DShader::My3DShader() :
 
 void My3DShader::SetConstantBuffer1(
 	FBXMesh& fbxMesh,
-	DX11RenderResource& resource,
-	DXDisplay& pDisplay
+	DX11RenderResource* resource,
+	DXDisplay* pDisplay
 )
 {
 	MyFBXCONSTANTBUFFER1 cb;
 	D3D11_MAPPED_SUBRESOURCE pData;
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
 		
-		cb.mW = *fbxMesh.mWorld * *resource.GetMatrixWorld().lock();
-		cb.mWVP = *resource.GetMatrixWVP(*fbxMesh.mWorld,pDisplay);
+		cb.mW = *fbxMesh.mWorld * *resource->GetMatrixWorld().lock();
+		cb.mWVP = *resource->GetMatrixWVP(*fbxMesh.mWorld,*pDisplay);
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		D3DXMatrixTranspose(&cb.mWVP, &cb.mWVP);
 		cb.LightDir = D3DXVECTOR4(1, 1, -1, 0);

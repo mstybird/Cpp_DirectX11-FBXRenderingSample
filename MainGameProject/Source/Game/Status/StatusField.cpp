@@ -16,6 +16,18 @@ StatusField::~StatusField()
 		delete lNode;
 	}
 }
+void StatusField::Initialize()
+{
+	mTeamBlack.mBase.Initialize();
+	mTeamWhite.mBase.Initialize();
+}
+void StatusField::InitRenderAndShader(MS3DRender & aRender, MSBase3DShader & aShader)
+{
+	mTeamBlack.mBase.SetShader(&aShader);
+	mTeamWhite.mBase.SetShader(&aShader);
+	mTeamBlack.mBase.SetRenderer(&aRender);
+	mTeamWhite.mBase.SetRenderer(&aRender);
+}
 void StatusField::CreateFieldNodes()
 {
 	Comfort::AIMapImporter im;
@@ -130,10 +142,10 @@ void StatusField::CreateSpawnBallNodes()
 	//AddNodeSafe(mSpawnBallNodes, new MyNode{ 5,"obj5",{ 6.25,0.00,2.50 } });
 	//AddNodeSafe(mSpawnBallNodes, new MyNode{ 13,"obj13",{ -4.00,0.00,8.50 } });
 }
-void StatusField::InitGoalIndex()
+void StatusField::InitGoalIndex(const int aWhiteGoalIndex, const int aBlackGoalIndex)
 {
-	mTeamWhite.mGoalIndex = 19;
-	mTeamBlack.mGoalIndex = 80;
+	mTeamWhite.mGoalIndex = aWhiteGoalIndex;
+	mTeamBlack.mGoalIndex = aBlackGoalIndex;
 }
 std::vector<Dijkstra::Node*> StatusField::GetFieldNodesClone()
 {
@@ -153,7 +165,7 @@ void StatusField::Respawn(CharacterBase * aSpawnChara)
 
 	aSpawnChara->GetWorld()->SetT(lPosition);
 	aSpawnChara->SetActive(true);
-	aSpawnChara->InitStatus();
+	aSpawnChara->InitStatus(aSpawnChara->GetDefaultStatus());
 	
 }
 void StatusField::RegisterTeamMember(CharacterBase * aRegistMember, eTeamType aType)
@@ -169,6 +181,22 @@ void StatusField::RegisterTeamMember(CharacterBase * aRegistMember, eTeamType aT
 	default:
 		break;
 	}
+}
+StaticObject * StatusField::GetTeamBase(eTeamType aTeamType)
+{
+	StaticObject* lTeamBase{ nullptr };
+	switch (aTeamType)
+	{
+	case eTeamType::White:
+		lTeamBase = &mTeamWhite.mBase;
+		break;
+	case eTeamType::Black:
+		lTeamBase = &mTeamBlack.mBase;
+		break;
+	default:
+		break;
+	}
+	return lTeamBase;
 }
 StatusTeam * StatusField::GetTeamAlly(CharacterBase * aMember)
 {
@@ -215,6 +243,17 @@ eTeamType StatusField::GetTeamType(CharacterBase * aChara)
 			return eTeamType::White;
 		}
 	}
+}
+DXVector3 StatusField::GetNodePosition(const int aIndex)
+{
+	DXVector3 lResult{};
+	for (auto&lNode : mFieldNodes) {
+		if (lNode->GetID() == aIndex) {
+			lResult = static_cast<MyNode*>(lNode)->Position;
+			break;
+		}
+	}
+	return lResult;
 }
 StatusField::StatusField():
 	mBallHoldChara{nullptr},

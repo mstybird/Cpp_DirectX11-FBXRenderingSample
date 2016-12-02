@@ -30,7 +30,7 @@ void MS3DRender::Clear(D3DXVECTOR4 pColor)
 
 
 
-void MS3DRender::Render(DX11RenderResource&resource)
+void MS3DRender::Render(DX11RenderResource*resource)
 {
 	//shader->SetConstantBuffer1(resource,&display);
 	//シェーダの設定
@@ -41,16 +41,16 @@ void MS3DRender::Render(DX11RenderResource&resource)
 
 	
 
-	auto meshData = resource.mMesh->GetCurrentMeshData();
-	auto lVertexBufferArray = resource.mMesh->GetCurrentVertexBuffer();
-	auto lIndexBufferArray = resource.mMesh->GetCurrentIndexBuffer();
-	auto lIndexBufferLengthArray = resource.mMesh->GetCurrentIndexBufferCount();
+	auto meshData = resource->mMesh->GetCurrentMeshData();
+	auto lVertexBufferArray = resource->mMesh->GetCurrentVertexBuffer();
+	auto lIndexBufferArray = resource->mMesh->GetCurrentIndexBuffer();
+	auto lIndexBufferLengthArray = resource->mMesh->GetCurrentIndexBufferCount();
 
 	//auto meshData = fbxManager.lock()->GetMeshData();
 	//メッシュの個数分
 	for (unsigned int i = 0; i < lVertexBufferArray->size(); i++) {
 		//メッシュ単位の設定
-		shader->SetConstantBuffer1(*meshData->at(i), resource, *display);
+		shader->SetConstantBuffer1(*meshData->at(i), resource, display.get());
 		//全てのメッシュに対して共通のデータを登録
 		sDeviceContext->VSSetConstantBuffers(0, 1, shader->GetCB1());
 		sDeviceContext->PSSetConstantBuffers(0, 1, shader->GetCB1());

@@ -7,12 +7,10 @@
 #include"MSGravity.h"
 #include"DXWorld.h"
 #include"NBullet.h"
-Player::Player():
-	//mCameraLen{ 0.0f,0.3f,-2.0f },
-	//mCameraOffset{ -1.45f,1.5f,0.0f }
-	mCameraLen{ 0.0f,50.0f,-0.1f },
-	mCameraOffset{ 0.0f,0.0f,0.0f }
+Player::Player()
 {
+	mCameraLen = { 0.0f,50.0f,-0.1f };
+	mCameraOffset = { 0.0f,0.0f,0.0f };
 	//mBulletNormal = std::make_unique<BulletNormal>();
 	mStatus = std::make_unique<StatusPlayer>();
 }
@@ -22,7 +20,6 @@ Player::~Player()
 void Player::Initialize(StatusField&pSetStatus)
 {
 	CharacterBase::Initialize(pSetStatus);
-	InitStatus();
 }
 
 void Player::Update()
@@ -61,7 +58,6 @@ void Player::UpdateAlive()
 		break;
 	case CharaStateFlag::RESPAWNWAIT:
 		//スポーン
-		InitStatus();
 		Respawn();
 
 		break;
@@ -70,33 +66,11 @@ void Player::UpdateAlive()
 	}
 }
 
-void Player::UpdateGravity()
-{
-	mGravity->UpdateGravity();
-	float f = mGravity->GetGravity();
-	this->GetWorld()->AddT(
-		DXWorld::TYPE_PARALLEL,
-		f,
-		{0,-1,0}
-	);
-}
-
-void Player::UpdateCamera()
-{
-	//座標を取得
-	auto lLookPosition = *GetWorld()->mPosition;
-	//差分計算
-	auto lEyePosition = lLookPosition + mCameraLen;
-	//カメラ位置をずらす
-	//lLookPosition += mCameraOffset;
-	//lEyePosition += mCameraOffset;
-	GetView()->SetCamera(*GetWorld(),mCameraLen,mCameraOffset);
-}
 
 void Player::Render()
 {
 	mRender->SetShader(mShader);
-	mRender->Render(*mTransform);
+	mRender->Render(mTransform.get());
 	RenderBullets();
 }
 
@@ -107,20 +81,7 @@ void Player::AddBullet()
 }
 
 
-void Player::InitStatus()
+void Player::InitStatus(const StatusBase* aInitStatus)
 {
-	auto lStatus = GetStatus<StatusPlayer>();
-	lStatus->mBall = nullptr;
-	lStatus->mEnergy.Set(5.0f, 0.0f, 2.0f);
-	lStatus->mHp.Set(10.0f, .0f, 10.0f);
-	lStatus->mLive = CharaStateFlag::ALIVE;
-	lStatus->mTargetChara = nullptr;
-	mGravity->Initialize(
-		true,
-		0.05f,
-		-0.05f,
-		0.0f,
-		0.1f,
-		0.01f
-	);
+	CharacterBase::InitStatus(aInitStatus);
 }

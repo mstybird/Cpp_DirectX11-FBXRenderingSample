@@ -24,7 +24,7 @@ public:
 	static void Clear(D3DXVECTOR4 pColor);
 
 	//レンダリング
-	void Render(DX11RenderResource&resource);
+	void Render(DX11RenderResource*resource);
 
 	//描画画面(ビュー行列と射影行列)を設定
 	void SetRenderTarget(const std::weak_ptr<DX11RenderResource>resource);

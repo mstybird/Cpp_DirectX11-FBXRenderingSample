@@ -35,9 +35,9 @@ public:
 
 	void Render()override;
 
-private:
 	//ステータスの初期化
-	void InitStatus()override;
+	void InitStatus(const StatusBase* aInitStatus)override;
+private:
 	//AIを更新する
 	void UpdateAI();
 

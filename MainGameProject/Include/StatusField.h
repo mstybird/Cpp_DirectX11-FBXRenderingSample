@@ -40,23 +40,28 @@ struct StatusField {
 	//ボールオブジェクトスポーン用ノードリスト
 	std::vector<Dijkstra::Node*>mSpawnBallNodes;
 
+	void Initialize();
+	void InitRenderAndShader(MS3DRender& aRender, MSBase3DShader&aShader);
 	void CreateFieldNodes();
 	void CreateSpawnCharaNodes();
 	void CreateSpawnBallNodes();
-	void InitGoalIndex();
+	void InitGoalIndex(const int aWhiteGoalIndex, const int aBlackGoalIndex);
 	std::vector<Dijkstra::Node*>GetFieldNodesClone();
 	//キャラクターをリスポーンさせる
 	void Respawn(CharacterBase* aSpawnChara);
 
 	//チームにメンバーを登録する
 	void RegisterTeamMember(CharacterBase*aRegistMember,eTeamType aType);
-
+	//チームのゴールを取得する
+	StaticObject* GetTeamBase(eTeamType aTeamType);
 	//所属しているチームを取得
 	StatusTeam* GetTeamAlly(CharacterBase*aMember);
 	//相手のチームを取得
 	StatusTeam* GetTeamEnemy(CharacterBase*aMember);
 	//自チームのタイプを取得
 	eTeamType GetTeamType(CharacterBase*aChara);
+	//
+	DXVector3 GetNodePosition(const int aIndex);
 
 	void SetBallHolder(CharacterBase*pBallHolder);
 	void RespawnBall(DXVector3*pPosition = nullptr);

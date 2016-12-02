@@ -1,6 +1,7 @@
 ﻿#include"MyScene.h"
 #include"MSUtility.h"
 #include"BarGauge.h"
+
 /*
 タスク：
 攻撃を受けるとダメージ
@@ -12,7 +13,7 @@ UI設計
 */
 
 //const int ValueMyScene::UI::cUILuaID = 100;
-
+const int cEnemyCount = 4;
 MyMSScene::MyMSScene()
 {
 }
@@ -31,20 +32,8 @@ void MyMSScene::Initialize()
 
 	InitializeFont();
 	InitializeModel();
-	//エフェクト初期化
-	{
-		//using namespace Comfort;
-		mEfkRender.Initialize(MSDirect::GetDevice(), MSDirect::GetDeviceContext());
-		mEfkManager.Initialize(mEfkRender.GetRenderer());
-		mEfkDb.Initialize(mEfkManager.GetManager());
-		mEfkDb.Load("Resource/Effect/test.efk", 0);
+	InitializeEffect();
 
-		mEfkObj.SetManager(&mEfkManager);
-		decltype(auto) lEfk = mEfkDb.Get(0);
-		mEfkObj.SetEffect(lEfk);
-		mEfkObj.SetPosition({ 11.0f,0.0f,7.5f });
-
-	}
 
 	{
 		//スプライト初期化
@@ -54,101 +43,31 @@ void MyMSScene::Initialize()
 		m2DRender.SetViewPort(MSDirect::GetViewPort());
 		m2DRender.SetShader(m2DShader);
 
-		mTexManager.RegistFromFile("Resource/Texture/MyScene/Chips_Cover.jpg", 0);
-		mTexManager.RegistFromFile("Resource/Texture/MyScene/Grass.png", 1);
-
-		mImage.SetTexture(mTexManager, 0);
-		mImage.SetSize({ 150,100 });
-		mImage.SetPosition({ 50, 25 });
-		mImage.SetSplitSizeX({ 0.5f,1.0f });
-		mImage.CreateBuffer();
-
-
-
-
-
 
 	}
-
-	InitializeUI();
-
-	{
-		mBall.Initialize();
-		mFieldStatus.CreateFieldNodes();
-		mFieldStatus.CreateSpawnCharaNodes();
-		mFieldStatus.CreateSpawnBallNodes();
-		mFieldStatus.InitGoalIndex();
-		mFieldStatus.mBallIsField = true;
-		mFieldStatus.mBall = &mBall;
-		mFieldStatus.RespawnBall();
-	}
-
 	//AI読み込み
 	mLuaDb.Load("Resource/AIPlanning/EnemyTask.lua", 0, "EnemyAI");
 
 	shader.Init();
+	//レンダラーシェーダーにはアドレスを記憶させるようにする
+	mBall.SetRenderer(&render);
+	mBall.SetShader(&shader);
 	shader.InitVertex("Resource/HLSL/Simple.hlsl");
 	shader.InitPixel("Resource/HLSL/Simple.hlsl");
 
-	//mdDB.Load("Resource/Model/box.fbx", false, cbullet);
-	////mdDB.Load("Resource/Model/box.fbx", false, cChara);
-	//mdDB.Load("Resource/Model/FoxyGirl_Static.fbx", true, cChara);
+	InitializeBall();
+	InitializeCharaFirst();
+	//敵数、プレイヤーを含むチーム分けも中で初期化している
+	InitializeFieldStatus();
+	InitializeBulletManager();
+	InitializePlayer();
+	InitializeEnemy();
 
-	//mdDB.Load("Resource/Model/FieldCollision.fbx", false, cFieldD);
-	//mdDB.Load("Resource/Model/FieldCollision.fbx", false, cFieldC);
-	//mdDB.Load("Resource/Model/ball.fbx", false, cBall);
+	//UIの初期化
+	InitializeUI();
 
-
-
-	//敵の初期化
-	enemy.push_back(make_unique<Enemy>());
-	enemy.push_back(make_unique<Enemy>());
-	enemy.push_back(make_unique<Enemy>());
-	enemy.push_back(make_unique<Enemy>());
-
-	mFieldStatus.RegisterTeamMember(enemy[0].get(), eTeamType::Black);
-	mFieldStatus.RegisterTeamMember(enemy[1].get(), eTeamType::White);
-	mFieldStatus.RegisterTeamMember(enemy[2].get(), eTeamType::Black);
-	mFieldStatus.RegisterTeamMember(enemy[3].get(), eTeamType::White);
-
-	mFieldStatus.RegisterTeamMember(&mPlayer, eTeamType::White);
 
 	//enemy.push_back(make_unique<Enemy>());
-
-
-
-	for (uint16_t i = 0; i < enemy.size(); ++i) {
-		enemy[i]->Initialize(mFieldStatus);
-		enemy[i]->SetAI(mLuaDb.GetManager(0));
-
-		auto lTeamType = mFieldStatus.GetTeamType(enemy[i].get());
-		switch (lTeamType)
-		{
-		case eTeamType::White:
-			SetMeshResouce(
-				enemy[i].get(),
-				ValueMyScene::Model::cCharaWhiteDesignID,
-				ValueMyScene::Model::cCharaWhiteCollisionID
-			);
-			break;
-		case eTeamType::Black:
-			SetMeshResouce(
-				enemy[i].get(),
-				ValueMyScene::Model::cCharaBlackDesignID,
-				ValueMyScene::Model::cCharaBlackCollisionID
-			);			
-			break;
-		default:
-			break;
-		}
-		
-		
-		enemy[i]->SetRenderer(&render);
-		enemy[i]->SetShader(&shader);
-		//enemy[i]->SetBulletMesh(*mdDB.Get(cbox));
-		enemy[i]->Respawn();
-	}
-
 
 
 	mField.Initialize();
@@ -158,107 +77,36 @@ void MyMSScene::Initialize()
 	mField.GetWorld()->SetT(0, -1, 0);
 
 	SetMeshResouce(&mBall, ValueMyScene::Model::cBallDesignID, ValueMyScene::Model::cBallCollisionID);
-	mBall.SetRenderer(&render);
-	mBall.SetShader(&shader);
-
-	mPlayer.Initialize(mFieldStatus);
 
 
-	auto lTeamType = mFieldStatus.GetTeamType(&mPlayer);
 
-	switch (lTeamType)
-	{
-	case eTeamType::White:
-		SetMeshResouce(
-			&mPlayer,
-			ValueMyScene::Model::cCharaWhiteDesignID,
-			ValueMyScene::Model::cCharaWhiteCollisionID
-		);
-		break;
-	case eTeamType::Black:
-		SetMeshResouce(
-			&mPlayer,
-			ValueMyScene::Model::cCharaBlackDesignID,
-			ValueMyScene::Model::cCharaBlackCollisionID
-		);
-		break;
-	default:
-		break;
-	}
-
-	mPlayer.SetRenderer(&render);
-	mPlayer.SetShader(&shader);
-	mPlayer.Respawn();
-
-	mPlayer.AddCollisionTarget(&mField);
-	mPlayer.AddCollisionTarget(&mBall);
-
-	for (uint32_t i = 0; i < enemy.size(); ++i) {
-		//enemy[i]->AddSearchTarget(&mPlayer);
-		enemy[i]->AddSearchTarget(&mBall);
-		//自分以外のエネミーを追加
-		for (auto&lEnemy : enemy) {
-			if (enemy[i] != lEnemy) {
-				if (mFieldStatus.GetTeamAlly(lEnemy.get())->IsMember(enemy[i].get()) == false) {
-					enemy[i]->AddSearchTarget(&*lEnemy);
-				}
-			}
-		}
-		enemy[i]->AddCollisionTarget(&mField);
-		enemy[i]->AddCollisionTarget(&mBall);
-	}
 
 	//バレットマネージャの初期化
-	{
-		bltManager.Initialize();
-		bltManager.RegisterMesh(
-			mdDB.Get(ValueMyScene::Model::cBulletDesignID),
-			mdDB.Get(ValueMyScene::Model::cBulletCollisionID),
-			0);
-		bltManager.RegisterShader(&shader, 0);
-		bltManager.RegisterChara(&mPlayer, 0);
-		
-		mPlayer.mBltManager = &bltManager;
-		for (auto&lEnemy : enemy) {
-			lEnemy->mBltManager = &bltManager;
-			bltManager.RegisterChara(lEnemy.get(), 0);
-		}
 
 
 		//リソースにオブジェクトを登録
-		render.SetShader(&shader);
-		render.SetRenderTarget(*mPlayer.GetTransform());
+	render.SetShader(&shader);
+	render.SetRenderTarget(*mPlayer.GetTransform());
 
-		//mPlayer.GetWorld()->SetS(scaleChara, scaleChara, scaleChara);
-		mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
-		mPlayer.GetProj()->SetProjection(60, 0.1f, 500.0f);
-		for (auto&lEnemy : enemy) {
-			mPlayer.AddSearchTarget(&*lEnemy);
-		}
-
-
-		//enemy[0]->GetWorld()->SetT(-15, 0, 0);
-		//enemy[1]->GetWorld()->SetT(-5, 0, 8);
-		//enemy[2]->GetWorld()->SetT(-10, 0, 10);
-		//enemy[0]->SetGoalIndex(19);
-		//enemy[1]->SetGoalIndex(20);
-
-		for (uint32_t i = 0; i < enemy.size(); ++i) {
-			enemy[i]->GetView()->SetCamera(*enemy[i]->GetWorld(), { 0,0,-5 });
-			enemy[i]->GetProj()->SetProjection(45, 0.01f, 50.0f);
-			enemy[i]->InitFinal();
-		}
-
-
-		::Comfort::EffectCamera cam;
-		::Comfort::EffectProjection proj;
-		cam.SetDXCamera(mPlayer.GetView());
-		proj.SetDXProjection(mPlayer.GetProj());
-		mEfkRender.SetCamera(&cam);
-		mEfkRender.SetProjection(&proj);
-		mEfkObj.Play();
-
+	//mPlayer.GetWorld()->SetS(scaleChara, scaleChara, scaleChara);
+	mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
+	mPlayer.GetProj()->SetProjection(60, 0.01f, 100.0f);
+	for (auto&lEnemy : enemy) {
+		mPlayer.AddSearchTarget(&*lEnemy);
 	}
+
+
+
+
+	::Comfort::EffectCamera cam;
+	::Comfort::EffectProjection proj;
+	cam.SetDXCamera(mPlayer.GetView());
+	proj.SetDXProjection(mPlayer.GetProj());
+	mEfkRender.SetCamera(&cam);
+	mEfkRender.SetProjection(&proj);
+	mEfkObj.Play();
+
+
 }
 
 void MyMSScene::Update() {
@@ -278,6 +126,10 @@ void MyMSScene::Update() {
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->Update();
 	}
+
+	
+	UpdateUI();
+
 }
 
 void MyMSScene::KeyDown(MSKEY pKey)
@@ -307,6 +159,21 @@ void MyMSScene::KeyHold(MSKEY pKey)
 	float speed = 0.5;
 	switch (pKey)
 	{
+	case MSKEY::CH_0:
+		render.SetRenderTarget(*mPlayer.GetTransform());
+		break;
+	case MSKEY::CH_1:
+		render.SetRenderTarget(*enemy[0]->GetTransform());
+		break;
+	case MSKEY::CH_2:
+		render.SetRenderTarget(*enemy[1]->GetTransform());
+		break;
+	case MSKEY::CH_3:
+		render.SetRenderTarget(*enemy[2]->GetTransform());
+		break;
+	case MSKEY::CH_4:
+		render.SetRenderTarget(*enemy[3]->GetTransform());
+		break;
 	case MSKEY::CH_W:
 		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 0.1, { 0,0,1 }, false);
 		mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,1 });
@@ -351,6 +218,8 @@ void MyMSScene::Render()
 	mBall.Render();
 	mEfkRender.RenderAll(&mEfkManager);
 
+	mFieldStatus.GetTeamBase(eTeamType::White)->Render();
+	mFieldStatus.GetTeamBase(eTeamType::Black)->Render();
 
 	ui.Render(m2DRender);
 
@@ -362,7 +231,8 @@ void MyMSScene::InitializeFont()
 	//フォントの準備
 	FontLog	logFont;
 	::ZeroMemory(&logFont, sizeof(logFont));
-	logFont.lfHeight = 40;	//フォントサイズ
+//	logFont.lfHeight = 40;	//フォントサイズ
+	logFont.SetFontSize(40);
 	logFont.lfWidth = 0;
 	logFont.lfEscapement = 0;
 	logFont.lfOrientation = 0;
@@ -422,6 +292,7 @@ void MyMSScene::InitializeUI()
 		lScale.clear();
 	};
 
+	//ステータスフレームのレイアウト情報
 	{
 		lManager->GetGlobal(cStatusFramePositionName, lPosition);
 		lManager->GetGlobal(cStatusFrameSize, lSize);
@@ -436,6 +307,7 @@ void MyMSScene::InitializeUI()
 		ClearTemp();
 	}
 
+	//HPバーのレイアウト情報
 	{
 		auto lHPBar = ui.mStatusFrame->GetHPBar();
 		MSProgress data;
@@ -448,7 +320,6 @@ void MyMSScene::InitializeUI()
 		lHPBar->SetGlobalPosition(lPosition[0], lPosition[1]);
 		lHPBar->SetGaugeScale(lScale[0], lScale[1]);
 		lHPBar->SetSize(lSize[0], lSize[1]);
-		lHPBar->SetParam(data);
 		lHPBar->SetTextures(
 		{ mTexManager,cHPBarOutID },
 		{ mTexManager,cHPBarInID }
@@ -459,6 +330,7 @@ void MyMSScene::InitializeUI()
 	}
 
 
+		//EPバーのレイアウト情報
 	{
 		auto lEPBar = ui.mStatusFrame->GetEPBar();
 		MSProgress data;
@@ -471,7 +343,6 @@ void MyMSScene::InitializeUI()
 		lEPBar->SetGlobalPosition(lPosition[0], lPosition[1]);
 		lEPBar->SetGaugeScale(lScale[0], lScale[1]);
 		lEPBar->SetSize(lSize[0], lSize[1]);
-		lEPBar->SetParam(data);
 		lEPBar->SetTextures(
 		{ mTexManager,cEPBarOutID },
 		{ mTexManager,cEPBarInID }
@@ -480,8 +351,19 @@ void MyMSScene::InitializeUI()
 		ClearTemp();
 
 	}
+}
 
+void MyMSScene::InitializeEffect()
+{
+	mEfkRender.Initialize(MSDirect::GetDevice(), MSDirect::GetDeviceContext());
+	mEfkManager.Initialize(mEfkRender.GetRenderer());
+	mEfkDb.Initialize(mEfkManager.GetManager());
+	mEfkDb.Load("Resource/Effect/test.efk", 0);
 
+	mEfkObj.SetManager(&mEfkManager);
+	decltype(auto) lEfk = mEfkDb.Get(0);
+	mEfkObj.SetEffect(lEfk);
+	mEfkObj.SetPosition({ 11.0f,0.0f,7.5f });
 }
 
 void MyMSScene::InitializeModel()
@@ -546,6 +428,37 @@ void MyMSScene::InitializeModel()
 	lManager->GetGlobal(cCharaWhiteCollisionScale, lScale);
 	mFbxScaleMap[cCharaWhiteCollisionID] = lScale;
 
+	//黒チーム拠点
+	lManager->GetGlobal(cBaseBlackDesignModel, lFileName);
+	lFileNameMap[cBaseBlackDesignID] = lFileName;
+	lManager->GetGlobal(cBaseBlackCollisionModel, lFileName);
+	lFileNameMap[cBaseBlackCollisionID] = lFileName;
+
+	lManager->GetGlobal(cBaseBlackDesignAnimation, lIsAnimation);
+	lIsAnimationMap[cBaseBlackDesignID] = lIsAnimation;
+	lManager->GetGlobal(cBaseBlackCollisionAnimation, lIsAnimation);
+	lIsAnimationMap[cBaseBlackCollisionID] = lIsAnimation;
+
+	lManager->GetGlobal(cBaseBlackDesignScale, lScale);
+	mFbxScaleMap[cBaseBlackDesignID] = lScale;
+	lManager->GetGlobal(cBaseBlackCollisionScale, lScale);
+	mFbxScaleMap[cBaseBlackCollisionID] = lScale;
+
+	//白チーム拠点
+	lManager->GetGlobal(cBaseWhiteDesignModel, lFileName);
+	lFileNameMap[cBaseWhiteDesignID] = lFileName;
+	lManager->GetGlobal(cBaseWhiteCollisionModel, lFileName);
+	lFileNameMap[cBaseWhiteCollisionID] = lFileName;
+
+	lManager->GetGlobal(cBaseWhiteDesignAnimation, lIsAnimation);
+	lIsAnimationMap[cBaseWhiteDesignID] = lIsAnimation;
+	lManager->GetGlobal(cBaseWhiteCollisionAnimation, lIsAnimation);
+	lIsAnimationMap[cBaseWhiteCollisionID] = lIsAnimation;
+
+	lManager->GetGlobal(cBaseWhiteDesignScale, lScale);
+	mFbxScaleMap[cBaseWhiteDesignID] = lScale;
+	lManager->GetGlobal(cBaseWhiteCollisionScale, lScale);
+	mFbxScaleMap[cBaseWhiteCollisionID] = lScale;
 
 	//フィールドマップ
 	lManager->GetGlobal(cFieldDesignModel, lFileName);
@@ -580,6 +493,9 @@ void MyMSScene::InitializeModel()
 	lManager->GetGlobal(cBallCollisionScale, lScale);
 	mFbxScaleMap[cBallCollisionID] = lScale;
 
+
+
+
 	//モデル読み込み
 	for (auto&lFilePair : lFileNameMap) {
 		mdDB.Load(
@@ -593,8 +509,188 @@ void MyMSScene::InitializeModel()
 
 }
 
+void MyMSScene::InitializeFieldStatus()
+{
+	mFieldStatus.Initialize();
+	mFieldStatus.CreateFieldNodes();
+	mFieldStatus.CreateSpawnCharaNodes();
+	mFieldStatus.CreateSpawnBallNodes();
+	mFieldStatus.InitGoalIndex(19, 80);
+	mFieldStatus.mBallIsField = true;
+	mFieldStatus.mBall = &mBall;
+	mFieldStatus.RespawnBall();
+
+	for (int i = 0; i < cEnemyCount; ++i) {
+		enemy.push_back(make_unique<Enemy>());
+		enemy[i]->Initialize(mFieldStatus);
+	}
+	mPlayer.Initialize(mFieldStatus);
+
+
+	mFieldStatus.RegisterTeamMember(enemy[0].get(), eTeamType::Black);
+	mFieldStatus.RegisterTeamMember(enemy[1].get(), eTeamType::White);
+	mFieldStatus.RegisterTeamMember(enemy[2].get(), eTeamType::Black);
+	mFieldStatus.RegisterTeamMember(enemy[3].get(), eTeamType::White);
+	mFieldStatus.RegisterTeamMember(&mPlayer, eTeamType::White);
+	SetMeshResouce(mFieldStatus.GetTeamBase(eTeamType::Black), ValueMyScene::Model::cBaseBlackDesignID, ValueMyScene::Model::cBaseBlackCollisionID);
+	SetMeshResouce(mFieldStatus.GetTeamBase(eTeamType::White), ValueMyScene::Model::cBaseWhiteDesignID, ValueMyScene::Model::cBaseWhiteCollisionID);
+
+	{
+		DXVector3 lWhitePosition;
+		DXVector3 lBlackPosition;
+		lWhitePosition = mFieldStatus.GetNodePosition(19);
+		lBlackPosition = mFieldStatus.GetNodePosition(80);
+		mFieldStatus.GetTeamBase(eTeamType::White)->GetWorld()->SetT(lWhitePosition);
+		mFieldStatus.GetTeamBase(eTeamType::Black)->GetWorld()->SetT(lBlackPosition);
+		mFieldStatus.InitRenderAndShader(render, shader);
+	}
+
+}
+
+void MyMSScene::InitializeBulletManager()
+{
+	auto lNBulletStatus = LoadBulletStatus("Resource/Script/BulletNormal.lua", BulletUniqueID::NBullet);
+
+	bltManager.Initialize(&lNBulletStatus);
+
+	bltManager.RegisterMesh(
+		&mdDB,
+		&mFbxScaleMap,
+		ValueMyScene::Model::cBulletDesignID,
+		ValueMyScene::Model::cBulletCollisionID,
+		BulletUniqueID::NBullet
+	);
+
+	bltManager.RegisterShader(&shader, BulletUniqueID::NBullet);
+	bltManager.RegisterChara(&mPlayer, BulletUniqueID::NBullet);
+
+	mPlayer.mBltManager = &bltManager;
+	for (auto&lEnemy : enemy) {
+		lEnemy->mBltManager = &bltManager;
+		bltManager.RegisterChara(lEnemy.get(), BulletUniqueID::NBullet);
+	}
+}
+
+void MyMSScene::InitializeCharaFirst()
+{
+	mLuaDb.Load("Resource/Script/CharacterDefaultStatus.lua", ValueMyScene::Chara::cStatusID);
+
+	auto lManager = mLuaDb.GetManager(ValueMyScene::Chara::cStatusID);
+	int lHp, lEnergy;
+	lManager->GetGlobal(ValueStatusBase::cHp, lHp);
+	lManager->GetGlobal(ValueStatusBase::cEnergy, lEnergy);
+	mDefaultStatus.mAllyNear = false;
+	mDefaultStatus.mBall = nullptr;
+	mDefaultStatus.mBallAllyNear = false;
+	mDefaultStatus.mEnergy.Set(lEnergy, 0.0f, lEnergy);
+	mDefaultStatus.mHp.Set(lHp, 0.0f, lHp);
+	mDefaultStatus.mLive = CharaStateFlag::ALIVE;
+	mDefaultStatus.mTargetChara = nullptr;
+}
+
+void MyMSScene::InitializeEnemy()
+{
+
+	//全キャラ分
+	for (uint16_t i = 0; i < enemy.size(); ++i) {
+		enemy[i]->SetDefaultStatus(mDefaultStatus);
+
+		//AIの設定
+		enemy[i]->SetAI(mLuaDb.GetManager(0));
+		//チーム別にメッシュを変えて差別化をする
+		auto lTeamType = mFieldStatus.GetTeamType(enemy[i].get());
+		switch (lTeamType)
+		{
+		case eTeamType::White:
+			SetMeshResouce(
+				enemy[i].get(),
+				ValueMyScene::Model::cCharaWhiteDesignID,
+				ValueMyScene::Model::cCharaWhiteCollisionID
+			);
+			break;
+		case eTeamType::Black:
+			SetMeshResouce(
+				enemy[i].get(),
+				ValueMyScene::Model::cCharaBlackDesignID,
+				ValueMyScene::Model::cCharaBlackCollisionID
+			);
+			break;
+		default:
+			break;
+		}
+		//ボールを探索対象とする
+		enemy[i]->AddSearchTarget(&mBall);
+
+		//自分以外のエネミーを追加
+		for (auto&lEnemy : enemy) {
+			if (enemy[i] != lEnemy) {
+				//チームじゃないメンバーを追加する
+				if (mFieldStatus.GetTeamAlly(lEnemy.get())->IsMember(enemy[i].get()) == false) {
+					enemy[i]->AddSearchTarget(&*lEnemy);
+				}
+			}
+		}
+
+		enemy[i]->SetRenderer(&render);
+		enemy[i]->SetShader(&shader);
+		//enemy[i]->SetBulletMesh(*mdDB.Get(cbox));
+		enemy[i]->Respawn();
+		if (mFieldStatus.GetTeamAlly(&mPlayer)->IsMember(enemy[i].get()) == false) {
+			enemy[i]->AddSearchTarget(&mPlayer);
+		}
+
+		enemy[i]->AddCollisionTarget(&mField);
+		enemy[i]->AddCollisionTarget(&mBall);
+		enemy[i]->GetView()->SetCamera(*enemy[i]->GetWorld(), { 0.0f,0.0f,2.00f });
+		enemy[i]->GetProj()->SetProjection(60, 0.01f, 500.0f);
+		enemy[i]->InitFinal();
+	}
+
+
+
+}
+
+void MyMSScene::InitializePlayer()
+{
+	auto lTeamType = mFieldStatus.GetTeamType(&mPlayer);
+	switch (lTeamType)
+	{
+	case eTeamType::White:
+		SetMeshResouce(
+			&mPlayer,
+			ValueMyScene::Model::cCharaWhiteDesignID,
+			ValueMyScene::Model::cCharaWhiteCollisionID
+		);
+		break;
+	case eTeamType::Black:
+		SetMeshResouce(
+			&mPlayer,
+			ValueMyScene::Model::cCharaBlackDesignID,
+			ValueMyScene::Model::cCharaBlackCollisionID
+		);
+		break;
+	default:
+		break;
+	}
+
+	mPlayer.SetRenderer(&render);
+	mPlayer.SetShader(&shader);
+	mPlayer.SetDefaultStatus(mDefaultStatus);
+	mPlayer.Respawn();
+
+	mPlayer.AddCollisionTarget(&mField);
+	mPlayer.AddCollisionTarget(&mBall);
+
+}
+
+void MyMSScene::InitializeBall()
+{
+	mBall.Initialize();
+}
+
 void MyMSScene::SetMeshResouce(GameObjectBase*aObject, const int aDesignID, const int aCollisionID)
 {
+	
 	aObject->SetMesh(*mdDB.Get(aDesignID));
 	aObject->SetMeshScale(
 		mFbxScaleMap[aDesignID],
@@ -609,6 +705,44 @@ void MyMSScene::SetMeshResouce(GameObjectBase*aObject, const int aDesignID, cons
 		mFbxScaleMap[aCollisionID]
 	);
 
+}
+
+StatusBulletBase MyMSScene::LoadBulletStatus(const std::string& aFileName, const int aBulletID)
+{
+	mLuaDb.Load(aFileName, aBulletID);
+	auto lManager = mLuaDb.GetManager(aBulletID);
+	StatusBulletBase lStatus;
+	
+	{
+		using namespace ValueStatusBullet;
+		lManager->GetGlobal(cCost, lStatus.mCost);
+		lManager->GetGlobal(cAtk, lStatus.mAtk);
+		float lInterval;
+		lManager->GetGlobal(cInterval, lInterval);
+		lStatus.mInterval.Set(lInterval, 0.0f, lInterval);
+		lManager->GetGlobal(cIntervalRecovery, lStatus.mIntervalRecovery);
+
+		int lDamageTypeValue;
+		lManager->GetGlobal(cDamageType, lDamageTypeValue);
+		lStatus.mType = ConvertDamageType(lDamageTypeValue);
+
+		lManager->GetGlobal(cFiringRange, lStatus.mFiringRange);
+		lManager->GetGlobal(cVelocity, lStatus.mVelocity);
+
+		std::vector<float>lDirection;
+		lManager->GetGlobal(cDirection, lDirection);
+		lStatus.mDirection.Set(lDirection[0], lDirection[1], lDirection[2]);
+	}
+
+	return lStatus;
+}
+
+void MyMSScene::UpdateUI()
+{
+	auto lHPBar = ui.mStatusFrame->GetHPBar();
+	auto lEPBar = ui.mStatusFrame->GetEPBar();
+	lHPBar->SetParam(mPlayer.GetStatus()->mHp);
+	lEPBar->SetParam(mPlayer.GetStatus()->mEnergy);
 }
 
 /*

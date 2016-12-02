@@ -1,6 +1,7 @@
 #pragma once
 #include<vector>
 #include"Dijkstra.h"
+#include"StaticObject.h"
 enum class eTeamType {
 	White,
 	Black
@@ -10,6 +11,7 @@ const int TeamIdWhite = 0;
 const int TeamIdBlack = 1;
 
 class GameObjectBase;
+class StaticObject;
 struct StatusTeam {
 private:
 	StatusTeam();
@@ -27,4 +29,11 @@ public:
 	bool IsMember(const GameObjectBase*aMember);
 	//チームのリスポーンエリア
 	std::vector<Dijkstra::Node*>mSpawnCharaNodes;
+	//拠点(ゴールデータ)
+	StaticObject mBase;
+	//ゴールの範囲
+	float mBaseScale = 1.0f;
+	bool IsCollisionBase(GameObjectBase* aCollider);
+
+
 };

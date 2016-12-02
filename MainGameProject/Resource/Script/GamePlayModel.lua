@@ -21,6 +21,23 @@ CharaWhiteCollisionModel="Resource/Model/box.fbx"
 CharaWhiteCollisionScale=0.01
 CharaWhiteCollisionAnimation=false
 
+BaseBlackDesignModel="Resource/Model/box.fbx"
+BaseBlackDesignScale=0.01
+BaseBlackDesignAnimation=false
+BaseBlackCollisionModel="Resource/Model/box.fbx"
+BaseBlackCollisionScale=0.02
+BaseBlackCollisionAnimation=false
+
+
+BaseWhiteDesignModel="Resource/Model/box.fbx"
+BaseWhiteDesignScale=0.01
+BaseWhiteDesignAnimation=false
+BaseWhiteCollisionModel="Resource/Model/box.fbx"
+BaseWhiteCollisionScale=0.02
+BaseWhiteCollisionAnimation=false
+
+
+
 FieldDesignModel="Resource/Model/FieldDesign.fbx"
 FieldDesignScale=1.0
 FieldDesignAnimation=false

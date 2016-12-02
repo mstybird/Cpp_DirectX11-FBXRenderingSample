@@ -13,15 +13,11 @@ public:
 	void Initialize(StatusField&pSetStatus)override;
 	void Update()override;
 	void UpdateAlive()override;
-	void UpdateGravity()override;
-	void UpdateCamera();
 
 	void Render()override;
 	void AddBullet();
 private:
-	void InitStatus()override;
+	void InitStatus(const StatusBase* aInitStatus)override;
 private:
-	DXVector3 mCameraLen;
-	DXVector3 mCameraOffset;
 };
 

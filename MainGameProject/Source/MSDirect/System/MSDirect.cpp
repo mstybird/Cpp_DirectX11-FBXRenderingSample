@@ -255,6 +255,8 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 
 	this->KeyList = MSKeyList;
 
+	
+
 	return S_OK;
 }
 

@@ -133,5 +133,5 @@ void BulletNormal::Render()
 	if (!mActive)return;
 	assert(mRender);
 	mRender->SetShader(mShader);
-	mRender->Render(*mTransform);
+	mRender->Render(mTransform.get());
 }

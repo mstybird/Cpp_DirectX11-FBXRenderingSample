@@ -12,9 +12,9 @@ ID3D11DeviceContext*MSCullingOcculusion::sDeviceContext;
 IDXGISwapChain*MSCullingOcculusion::sSwapChain;
 
 bool MSCullingOcculusion::IsCullingWorld(
-	MS3DRender&pRender,
-	DX11RenderResource&pEyeResource,
-	DX11RenderResource&pTargetResource,
+	MS3DRender*pRender,
+	DX11RenderResource*pEyeResource,
+	DX11RenderResource*pTargetResource,
 	float pPixelper,
 	std::function<void(void)>pRenderFunc
 	)
@@ -23,10 +23,10 @@ bool MSCullingOcculusion::IsCullingWorld(
 
 	//元に戻すためのカメラのコピーを生成
 	DXCamera lEyeCameraCopy;
-	pEyeResource.GetCamera().lock()->Clone(lEyeCameraCopy);
+	pEyeResource->GetCamera().lock()->Clone(lEyeCameraCopy);
 
 	//カメラをワールド行列を使って正面方向に作成する
-	pEyeResource.GetCamera().lock()->SetCamera(*pEyeResource.GetWorld().lock(), { 0,0,-1 });
+	pEyeResource->GetCamera().lock()->SetCamera(*pEyeResource->GetWorld().lock(), { 0,0,-1 });
 	//視野を設定
 	//pEyeResource.SetProjection(pEyeProjection);
 
@@ -59,25 +59,31 @@ bool MSCullingOcculusion::IsCullingWorld(
 
 		//障害物を描画する処理
 		DXDisplay lTmpDisplay;
-		pRender.GetDisplay(lTmpDisplay);
-		pRender.SetRenderTarget(pEyeResource);
+		pRender->GetDisplay(lTmpDisplay);
+		pRender->SetRenderTarget(*pEyeResource);
 		pRenderFunc();
 
 
 		//レンダリング判定をする描画
 		BeginOcclusionQuery();
 
-		pRender.Render(pTargetResource);
+		pRender->Render(pTargetResource);
 		
 		
 		
 		EndOcclusionQuery();
-		pRender.SetRenderTarget(lTmpDisplay);
+		pRender->SetRenderTarget(lTmpDisplay);
 		//カメラと視野をもとに戻す
-		pEyeResource.SetCamera(lEyeCameraCopy);
+		pEyeResource->SetCamera(lEyeCameraCopy);
 		//描画先を元に戻す
-		
-		//MSDirect::GetSwapChain()->Present(0,0);
+		static int count = 0;
+		if (count == 0) {
+			//MSDirect::GetSwapChain()->Present(0,0);
+		}
+
+		++count;
+		count %= 4;
+
 		sDeviceContext->OMSetRenderTargets(1, &lRTVCopy, lDSVCopy);
 		sDeviceContext->RSSetViewports(1, lMainViewPort);
 	}

@@ -8,6 +8,11 @@ enum class CharaStateFlag {
 	RESPAWNWAIT	//リスポーン待機中
 };
 
+namespace ValueStatusBase {
+	static const char* cHp = "Hp";
+	static const char* cEnergy = "Energy";
+}
+
 class GameObjectBase;
 struct StatusBase {
 

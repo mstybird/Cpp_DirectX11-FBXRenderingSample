@@ -11,6 +11,21 @@ enum class BulletDamageType {
 	FIXED	//固定ダメージ
 };
 
+BulletDamageType ConvertDamageType(int aType);
+
+
+namespace ValueStatusBullet {
+	static const char* cCost = "Cost";
+	static const char* cAtk = "Atk";
+	static const char* cInterval = "Interval";
+	static const char* cIntervalRecovery = "IntervalRecovery";
+	static const char* cDamageType = "DamageType";
+	static const char* cFiringRange = "FiringRange";
+	static const char* cVelocity = "Velocity";
+	static const char* cDirection = "Direction";
+}
+
+
 //バレット固有の能力の基底クラス
 struct StatusBulletBase {
 	int mCost;				//使用コスト

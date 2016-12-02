@@ -1,9 +1,9 @@
 #pragma once
+#include"GameObjectBase.h"
 #include<memory>
 #include<vector>
 #include<type_traits>
-#include"GameObjectBase.h"
-
+#include<DXMath.hpp>
 class MSFbxManager;
 class MSBase3DShader;
 class MSFbxManager;
@@ -26,12 +26,18 @@ public:
 	CharacterBase();
 	virtual ~CharacterBase();
 	virtual void Initialize(StatusField&pSetStatus);
-	virtual void InitStatus() = 0;
+	virtual void InitStatus(const StatusBase* aInitStatus);
 	//生存死亡などの処理を行う
 	virtual void UpdateAlive() = 0;
 	//重力処理
 	virtual void UpdateGravity() {};
+	//カメラの更新
+	virtual void UpdateCamera()final;
+	//フィールド情報の参照を設定
 	void SetField(StatusField&pSetStatus);
+	//デフォルトステータス(リスポーン時に使用)
+	void SetDefaultStatus(const StatusBase&aStatus);
+	const StatusBase* GetDefaultStatus()const;
 	//void SetBulletMesh(MSFbxManager&aSetMesh);
 	void AddSearchTarget(GameObjectBase*aCollisionTarget);
 	void ClearSearchTarget();
@@ -60,7 +66,12 @@ protected:
 	//std::unique_ptr<BulletObject>mBulletNormal;
 	std::vector<GameObjectBase*>mSearchTargets;
 	StatusField*mField;
-	std::unique_ptr<StatusBase>mStatus;
+	std::shared_ptr<StatusBase>mStatus;
+	DXVector3 mCameraLen;
+	DXVector3 mCameraOffset;
+
+	std::unique_ptr<StatusBase>mDefaultStatus;
+
 };
 
 

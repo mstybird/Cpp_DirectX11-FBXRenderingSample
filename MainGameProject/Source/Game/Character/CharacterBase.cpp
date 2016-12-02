@@ -28,6 +28,30 @@ void CharacterBase::Initialize(StatusField&pSetStatus)
 //	mBulletNormal->Initialize();
 }
 
+void CharacterBase::InitStatus(const StatusBase * aInitStatus)
+{
+	auto lStatus = GetStatus();
+	lStatus->mBall = nullptr;
+	lStatus->mEnergy = aInitStatus->mEnergy;
+	lStatus->mHp = aInitStatus->mHp;
+	lStatus->mLive = CharaStateFlag::ALIVE;
+	lStatus->mAllyNear = false;
+	lStatus->mBallAllyNear= false;
+	lStatus->mTargetChara = nullptr;
+}
+
+void CharacterBase::UpdateCamera()
+{
+	//座標を取得
+	auto lLookPosition = *GetWorld()->mPosition;
+	//差分計算
+	auto lEyePosition = lLookPosition + mCameraLen;
+	//カメラ位置をずらす
+	//lLookPosition += mCameraOffset;
+	//lEyePosition += mCameraOffset;
+	GetView()->SetCamera(*GetWorld(), mCameraLen, mCameraOffset);
+}
+
 void CharacterBase::SetField(StatusField&pSetStatus)
 {
 	mField = &pSetStatus;
@@ -82,6 +106,19 @@ void CharacterBase::RenderBullets()
 	}
 }
 
+
+void CharacterBase::SetDefaultStatus(const StatusBase & aStatus)
+{
+	if (!mDefaultStatus) {
+		mDefaultStatus = std::make_unique<StatusBase>();
+	}
+	*mDefaultStatus = aStatus;
+}
+
+const StatusBase * CharacterBase::GetDefaultStatus() const
+{
+	return mDefaultStatus.get();
+}
 
 void CharacterBase::AddSearchTarget(GameObjectBase * aCollisionTarget)
 {

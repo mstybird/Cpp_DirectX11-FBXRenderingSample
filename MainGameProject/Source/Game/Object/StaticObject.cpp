@@ -13,5 +13,5 @@ void StaticObject::Render()
 {
 	if (!mActive)return;
 	mRender->SetShader(mShader);
-	mRender->Render(*mTransform);
+	mRender->Render(mTransform.get());
 }

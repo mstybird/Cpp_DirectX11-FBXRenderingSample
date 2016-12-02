@@ -20,9 +20,9 @@ public:
 		pRenderFunc		:障害となるオブジェクトの描画処理
 	*/
 	static bool IsCullingWorld(
-		MS3DRender&pRender,
-		DX11RenderResource&pEyeResource,
-		DX11RenderResource&pTargetResource,
+		MS3DRender*pRender,
+		DX11RenderResource*pEyeResource,
+		DX11RenderResource*pTargetResource,
 		float pPixelper,
 		std::function<void(void)>pRenderFunc
 		);

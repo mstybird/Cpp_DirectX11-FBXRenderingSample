@@ -188,7 +188,7 @@ bool TextManager::RegisterFont(const FontLog & aFontDescription, const int aID)
 
 bool TextManager::PreLoadString(const std::string & aText)
 {
-	const int lFontSize = mDBFont->GetActiveFontDesc()->lfHeight;
+	const int lFontSize = mDBFont->GetActiveFontDesc()->GetFontSize();
 	const auto lHFont = mDBFont->GetActiveFontHFont();
 	auto lHdc = GetDC(nullptr);
 	auto lOldFont = static_cast<HFONT>(SelectObject(lHdc, lHFont));
@@ -225,7 +225,7 @@ std::shared_ptr<TextGraphic> TextManager::Create(const std::string& aText)
 	
 	auto lOldFont = static_cast<HFONT>(SelectObject(lHdc, *lHFont));
 
-	mDBChar->Load(lHdc,aText,lFontID,lFontDesc->lfHeight);
+	mDBChar->Load(lHdc,aText,lFontID,lFontDesc->GetFontSize());
 
 	
 	//フォントビットマップ取得
@@ -233,12 +233,12 @@ std::shared_ptr<TextGraphic> TextManager::Create(const std::string& aText)
 	ReleaseDC(nullptr, lHdc);
 
 
-	auto lCharResources = mDBChar->GetArray(aText, lFontID, lFontDesc->lfHeight);
+	auto lCharResources = mDBChar->GetArray(aText, lFontID, lFontDesc->GetFontSize());
 
 	//フォントサイズの登録
 	clock_t start, end;
 	start = clock();
-	lText->mFontSize = lFontDesc->lfHeight;
+	lText->mFontSize = lFontDesc->GetFontSize();
 	//テキストの登録
 	auto lTextLine = new TextureTextLine;
 	for (auto&lCharResource : lCharResources) {

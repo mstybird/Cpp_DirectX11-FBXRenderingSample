@@ -180,7 +180,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName);C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\$(PlatformShortName)\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName);$(SolutionDir)DX11FbxLoader\FBXSDK\x86\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libfbxsdk-mt.lib</AdditionalDependencies>
     </Lib>
     <ProjectReference>
@@ -274,7 +274,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName);C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.2\lib\vs2015\$(PlatformShortName)\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName);$(SolutionDir)DX11FbxLoader\FBXSDK\x86\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libfbxsdk-mt.lib</AdditionalDependencies>
     </Lib>
     <ProjectReference>

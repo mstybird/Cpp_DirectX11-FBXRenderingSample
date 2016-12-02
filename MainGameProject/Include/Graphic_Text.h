@@ -96,6 +96,15 @@ private:
 
 //LOGFONTÇÃägí£ÅB
 class FontLog :public LOGFONT{
+private:
+	using LOGFONT::lfHeight;
+public:
+	void SetFontSize(long aHeight) {
+		lfHeight = aHeight;
+	}
+	long GetFontSize()const {
+		return lfHeight;
+	}
 };
 
 struct FontDesc {

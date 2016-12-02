@@ -5,21 +5,21 @@
 #include<unordered_map>
 class NBullet;
 class MSFbxManager;
-
+class MSFbxDatabase;
 namespace BulletUniqueID {
-	static const int NBullet = 0;
+	static const int NBullet = 1000;
 }
 
 class BulletManager {
 public:
 	//マネージャの初期化
-	void Initialize();
+	void Initialize(StatusBulletBase* aBullet1);
 
 	//キャラクターを登録する
 	bool RegisterChara(CharacterBase* aChara, const int aActiveID);
 
 	//弾にメッシュを登録する
-	void RegisterMesh(MSFbxManager*aDesignMesh, MSFbxManager*aCollisionMesh,const int aID);
+	void RegisterMesh(MSFbxDatabase*aModelDb,std::unordered_map<int,float>*aScaleMap,const int aDesignID, const int aCollisionID,const int aBulletID);
 	//シェーダをセットする
 	void RegisterShader(MSBase3DShader*aShader, const int aID);
 

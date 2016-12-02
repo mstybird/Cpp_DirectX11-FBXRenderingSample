@@ -39,6 +39,7 @@
     <ClCompile Include="Source\Game\Shader\MySprite2DShader.cpp" />
     <ClCompile Include="Source\Game\Shader\MySprite3DShader.cpp" />
     <ClCompile Include="Source\Game\Status\StatusBase.cpp" />
+    <ClCompile Include="Source\Game\Status\StatusBulletBase.cpp" />
     <ClCompile Include="Source\Game\Status\StatusEnemy.cpp" />
     <ClCompile Include="Source\Game\Status\StatusField.cpp" />
     <ClCompile Include="Source\Game\Status\StatusFrame.cpp" />
@@ -46,6 +47,7 @@
     <ClCompile Include="Source\Game\Status\StatusTeam.cpp" />
     <ClCompile Include="Source\Game\UI\BarGauge.cpp" />
     <ClCompile Include="Source\Game\UI\BarGaugeVS.cpp" />
+    <ClCompile Include="Source\Game\UI\Button.cpp" />
     <ClCompile Include="Source\Game\UI\MySceneUI.cpp" />
     <ClCompile Include="Source\Game\UI\UIBase.cpp" />
     <ClCompile Include="Source\Helper\Helper.cpp" />
@@ -76,6 +78,15 @@
     <ClCompile Include="Source\MSDirect\Utility\MSGravity.cpp" />
     <ClCompile Include="Source\MSDirect\Utility\MSProgresData.cxx" />
     <ClCompile Include="Source\MSDirect\Utility\MSUtility.cpp" />
+    <ClInclude Include="Include\Button.h" />
+    <ClInclude Include="Include\statusbase.h" />
+    <ClInclude Include="Include\statusbulletbase.h" />
+    <ClInclude Include="Include\StatusBulletNormal.h" />
+    <ClInclude Include="Include\StatusEnemy.h" />
+    <ClInclude Include="Include\StatusField.h" />
+    <ClInclude Include="Include\StatusFrame.h" />
+    <ClInclude Include="Include\StatusPlayer.h" />
+    <ClInclude Include="Include\StatusStatic.h" />
     <ClInclude Include="Source\NoUse\NoCompile.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -86,6 +97,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="IDRangeDefine.txt" />
     <Text Include="Source\NoUse\2DSprite.txt" />
     <Text Include="Source\NoUse\Task.txt" />
   </ItemGroup>
@@ -140,6 +152,12 @@
     <ClInclude Include="Include\Player.h" />
     <ClInclude Include="Include\Title.h" />
     <ClInclude Include="Include\UIBase.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="NatvisFile.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PropertySheet.props" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C433557F-113C-4D21-B652-F6AF721C2101}</ProjectGuid>

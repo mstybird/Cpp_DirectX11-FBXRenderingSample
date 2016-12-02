@@ -19,6 +19,8 @@
 #include"BulletManager.h"
 Enemy::Enemy()
 {
+	mCameraLen = { 0.0f,0.0f,-0.1f };
+	mCameraOffset = { 0.0f,0.0f,0.0f };
 	//mBulletNormal = std::make_unique<BulletNormal>();
 	mStatus = std::make_unique<EnemyStatus>();
 }
@@ -32,8 +34,6 @@ void Enemy::Initialize(StatusField&pSetStatus)
 	mAI = std::make_unique<EnemyAI>();
 	mAI->CreateNodes(*mField);
 
-	//ステータスの初期化
-	InitStatus();
 }
 void Enemy::InitFinal()
 {
@@ -120,6 +120,7 @@ void Enemy::Update()
 
 	//行動処理が全て終わってから衝突判定
 	UpdateCollision(true);
+	UpdateCamera();
 }
 
 void Enemy::UpdateAlive()
@@ -152,23 +153,16 @@ void Enemy::UpdateAlive()
 
 }
 
-void Enemy::InitStatus()
+void Enemy::InitStatus(const StatusBase* aInitStatus)
 {
+	CharacterBase::InitStatus(aInitStatus);
 	auto lStatus = GetStatus<EnemyStatus>();
-
+	lStatus->mIsTargetingBall = false;
 	lStatus->mTargetting = false;
 	lStatus->mLastLookPosiion = {};
 	lStatus->mAllyComplianceCount = 0;
-	lStatus->mAllyNear = false;
-	lStatus->mBall = nullptr;
-	lStatus->mBallAllyNear = false;
-	lStatus->mEnergy.Set(5.0f,0.0f,2.0f);
-	lStatus->mHp.Set(10.0f, .0f, 10.0f);
-	lStatus->mIsTargetingBall = false;
-	lStatus->mTargetChara = nullptr;
 	lStatus->mTargetting = false;
 	lStatus->mAIType = EnemyAIType::Type::eUnKnown;
-	lStatus->mLive = CharaStateFlag::ALIVE;
 }
 
 void Enemy::UpdateAI()
@@ -283,7 +277,7 @@ void Enemy::Render()
 {
 	assert(mRender);
 	mRender->SetShader(mShader);
-	mRender->Render(*mTransform);
+	mRender->Render(mTransform.get());
 	RenderBullets();
 
 }
@@ -313,7 +307,7 @@ bool Enemy::MoveNode()
 	if (!lAINode)return false;
 	float lAng = MSHormingY(*mTransform, lAINode->Position, 6.0f);
 	GetWorld()->AddRC(0, lAng, 0);
-	if (IsZero(lAng, 5.1f)) {
+	if (IsZero(lAng, 5.99f)) {
 		GetWorld()->AddT(DXWorld::TYPE_ROTATE, 0.1f, { 0,0,1 });
 		DXVector3 lLength;
 		GetWorld()->GetMatrix().lock()->GetT(lLength);
@@ -356,7 +350,7 @@ GameObjectBase * Enemy::IsCulling()
 
 
 			if (MSCullingOcculusion::IsCullingWorld(
-				*mRender, *mTransform, *lTarget->GetTransform(), 0.02f,
+				mRender, mTransform.get(), lTarget->GetTransform(), 0.003f,
 				[&,this]() {
 
 
@@ -388,7 +382,7 @@ GameObjectBase * Enemy::IsCulling()
 						lCollision->mTransform = lTmpMesh;
 						continue;
 					}
-					mRender->Render(*lCollision->GetTransform());
+					mRender->Render(lCollision->GetTransform());
 
 					lCollision->mTransform = lTmpMesh;
 
@@ -515,18 +509,21 @@ void Enemy::BetaMoveToGoal()
 	}
 
 	if (!MoveNode()) {
-
 		printf("%.2f\t%.2f\t%.2f\n",
 			GetWorld()->mPosition->x,
 			GetWorld()->mPosition->y,
 			GetWorld()->mPosition->z);
 
+		mAI->ClearAI();
+	}
+
+	if (mField->GetTeamAlly(this)->IsCollisionBase(this) == true) {
 		mField->RespawnBall();
 		GetStatus()->mBall = nullptr;
 		GetStatus<EnemyStatus>()->mIsTargetingBall = false;
-
 		mAI->ClearAI();
 	}
+
 
 }
 
@@ -797,6 +794,15 @@ void Enemy::BetaMoveToBallHoldAlly()
 		敵を発見
 		ボールと接触
 	*/
+
+	//ボールを持った味方がやられた場合(落とした場合、
+	//AIクリア
+	if (mField->mBallHoldChara == nullptr) {
+		mAI->ClearAI();
+		return;
+	}
+
+
 	if (GetStatus<EnemyStatus>()->mAIType != EnemyAIType::eMoveToBallHoldAlly) {
 		printf("Task:%s\n", "MoveToBallHoldAlly");
 		GetStatus<EnemyStatus>()->mAIType = EnemyAIType::eMoveToBallHoldAlly;
@@ -814,11 +820,6 @@ void Enemy::BetaMoveToBallHoldAlly()
 		GetStatus<EnemyStatus>()->mAllyComplianceCount = 0;
 	}
 
-	//ボールを持った味方がやられた場合(落とした場合、
-	//AIクリア
-	if (mField->mBallHoldChara == nullptr) {
-		mAI->ClearAI();
-	}
 
 
 
