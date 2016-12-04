@@ -49,6 +49,8 @@
     <ClCompile Include="Source\Game\UI\BarGaugeVS.cpp" />
     <ClCompile Include="Source\Game\UI\Button.cpp" />
     <ClCompile Include="Source\Game\UI\MySceneUI.cpp" />
+    <ClCompile Include="Source\Game\UI\ScoreView.cpp" />
+    <ClCompile Include="Source\Game\UI\Toggle.cpp" />
     <ClCompile Include="Source\Game\UI\UIBase.cpp" />
     <ClCompile Include="Source\Helper\Helper.cpp" />
     <ClCompile Include="Source\MSDirect\Collision\MSCollisionBase.cpp" />
@@ -79,6 +81,7 @@
     <ClCompile Include="Source\MSDirect\Utility\MSProgresData.cxx" />
     <ClCompile Include="Source\MSDirect\Utility\MSUtility.cpp" />
     <ClInclude Include="Include\Button.h" />
+    <ClInclude Include="Include\ScoreView.h" />
     <ClInclude Include="Include\statusbase.h" />
     <ClInclude Include="Include\statusbulletbase.h" />
     <ClInclude Include="Include\StatusBulletNormal.h" />
@@ -87,6 +90,7 @@
     <ClInclude Include="Include\StatusFrame.h" />
     <ClInclude Include="Include\StatusPlayer.h" />
     <ClInclude Include="Include\StatusStatic.h" />
+    <ClInclude Include="Include\Toggle.h" />
     <ClInclude Include="Source\NoUse\NoCompile.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

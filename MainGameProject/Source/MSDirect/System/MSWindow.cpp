@@ -84,8 +84,9 @@ void MSWindow::_Run(HINSTANCE hInstance,
 		assert(0);
 		return;
 	}
-	
 	MSDirect::SetScene(std::make_unique<MyMSScene>());
+
+//	MSDirect::SetScene(std::make_unique<SceneTitle>());
 	_Loop();
 	Destroy();
 

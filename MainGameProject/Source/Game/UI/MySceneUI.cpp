@@ -4,7 +4,7 @@
 #include"BarGaugeVS.h"
 MySceneUI::MySceneUI():
 	mStatusFrame{ std::make_unique<StatusFrame>() },
-	bar{std::make_unique<BarGaugeVS>()}
+	mScoreView{std::make_unique<ScoreView>()}
 {
 }
 
@@ -21,4 +21,9 @@ void MySceneUI::Render(MSSprite2DRender & aRender, UIBase * aParent)
 StatusFrame * MySceneUI::GetStatusFrame()
 {
 	return mStatusFrame.get();
+}
+
+ScoreView * MySceneUI::GetScoreView()
+{
+	return mScoreView.get();
 }

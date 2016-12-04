@@ -33,7 +33,7 @@ public:
 	void SetOffset(const DXVector2&aOffset);
 
 	//ゲージ用のステータスを設定する
-	void SetParam(MSProgress&aLeftParam, MSProgress&aRightParam);
+	void SetParam(const float&aLeftParam, const float&aRightParam);
 
 	//設定された値でリソースを更新する
 	virtual void Update()override;
@@ -50,10 +50,10 @@ private:
 	//ゲージ(右)
 	MSSprite2DResource mGaugeRightImg;
 
-	//ゲージステータス(左)
-	MSProgress mStatusLeft;
-	//ゲージステータス(右)
-	MSProgress mStatusRight;
+	//ゲージスコア(左)
+	float mStatusLeft;
+	//ゲージスコア(右)
+	float mStatusRight;
 
 	//ゲージ全体のサイズ
 	DXVector2 mGaugeSize;

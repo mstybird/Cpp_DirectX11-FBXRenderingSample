@@ -12,9 +12,9 @@ public:
 	void UpdateAll() {}
 	virtual void Render(MSSprite2DRender& aRender, UIBase*aParent = nullptr);
 	StatusFrame* GetStatusFrame();
-//private:
+	ScoreView* GetScoreView();
 	std::unique_ptr<StatusFrame> mStatusFrame;
-	std::unique_ptr<BarGaugeVS> bar;
-	//std::unique_ptr<ScoreView>mScoreView;
+private:
+	std::unique_ptr<ScoreView>mScoreView;
 
 };

@@ -5,6 +5,7 @@
 #include"MySprite2DShader.h"
 #include"MSSprite2DRender.h"
 #include<DX11TextureManager.hpp>
+#include<DXMath.hpp>
 //テクスチャはA8R8G8B8の32ビットとする
 
 struct IRECT {
@@ -74,6 +75,11 @@ public:
 	void SetTextAlign(uint32_t aLineIdx, uint32_t aLineIdxTo, TextAlign aAlign);
 	//テキストのアルファ値(描画ポリゴンディフューズ変更)
 	void SetTextAlpha(DWORD aAlpha);
+	//描画位置の指定
+	void SetPosition(const DXVector2& aPosition);
+	void SetPosition(float aX,float aY);
+	void AddPosition(const DXVector2& aPosition);
+	void AddPosition(float aX,float aY);
 	void Release();
 	void Render(MSSprite2DRender&aRender);
 
@@ -82,6 +88,7 @@ private:
 	IRECT mRect;	//描画範囲
 	int mFontSize;	//フォントサイズ
 	DWORD mAlphaColor;	//アルファ色(描画するポリゴンのディフューズ)
+	DXVector2 mPosition;//描画位置
 	static ID3D11Device *sDevice;
 	static ID3D11DeviceContext *sDeviceContext;
 

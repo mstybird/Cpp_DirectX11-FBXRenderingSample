@@ -25,10 +25,16 @@ namespace ValueMyScene {
 		static const int cUILuaID=100;
 
 		static const int cStatusFrameID = 100;
+
 		static const int cHPBarOutID = 110;
 		static const int cHPBarInID = 111;
+
 		static const int cEPBarOutID = 120;
 		static const int cEPBarInID = 121;
+
+		static const int cScoreBarOutID = 130;
+		static const int cScoreBarLeftID = 131;
+		static const int cScoreBarRightID = 132;
 
 		static const char* cStatusFramePositionName = "StatusFramePosition";
 		static const char* cStatusFrameSize = "StatusFrameSize";

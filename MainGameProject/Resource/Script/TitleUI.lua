@@ -5,6 +5,12 @@ BackgroundSize={640,960}
 BackgroundScale={1.0,1.0}
 BackgroundTexturePath="Resource/UI/Title/BackgroundImage.png"
 
+--Title
+TitlePosition={0,0}
+TitleSize={400,80}
+TitleScale={1.0,1.0}
+TitleTexturePath="Resource/UI/Title/Title.png"
+
 --ButtonStart
 ButtonPosition={100,200}
 ButtonSize={160,30}

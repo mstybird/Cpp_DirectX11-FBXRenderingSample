@@ -36,7 +36,7 @@ void BarGaugeVS::SetOffset(const DXVector2 & aOffset)
 	mGaugeOffset = aOffset;
 }
 
-void BarGaugeVS::SetParam(MSProgress & aLeftParam, MSProgress & aRightParam)
+void BarGaugeVS::SetParam(const float & aLeftParam, const float & aRightParam)
 {
 	mStatusLeft = aLeftParam;
 	mStatusRight = aRightParam;
@@ -77,14 +77,14 @@ void BarGaugeVS::Render(MSSprite2DRender & aRender, UIBase * aParent)
 	mGaugeRightImg.SetScale(lGaugeScale);
 
 	//左右合計スコア
-	auto totalScore = mStatusLeft.GetNow() + mStatusRight.GetNow();
+	auto totalScore = mStatusLeft + mStatusRight;
 	float left{ 0 };
 	float right{ 0 };
 
 	if (totalScore != 0) {
 		//左ゲージ幅
-		left = mStatusRight.GetNow() / totalScore;
-		right = mStatusLeft.GetNow() / totalScore;
+		left = mStatusRight / totalScore;
+		right = mStatusLeft / totalScore;
 	}
 
 	//右から左へ

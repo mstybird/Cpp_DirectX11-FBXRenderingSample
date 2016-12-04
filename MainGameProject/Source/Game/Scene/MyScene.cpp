@@ -205,7 +205,8 @@ void MyMSScene::KeyHold(MSKEY pKey)
 void MyMSScene::Render()
 {
 
-
+	auto text = textMan.Create("Hello");
+	text->SetPosition(100, 300);
 	//text.Create("Hello", 0, 0, 720, 960, logFont);
 
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
@@ -220,7 +221,7 @@ void MyMSScene::Render()
 
 	mFieldStatus.GetTeamBase(eTeamType::White)->Render();
 	mFieldStatus.GetTeamBase(eTeamType::Black)->Render();
-
+	text->Render(m2DRender);
 	ui.Render(m2DRender);
 
 
@@ -255,6 +256,7 @@ void MyMSScene::InitializeFont()
 	textMan.RegisterFont(logFont, 0);
 	textMan.SetDefaultSize(640, 960);
 	textMan.SetFont(0);
+
 }
 
 void MyMSScene::InitializeUI()
@@ -333,9 +335,7 @@ void MyMSScene::InitializeUI()
 		//EPバーのレイアウト情報
 	{
 		auto lEPBar = ui.mStatusFrame->GetEPBar();
-		MSProgress data;
-		data.Set(100, 0, 50);
-
+		
 		lManager->GetGlobal(cEPBarPosition, lPosition);
 		lManager->GetGlobal(cEPBarSize, lSize);
 		lManager->GetGlobal(cEPBarInScale, lScale);
@@ -351,6 +351,16 @@ void MyMSScene::InitializeUI()
 		ClearTemp();
 
 	}
+
+	/*
+		HP,EPテキストの座標などの情報取得追加
+		スコアテキスト情報追加
+	*/
+
+	{
+		auto lScoreBar=ui.
+	}
+
 }
 
 void MyMSScene::InitializeEffect()
@@ -739,10 +749,7 @@ StatusBulletBase MyMSScene::LoadBulletStatus(const std::string& aFileName, const
 
 void MyMSScene::UpdateUI()
 {
-	auto lHPBar = ui.mStatusFrame->GetHPBar();
-	auto lEPBar = ui.mStatusFrame->GetEPBar();
-	lHPBar->SetParam(mPlayer.GetStatus()->mHp);
-	lEPBar->SetParam(mPlayer.GetStatus()->mEnergy);
+	ui.mStatusFrame->UpdateStatus(mPlayer.GetStatus());
 }
 
 /*

@@ -64,6 +64,26 @@ void TextGraphic::SetTextAlpha(DWORD aAlpha)
 	mAlphaColor = aAlpha;
 }
 
+void TextGraphic::SetPosition(const DXVector2 & aPosition)
+{
+	mPosition = aPosition;
+}
+
+void TextGraphic::SetPosition(float aX, float aY)
+{
+	mPosition.Set(aX, aY);
+}
+
+void TextGraphic::AddPosition(const DXVector2 & aPosition)
+{
+	mPosition += aPosition;
+}
+
+void TextGraphic::AddPosition(float aX, float aY)
+{
+	mPosition.Add(aX, aY);
+}
+
 void TextGraphic::Release()
 {
 	for (auto&lLine : mLineAry) {
@@ -75,12 +95,12 @@ void TextGraphic::Release()
 
 void TextGraphic::Render(MSSprite2DRender & aRender)
 {
-	float lStX{ 0 };
-	float lStY{ 0 };
+	float lStX{ mPosition.x };
+	float lStY{ mPosition.y };
 
 	for (const auto&lLine : mLineAry) {
 		//çsÇÃç∂ë§
-		lStX = static_cast<float>(mRect.left);
+		lStX = mPosition.x;
 
 		switch (lLine->mAlign)
 		{

@@ -2,10 +2,40 @@
 #include"MSSprite2DRender.h"
 #include"BarGauge.h"
 #include"MSSprite2DResource.h"
+#include"StatusBase.h"
+#include<iomanip>
+#include <sstream>
 StatusFrame::StatusFrame():
 	mHpBar{ std::make_shared<BarGauge>() },
 	mEpBar{std::make_shared<BarGauge>()}
 {
+	//フォントの準備
+	FontLog	logFont;
+	::ZeroMemory(&logFont, sizeof(logFont));
+	//	logFont.lfHeight = 40;	//フォントサイズ
+	logFont.SetFontSize(40);
+	logFont.lfWidth = 0;
+	logFont.lfEscapement = 0;
+	logFont.lfOrientation = 0;
+	logFont.lfWeight = FW_EXTRABOLD;
+	logFont.lfItalic = 0;
+	logFont.lfUnderline = 0;
+	logFont.lfStrikeOut = 0;
+	logFont.lfCharSet = SHIFTJIS_CHARSET;
+	logFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+	logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+	logFont.lfQuality = PROOF_QUALITY;
+	logFont.lfPitchAndFamily = FIXED_PITCH | FF_MODERN;
+
+#ifdef UNICODE
+	//wcscpy_sの第二引数は文字(配列)数(バッファサイズだとデバッガが終了しなかったりする)
+	wcscpy_s(logFont.lfFaceName, LF_FACESIZE, _T("ＭＳ 明朝"));
+#else
+	strcpy_s(logFont.lfFaceName, LF_FACESIZE, ("ＭＳ 明朝"));
+#endif	
+	mTextMan.RegisterFont(logFont, 0);
+	mTextMan.SetDefaultSize(640, 960);
+	mTextMan.SetFont(0);
 }
 BarGauge * StatusFrame::GetHPBar()
 {
@@ -53,4 +83,15 @@ void StatusFrame::SetTexture(DX11TextureManager & aManager, const int & aTexture
 void StatusFrame::SetSize(const float & aWidth, const float & aHeight)
 {
 	mFrame.SetSize({ aWidth,aHeight });
+}
+
+void StatusFrame::UpdateStatus(StatusBase * aStatus)
+{
+	mHpBar->SetParam(aStatus->mHp);
+	mEpBar->SetParam(aStatus->mEnergy);
+	std::ostringstream sout;
+	sout << std::setw(4) << std::right << (int)aStatus->mHp.GetNow() << " / " << std::setw(4) << std::left << (int)aStatus->mHp.GetMax();
+	mHpText = mTextMan.Create(sout.str());
+	sout << std::setw(4) << std::right << (int)aStatus->mEnergy.GetNow() << " / " << std::setw(4) << std::left << (int)aStatus->mEnergy.GetMax();
+	mEpText = mTextMan.Create(sout.str());
 }

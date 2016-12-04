@@ -294,9 +294,6 @@
     <ClCompile Include="Source\Game\Status\StatusField.cpp">
       <Filter>Game\Status\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Status\StatusFrame.cpp">
-      <Filter>Game\Status\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Status\StatusPlayer.cpp">
       <Filter>Game\Status\Source</Filter>
     </ClCompile>
@@ -412,6 +409,15 @@
       <Filter>Game\Status\Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\UI\Button.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\UI\Toggle.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Status\StatusFrame.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\UI\ScoreView.cpp">
       <Filter>Game\UI\Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -595,9 +601,6 @@
     <ClInclude Include="Include\StatusField.h">
       <Filter>Game\Status\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Include\StatusFrame.h">
-      <Filter>Game\Status\Header</Filter>
-    </ClInclude>
     <ClInclude Include="Include\StatusPlayer.h">
       <Filter>Game\Status\Header</Filter>
     </ClInclude>
@@ -608,6 +611,15 @@
       <Filter>Game\Status\Header</Filter>
     </ClInclude>
     <ClInclude Include="Include\Button.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Toggle.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\StatusFrame.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ScoreView.h">
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
   </ItemGroup>
