@@ -12,17 +12,19 @@ TitleScale={1.0,1.0}
 TitleTexturePath="Resource/UI/Title/Title.png"
 
 --ButtonStart
-ButtonPosition={100,200}
-ButtonSize={160,30}
-ButtonScale={1.0,1.0}
-ButtonNormalTexturePath="Resource/UI/Title/ButtonStart_Normal.png"
-ButtonPushTexturePath="Resource/UI/Title/ButtonStart_Push.png"
-ButtonNoActiveTexturePath="Resource/UI/Title/ButtonStart_NoActive.png"
+ButtonStartPosition={100,200}
+ButtonStartSize={160,30}
+ButtonStartScale={1.0,1.0}
+ButtonStartNormalTexturePath="Resource/UI/Title/ButtonStart_Normal.png"
+ButtonStartPushTexturePath="Resource/UI/Title/ButtonStart_Push.png"
+ButtonStartNoActiveTexturePath="Resource/UI/Title/ButtonStart_NoActive.png"
+ButtonStartDisableTexturePath="Resource/UI/Title/ButtonStart_NoActive.png"
 
---ButtonExit
-ButtonPosition={100,200}
-ButtonSize={160,30}
-ButtonScale={1.0,1.0}
-ButtonNormalTexturePath="Resource/UI/Title/ButtonStart_Normal.png"
-ButtonPushTexturePath="Resource/UI/Title/ButtonStart_Push.png"
-ButtonNoActiveTexturePath="Resource/UI/Title/ButtonStart_NoActive.png"
+--ButtonExitExit
+ButtonExitPosition={100,200}
+ButtonExitSize={160,30}
+ButtonExitScale={1.0,1.0}
+ButtonExitNormalTexturePath="Resource/UI/Title/ButtonExit_Normal.png"
+ButtonExitPushTexturePath="Resource/UI/Title/ButtonExit_Push.png"
+ButtonExitNoActiveTexturePath="Resource/UI/Title/ButtonExit_NoActive.png"
+ButtonExitDisableTexturePath="Resource/UI/Title/ButtonExit_NoActive.png"
