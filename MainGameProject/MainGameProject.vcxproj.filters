@@ -235,6 +235,9 @@
     <Filter Include="Game\Title\UI">
       <UniqueIdentifier>{546e3665-a1a3-4eff-9426-49f179575520}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\MyScene">
+      <UniqueIdentifier>{820d115e-afe2-47fb-8218-7dc058b18e7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Comfort\Effekseer\Effect.cxx">
@@ -419,6 +422,12 @@
     </ClCompile>
     <ClCompile Include="Source\Game\UI\ScoreView.cpp">
       <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\UI\TimeView.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\MyScene\TimeOver.cpp">
+      <Filter>Game\Scene\MyScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -621,6 +630,18 @@
     </ClInclude>
     <ClInclude Include="Include\ScoreView.h">
       <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TimeView.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GameObjectBase.h">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\StaticObject.h">
+      <Filter>Game\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TimeOver.h">
+      <Filter>Game\Scene\MyScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

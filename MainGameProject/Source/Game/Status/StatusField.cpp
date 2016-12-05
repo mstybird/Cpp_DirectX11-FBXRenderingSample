@@ -3,6 +3,9 @@
 #include"DXMatrix.h"
 #include"EnemyAI.h"
 #include"CharacterBase.h"
+#include"StatusBase.h"
+#include"StatusEnemy.h"
+#include"Enemy.h"
 #include<SpawnMapImporter.hpp>
 #include<AIMapImport.hpp>
 #include<cassert>
@@ -18,15 +21,23 @@ StatusField::~StatusField()
 }
 void StatusField::Initialize()
 {
-	mTeamBlack.mBase.Initialize();
-	mTeamWhite.mBase.Initialize();
+	mTeamBlack.GetBase()->Initialize();
+	mTeamWhite.GetBase()->Initialize();
+	mTeamBlack.InitScore();
+	mTeamWhite.InitScore();
+}
+void StatusField::InitializeTime(const int aLimitSecond)
+{
+	mStartTime = std::chrono::system_clock::now();
+	mLimitTime = aLimitSecond;
+	mRemainTime = aLimitSecond;
 }
 void StatusField::InitRenderAndShader(MS3DRender & aRender, MSBase3DShader & aShader)
 {
-	mTeamBlack.mBase.SetShader(&aShader);
-	mTeamWhite.mBase.SetShader(&aShader);
-	mTeamBlack.mBase.SetRenderer(&aRender);
-	mTeamWhite.mBase.SetRenderer(&aRender);
+	mTeamBlack.GetBase()->SetShader(&aShader);
+	mTeamWhite.GetBase()->SetShader(&aShader);
+	mTeamBlack.GetBase()->SetRenderer(&aRender);
+	mTeamWhite.GetBase()->SetRenderer(&aRender);
 }
 void StatusField::CreateFieldNodes()
 {
@@ -144,8 +155,8 @@ void StatusField::CreateSpawnBallNodes()
 }
 void StatusField::InitGoalIndex(const int aWhiteGoalIndex, const int aBlackGoalIndex)
 {
-	mTeamWhite.mGoalIndex = aWhiteGoalIndex;
-	mTeamBlack.mGoalIndex = aBlackGoalIndex;
+	mTeamWhite.SetGoalIndex(aWhiteGoalIndex);
+	mTeamBlack.SetGoalIndex(aBlackGoalIndex);
 }
 std::vector<Dijkstra::Node*> StatusField::GetFieldNodesClone()
 {
@@ -173,10 +184,10 @@ void StatusField::RegisterTeamMember(CharacterBase * aRegistMember, eTeamType aT
 	switch (aType)
 	{
 	case eTeamType::White:
-		mTeamWhite.mMembers.push_back(aRegistMember);
+		mTeamWhite.GetMembers()->push_back(aRegistMember);
 		break;
 	case eTeamType::Black:
-		mTeamBlack.mMembers.push_back(aRegistMember);
+		mTeamBlack.GetMembers()->push_back(aRegistMember);
 		break;
 	default:
 		break;
@@ -188,10 +199,10 @@ StaticObject * StatusField::GetTeamBase(eTeamType aTeamType)
 	switch (aTeamType)
 	{
 	case eTeamType::White:
-		lTeamBase = &mTeamWhite.mBase;
+		lTeamBase = mTeamWhite.GetBase();
 		break;
 	case eTeamType::Black:
-		lTeamBase = &mTeamBlack.mBase;
+		lTeamBase = mTeamBlack.GetBase();
 		break;
 	default:
 		break;
@@ -203,12 +214,12 @@ StatusTeam * StatusField::GetTeamAlly(CharacterBase * aMember)
 	if (aMember == nullptr)return nullptr;
 
 
-	for (decltype(auto)lMember : mTeamBlack.mMembers) {
+	for (decltype(auto)lMember : *mTeamBlack.GetMembers()) {
 		if (lMember == aMember) {
 			return &mTeamBlack;
 		}
 	}
-	for (decltype(auto)lMember : mTeamWhite.mMembers) {
+	for (decltype(auto)lMember : *mTeamWhite.GetMembers()) {
 		if (lMember == aMember) {
 			return &mTeamWhite;
 		}
@@ -219,12 +230,12 @@ StatusTeam * StatusField::GetTeamEnemy(CharacterBase * aMember)
 {
 	if (aMember == nullptr)return nullptr;
 
-	for (decltype(auto)lMember : mTeamBlack.mMembers) {
+	for (decltype(auto)lMember : *mTeamBlack.GetMembers()) {
 		if (lMember == aMember) {
 			return &mTeamWhite;
 		}
 	}
-	for (decltype(auto)lMember : mTeamWhite.mMembers) {
+	for (decltype(auto)lMember : *mTeamWhite.GetMembers()) {
 		if (lMember == aMember) {
 			return &mTeamBlack;
 		}
@@ -233,12 +244,12 @@ StatusTeam * StatusField::GetTeamEnemy(CharacterBase * aMember)
 }
 eTeamType StatusField::GetTeamType(CharacterBase * aChara)
 {
-	for (decltype(auto)lMember : mTeamBlack.mMembers) {
+	for (decltype(auto)lMember : *mTeamBlack.GetMembers()) {
 		if (lMember == aChara) {
 			return eTeamType::Black;
 		}
 	}
-	for (decltype(auto)lMember : mTeamWhite.mMembers) {
+	for (decltype(auto)lMember : *mTeamWhite.GetMembers()) {
 		if (lMember == aChara) {
 			return eTeamType::White;
 		}
@@ -287,6 +298,49 @@ void StatusField::RespawnBall(DXVector3*pPosition)
 		auto& lPosition =static_cast<MyNode*>(mSpawnBallNodes[lCount])->Position;
 		mBall->GetWorld()->SetT(lPosition);
 	}
+}
+
+void StatusField::GoalProccess(CharacterBase * aGoaler)
+{
+	RespawnBall();
+	aGoaler->GetStatus()->mBall = nullptr;
+
+	if (dynamic_cast<Enemy*>(aGoaler)) {
+		aGoaler->GetStatus<EnemyStatus>()->mIsTargetingBall = false;
+		
+	}
+
+	//ゴールしたチームに得点
+	GetTeamAlly(aGoaler)->AddScore();
+
+}
+
+int StatusField::GetScoreWhite()
+{
+	return mTeamWhite.GetScore();
+}
+
+int StatusField::GetScoreBlack()
+{
+	return mTeamBlack.GetScore();
+}
+
+void StatusField::UpdateTime()
+{
+	auto lNowTime = std::chrono::system_clock::now();
+	mRemainTime = mLimitTime - std::chrono::duration_cast<std::chrono::seconds>(lNowTime - mStartTime).count();
+}
+
+bool StatusField::IsTimeOver()
+{
+	
+	return mRemainTime <= 0;
+}
+
+void StatusField::GetRemainTime(int & aMinutes, int & aSeconds)
+{
+	aMinutes = mRemainTime / 60;
+	aSeconds = mRemainTime % 60;
 }
 
 void NodeControl::AddNodeSafe(std::vector<Dijkstra::Node*>& aNodeList, Dijkstra::Node * aAddNode)

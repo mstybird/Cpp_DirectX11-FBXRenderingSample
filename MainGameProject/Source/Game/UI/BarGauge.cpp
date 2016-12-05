@@ -87,6 +87,6 @@ void BarGauge::Render(MSSprite2DRender& aRender, UIBase*aParent)
 	}
 
 
-	aRender.Render(mInImage);
 	aRender.Render(mOutImage);
+	aRender.Render(mInImage);
 }

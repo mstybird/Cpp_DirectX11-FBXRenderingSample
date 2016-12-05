@@ -3,6 +3,7 @@
 #include"BarGauge.h"
 #include"MSSprite2DResource.h"
 #include"StatusBase.h"
+#include<MSDirect.h>
 #include<iomanip>
 #include <sstream>
 StatusFrame::StatusFrame():
@@ -13,7 +14,7 @@ StatusFrame::StatusFrame():
 	FontLog	logFont;
 	::ZeroMemory(&logFont, sizeof(logFont));
 	//	logFont.lfHeight = 40;	//フォントサイズ
-	logFont.SetFontSize(40);
+	logFont.SetFontSize(18);
 	logFont.lfWidth = 0;
 	logFont.lfEscapement = 0;
 	logFont.lfOrientation = 0;
@@ -65,9 +66,13 @@ void StatusFrame::Render(MSSprite2DRender& aRender, UIBase*aParent)
 	
 	
 	
+	aRender.Render(mFrame);
 	mHpBar->Render(aRender,this);
 	mEpBar->Render(aRender,this);
-	aRender.Render(mFrame);
+	mHpText->Render(aRender);
+	mEpText->Render(aRender);
+
+
 	//バッファから値を復帰
 	mGlobalPosition = mGlobalPositionBuffer;
 	mGlobalScale = mGlobalScaleBuffer;
@@ -85,6 +90,16 @@ void StatusFrame::SetSize(const float & aWidth, const float & aHeight)
 	mFrame.SetSize({ aWidth,aHeight });
 }
 
+void StatusFrame::SetHPTextOffset(const float aWidth, const float aHeight)
+{
+	mHpTextPos.Set(aWidth, aHeight);
+}
+
+void StatusFrame::SetEPTextOffset(const float aWidth, const float aHeight)
+{
+	mEpTextPos.Set(aWidth, aHeight);
+}
+
 void StatusFrame::UpdateStatus(StatusBase * aStatus)
 {
 	mHpBar->SetParam(aStatus->mHp);
@@ -94,4 +109,13 @@ void StatusFrame::UpdateStatus(StatusBase * aStatus)
 	mHpText = mTextMan.Create(sout.str());
 	sout << std::setw(4) << std::right << (int)aStatus->mEnergy.GetNow() << " / " << std::setw(4) << std::left << (int)aStatus->mEnergy.GetMax();
 	mEpText = mTextMan.Create(sout.str());
+
+	//HpBarPosition
+	auto lHPBarScale = (mGlobalScale * *mHpBar->GetGlobalScale());
+	auto lEPBarScale = (mGlobalScale * *mEpBar->GetGlobalScale());
+	auto lHPTextPos = (mGlobalPosition + *mHpBar->GetGlobalPosition())*lHPBarScale + mHpTextPos;
+	auto lEPTextPos = (mGlobalPosition + *mEpBar->GetGlobalPosition())*lEPBarScale + mEpTextPos;
+	mHpText->SetPosition(lHPTextPos);
+	mEpText->SetPosition(lEPTextPos);
+
 }

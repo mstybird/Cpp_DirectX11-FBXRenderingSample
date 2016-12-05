@@ -15,6 +15,9 @@ public:
 	void SetSize(float aWidth, float aHeight);
 	void SetTextOffset(const DXVector2&aOffset);
 	void SetTextOffset(float aWidth, float aHeight);
+
+	void SetTextures(DX11TextureManager*aTexManager,const int aFrameID, const int aLeftID, const int aRightID);
+
 	void UpdateScore(float aLeft, float aRight);
 
 	virtual void Render(MSSprite2DRender& aRender, UIBase*aParent = nullptr)override;

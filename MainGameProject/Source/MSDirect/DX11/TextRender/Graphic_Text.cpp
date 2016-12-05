@@ -253,33 +253,32 @@ std::shared_ptr<TextGraphic> TextManager::Create(const std::string& aText)
 	ReleaseDC(nullptr, lHdc);
 
 
-	auto lCharResources = mDBChar->GetArray(aText, lFontID, lFontDesc->GetFontSize());
-
+	auto lCharTextures = mDBChar->GetArray(aText, lFontID, lFontDesc->GetFontSize());
 	//フォントサイズの登録
 	clock_t start, end;
 	start = clock();
 	lText->mFontSize = lFontDesc->GetFontSize();
 	//テキストの登録
 	auto lTextLine = new TextureTextLine;
-	for (auto&lCharResource : lCharResources) {
-		TextureChar lChar;
+	for (auto&lChar : lCharTextures) {
+		//TextureChar lChar;
 
-		auto& lTexture = lCharResource.first;
-		auto& lResource = lCharResource.second;
+		//auto& lTexture = lCharResource.first;
+		//auto& lResource = lCharResource.second;
 
 		//内部でのポリゴン生成を必須にしないようにする
-		lChar.SetTexture(lTexture);
-		lChar.SetSize({ static_cast<float>(lResource->Width),static_cast<float>(lResource->Height) });
-		lChar.mWidth = lResource->Width;
+		//lChar.SetTexture(lTexture);
+		//lChar.SetSize({ static_cast<float>(lResource->Width),static_cast<float>(lResource->Height) });
+		//lChar.mWidth = lResource->Width;
 		//文字加算をしてはみ出すかチェック
-		if (lTextLine->mWidth + lResource->Width > mSize.x) {
+		if (lTextLine->mWidth + lChar.mWidth > mSize.x) {
 			//折り返す
 			lText->mLineAry.push_back(lTextLine);
 			lTextLine = new TextureTextLine;
 		}
 
 		lTextLine->push_back(std::move(lChar));
-		lTextLine->mWidth += lResource->Width;
+		lTextLine->mWidth += lChar.mWidth;
 
 	}
 
@@ -507,14 +506,25 @@ bool CharDatabase::Load(HDC&aHandle,const uint32_t aCharCode, const int aFontID,
 	delete lPtr;
 	sDeviceContext->Unmap(lTex2D, 0);
 
+
 	//テクスチャ登録
 	RegisterTexture(aFontID, aFontSize, aCharCode, lTex2D);
 	//テクスチャ情報登録
 	RegisterDescription(aFontID, aFontSize, aCharCode, lDesc.Width, lDesc.Height);
 
+	TextureChar lChar;
+	auto lResource = GetResource(aCharCode, aFontID, aFontSize);
+	lChar.SetTexture(lResource.first);
+	lChar.SetSize({ static_cast<float>(lResource.second->Width),static_cast<float>(lResource.second->Height) });
+	lChar.mWidth = lResource.second->Width;
+	lChar.CreateBuffer();
+	RegisterChar(aFontID, aFontSize, aCharCode, lChar);
+
 	if (lTex2D) {
 		lTex2D->Release();
 	}
+
+
 
 	return true;
 }
@@ -528,6 +538,7 @@ void CharDatabase::Release()
 	}
 	mTextureManager.clear();
 	mDescManager.clear();
+	mCharManager.clear();
 }
 
 void CharDatabase::Release(const int aFontID, const int aFontSize)
@@ -535,7 +546,7 @@ void CharDatabase::Release(const int aFontID, const int aFontSize)
 	mTextureManager[aFontID][aFontSize].UnRegisterFileAll();
 }
 
-CharResource CharDatabase::Get(const uint32_t aCharCode, const int aFontID, const int aFontSize)
+CharResource CharDatabase::GetResource(const uint32_t aCharCode, const int aFontID, const int aFontSize)
 {
 	CharResource lResource;
 	mTextureManager[aFontID][aFontSize].Load(lResource.first, aCharCode);
@@ -543,14 +554,19 @@ CharResource CharDatabase::Get(const uint32_t aCharCode, const int aFontID, cons
 	return lResource;
 }
 
-std::vector<CharResource> CharDatabase::GetArray(const std::string & aText, const int aFontID, const int aFontSize)
+TextureChar CharDatabase::GetTextureChar(const uint32_t aCharCode, const int aFontID, const int aFontSize)
+{
+	return mCharManager[aFontID][aFontSize][aCharCode];
+}
+
+std::vector<TextureChar> CharDatabase::GetArray(const std::string & aText, const int aFontID, const int aFontSize)
 {
 	auto lCharCodeArray = GetCharCodeArray(aText);
-	std::vector<CharResource>lCharArray;
+	std::vector<TextureChar>lCharArray;
 	for (auto&lCharCode : lCharCodeArray) {
-		//1文字ごとにリソースを取得する
-		CharResource lResource = Get(lCharCode, aFontID, aFontSize);
-		lCharArray.push_back(std::move(lResource));
+		//1文字ごとにバッファを取得
+		TextureChar lChar = GetTextureChar(lCharCode, aFontID, aFontSize);
+		lCharArray.push_back(std::move(lChar));
 	}
 	
 	return std::move(lCharArray);
@@ -622,4 +638,9 @@ void CharDatabase::RegisterDescription(const int aFontID, const int aFontSize, c
 {
 	mDescManager[aFontID][aFontSize].Width = aWidth;
 	mDescManager[aFontID][aFontSize].Height = aHeight;
+}
+
+void CharDatabase::RegisterChar(const int aFontID, const int aFontSize, const uint32_t aCharCode, TextureChar & aCharTexture)
+{
+	mCharManager[aFontID][aFontSize][aCharCode] = std::move(aCharTexture);
 }

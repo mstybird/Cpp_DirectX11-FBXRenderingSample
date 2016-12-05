@@ -9,7 +9,7 @@ ScoreView::ScoreView():
 	FontLog	logFont;
 	::ZeroMemory(&logFont, sizeof(logFont));
 	//	logFont.lfHeight = 40;	//フォントサイズ
-	logFont.SetFontSize(40);
+	logFont.SetFontSize(20);
 	logFont.lfWidth = 0;
 	logFont.lfEscapement = 0;
 	logFont.lfOrientation = 0;
@@ -56,6 +56,15 @@ void ScoreView::SetTextOffset(const DXVector2 & aOffset)
 void ScoreView::SetTextOffset(float aWidth, float aHeight)
 {
 	mTextOffset.Set(aWidth, aHeight);
+}
+
+void ScoreView::SetTextures(DX11TextureManager * aTexManager, const int aFrameID, const int aLeftID, const int aRightID)
+{
+	mScoreBar->SetTextures(
+	{ *aTexManager,aFrameID },
+	{ *aTexManager,aLeftID },
+	{ *aTexManager,aRightID }
+	);
 }
 
 void ScoreView::UpdateScore(float aLeft, float aRight)

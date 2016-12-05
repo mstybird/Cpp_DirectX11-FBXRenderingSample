@@ -38,7 +38,7 @@ void Enemy::Initialize(StatusField&pSetStatus)
 void Enemy::InitFinal()
 {
 	//ゴールの初期化
-	SetGoalIndex(mField->GetTeamAlly(this)->mGoalIndex);
+	SetGoalIndex(mField->GetTeamAlly(this)->GetGoalIndex());
 	
 	mRayPick->SetFramePosition(*mTransform);
 	//一番近いノードを初期座標としておく
@@ -237,7 +237,7 @@ void Enemy::UpdateAI()
 
 	//味方全走査
 	lAIStatus.mAllyNear = false;
-	for (decltype(auto)lAlly : mField->GetTeamAlly(this)->mMembers) {
+	for (decltype(auto)lAlly : *mField->GetTeamAlly(this)->GetMembers()) {
 		if (lAIStatus.mAllyNear == true)break;
 		//自身はチェックしない
 		if (lAlly == this) continue;
@@ -494,7 +494,7 @@ void Enemy::BetaMoveToGoal()
 		//移動先をゴールにする
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
 		mAI->GenerateRoot();
-		mAI->CreateRoot(mField->GetTeamAlly(this)->mGoalIndex);
+		mAI->CreateRoot(mField->GetTeamAlly(this)->GetGoalIndex());
 
 	}
 
@@ -518,9 +518,7 @@ void Enemy::BetaMoveToGoal()
 	}
 
 	if (mField->GetTeamAlly(this)->IsCollisionBase(this) == true) {
-		mField->RespawnBall();
-		GetStatus()->mBall = nullptr;
-		GetStatus<EnemyStatus>()->mIsTargetingBall = false;
+		mField->GoalProccess(this);
 		mAI->ClearAI();
 	}
 
@@ -1104,7 +1102,7 @@ void Enemy::BetaSearchForAllyArea()
 		//味方エリアのどこかをゴールとする
 		MyNode*lGoalNode;
 		//味方チームのチームタイプを取得する
-		eTeamType lEnemyTeamType = lEnemyTeam->mTeamType;
+		eTeamType lEnemyTeamType = lEnemyTeam->GetTeamType();;
 		do {
 
 			lGoalNode = mAI->GetNodeRandom();

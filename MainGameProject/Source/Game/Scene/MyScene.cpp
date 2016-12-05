@@ -1,7 +1,8 @@
 ﻿#include"MyScene.h"
 #include"MSUtility.h"
 #include"BarGauge.h"
-
+#include<ScoreView.h>
+#include<TimeView.h>
 /*
 タスク：
 攻撃を受けるとダメージ
@@ -16,6 +17,8 @@ UI設計
 const int cEnemyCount = 4;
 MyMSScene::MyMSScene()
 {
+	mIsTimeOver = false;
+	mSceneCounter = 0;
 }
 
 MyMSScene::~MyMSScene()
@@ -130,6 +133,12 @@ void MyMSScene::Update() {
 	
 	UpdateUI();
 
+	//時間制限が来た時の処理
+	if (mFieldStatus.IsTimeOver()) {
+		int a = 10;
+	}
+
+	++mSceneCounter;
 }
 
 void MyMSScene::KeyDown(MSKEY pKey)
@@ -204,9 +213,8 @@ void MyMSScene::KeyHold(MSKEY pKey)
 
 void MyMSScene::Render()
 {
-
-	auto text = textMan.Create("Hello");
-	text->SetPosition(100, 300);
+	static int count = 0;
+	printf("count:%d\n", count++);
 	//text.Create("Hello", 0, 0, 720, 960, logFont);
 
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
@@ -221,7 +229,6 @@ void MyMSScene::Render()
 
 	mFieldStatus.GetTeamBase(eTeamType::White)->Render();
 	mFieldStatus.GetTeamBase(eTeamType::Black)->Render();
-	text->Render(m2DRender);
 	ui.Render(m2DRender);
 
 
@@ -280,6 +287,14 @@ void MyMSScene::InitializeUI()
 		lFileNameMap[cEPBarOutID] = lFileName;
 		lManager->GetGlobal(cEPBarInTexturePath, lFileName);
 		lFileNameMap[cEPBarInID] = lFileName;
+
+		lManager->GetGlobal(cScoreBarOutTexturScoreath, lFileName);
+		lFileNameMap[cScoreBarOutID] = lFileName;
+		lManager->GetGlobal(cScoreBarLeftTexturScoreath, lFileName);
+		lFileNameMap[cScoreBarLeftID] = lFileName;
+		lManager->GetGlobal(cScoreBarRightTexturScoreath, lFileName);
+		lFileNameMap[cScoreBarRightID] = lFileName;
+
 		mTexManager.RegisterFileList(lFileNameMap);
 	}
 
@@ -287,11 +302,13 @@ void MyMSScene::InitializeUI()
 	std::vector<float>lPosition;
 	std::vector<float>lSize;
 	std::vector<float>lScale;
+	std::vector<float>lOffset;
 	//解放用
 	auto ClearTemp = [&]() {
 		lPosition.clear();
 		lSize.clear();
 		lScale.clear();
+		lOffset.clear();
 	};
 
 	//ステータスフレームのレイアウト情報
@@ -318,6 +335,8 @@ void MyMSScene::InitializeUI()
 		lManager->GetGlobal(cHPBarPosition, lPosition);
 		lManager->GetGlobal(cHPBarSize, lSize);
 		lManager->GetGlobal(cHPBarInScale, lScale);
+		lManager->GetGlobal(cHPTextOffset, lOffset);
+
 
 		lHPBar->SetGlobalPosition(lPosition[0], lPosition[1]);
 		lHPBar->SetGaugeScale(lScale[0], lScale[1]);
@@ -326,11 +345,12 @@ void MyMSScene::InitializeUI()
 		{ mTexManager,cHPBarOutID },
 		{ mTexManager,cHPBarInID }
 		);
+		
+		ui.mStatusFrame->SetHPTextOffset(lOffset[0], lOffset[1]);
 		//lHPBar->Update();
 		ClearTemp();
 
 	}
-
 
 		//EPバーのレイアウト情報
 	{
@@ -339,15 +359,20 @@ void MyMSScene::InitializeUI()
 		lManager->GetGlobal(cEPBarPosition, lPosition);
 		lManager->GetGlobal(cEPBarSize, lSize);
 		lManager->GetGlobal(cEPBarInScale, lScale);
+		lManager->GetGlobal(cEPTextOffset, lOffset);
 
 		lEPBar->SetGlobalPosition(lPosition[0], lPosition[1]);
 		lEPBar->SetGaugeScale(lScale[0], lScale[1]);
 		lEPBar->SetSize(lSize[0], lSize[1]);
+		
 		lEPBar->SetTextures(
 		{ mTexManager,cEPBarOutID },
 		{ mTexManager,cEPBarInID }
 		);
 		//lEPBar->Update();
+
+		ui.mStatusFrame->SetEPTextOffset(lOffset[0], lOffset[1]);
+
 		ClearTemp();
 
 	}
@@ -358,7 +383,26 @@ void MyMSScene::InitializeUI()
 	*/
 
 	{
-		auto lScoreBar=ui.
+		
+		auto lScoreView = ui.GetScoreView();
+		lManager->GetGlobal(cScoreBarPosition, lPosition);
+		lManager->GetGlobal(cScoreBarSize, lSize);
+		lManager->GetGlobal(cScoreBarInScale, lScale);
+		lManager->GetGlobal(cScoreTextOffset, lOffset);
+		
+		lScoreView->SetGlobalPosition(lPosition[0], lPosition[1]);
+		lScoreView->SetSize(lSize[0], lSize[1]);
+		lScoreView->SetGlobalScale(lScale[0], lScale[1]);
+		lScoreView->SetTextOffset(lOffset[0], lOffset[1]);
+		lScoreView->SetTextures(&mTexManager, cScoreBarOutID, cScoreBarLeftID, cScoreBarRightID);
+		ClearTemp();
+	}
+
+	{
+		auto lTimeView = ui.GetTimeView();
+		lManager->GetGlobal(cTimeTextPosition, lPosition);
+		lTimeView->SetGlobalPosition(lPosition[0], lPosition[1]);
+
 	}
 
 }
@@ -522,6 +566,7 @@ void MyMSScene::InitializeModel()
 void MyMSScene::InitializeFieldStatus()
 {
 	mFieldStatus.Initialize();
+	mFieldStatus.InitializeTime(60);
 	mFieldStatus.CreateFieldNodes();
 	mFieldStatus.CreateSpawnCharaNodes();
 	mFieldStatus.CreateSpawnBallNodes();
@@ -749,6 +794,15 @@ StatusBulletBase MyMSScene::LoadBulletStatus(const std::string& aFileName, const
 
 void MyMSScene::UpdateUI()
 {
+	int lMinutes, lSeconds;
+	mFieldStatus.UpdateTime();
+	mFieldStatus.GetRemainTime(lMinutes, lSeconds);
+	ui.GetTimeView()->UpdateTime(lMinutes, lSeconds);
+
+	auto lWhiteScore = mFieldStatus.GetScoreWhite();
+	auto lBlackScore = mFieldStatus.GetScoreBlack();
+
+	ui.GetScoreView()->UpdateScore(lWhiteScore, lBlackScore);
 	ui.mStatusFrame->UpdateStatus(mPlayer.GetStatus());
 }
 

@@ -32,3 +32,43 @@ bool StatusTeam::IsCollisionBase(GameObjectBase * aCollider)
 	float lDistance = (lColliderPos - lBasePos).GetDistance();
 	return lDistance < mBaseScale;
 }
+
+void StatusTeam::SetGoalIndex(const int aIndex)
+{
+	mGoalIndex = aIndex;
+}
+
+int StatusTeam::GetGoalIndex()
+{
+	return mGoalIndex;
+}
+
+StaticObject * StatusTeam::GetBase()
+{
+	return &mBase;
+}
+
+void StatusTeam::InitScore()
+{
+	mScore = 2;
+}
+
+int StatusTeam::GetScore()
+{
+	return mScore;
+}
+
+void StatusTeam::AddScore(const int aScore)
+{
+	mScore += aScore;
+}
+
+std::vector<GameObjectBase*>* StatusTeam::GetMembers()
+{
+	return &mMembers;
+}
+
+eTeamType StatusTeam::GetTeamType()
+{
+	return mTeamType;
+}

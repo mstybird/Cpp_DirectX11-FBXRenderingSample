@@ -3,6 +3,7 @@
 #include"EnemyAI.h"
 #include"StatusTeam.h"
 #include<vector>
+#include<chrono>
 class CharacterBase;
 namespace NodeControl {
 	void AddNodeSafe(std::vector<Dijkstra::Node*>&aNodeList, Dijkstra::Node*aAddNode);
@@ -41,6 +42,8 @@ struct StatusField {
 	std::vector<Dijkstra::Node*>mSpawnBallNodes;
 
 	void Initialize();
+	//制限時間を設定する
+	void InitializeTime(const int mLimitSecond);
 	void InitRenderAndShader(MS3DRender& aRender, MSBase3DShader&aShader);
 	void CreateFieldNodes();
 	void CreateSpawnCharaNodes();
@@ -60,13 +63,32 @@ struct StatusField {
 	StatusTeam* GetTeamEnemy(CharacterBase*aMember);
 	//自チームのタイプを取得
 	eTeamType GetTeamType(CharacterBase*aChara);
-	//
+	//指定したノードの座標を取得する
 	DXVector3 GetNodePosition(const int aIndex);
-
+	//ボール所持者を設定する
 	void SetBallHolder(CharacterBase*pBallHolder);
 	void RespawnBall(DXVector3*pPosition = nullptr);
 
+	//ゴールした際の処理
+	void GoalProccess(CharacterBase* aGoaler);
+
+	//Team Whiteのスコアを取得する
+	int GetScoreWhite();
+	//Team Blackのスコアを取得する
+	int GetScoreBlack();
+	//時間を更新する
+	void UpdateTime();
+	//制限時間チェックをする
+	bool IsTimeOver();
+	//残り時間を分と秒で取得する
+	void GetRemainTime(int&aMinutes, int&aSeconds);
 	StatusTeam mTeamWhite;	//白チーム
 	StatusTeam mTeamBlack;	//黒チーム
-
+private:
+	//開始時間
+	std::chrono::system_clock::time_point mStartTime;
+	//制限時間
+	int mLimitTime;
+	//残り時間
+	int mRemainTime;
 };

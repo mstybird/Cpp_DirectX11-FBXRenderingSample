@@ -19,7 +19,8 @@ public:
 	virtual void Render(MSSprite2DRender& aRender, UIBase*aParent = nullptr)override;
 	void SetTexture(DX11TextureManager&aManager, const int&aTextureID);
 	void SetSize(const float & aWidth, const float & aHeight);
-
+	void SetHPTextOffset(const float aWidth, const float aHeight);
+	void SetEPTextOffset(const float aWidth, const float aHeight);
 	void UpdateStatus(StatusBase* aStatus);
 
 private:

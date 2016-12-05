@@ -202,7 +202,7 @@ void MSSpriteBaseResource::CreateBuffer()
 	if (FAILED(sDevice->CreateBuffer(&bd, &InitData, &mVertexBuffer))) {
 		assert(0);
 	};
-	mUpdateFlag = true;
+	mUpdateFlag = false;
 }
 
 void MSSprite2DResource::SetPosition(const DXVector2 & pPosition)

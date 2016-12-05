@@ -17,6 +17,7 @@
 #include"MySceneUI.h"
 #include"Graphic_Text.h"
 #include"BulletManager.h"
+#include"TimeOver.h"
 namespace ValueMyScene {
 
 	//UI値:100~499
@@ -36,6 +37,10 @@ namespace ValueMyScene {
 		static const int cScoreBarLeftID = 131;
 		static const int cScoreBarRightID = 132;
 
+		static const int cLogoFinishID = 140;
+		static const int cLogoWinID = 141;
+		static const int cLogoLoseID = 142;
+
 		static const char* cStatusFramePositionName = "StatusFramePosition";
 		static const char* cStatusFrameSize = "StatusFrameSize";
 		static const char* cStatusFrameScale = "StatusFrameScale";
@@ -52,7 +57,23 @@ namespace ValueMyScene {
 		static const char* cEPBarInScale = "EPBarInScale";
 		static const char* cEPBarOutTexturePath = "EPBarOutTexturePath";
 		static const char* cEPBarInTexturePath = "EPBarInTexturePath";
-	}
+
+		static const char* cScoreBarPosition = "ScoreBarPosition";
+		static const char* cScoreBarSize = "ScoreBarSize";
+		static const char* cScoreBarInScale = "ScoreBarInScale";
+		static const char* cScoreBarOutTexturScoreath = "ScoreBarOutTexturePath";
+		static const char* cScoreBarLeftTexturScoreath = "ScoreBarLeftTexturePath";
+		static const char* cScoreBarRightTexturScoreath = "ScoreBarRightTexturePath";
+
+		//テキストオフセット
+		static const char* cHPTextOffset = "HPTextOffset";
+		static const char* cEPTextOffset = "EPTextOffset";
+		static const char* cScoreTextOffset = "ScoreTextOffset";
+
+		static const char* cTimeTextPosition = "TimeTextPosition";
+
+
+	
 
 	//Modelオフセット値500~999
 	namespace Model {
@@ -131,6 +152,21 @@ namespace ValueMyScene {
 
 	}
 
+	namespace TimeOver {
+		static const char* cLogoFinishPosition = "LogoFinishPosition";
+		static const char* cLogoFinishSize = "LogoFinishSize";
+		static const char* cLogoFinishScale = "LogoFinishScale";
+		static const char* cLogoFinishTexturePath = "LogoFinishTexturePath";
+
+		static const char* cLogoIssuePosition = "LogoIssuePosition";
+		static const char* cLogoIssueSize = "LogoIssueSize";
+		static const char* cLogoIssueScale = "LogoIssueScale";
+		static const char* cLogoIssueWinTexturePath = "LogoIssueWinTexturePath";
+		static const char* cLogoIssueLoseTexturePath = "LogoIssueLoseTexturePath";
+
+	}
+
+
 	//CharaBase値:1500~1999
 	namespace Chara {
 		static const int cStatusID = 1500;
@@ -169,6 +205,8 @@ private:
 	StatusBulletBase LoadBulletStatus(const std::string& aFileName, const int aBulletID);
 
 	void UpdateUI();
+	//タイムオーバー時の処理
+	void UpdateTimeOver();
 
 private:
 
@@ -200,7 +238,6 @@ private:
 
 	//テキスト
 	TextManager textMan;
-	std::shared_ptr<TextGraphic> text;
 
 	BulletManager bltManager;
 	std::vector<std::unique_ptr<NBullet>> blts;
@@ -217,4 +254,8 @@ private:
 	//デフォルトステータス
 	StatusBase mDefaultStatus;
 
+	//シーンカウンタ
+	int mSceneCounter;
+	//時間制限が来たかどうか
+	bool mIsTimeOver;
 };

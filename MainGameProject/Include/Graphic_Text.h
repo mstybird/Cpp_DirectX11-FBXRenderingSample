@@ -6,6 +6,7 @@
 #include"MSSprite2DRender.h"
 #include<DX11TextureManager.hpp>
 #include<DXMath.hpp>
+#include<memory>
 //テクスチャはA8R8G8B8の32ビットとする
 
 struct IRECT {
@@ -162,8 +163,11 @@ private:
 	int mActiveID;
 };
 
-
+//FontID,FontSize
 using CharTextureManager = std::unordered_map<int, std::unordered_map<int, DX11TextureManager>>;
+//FontID,FontSize,CharCode
+using CharManager = std::unordered_map<int, std::unordered_map<int, std::unordered_map<int, TextureChar>>>;
+//FontID,FontSize
 using CharDescManager=std::unordered_map<int, std::unordered_map<int, FontDesc>>;
 
 using CharResource = std::pair<DXTexture*, FontDesc*>;
@@ -184,9 +188,10 @@ public:
 	//指定したフォントのみ解放
 	void Release(const int aFontID, const int aFontSize);
 	//指定した文字のデータを取得する
-	CharResource Get(const uint32_t aCharCode, const int aFontID, const int aFontSize);
+	CharResource GetResource(const uint32_t aCharCode, const int aFontID, const int aFontSize);
+	TextureChar GetTextureChar(const uint32_t aCharCode, const int aFontID, const int aFontSize);
 	//文字列のデータを取得する
-	std::vector<CharResource> GetArray(const std::string&aText, const int aFontID, const int aFontSize);
+	std::vector<TextureChar> GetArray(const std::string&aText, const int aFontID, const int aFontSize);
 
 	//テクスチャが存在するか
 	bool IsExist(const uint32_t aCharCode, const int aFontID, const int aFontSize);
@@ -198,6 +203,7 @@ private:
 
 	void RegisterTexture(const int aFontID, const int aFontSize, const uint32_t aCharCode, ID3D11Texture2D*& aTexture);
 	void RegisterDescription(const int aFontID, const int aFontSize, const uint32_t aCharCode, const int aWidth, const int aHeight);
+	void RegisterChar(const int aFontID, const int aFontSize, const uint32_t aCharCode, TextureChar&aCharTexture);
 
 	static ID3D11Device *sDevice;
 	static ID3D11DeviceContext *sDeviceContext;
@@ -205,6 +211,7 @@ private:
 	//FontID,FontSize,Manager
 	CharTextureManager mTextureManager;
 	CharDescManager mDescManager;
+	CharManager mCharManager;
 };
 
 //論理フォント、テキストテクスチャの管理、

@@ -5,6 +5,7 @@
 #include"DX11TextureManager.hpp"
 #include"DXDisplay.h"
 #include"DX11RenderResource.h"
+#include<MSDirect.h>
 ID3D11Device*MSSpriteBaseRender::sDevice;
 ID3D11DeviceContext*MSSpriteBaseRender::sDeviceContext;
 ID3D11RenderTargetView*MSSpriteBaseRender::sRenderTargetView;
@@ -23,6 +24,9 @@ void MSSprite2DRender::Render(MSSpriteBaseResource&pSprite)
 	if (pSprite.IsUpdateBuffering()) {
 		pSprite.CreateBuffer();
 	}
+
+
+
 	shader->mVertexShader.SetShader();
 	shader->mPixelShader.SetShader();
 	//頂点インプットレイアウトをセット
@@ -43,9 +47,13 @@ void MSSprite2DRender::Render(MSSpriteBaseResource&pSprite)
 	;
 	sDeviceContext->PSSetSamplers(0, 1, &pSprite.GetTexture()->mSampleLinear);
 	sDeviceContext->PSSetShaderResources(0, 1, &pSprite.GetTexture()->mTexture);
-
+	auto lRTV = MSDirect::GetRTV();
+	auto lDSV = MSDirect::GetDSV();
+	sDeviceContext->OMSetRenderTargets(1, &lRTV, nullptr);
 	sDeviceContext->OMSetBlendState(pSprite.GetTexture()->mBlendState, nullptr, 0xFFFF'FFFF);
 	sDeviceContext->Draw(4, 0);
+	sDeviceContext->OMSetRenderTargets(1, &lRTV, lDSV);
+
 }
 
 void MSSpriteBaseRender::SetShader(MSBaseSpriteShader&pShader)

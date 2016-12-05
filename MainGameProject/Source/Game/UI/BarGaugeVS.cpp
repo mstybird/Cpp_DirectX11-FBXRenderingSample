@@ -4,7 +4,9 @@
 BarGaugeVS::BarGaugeVS()
 {
 	mGaugeLeftImg.SetPivot({ 0.5f,0.5f });
+	mGaugeScale.Set(1.0f);
 	mGaugeRightImg.SetPivot({ 0.5f,0.5f });
+
 }
 
 void BarGaugeVS::SetTextures(std::pair<DX11TextureManager, int> aFrame, std::pair<DX11TextureManager, int> aLeftImage, std::pair<DX11TextureManager, int> aRightImage)
@@ -83,8 +85,8 @@ void BarGaugeVS::Render(MSSprite2DRender & aRender, UIBase * aParent)
 
 	if (totalScore != 0) {
 		//左ゲージ幅
-		left = mStatusRight / totalScore;
-		right = mStatusLeft / totalScore;
+		left = mStatusLeft / totalScore;
+		right = mStatusRight / totalScore;
 	}
 
 	//右から左へ
@@ -100,9 +102,9 @@ void BarGaugeVS::Render(MSSprite2DRender & aRender, UIBase * aParent)
 		ゲージ部分のリソース設定からの描画処理
 	*/
 
+	aRender.Render(mFrameImg);
 	aRender.Render(mGaugeLeftImg);
 	aRender.Render(mGaugeRightImg);
-	aRender.Render(mFrameImg);
 
 	if (aParent != nullptr) {
 		LoadGlobalData();
