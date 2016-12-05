@@ -17,13 +17,15 @@
 #include"MySceneUI.h"
 #include"Graphic_Text.h"
 #include"BulletManager.h"
+#include<DX11TextureManager.hpp>
 #include"TimeOver.h"
+#include"Result.h"
 namespace ValueMyScene {
 
 	//UI値:100~499
 	namespace UI {
 
-		static const int cUILuaID=100;
+		static const int cUILuaID = 100;
 
 		static const int cStatusFrameID = 100;
 
@@ -40,6 +42,7 @@ namespace ValueMyScene {
 		static const int cLogoFinishID = 140;
 		static const int cLogoWinID = 141;
 		static const int cLogoLoseID = 142;
+		static const int cLogoDrawID = 143;
 
 		static const char* cStatusFramePositionName = "StatusFramePosition";
 		static const char* cStatusFrameSize = "StatusFrameSize";
@@ -72,8 +75,8 @@ namespace ValueMyScene {
 
 		static const char* cTimeTextPosition = "TimeTextPosition";
 
+	}
 
-	
 
 	//Modelオフセット値500~999
 	namespace Model {
@@ -163,6 +166,7 @@ namespace ValueMyScene {
 		static const char* cLogoIssueScale = "LogoIssueScale";
 		static const char* cLogoIssueWinTexturePath = "LogoIssueWinTexturePath";
 		static const char* cLogoIssueLoseTexturePath = "LogoIssueLoseTexturePath";
+		static const char* cLogoIssueDrawTexturePath = "LogoIssueDrawTexturePath";
 
 	}
 
@@ -172,9 +176,63 @@ namespace ValueMyScene {
 		static const int cStatusID = 1500;
 	}
 
+	//Result値:2000~2499
+	namespace Result {
+		static const int cLuaID = 2000;
+
+		//TextureIDs
+		static const int cFrameID = 2100;
+
+		static const int cLogoWinID = 2200;
+		static const int cLogoLoseID = 2201;
+		static const int cLogoDrawID = 2202;
+
+		static const int cButtonRetryNormalID = 2300;
+		static const int cButtonRetryActiveID = 2301;
+		static const int cButtonRetryPushID = 2302;
+		static const int cButtonRetryDisableID = 2303;
+
+		static const int cButtonToTitleNormalID = 2310;
+		static const int cButtonToTitleActiveID = 2311;
+		static const int cButtonToTitlePushID = 2312;
+		static const int cButtonToTitleDisableID = 2313;
+
+		static const char* cFramePosition = "FramePosition";
+		static const char* cFrameSize = "FrameSize";
+		static const char* cFrameScale = "FrameScale";
+		static const char* cFrameTexturePath = "FrameTexturePath";
+
+		static const char* cLogoPosition = "LogoPosition";
+		static const char* cLogoSize = "LogoSize";
+		static const char* cLogoScale = "LogoScale";
+		static const char* cLogoWinTexturePath = "LogoWinTexturePath";
+		static const char* cLogoLoseTexturePath = "LogoLoseTexturePath";
+		static const char* cLogoDrawTexturePath = "LogoDrawTexturePath";
+
+
+		static const char* cTextPosition = "TextPosition";
+
+		static const char* cTogglePosition = "TogglePosition";
+
+		static const char* cButtonRetrySize = "ButtonRetrySize";
+		static const char* cButtonRetryScale = "ButtonRetryScale";
+		static const char* cButtonRetryNormalTexturePath = "ButtonRetryNormalTexturePath";
+		static const char* cButtonRetryActiveTexturePath = "ButtonRetryActiveTexturePath";
+		static const char* cButtonRetryPushTexturePath = "ButtonRetryPushTexturePath";
+		static const char* cButtonRetryDisableTexturePath = "ButtonRetryDisableTexturePath";
+
+		static const char* cButtonToTitleSize = "ButtonToTitleSize";
+		static const char* cButtonToTitleScale = "ButtonToTitleScale";
+		static const char* cButtonToTitleNormalTexturePath = "ButtonToTitleNormalTexturePath";
+		static const char* cButtonToTitleActiveTexturePath = "ButtonToTitleActiveTexturePath";
+		static const char* cButtonToTitlePushTexturePath = "ButtonToTitlePushTexturePath";
+		static const char* cButtonToTitleDisableTexturePath = "ButtonToTitleDisableTexturePath";
+
+
+
+	}
 
 }
-
 class MyMSScene :public MSSceneBase {
 public:
 	MyMSScene();
@@ -201,6 +259,8 @@ private:
 	void InitializeEnemy();
 	void InitializePlayer();
 	void InitializeBall();
+	void InitializeTimeOver();
+	void InitializeResult();
 	void SetMeshResouce(GameObjectBase*aObject, const int aDesignID, const int aCollisionID);
 	StatusBulletBase LoadBulletStatus(const std::string& aFileName, const int aBulletID);
 
@@ -236,11 +296,16 @@ private:
 	//UI
 	MySceneUI ui;
 
-	//テキスト
+	//テキストマネージャ
 	TextManager textMan;
 
 	BulletManager bltManager;
 	std::vector<std::unique_ptr<NBullet>> blts;
+
+	//タイムオーバー処理クラス
+	MySceneTimeOver mTimeOver;
+	//リザルト処理クラス
+	MySceneResult mResult;
 
 	//Effekseer関係
 	::Comfort::EfkRenderer mEfkRender;

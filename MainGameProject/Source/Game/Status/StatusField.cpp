@@ -28,9 +28,17 @@ void StatusField::Initialize()
 }
 void StatusField::InitializeTime(const int aLimitSecond)
 {
-	mStartTime = std::chrono::system_clock::now();
 	mLimitTime = aLimitSecond;
 	mRemainTime = aLimitSecond;
+}
+void StatusField::InitEffect(::Comfort::EfkManager * aManager, ::Comfort::EffectDatabase * aDb, const int aBallGetID, const int aKillID)
+{
+	auto lEffect = aDb->Get(aBallGetID);
+	mEfkBallGet.SetManager(aManager);
+	mEfkBallGet.SetEffect(lEffect);
+	lEffect = aDb->Get(aKillID);
+	mEfkGameSet.SetManager(aManager);
+	mEfkGameSet.SetEffect(lEffect);
 }
 void StatusField::InitRenderAndShader(MS3DRender & aRender, MSBase3DShader & aShader)
 {
@@ -255,6 +263,31 @@ eTeamType StatusField::GetTeamType(CharacterBase * aChara)
 		}
 	}
 }
+void StatusField::GetBall(CharacterBase * aChara)
+{
+	aChara->GetStatus()->mBall = mBall;
+	SetBallHolder(aChara);
+	DXVector3 lPosition;
+	aChara->GetWorld()->GetMatrix().lock()->GetT(lPosition);
+
+	this->mEfkBallGet.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
+	this->mEfkBallGet.Play();
+
+}
+IssueFlag StatusField::IsWin(CharacterBase * aChara)
+{
+	auto lAlly = GetTeamAlly(aChara);
+	auto lEnemy = GetTeamEnemy(aChara);
+
+	IssueFlag lResult{ IssueFlag::Draw };
+	if (lAlly->GetScore() > lEnemy->GetScore()) {
+		lResult = IssueFlag::Win;
+	}else if (lAlly->GetScore() < lEnemy->GetScore()) {
+		lResult = IssueFlag::Lose;
+	}
+
+	return lResult;
+}
 DXVector3 StatusField::GetNodePosition(const int aIndex)
 {
 	DXVector3 lResult{};
@@ -329,6 +362,11 @@ void StatusField::UpdateTime()
 {
 	auto lNowTime = std::chrono::system_clock::now();
 	mRemainTime = mLimitTime - std::chrono::duration_cast<std::chrono::seconds>(lNowTime - mStartTime).count();
+}
+
+void StatusField::GameStart()
+{
+	mStartTime = std::chrono::system_clock::now();
 }
 
 bool StatusField::IsTimeOver()

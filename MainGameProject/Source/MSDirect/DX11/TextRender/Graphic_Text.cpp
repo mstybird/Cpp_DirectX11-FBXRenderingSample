@@ -256,7 +256,6 @@ std::shared_ptr<TextGraphic> TextManager::Create(const std::string& aText)
 	auto lCharTextures = mDBChar->GetArray(aText, lFontID, lFontDesc->GetFontSize());
 	//フォントサイズの登録
 	clock_t start, end;
-	start = clock();
 	lText->mFontSize = lFontDesc->GetFontSize();
 	//テキストの登録
 	auto lTextLine = new TextureTextLine;
@@ -288,8 +287,6 @@ std::shared_ptr<TextGraphic> TextManager::Create(const std::string& aText)
 	else {
 		delete lTextLine;
 	}
-	end = clock();
-	printf("%d\n", end - start);
 	//一度文字列をデータベースに登録
 
 	return std::move(lText);

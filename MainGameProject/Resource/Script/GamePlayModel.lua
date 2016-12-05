@@ -1,5 +1,5 @@
-BulletDesignModel="Resource/Model/box.fbx"
-BulletDesignScale=0.01
+BulletDesignModel="Resource/Model/Bullet.fbx"
+BulletDesignScale=1.0
 BulletDesignAnimation=false
 BulletCollisionModel="Resource/Model/box.fbx"
 BulletCollisionScale=0.01
@@ -21,16 +21,16 @@ CharaWhiteCollisionModel="Resource/Model/box.fbx"
 CharaWhiteCollisionScale=0.01
 CharaWhiteCollisionAnimation=false
 
-BaseBlackDesignModel="Resource/Model/box.fbx"
-BaseBlackDesignScale=0.01
+BaseBlackDesignModel="Resource/Model/Base.fbx"
+BaseBlackDesignScale=1.0
 BaseBlackDesignAnimation=false
 BaseBlackCollisionModel="Resource/Model/box.fbx"
 BaseBlackCollisionScale=0.02
 BaseBlackCollisionAnimation=false
 
 
-BaseWhiteDesignModel="Resource/Model/box.fbx"
-BaseWhiteDesignScale=0.01
+BaseWhiteDesignModel="Resource/Model/Base.fbx"
+BaseWhiteDesignScale=1.0
 BaseWhiteDesignAnimation=false
 BaseWhiteCollisionModel="Resource/Model/box.fbx"
 BaseWhiteCollisionScale=0.02
@@ -45,8 +45,8 @@ FieldCollisionModel="Resource/Model/FieldCollision.fbx"
 FieldCollisionScale=1.0
 FieldCollisionAnimation=false
 
-BallDesignModel="Resource/Model/box.fbx"
-BallDesignScale=0.01
+BallDesignModel="Resource/Model/Ball.fbx"
+BallDesignScale=1.0
 BallDesignAnimation=false
 BallCollisionModel="Resource/Model/box.fbx"
 BallCollisionScale=0.01

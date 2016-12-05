@@ -105,10 +105,12 @@ void StatusFrame::UpdateStatus(StatusBase * aStatus)
 	mHpBar->SetParam(aStatus->mHp);
 	mEpBar->SetParam(aStatus->mEnergy);
 	std::ostringstream sout;
-	sout << std::setw(4) << std::right << (int)aStatus->mHp.GetNow() << " / " << std::setw(4) << std::left << (int)aStatus->mHp.GetMax();
+	sout << "HP:" << std::setfill('0') << std::setw(2) << (int)aStatus->mHp.GetNow() << "/" << std::setfill('0') << std::setw(2) << (int)aStatus->mHp.GetMax();
 	mHpText = mTextMan.Create(sout.str());
-	sout << std::setw(4) << std::right << (int)aStatus->mEnergy.GetNow() << " / " << std::setw(4) << std::left << (int)aStatus->mEnergy.GetMax();
-	mEpText = mTextMan.Create(sout.str());
+	std::ostringstream sout2;
+
+	sout2 << "EP:" << std::setfill('0') << std::setw(2) << (int)aStatus->mEnergy.GetNow() << "/" << std::setw(2) << std::setfill('0') << (int)aStatus->mEnergy.GetMax();
+	mEpText = mTextMan.Create(sout2.str());
 
 	//HpBarPosition
 	auto lHPBarScale = (mGlobalScale * *mHpBar->GetGlobalScale());

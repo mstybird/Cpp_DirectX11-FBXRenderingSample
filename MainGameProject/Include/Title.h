@@ -29,17 +29,17 @@ namespace ValueTitle{
 				static const char* cTitleScale = "TitleScale";
 				static const char* cTitleTexturePath = "TitleTexturePath";
 
-				static const char* cButtonStartPosition = "ButtonStartPosition";
+				static const char* cTogglePosition = "TogglePosition";
+				static const char* cTogglePadding = "TogglePadding";
+
+
 				static const char* cButtonStartSize = "ButtonStartSize";
-				static const char* cButtonStartScale = "ButtonStartScale";
 				static const char* cButtonStartNormalTexturePath = "ButtonStartNormalTexturePath";
 				static const char* cButtonStartPushTexturePath = "ButtonStartPushTexturePath";
 				static const char* cButtonStartActiveTexturePath = "ButtonStartActiveTexturePath";
 				static const char* cButtonStartDisableTexturePath = "ButtonStartDisableTexturePath";
 
-				static const char* cButtonExitPosition = "ButtonExitPosition";
 				static const char* cButtonExitSize = "ButtonExitSize";
-				static const char* cButtonExitScale = "ButtonExitScale";
 				static const char* cButtonExitNormalTexturePath = "ButtonExitNormalTexturePath";
 				static const char* cButtonExitPushTexturePath = "ButtonExitPushTexturePath";
 				static const char* cButtonExitActiveTexturePath = "ButtonExitActiveTexturePath";
@@ -90,7 +90,8 @@ private:
 	//2Dスプライト関係
 	MySprite2DShader m2DShader;
 	MSSprite2DRender m2DRender;
-	MSSprite2DResource mImage;
+	MSSprite2DResource mBackground;
+	MSSprite2DResource mTitle;
 
 	Button mBtnStart;
 	Button mBtnExit;

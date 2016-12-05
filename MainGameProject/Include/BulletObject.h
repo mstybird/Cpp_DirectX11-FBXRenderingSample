@@ -1,6 +1,7 @@
 #pragma once
 #include"GameObjectBase.h"
 #include"DXMath.hpp"
+#include"Effect.hxx"
 //弾の基底クラス
 class CharacterBase;
 struct StatusBulletBase;
@@ -13,6 +14,8 @@ public:
 	//生成パターンは弾ごとに異なり、正整数も異なると仮定して、ベクタで管理することを前提にする
 	virtual void Create(std::vector<std::unique_ptr<BulletObject>>&aOutBulletList, CharacterBase* aShoter) = 0;
 	void SetBulletMesh(MSFbxManager&aSetMesh);
+	void SetEffect(::Comfort::EfkManager*aManager, ::Comfort::EffectDatabase*aDb, const int aHitID, const int aShotID);
+
 	StatusBulletBase* GetStatus() {
 		return mStatus.get();
 	}
@@ -42,7 +45,5 @@ protected:
 	//弾のメッシュ
 	MSFbxManager* mBulletMesh;
 	CharacterBase* mParentPtr;
-
-
 
 };

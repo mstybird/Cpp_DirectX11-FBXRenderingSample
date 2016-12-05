@@ -11,8 +11,8 @@ void Comfort::EffectCamera::SetDXCamera(DXCamera * aCamera)
 	mLookAt.X = aCamera->mLookPosition->x;
 	mLookAt.Y = aCamera->mLookPosition->y;
 	mLookAt.Z = aCamera->mLookPosition->z;
-	mUp.X = aCamera->mUpVector->x;
-	mUp.Y = aCamera->mUpVector->y;
+	mUp.X = aCamera->mUpVector->y;
+	mUp.Y = aCamera->mUpVector->x;
 	mUp.Z = aCamera->mUpVector->z;
 
 }
@@ -107,7 +107,7 @@ Comfort::EfkManager::~EfkManager()
 
 void Comfort::EfkManager::Initialize(::EffekseerRenderer::Renderer *& aRenderer, const int aInstanceMax)
 {
-	mManager= ::Effekseer::Manager::Create(2000);
+	mManager = ::Effekseer::Manager::Create(2000);
 
 	mManager->SetSpriteRenderer(aRenderer->CreateSpriteRenderer());
 	mManager->SetRibbonRenderer(aRenderer->CreateRibbonRenderer());

@@ -1,8 +1,9 @@
-﻿#include"MyScene.h"
-#include"MSUtility.h"
+﻿#include"MSUtility.h"
 #include"BarGauge.h"
 #include<ScoreView.h>
 #include<TimeView.h>
+#include"MyScene.h"
+#include"Title.h"
 /*
 タスク：
 攻撃を受けるとダメージ
@@ -68,7 +69,8 @@ void MyMSScene::Initialize()
 
 	//UIの初期化
 	InitializeUI();
-
+	InitializeTimeOver();
+	InitializeResult();
 
 	//enemy.push_back(make_unique<Enemy>());
 
@@ -94,9 +96,7 @@ void MyMSScene::Initialize()
 	//mPlayer.GetWorld()->SetS(scaleChara, scaleChara, scaleChara);
 	mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
 	mPlayer.GetProj()->SetProjection(60, 0.01f, 100.0f);
-	for (auto&lEnemy : enemy) {
-		mPlayer.AddSearchTarget(&*lEnemy);
-	}
+	
 
 
 
@@ -108,8 +108,7 @@ void MyMSScene::Initialize()
 	mEfkRender.SetCamera(&cam);
 	mEfkRender.SetProjection(&proj);
 	mEfkObj.Play();
-
-
+	mFieldStatus.GameStart();
 }
 
 void MyMSScene::Update() {
@@ -118,6 +117,7 @@ void MyMSScene::Update() {
 	mPlayer.GetWorld()->GetMatrix().lock()->GetT(v);
 	mEfkObj.SetPosition({ v.x,v.y,v.z });
 	::Comfort::EffectCamera cam;
+	mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
 	cam.SetDXCamera(mPlayer.GetView());
 	mEfkRender.SetCamera(&cam);
 
@@ -133,10 +133,7 @@ void MyMSScene::Update() {
 	
 	UpdateUI();
 
-	//時間制限が来た時の処理
-	if (mFieldStatus.IsTimeOver()) {
-		int a = 10;
-	}
+	UpdateTimeOver();
 
 	++mSceneCounter;
 }
@@ -144,77 +141,113 @@ void MyMSScene::Update() {
 void MyMSScene::KeyDown(MSKEY pKey)
 {
 	static int count = 0;
-	switch (pKey)
-	{
-	case MSKEY::ENTER:
-		mPlayer.AddBullet();
+	if (mIsTimeOver == false) {
+		switch (pKey)
+		{
+		case MSKEY::ENTER:
+			mPlayer.AddBullet();
+			break;
+		case MSKEY::SPACE:
+		{
+			DXVector3 Pos;
+			mPlayer.GetWorld()->GetMatrix().lock()->GetT(Pos);
+			printf("%.2f,%.2f,%.2f\n", Pos.x, Pos.y, Pos.z);
+			++count;
+		}
 		break;
-	case MSKEY::SPACE:
-	{
-		DXVector3 Pos;
-		mPlayer.GetWorld()->GetMatrix().lock()->GetT(Pos);
-		printf("%.2f,%.2f,%.2f\n", Pos.x, Pos.y, Pos.z);
-		++count;
+		default:
+			break;
+		}
+
 	}
-	break;
-	default:
-		break;
+	else {
+		if (!mTimeOver.IsUpdateing()) {
+
+			switch (pKey) {
+			case MSKEY::UP:
+				mResult.ButtonBack();
+				break;
+			case MSKEY::DOWN:
+				mResult.ButtonNext();
+				break;
+			case MSKEY::ENTER:
+				mResult.ButtonPush();
+
+				switch (mResult.GetButtonActiveIndex())
+				{
+				case 0:
+					//リトライ
+					MSDirect::SetScene(std::make_unique<MyMSScene>());
+					break;
+				case 1:
+					//タイトルへ
+					MSDirect::SetScene(std::make_unique<SceneTitle>());
+					break;
+				default:
+					break;
+				}
+
+				break;
+			}
+		}
 	}
 }
 
 void MyMSScene::KeyHold(MSKEY pKey)
 {
-	DXVector3 data;
-	float speed = 0.5;
-	switch (pKey)
-	{
-	case MSKEY::CH_0:
-		render.SetRenderTarget(*mPlayer.GetTransform());
-		break;
-	case MSKEY::CH_1:
-		render.SetRenderTarget(*enemy[0]->GetTransform());
-		break;
-	case MSKEY::CH_2:
-		render.SetRenderTarget(*enemy[1]->GetTransform());
-		break;
-	case MSKEY::CH_3:
-		render.SetRenderTarget(*enemy[2]->GetTransform());
-		break;
-	case MSKEY::CH_4:
-		render.SetRenderTarget(*enemy[3]->GetTransform());
-		break;
-	case MSKEY::CH_W:
-		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 0.1, { 0,0,1 }, false);
-		mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,1 });
-		break;
-	case MSKEY::CH_S:
-		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -0.1, { 0,0,1 }, false);
-		mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,-1 });
-		break;
-	case MSKEY::CH_A:
-		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -0.1, { 1,0,0 }, false);
-		mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { -1,0,0 });
-		break;
-	case MSKEY::CH_D:
-		//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 0.1, { 1,0,0 }, false);
-		mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
-		break;
-	case MSKEY::LEFT:
-		mPlayer.GetWorld()->AddRC({ 0,-5,0 });
-		break;
-	case MSKEY::RIGHT:
-		mPlayer.GetWorld()->AddRC({ 0,5,0 });
-		break;
-	default:
-		break;
-	}
+
+	if (mIsTimeOver == true)return;
+		DXVector3 data;
+		float speed = 0.1f;
+		switch (pKey)
+		{
+		case MSKEY::CH_0:
+			render.SetRenderTarget(*mPlayer.GetTransform());
+			break;
+		case MSKEY::CH_1:
+			render.SetRenderTarget(*enemy[0]->GetTransform());
+			break;
+		case MSKEY::CH_2:
+			render.SetRenderTarget(*enemy[1]->GetTransform());
+			break;
+		case MSKEY::CH_3:
+			render.SetRenderTarget(*enemy[2]->GetTransform());
+			break;
+		case MSKEY::CH_4:
+			render.SetRenderTarget(*enemy[3]->GetTransform());
+			break;
+		case MSKEY::CH_W:
+			//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 0.1, { 0,0,1 }, false);
+			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,1 });
+			break;
+		case MSKEY::CH_S:
+			//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -0.1, { 0,0,1 }, false);
+			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,-1 });
+			break;
+		case MSKEY::CH_A:
+			//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -0.1, { 1,0,0 }, false);
+			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { -1,0,0 });
+			break;
+		case MSKEY::CH_D:
+			//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 0.1, { 1,0,0 }, false);
+			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
+			break;
+		case MSKEY::LEFT:
+			mPlayer.GetWorld()->AddRC({ 0.0f,-2.5f,0.0f });
+			break;
+		case MSKEY::RIGHT:
+			mPlayer.GetWorld()->AddRC({ 0.0f,2.5f,0.0f });
+			break;
+		default:
+			break;
+		}
+
+
 
 }
 
 void MyMSScene::Render()
 {
-	static int count = 0;
-	printf("count:%d\n", count++);
 	//text.Create("Hello", 0, 0, 720, 960, logFont);
 
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
@@ -230,6 +263,17 @@ void MyMSScene::Render()
 	mFieldStatus.GetTeamBase(eTeamType::White)->Render();
 	mFieldStatus.GetTeamBase(eTeamType::Black)->Render();
 	ui.Render(m2DRender);
+
+	if (mIsTimeOver == true) {
+		if (mTimeOver.IsUpdateing()) {
+			mTimeOver.Render(m2DRender);
+
+		}
+		else {
+			mResult.Render(m2DRender);
+		}
+	}
+
 
 
 }
@@ -369,7 +413,6 @@ void MyMSScene::InitializeUI()
 		{ mTexManager,cEPBarOutID },
 		{ mTexManager,cEPBarInID }
 		);
-		//lEPBar->Update();
 
 		ui.mStatusFrame->SetEPTextOffset(lOffset[0], lOffset[1]);
 
@@ -566,7 +609,8 @@ void MyMSScene::InitializeModel()
 void MyMSScene::InitializeFieldStatus()
 {
 	mFieldStatus.Initialize();
-	mFieldStatus.InitializeTime(60);
+	mFieldStatus.InitializeTime(5);
+	mFieldStatus.InitEffect(&mEfkManager, &mEfkDb, 0, 0);
 	mFieldStatus.CreateFieldNodes();
 	mFieldStatus.CreateSpawnCharaNodes();
 	mFieldStatus.CreateSpawnBallNodes();
@@ -607,7 +651,7 @@ void MyMSScene::InitializeBulletManager()
 	auto lNBulletStatus = LoadBulletStatus("Resource/Script/BulletNormal.lua", BulletUniqueID::NBullet);
 
 	bltManager.Initialize(&lNBulletStatus);
-
+	bltManager.InitEffect(&mEfkManager, &mEfkDb, 0,0,0);
 	bltManager.RegisterMesh(
 		&mdDB,
 		&mFbxScaleMap,
@@ -686,6 +730,7 @@ void MyMSScene::InitializeEnemy()
 			}
 		}
 
+
 		enemy[i]->SetRenderer(&render);
 		enemy[i]->SetShader(&shader);
 		//enemy[i]->SetBulletMesh(*mdDB.Get(cbox));
@@ -735,12 +780,163 @@ void MyMSScene::InitializePlayer()
 
 	mPlayer.AddCollisionTarget(&mField);
 	mPlayer.AddCollisionTarget(&mBall);
+	for (auto&lEnemy : enemy) {
+		if (mFieldStatus.GetTeamAlly(&mPlayer)->IsMember(lEnemy.get()) == false) {
+			mPlayer.AddSearchTarget(&*lEnemy);
+		}
+	}
 
 }
 
 void MyMSScene::InitializeBall()
 {
 	mBall.Initialize();
+}
+
+void MyMSScene::InitializeTimeOver()
+{
+	using namespace ValueMyScene::UI;
+	auto lManager = mLuaDb.GetManager(cUILuaID);
+
+	std::unordered_map<int, std::string>lFileNameMap;
+	std::string lFileName;
+	using namespace ValueMyScene::TimeOver;
+	lManager->GetGlobal(cLogoFinishTexturePath, lFileName);
+	lFileNameMap[cLogoFinishID] = lFileName;
+	lManager->GetGlobal(cLogoIssueWinTexturePath, lFileName);
+	lFileNameMap[cLogoWinID] = lFileName;
+	lManager->GetGlobal(cLogoIssueLoseTexturePath, lFileName);
+	lFileNameMap[cLogoLoseID] = lFileName;
+	lManager->GetGlobal(cLogoIssueDrawTexturePath, lFileName);
+	lFileNameMap[cLogoDrawID] = lFileName;
+	mTexManager.RegisterFileList(lFileNameMap);
+
+	std::vector<float>lPosition;
+	std::vector<float>lSize;
+	std::vector<float>lScale;
+	//解放用
+	auto ClearTemp = [&]() {
+		lPosition.clear();
+		lSize.clear();
+		lScale.clear();
+	};
+
+	//FinishLogo
+	{
+		lManager->GetGlobal(cLogoFinishPosition, lPosition);
+		lManager->GetGlobal(cLogoFinishSize, lSize);
+		lManager->GetGlobal(cLogoFinishScale, lScale);
+		
+		mTimeOver.SetTextures(&mTexManager, cLogoFinishID, cLogoWinID, cLogoLoseID, cLogoDrawID);
+
+		mTimeOver.SetFinishPosition({ lPosition[0], lPosition[1] });
+		mTimeOver.SetFinishScale({ lScale[0], lScale[1] });
+		mTimeOver.SetFinishSize({ lSize[0], lSize[1] });
+
+		lManager->GetGlobal(cLogoIssuePosition, lPosition);
+		lManager->GetGlobal(cLogoIssueSize, lSize);
+		lManager->GetGlobal(cLogoIssueScale, lScale);
+		mTimeOver.SetIssuePosition({ lPosition[0], lPosition[1] });
+		mTimeOver.SetIssueScale({ lScale[0], lScale[1] });
+		mTimeOver.SetIssueSize({ lSize[0], lSize[1] });
+	}
+
+}
+
+void MyMSScene::InitializeResult()
+{
+	using namespace ValueMyScene::Result;
+	mLuaDb.Load("Resource/Script/Result.lua", cLuaID);
+	auto lManager = mLuaDb.GetManager(cLuaID);
+
+	//テクスチャ一括登録
+	{
+		std::unordered_map<int, std::string>lFileNameMap;
+		std::string lFileName;
+
+		lManager->GetGlobal(cFrameTexturePath, lFileName);
+		lFileNameMap[cFrameID] = lFileName;
+
+		lManager->GetGlobal(cLogoWinTexturePath, lFileName);
+		lFileNameMap[cLogoWinID] = lFileName;
+		lManager->GetGlobal(cLogoLoseTexturePath, lFileName);
+		lFileNameMap[cLogoLoseID] = lFileName;
+		lManager->GetGlobal(cLogoDrawTexturePath, lFileName);
+		lFileNameMap[cLogoDrawID] = lFileName;
+
+		lManager->GetGlobal(cButtonRetryNormalTexturePath, lFileName);
+		lFileNameMap[cButtonRetryNormalID] = lFileName;
+		lManager->GetGlobal(cButtonRetryActiveTexturePath, lFileName);
+		lFileNameMap[cButtonRetryActiveID] = lFileName;
+		lManager->GetGlobal(cButtonRetryPushTexturePath, lFileName);
+		lFileNameMap[cButtonRetryPushID] = lFileName;
+		lManager->GetGlobal(cButtonRetryDisableTexturePath, lFileName);
+		lFileNameMap[cButtonRetryDisableID] = lFileName;
+
+		lManager->GetGlobal(cButtonToTitleNormalTexturePath, lFileName);
+		lFileNameMap[cButtonToTitleNormalID] = lFileName;
+		lManager->GetGlobal(cButtonToTitleActiveTexturePath, lFileName);
+		lFileNameMap[cButtonToTitleActiveID] = lFileName;
+		lManager->GetGlobal(cButtonToTitlePushTexturePath, lFileName);
+		lFileNameMap[cButtonToTitlePushID] = lFileName;
+		lManager->GetGlobal(cButtonToTitleDisableTexturePath, lFileName);
+		lFileNameMap[cButtonToTitleDisableID] = lFileName;
+
+		mTexManager.RegisterFileList(lFileNameMap);
+
+	}
+
+	std::vector<float>lPosition;
+	std::vector<float>lSize;
+	std::vector<float>lScale;
+	//解放用
+	auto ClearTemp = [&]() {
+		lPosition.clear();
+		lSize.clear();
+		lScale.clear();
+	};	
+	//Init Frame
+	{
+		lManager->GetGlobal(cFramePosition, lPosition);
+		lManager->GetGlobal(cFrameSize, lSize);
+		mResult.SetFrameTexture(&mTexManager, cFrameID);
+		mResult.SetFramePosition(lPosition[0], lPosition[1]);
+		mResult.SetFrameSize(lSize[0], lSize[1]);
+		ClearTemp();
+	}
+
+
+	//Init Button
+	{
+		lManager->GetGlobal(cTogglePosition, lPosition);
+		mResult.SetButtonRetryTexture(&mTexManager, cButtonRetryNormalID, cButtonRetryActiveID, cButtonRetryPushID, cButtonRetryDisableID);
+		mResult.SetButtonToTitleTexture(&mTexManager, cButtonToTitleNormalID, cButtonToTitleActiveID, cButtonToTitlePushID, cButtonToTitleDisableID);
+		mResult.SetButtonPadding(0, 20);
+		mResult.SetButtonPosition(lPosition[0], lPosition[1]);
+
+		lManager->GetGlobal(cButtonRetrySize, lSize);
+		mResult.SetButtonSize(lSize[0], lSize[1]);
+		ClearTemp();
+	}
+
+
+	//Init Logo
+	{
+		lManager->GetGlobal(cLogoPosition, lPosition);
+		lManager->GetGlobal(cLogoSize, lSize);
+		mResult.SetLogoTexture(&mTexManager, cLogoWinID, cLogoLoseID, cLogoDrawID);
+		mResult.SetLogoPosition(lPosition[0], lPosition[1]);
+		mResult.SetLogoSize(lSize[0], lSize[1]);
+		ClearTemp();
+	}
+
+	//InitText
+	{
+		lManager->GetGlobal(cTextPosition, lPosition);
+		mResult.SetTextPosition(lPosition[0],lPosition[1]);
+		ClearTemp();
+	}
+
 }
 
 void MyMSScene::SetMeshResouce(GameObjectBase*aObject, const int aDesignID, const int aCollisionID)
@@ -804,6 +1000,40 @@ void MyMSScene::UpdateUI()
 
 	ui.GetScoreView()->UpdateScore(lWhiteScore, lBlackScore);
 	ui.mStatusFrame->UpdateStatus(mPlayer.GetStatus());
+}
+
+void MyMSScene::UpdateTimeOver()
+{
+	//時間制限が来た時の処理
+	if (mFieldStatus.IsTimeOver()) {
+		if (mIsTimeOver == false) {
+			mIsTimeOver = true;
+			auto lIssue = mFieldStatus.IsWin(&mPlayer);
+			mTimeOver.UpdateStart(lIssue);
+			ResultValue lResult;
+			lResult.mBlackScore = mFieldStatus.GetScoreBlack();
+			lResult.mWhiteScore = mFieldStatus.GetScoreBlack();
+			lResult.mIssue = lIssue;
+			mResult.SetValues(lResult);
+
+			for (auto&lEnemy : enemy) {
+				lEnemy->StopAI();
+
+			}
+
+		}
+	}
+
+	if (mIsTimeOver == true) {
+		mTimeOver.Update();
+
+		//Updateが終わったらリザルト移行
+		if (mTimeOver.IsUpdateing()==false) {
+
+		}
+
+	}
+
 }
 
 /*

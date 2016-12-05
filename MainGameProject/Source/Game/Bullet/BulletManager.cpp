@@ -11,6 +11,11 @@ void BulletManager::Initialize(StatusBulletBase* aBullet1)
 
 }
 
+void BulletManager::InitEffect(::Comfort::EfkManager * aManager, ::Comfort::EffectDatabase * aDb, const int aShotID, const int aHitID, const int KillID)
+{
+	nBullet->SetEffect(aManager, aDb, aHitID, aShotID, KillID);
+}
+
 bool BulletManager::RegisterChara(CharacterBase * aChara, const int aActiveID)
 {
 	//“o˜^Ï‚İ‚©’²‚×‚é

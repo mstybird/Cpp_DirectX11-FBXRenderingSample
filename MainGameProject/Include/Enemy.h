@@ -30,6 +30,7 @@ public:
 	//EnemyStatus* GetStatus();
 
 	//毎フレーム行うエネミーの更新処理
+	void StopAI();
 	void Update()override;
 	void UpdateAlive()override;
 
@@ -107,6 +108,7 @@ private:
 	
 	std::unique_ptr<EnemyAI>mAI;
 
+	bool mIsStopAI = false;
 
 	//EnemyStatus mStatus;
 };

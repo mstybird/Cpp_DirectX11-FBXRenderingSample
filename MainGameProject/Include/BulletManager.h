@@ -1,6 +1,7 @@
 #pragma once
 #include"NBullet.h"
 #include"MSFbxManager.h"
+#include"Effect.hxx"
 #include<memory>
 #include<unordered_map>
 class NBullet;
@@ -14,7 +15,7 @@ class BulletManager {
 public:
 	//マネージャの初期化
 	void Initialize(StatusBulletBase* aBullet1);
-
+	void InitEffect(::Comfort::EfkManager* aManager, ::Comfort::EffectDatabase*aDb, const int aShotID, const int aHitID, const int KillID);
 	//キャラクターを登録する
 	bool RegisterChara(CharacterBase* aChara, const int aActiveID);
 

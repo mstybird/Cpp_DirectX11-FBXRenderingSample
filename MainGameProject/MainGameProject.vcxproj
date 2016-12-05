@@ -34,6 +34,7 @@
     <ClCompile Include="Source\Game\Object\GameObjectBase.cpp" />
     <ClCompile Include="Source\Game\Object\StaticObject.cpp" />
     <ClCompile Include="Source\Game\Scene\MyScene.cpp" />
+    <ClCompile Include="Source\Game\Scene\MyScene\Result.cpp" />
     <ClCompile Include="Source\Game\Scene\MyScene\TimeOver.cpp" />
     <ClCompile Include="Source\Game\Scene\Title.cpp" />
     <ClCompile Include="Source\Game\Shader\My3DShader.cpp" />
@@ -84,6 +85,7 @@
     <ClCompile Include="Source\MSDirect\Utility\MSUtility.cpp" />
     <ClInclude Include="Include\Button.h" />
     <ClInclude Include="Include\GameObjectBase.h" />
+    <ClInclude Include="Include\Result.h" />
     <ClInclude Include="Include\ScoreView.h" />
     <ClInclude Include="Include\StaticObject.h" />
     <ClInclude Include="Include\statusbase.h" />

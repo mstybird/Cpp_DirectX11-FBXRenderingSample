@@ -62,11 +62,19 @@ void Enemy::SetGoalIndex(int aIndex)
 
 
 
+void Enemy::StopAI()
+{
+	mIsStopAI = true;
+}
+
 void Enemy::Update()
 {
 	UpdateMesh();
 	UpdateBullets();
 	
+	if (mIsStopAI)return;
+
+
 	if (mStatus->mLive == CharaStateFlag::ALIVE) {
 
 		switch (mAI->GetNowAI())
@@ -470,6 +478,7 @@ void Enemy::BetaMoveToBall()
 	auto lHitBall = UtlCollisionBall();
 	//“–‚½‚ê‚Îƒ{[ƒ‹‚ð‰ñŽû
 	if (lHitBall) {
+		mField->GetBall(this);
 		GetStatus()->mBall = lHitBall;
 		mField->SetBallHolder(this);
 		//AI‚ði‚ß‚é
@@ -509,10 +518,6 @@ void Enemy::BetaMoveToGoal()
 	}
 
 	if (!MoveNode()) {
-		printf("%.2f\t%.2f\t%.2f\n",
-			GetWorld()->mPosition->x,
-			GetWorld()->mPosition->y,
-			GetWorld()->mPosition->z);
 
 		mAI->ClearAI();
 	}

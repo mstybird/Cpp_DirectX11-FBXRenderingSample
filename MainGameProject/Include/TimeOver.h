@@ -1,6 +1,6 @@
 #pragma once
 #include"MSSprite2DResource.h"
-
+#include"StatusField.h"
 enum class SceneTimeOverSequence {
 	FirstWait,
 	Finishing,
@@ -19,7 +19,7 @@ public:
 	MySceneTimeOver();
 	~MySceneTimeOver();
 	//テクスチャの設定
-	void SetTextures(DX11TextureManager * aManager, const int aFinishID, const int aWinID, const int aLoseID);
+	void SetTextures(DX11TextureManager * aManager, const int aFinishID, const int aWinID, const int aLoseID,const int aDrawID);
 	//タイムリミットロゴの位置
 	void SetFinishPosition(const DXVector2&aPosition);
 	//タイムリミットロゴのサイズ
@@ -33,7 +33,7 @@ public:
 	//勝敗ロゴのスケール
 	void SetIssueScale(const DXVector2&aScale);
 	//Updateを開始する(勝利したかどうかを決定させる)
-	void UpdateStart(const bool aIsWin);
+	void UpdateStart(const IssueFlag aIsWin);
 
 	//タイムオーバー処理の更新
 	void Update();
@@ -58,6 +58,7 @@ private:
 private:
 	MSSprite2DResource mLogoFinish;
 	MSSprite2DResource mLogoWin;
+	MSSprite2DResource mLogoDraw;
 	MSSprite2DResource mLogoLose;
 
 	MSSprite2DResource* mActiveLogo;
@@ -73,5 +74,5 @@ private:
 	//アップデート中のフラグ
 	bool mIsUpdating;
 	//勝利フラグ
-	bool mIsWin;
+	IssueFlag mIsWin;
 };

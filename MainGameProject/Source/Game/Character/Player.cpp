@@ -7,6 +7,7 @@
 #include"MSGravity.h"
 #include"DXWorld.h"
 #include"NBullet.h"
+#include"ChangeStates.hxx"
 Player::Player()
 {
 	mCameraLen = { 0.0f,50.0f,-0.1f };
@@ -37,14 +38,20 @@ void Player::Update()
 			//ボールに当たった場合、そのボールを回収する
 			Ball* lBall = dynamic_cast<Ball*>(lHitTarget);
 			if (lBall) {
-				GetStatus<StatusPlayer>()->mBall = lBall;
-				mField->SetBallHolder(this);
+				mField->GetBall(this);
 			}
 		}
 	}
 	UpdateCamera();
 //	GetView()->SetCamera(*GetWorld(), mCameraLen);
 	//mCameraLen.y += 0.01f;
+
+	if (mField->GetTeamAlly(this)->IsCollisionBase(this) == true) {
+		if (this->GetStatus()->mBall != nullptr) {
+			mField->GoalProccess(this);
+		}
+	}
+
 }
 
 void Player::UpdateAlive()
@@ -76,8 +83,7 @@ void Player::Render()
 
 void Player::AddBullet()
 {
-	mBltManager->Create(mBullets, this);
-	//mBulletNormal->Create(mBullets, this);
+	ChangeStates::BulletShot(mBullets, this, mBltManager);
 }
 
 

@@ -41,7 +41,7 @@ TimeView::~TimeView()
 void TimeView::UpdateTime(const int mMinute, const int mSecond)
 {
 	std::ostringstream sout;
-	sout << std::setw(4) << std::right << mMinute << " : " << std::setw(4) << std::left << mSecond;
+	sout << std::setw(2) << std::setfill('0') << mMinute << ":" << std::setw(2)<<std::setfill('0') << mSecond;
 	mTimeText = mTextMan.Create(sout.str());
 }
 

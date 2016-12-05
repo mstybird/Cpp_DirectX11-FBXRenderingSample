@@ -426,8 +426,11 @@
     <ClCompile Include="Source\Game\UI\TimeView.cpp">
       <Filter>Game\UI\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Scene\MyScene\Result.cpp">
+      <Filter>Game\Scene\Source</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Game\Scene\MyScene\TimeOver.cpp">
-      <Filter>Game\Scene\MyScene</Filter>
+      <Filter>Game\Scene\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -641,6 +644,9 @@
       <Filter>Game\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Include\TimeOver.h">
+      <Filter>Game\Scene\MyScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Result.h">
       <Filter>Game\Scene\MyScene</Filter>
     </ClInclude>
   </ItemGroup>

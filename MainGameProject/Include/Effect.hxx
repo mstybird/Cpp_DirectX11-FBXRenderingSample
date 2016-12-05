@@ -17,7 +17,7 @@
 #endif
 
 namespace Comfort {
-	
+
 
 
 	//Effekseer一元管理用データベース
@@ -46,7 +46,7 @@ namespace Comfort {
 		::Effekseer::Vector3D mLookAt;
 		::Effekseer::Vector3D mUp;
 		void SetDXCamera(DXCamera*aCamera);
-//		::Effekseer::Matrix44 GetLookAtLH();
+		//		::Effekseer::Matrix44 GetLookAtLH();
 		::Effekseer::Matrix44 GetLookAtRH();
 
 	};
@@ -58,7 +58,7 @@ namespace Comfort {
 		float mNear;
 		float mFar;
 		void SetDXProjection(DXProjection*aProjection);
-//		::Effekseer::Matrix44 GetPerspectiveFovLH();
+		//		::Effekseer::Matrix44 GetPerspectiveFovLH();
 		::Effekseer::Matrix44 GetPerspectiveFovRH();
 
 	};
@@ -78,7 +78,7 @@ namespace Comfort {
 		::Effekseer::Effect* mEffect;
 		::Effekseer::Handle mHandle = -1;
 		::Effekseer::Vector3D mPosition;	//エフェクト座標
-		//再生登録したマネージャが入る
+											//再生登録したマネージャが入る
 		::Effekseer::Manager* mParentManager;
 
 
@@ -87,7 +87,7 @@ namespace Comfort {
 	class EfkManager {
 	public:
 		~EfkManager();
-		void Initialize( ::EffekseerRenderer::Renderer*&aRenderer, const int aInstanceMax = 2000);
+		void Initialize(::EffekseerRenderer::Renderer*&aRenderer, const int aInstanceMax = 2000);
 		::Effekseer::Manager*& GetManager();
 		::Effekseer::Manager* mManager;
 		void Update();
@@ -98,13 +98,13 @@ namespace Comfort {
 	class EfkRenderer {
 	public:
 		~EfkRenderer();
-		
+
 		void Initialize(ID3D11Device*aDevice, ID3D11DeviceContext*aDeviceContext, const int aDrawMax = 2000);
 
 		::EffekseerRenderer::Renderer*& GetRenderer();
 
 		void RenderAll(EfkManager*aManager);
-//		void Render(const int32_t aID);
+		//		void Render(const int32_t aID);
 
 		void SetProjection(EffectProjection* aProjection);
 		void SetCamera(EffectCamera* aProjection);
@@ -115,49 +115,4 @@ namespace Comfort {
 		::EffekseerRenderer::Renderer* mRenderer;
 
 	};
-
-
-	////実際に使うエフェクト
-	//class Effect {
-
-	//public:
-	//	//レンダラ作成
-	//	bool CreateRenderer(ID3D11Device*&aDevice, ID3D11DeviceContext*&aDeviceContext, const int aDrawMax = 2000);
-	//	//エフェクトマネージャ作成
-	//	bool CreateManager(const int aInstanceMax = 2000);
-	//	//レンダリング機能設定
-	//	void SetRenderFunction();
-	//	//テクスチャ読み込み機能設定
-	//	void SetTextureLoader();
-
-	//	//音再生用インスタンス生成
-	//	bool CreateSound(IXAudio2*&aAudio, const int32_t a1ChSoundCount = 16, const int32_t a2ChSoundCount = 16);
-	//	//再生機能を設定
-	//	void SetSoundPlayer();
-	//	void SetSoundLoader();
-	//	
-	//	void SetEyePosition(const ::Effekseer::Vector3D& aEye);
-	//	void SetLookPosition(const ::Effekseer::Vector3D& aLook);
-	//	void SetUpVector(const ::Effekseer::Vector3D& aUp);
-	//	//エフェクトの座標設定
-	//	void SetLocation(const ::Effekseer::Vector3D& aLocation);
-
-	//	bool Load(const char* aFileName);
-	//	void Play();
-	//	void Stop();
-	//	void Release();
-
-	//	void Update();
-	//	void Render();
-	//public:
-	//	::Effekseer::Manager* mManager;
-	//	::EffekseerRenderer::Renderer* mRenderer;
-	//	::EffekseerSound::Sound* mSound;
-	//	::Effekseer::Effect* mEffect;
-	//	::Effekseer::Handle mHandle = -1;
-	//	::Effekseer::Vector3D mPosition;	//エフェクト座標
-	//	EffectCamera mCamera;
-	//	EffectProjection mProjection;
-	//};
-
 }

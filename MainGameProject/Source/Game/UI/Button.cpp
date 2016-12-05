@@ -11,9 +11,9 @@ Button::~Button()
 void Button::SetTextures(DX11TextureManager * aManager, const int aNormalID, const int aActiveID, const int aPushID, const int aDisableID)
 {
 	mImageNormal.SetTexture(*aManager, aNormalID);
-	mImageActive.SetTexture(*aManager, aNormalID);
-	mImagePush.SetTexture(*aManager, aNormalID);
-	mImageDisable.SetTexture(*aManager, aNormalID);
+	mImageActive.SetTexture(*aManager, aActiveID);
+	mImagePush.SetTexture(*aManager, aPushID);
+	mImageDisable.SetTexture(*aManager, aDisableID);
 }
 
 void Button::SetSize(const float & aWidth, const float & aHeight)

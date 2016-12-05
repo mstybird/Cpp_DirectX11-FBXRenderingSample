@@ -89,8 +89,8 @@ void Toggle::PopButton()
 
 void Toggle::Render(MSSprite2DRender & aRender, UIBase * aParent)
 {
-	if (aParent != nullptr) {
 		StoreGlobalData();
+	if (aParent != nullptr) {
 
 		mGlobalPosition += *aParent->GetGlobalPosition();
 		mGlobalScale *= *aParent->GetGlobalScale();
@@ -108,7 +108,7 @@ void Toggle::Render(MSSprite2DRender & aRender, UIBase * aParent)
 		mGlobalPosition.y += ButtonSize.y;
 	}
 
-	if (aParent != nullptr) {
 		LoadGlobalData();
+	if (aParent != nullptr) {
 	}
 }

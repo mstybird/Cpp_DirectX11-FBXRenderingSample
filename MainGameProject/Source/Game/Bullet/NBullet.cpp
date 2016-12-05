@@ -15,6 +15,20 @@ void NBullet::InitStatus(StatusBulletBase* aBulletStatus)
 	mStatus = *aBulletStatus;
 }
 
+void NBullet::SetEffect(::Comfort::EfkManager * aManager, ::Comfort::EffectDatabase * aDb, const int aHitID, const int aShotID, const int aKillID)
+{
+
+	auto lEffect = aDb->Get(aHitID);
+	mHitEffect.SetManager(aManager);
+	mHitEffect.SetEffect(lEffect);
+	lEffect = aDb->Get(aShotID);
+	mShotEffect.SetManager(aManager);
+	mShotEffect.SetEffect(lEffect);
+	lEffect = aDb->Get(aShotID);
+	mKillEffect.SetManager(aManager);
+	mKillEffect.SetEffect(lEffect);
+}
+
 void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, CharacterBase * aShoter)
 {
 	printf("Create %s, From %s\n", typeid(aShoter).name(), typeid(*this).name());
@@ -69,7 +83,12 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 	//発射主の登録
 	bullet->mParentPtr = aShoter;
 
+	bullet->mHitEffect = this->mHitEffect;
+	bullet->mShotEffect = this->mShotEffect;
+	bullet->mShotEffect.SetPosition({ lSpwanPos.x,lSpwanPos.y,lSpwanPos.z });
+	bullet->mShotEffect.Play();
 	aOutBulletList.push_back(std::move(bullet));
+
 
 
 }
@@ -79,9 +98,17 @@ void NBullet::Update()
 	if (!mActive)return;
 
 	GetWorld()->AddT(this->mStatus.mDirection*this->mStatus.mVelocity);
+	GetWorld()->AddRC(4.0f, 6.0f, 10.0f);
 	//当たった場合
 	auto lHitTargets = UpdateCollision(false);
 	for (auto&lHitTarget : lHitTargets) {
+		DXVector3 lPosition;
+		GetWorld()->GetMatrix().lock()->GetT(lPosition);
+		this->mHitEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
+		this->mHitEffect.Play();
+
+
+
 		//弾を消すために非アクティブにする
 		SetActive(false);
 
@@ -98,6 +125,12 @@ void NBullet::Update()
 		//死んだキャラのステータスを取得
 		auto lStatus = lChara->GetStatus();
 		lStatus->mLive = CharaStateFlag::DEAD;
+
+		//キルエフェクト再生
+		this->mKillEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
+		this->mKillEffect.Play();
+
+
 		//ボールを持っていた場合、ボールをフィールドにセット
 		if (lStatus->mBall != nullptr) {
 			DXVector3 lPosition;

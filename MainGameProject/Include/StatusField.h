@@ -2,6 +2,7 @@
 #include"GameObjectBase.h"
 #include"EnemyAI.h"
 #include"StatusTeam.h"
+#include"Effect.hxx"
 #include<vector>
 #include<chrono>
 class CharacterBase;
@@ -20,6 +21,12 @@ namespace NodeControl {
 		return (lMin <= aIndex) && (aIndex <= lMax);
 	}
 }
+
+enum class IssueFlag {
+	Win,
+	Lose,
+	Draw
+};
 
 //フィールド情報
 struct StatusField {
@@ -44,6 +51,7 @@ struct StatusField {
 	void Initialize();
 	//制限時間を設定する
 	void InitializeTime(const int mLimitSecond);
+	void InitEffect(::Comfort::EfkManager*aManager, ::Comfort::EffectDatabase*aDb, const int aBallGetID, const int aKillID);
 	void InitRenderAndShader(MS3DRender& aRender, MSBase3DShader&aShader);
 	void CreateFieldNodes();
 	void CreateSpawnCharaNodes();
@@ -63,6 +71,11 @@ struct StatusField {
 	StatusTeam* GetTeamEnemy(CharacterBase*aMember);
 	//自チームのタイプを取得
 	eTeamType GetTeamType(CharacterBase*aChara);
+	//指定キャラがボールをゲットする
+	void GetBall(CharacterBase*aChara);
+	//指定したキャラが生老チームに含まれているかどうか
+	IssueFlag IsWin(CharacterBase*aChara);
+
 	//指定したノードの座標を取得する
 	DXVector3 GetNodePosition(const int aIndex);
 	//ボール所持者を設定する
@@ -78,6 +91,8 @@ struct StatusField {
 	int GetScoreBlack();
 	//時間を更新する
 	void UpdateTime();
+	//ゲームを開始する
+	void GameStart();
 	//制限時間チェックをする
 	bool IsTimeOver();
 	//残り時間を分と秒で取得する
@@ -91,4 +106,9 @@ private:
 	int mLimitTime;
 	//残り時間
 	int mRemainTime;
+	//ボールゲットエフェクト
+	::Comfort::EfkObject mEfkBallGet;
+	//ゲーム終了エフェクト
+	::Comfort::EfkObject mEfkGameSet;
+
 };
