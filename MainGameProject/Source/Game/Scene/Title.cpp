@@ -26,7 +26,17 @@ void SceneTitle::KeyDown(MSKEY pKey)
 		mButtonList.PushButton();
 		break;
 	case MSKEY::ENTER:
-		MSDirect::SetScene(std::make_unique<MyMSScene>());
+		switch (mButtonList.GetActiveIndex()) 
+		{
+		case 0:
+			MSDirect::SetScene(std::make_unique<MyMSScene>());
+			break;
+		case 1:
+			PostQuitMessage(0);
+			break;
+		default:
+			break;
+		}
 		break;
 	default:
 		break;

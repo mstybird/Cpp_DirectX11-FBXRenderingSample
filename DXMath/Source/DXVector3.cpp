@@ -75,7 +75,7 @@ DXVector3 & DXVector3::operator=(const DXVector2 & pVector2D)
 	return *this;
 }
 
-DXVector3 DXVector3::operator+(float pXYZ)
+DXVector3 DXVector3::operator+(float pXYZ)const
 {
 	DXVector3 lResult{ *this };
 	lResult.x += pXYZ;
@@ -92,7 +92,7 @@ DXVector3 & DXVector3::operator+=(float pXYZ)
 	return *this;
 }
 
-DXVector3 DXVector3::operator+(const D3DXVECTOR3 & pAddVector)
+DXVector3 DXVector3::operator+(const D3DXVECTOR3 & pAddVector)const
 {
 	DXVector3 lResult{ *this };
 	lResult.x += pAddVector.x;
@@ -111,7 +111,7 @@ DXVector3 & DXVector3::operator+=(const D3DXVECTOR3 & pAddVector)
 
 
 
-DXVector3 DXVector3::operator-(float pXYZ)
+DXVector3 DXVector3::operator-(float pXYZ)const
 {
 	DXVector3 lResult{ *this };
 	lResult.x -= pXYZ;
@@ -128,7 +128,7 @@ DXVector3 & DXVector3::operator-=(float pXYZ)
 	return *this;
 }
 
-DXVector3 DXVector3::operator-(const D3DXVECTOR3 & pSubVector)
+DXVector3 DXVector3::operator-(const D3DXVECTOR3 & pSubVector)const
 {
 	DXVector3 lResult{ *this };
 	lResult.x -= pSubVector.x;
@@ -147,7 +147,7 @@ DXVector3 & DXVector3::operator-=(const D3DXVECTOR3 & pSubVector)
 	return *this;
 }
 
-DXVector3 DXVector3::operator*(float pXYZ)
+DXVector3 DXVector3::operator*(float pXYZ)const
 {
 	DXVector3 lResult{ *this };
 	lResult.x *= pXYZ;
@@ -164,7 +164,7 @@ DXVector3 & DXVector3::operator*=(float pXYZ)
 	return *this;
 }
 
-DXVector3 DXVector3::operator*(const D3DXVECTOR3 & pMulVector)
+DXVector3 DXVector3::operator*(const D3DXVECTOR3 & pMulVector)const
 {
 	DXVector3 lResult{*this};
 	lResult.x *= pMulVector.x;
@@ -181,7 +181,7 @@ DXVector3 & DXVector3::operator*=(const D3DXVECTOR3 & pMulVector)
 	return *this;
 }
 
-DXVector3 DXVector3::operator/(float pXYZ)
+DXVector3 DXVector3::operator/(float pXYZ)const
 {
 	DXVector3 lResult{ *this };
 	lResult.x /= pXYZ;
@@ -198,7 +198,7 @@ DXVector3 & DXVector3::operator/=(float pXYZ)
 	return *this;
 }
 
-DXVector3 DXVector3::operator/(const D3DXVECTOR3 & pMulVector)
+DXVector3 DXVector3::operator/(const D3DXVECTOR3 & pMulVector)const
 {
 	DXVector3 lResult{ *this };
 	lResult.x /= pMulVector.x;

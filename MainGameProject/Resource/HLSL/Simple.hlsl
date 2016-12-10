@@ -11,6 +11,7 @@ cbuffer global:register(b0)
 	matrix g_mW;//ワールド行列
 	matrix g_mWVP; //ワールドから射影までの変換行列
 	float4 g_vLightDir;  //ライトの方向ベクトル
+	float g_Alpha;	//透明度
 };
 
 //サブメッシュごとに適用
@@ -48,6 +49,7 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL, float2 Tex : TEXCOOR
 //
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-	
-	return gTexture.Sample(gSampler,input.UV)*(1.0 - g_ColorPer) + input.Color*(g_ColorPer);
+	float4 Color = gTexture.Sample(gSampler,input.UV)*(1.0 - g_ColorPer) + input.Color*(g_ColorPer);
+	Color.w = g_Alpha;
+	return Color;
 }

@@ -13,6 +13,7 @@
 
 UI設計
 */
+//ベクトル正規化
 
 //const int ValueMyScene::UI::cUILuaID = 100;
 const int cEnemyCount = 4;
@@ -81,7 +82,7 @@ void MyMSScene::Initialize()
 	mField.SetShader(&shader);
 	mField.GetWorld()->SetT(0, -1, 0);
 
-	SetMeshResouce(&mBall, ValueMyScene::Model::cBallDesignID, ValueMyScene::Model::cBallCollisionID);
+	
 
 
 
@@ -98,7 +99,7 @@ void MyMSScene::Initialize()
 	mPlayer.GetProj()->SetProjection(60, 0.01f, 100.0f);
 	
 
-
+	mPlayer.GetWorld()->AddRC({ 0,0,0 });
 
 
 	::Comfort::EffectCamera cam;
@@ -112,12 +113,13 @@ void MyMSScene::Initialize()
 }
 
 void MyMSScene::Update() {
+
 	mPlayer.Update();
 	DXVector3 v;
 	mPlayer.GetWorld()->GetMatrix().lock()->GetT(v);
 	mEfkObj.SetPosition({ v.x,v.y,v.z });
 	::Comfort::EffectCamera cam;
-	mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
+	//mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
 	cam.SetDXCamera(mPlayer.GetView());
 	mEfkRender.SetCamera(&cam);
 
@@ -144,10 +146,26 @@ void MyMSScene::KeyDown(MSKEY pKey)
 	if (mIsTimeOver == false) {
 		switch (pKey)
 		{
-		case MSKEY::ENTER:
-			mPlayer.AddBullet();
+		case MSKEY::CH_W:
+			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
+			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+			break;
+		case MSKEY::CH_S:
+			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
+			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+			break;
+		case MSKEY::CH_A:
+			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
+			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+			break;
+		case MSKEY::CH_D:
+			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
+			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
 			break;
 		case MSKEY::SPACE:
+			mPlayer.AddBullet();
+			break;
+		case MSKEY::ENTER:
 		{
 			DXVector3 Pos;
 			mPlayer.GetWorld()->GetMatrix().lock()->GetT(Pos);
@@ -164,6 +182,7 @@ void MyMSScene::KeyDown(MSKEY pKey)
 		if (!mTimeOver.IsUpdateing()) {
 
 			switch (pKey) {
+			
 			case MSKEY::UP:
 				mResult.ButtonBack();
 				break;
@@ -198,7 +217,7 @@ void MyMSScene::KeyHold(MSKEY pKey)
 
 	if (mIsTimeOver == true)return;
 		DXVector3 data;
-		float speed = 0.1f;
+		float speed = 0.25f;
 		switch (pKey)
 		{
 		case MSKEY::CH_0:
@@ -217,19 +236,15 @@ void MyMSScene::KeyHold(MSKEY pKey)
 			render.SetRenderTarget(*enemy[3]->GetTransform());
 			break;
 		case MSKEY::CH_W:
-			//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 0.1, { 0,0,1 }, false);
 			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,1 });
 			break;
 		case MSKEY::CH_S:
-			//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -0.1, { 0,0,1 }, false);
 			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,-1 });
 			break;
 		case MSKEY::CH_A:
-			//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, -0.1, { 1,0,0 }, false);
 			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { -1,0,0 });
 			break;
 		case MSKEY::CH_D:
-			//rMe->GetCamera().lock()->Translation(DXCamera::TYPE_PARALLEL, 0.1, { 1,0,0 }, false);
 			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
 			break;
 		case MSKEY::LEFT:
@@ -246,6 +261,28 @@ void MyMSScene::KeyHold(MSKEY pKey)
 
 }
 
+void MyMSScene::KeyUp(MSKEY pKey)
+{
+	switch (pKey) {
+	case MSKEY::CH_W:
+		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
+		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		break;
+	case MSKEY::CH_S:
+		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
+		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		break;
+	case MSKEY::CH_A:
+		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
+		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		break;
+	case MSKEY::CH_D:
+		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
+		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		break;
+	}
+}
+
 void MyMSScene::Render()
 {
 	//text.Create("Hello", 0, 0, 720, 960, logFont);
@@ -255,13 +292,14 @@ void MyMSScene::Render()
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->Render();
 	}
-	mField.Render();
 	mPlayer.Render();
 	mBall.Render();
+	mField.Render();
 	mEfkRender.RenderAll(&mEfkManager);
 
 	mFieldStatus.GetTeamBase(eTeamType::White)->Render();
 	mFieldStatus.GetTeamBase(eTeamType::Black)->Render();
+
 	ui.Render(m2DRender);
 
 	if (mIsTimeOver == true) {
@@ -435,7 +473,7 @@ void MyMSScene::InitializeUI()
 		
 		lScoreView->SetGlobalPosition(lPosition[0], lPosition[1]);
 		lScoreView->SetSize(lSize[0], lSize[1]);
-		lScoreView->SetGlobalScale(lScale[0], lScale[1]);
+		lScoreView->SetGaugeScale(lScale[0], lScale[1]);
 		lScoreView->SetTextOffset(lOffset[0], lOffset[1]);
 		lScoreView->SetTextures(&mTexManager, cScoreBarOutID, cScoreBarLeftID, cScoreBarRightID);
 		ClearTemp();
@@ -455,10 +493,13 @@ void MyMSScene::InitializeEffect()
 	mEfkRender.Initialize(MSDirect::GetDevice(), MSDirect::GetDeviceContext());
 	mEfkManager.Initialize(mEfkRender.GetRenderer());
 	mEfkDb.Initialize(mEfkManager.GetManager());
-	mEfkDb.Load("Resource/Effect/test.efk", 0);
+	mEfkDb.Load("Resource/Effect/Hit.efk", ValueMyScene::Effect::cHitID);
+	mEfkDb.Load("Resource/Effect/Shot.efk", ValueMyScene::Effect::cShotID);
+	mEfkDb.Load("Resource/Effect/Kill.efk", ValueMyScene::Effect::cKillID);
+	mEfkDb.Load("Resource/Effect/Goal.efk", ValueMyScene::Effect::cGoalInID);
 
 	mEfkObj.SetManager(&mEfkManager);
-	decltype(auto) lEfk = mEfkDb.Get(0);
+	decltype(auto) lEfk = mEfkDb.Get(ValueMyScene::Effect::cHitID);
 	mEfkObj.SetEffect(lEfk);
 	mEfkObj.SetPosition({ 11.0f,0.0f,7.5f });
 }
@@ -609,8 +650,8 @@ void MyMSScene::InitializeModel()
 void MyMSScene::InitializeFieldStatus()
 {
 	mFieldStatus.Initialize();
-	mFieldStatus.InitializeTime(5);
-	mFieldStatus.InitEffect(&mEfkManager, &mEfkDb, 0, 0);
+	mFieldStatus.InitializeTime(70);
+	mFieldStatus.InitEffect(&mEfkManager, &mEfkDb, ValueMyScene::Effect::cGoalInID, ValueMyScene::Effect::cKillID);
 	mFieldStatus.CreateFieldNodes();
 	mFieldStatus.CreateSpawnCharaNodes();
 	mFieldStatus.CreateSpawnBallNodes();
@@ -651,7 +692,7 @@ void MyMSScene::InitializeBulletManager()
 	auto lNBulletStatus = LoadBulletStatus("Resource/Script/BulletNormal.lua", BulletUniqueID::NBullet);
 
 	bltManager.Initialize(&lNBulletStatus);
-	bltManager.InitEffect(&mEfkManager, &mEfkDb, 0,0,0);
+	bltManager.InitEffect(&mEfkManager, &mEfkDb, ValueMyScene::Effect::cShotID, ValueMyScene::Effect::cHitID, ValueMyScene::Effect::cKillID);
 	bltManager.RegisterMesh(
 		&mdDB,
 		&mFbxScaleMap,
@@ -791,6 +832,7 @@ void MyMSScene::InitializePlayer()
 void MyMSScene::InitializeBall()
 {
 	mBall.Initialize();
+	SetMeshResouce(&mBall, ValueMyScene::Model::cBallDesignID, ValueMyScene::Model::cBallCollisionID);
 }
 
 void MyMSScene::InitializeTimeOver()
@@ -993,6 +1035,8 @@ void MyMSScene::UpdateUI()
 	int lMinutes, lSeconds;
 	mFieldStatus.UpdateTime();
 	mFieldStatus.GetRemainTime(lMinutes, lSeconds);
+	if (lSeconds < 0)lSeconds = 0;
+	if (lMinutes < 0)lMinutes = 0;
 	ui.GetTimeView()->UpdateTime(lMinutes, lSeconds);
 
 	auto lWhiteScore = mFieldStatus.GetScoreWhite();
@@ -1012,13 +1056,12 @@ void MyMSScene::UpdateTimeOver()
 			mTimeOver.UpdateStart(lIssue);
 			ResultValue lResult;
 			lResult.mBlackScore = mFieldStatus.GetScoreBlack();
-			lResult.mWhiteScore = mFieldStatus.GetScoreBlack();
+			lResult.mWhiteScore = mFieldStatus.GetScoreWhite();
 			lResult.mIssue = lIssue;
 			mResult.SetValues(lResult);
 
 			for (auto&lEnemy : enemy) {
 				lEnemy->StopAI();
-
 			}
 
 		}
@@ -1036,11 +1079,4 @@ void MyMSScene::UpdateTimeOver()
 
 }
 
-/*
-タスク続き
-ビルボード実装
-スプライトの回転実装
-イベントメソッド書き足し
-ダイナミクス実装
-*/
 

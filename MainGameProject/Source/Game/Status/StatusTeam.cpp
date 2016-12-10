@@ -50,7 +50,7 @@ StaticObject * StatusTeam::GetBase()
 
 void StatusTeam::InitScore()
 {
-	mScore = 2;
+	mScore = 0;
 }
 
 int StatusTeam::GetScore()

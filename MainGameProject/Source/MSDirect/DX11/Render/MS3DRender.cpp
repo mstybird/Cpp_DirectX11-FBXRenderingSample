@@ -41,10 +41,10 @@ void MS3DRender::Render(DX11RenderResource*resource)
 
 	
 
-	auto meshData = resource->mMesh->GetCurrentMeshData();
-	auto lVertexBufferArray = resource->mMesh->GetCurrentVertexBuffer();
-	auto lIndexBufferArray = resource->mMesh->GetCurrentIndexBuffer();
-	auto lIndexBufferLengthArray = resource->mMesh->GetCurrentIndexBufferCount();
+	auto meshData = resource->GetMesh()->GetCurrentMeshData();
+	auto lVertexBufferArray = resource->GetMesh()->GetCurrentVertexBuffer();
+	auto lIndexBufferArray = resource->GetMesh()->GetCurrentIndexBuffer();
+	auto lIndexBufferLengthArray = resource->GetMesh()->GetCurrentIndexBufferCount();
 
 	//auto meshData = fbxManager.lock()->GetMeshData();
 	//ƒƒbƒVƒ…‚ÌŒÂ”•ª

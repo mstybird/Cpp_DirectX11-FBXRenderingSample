@@ -37,7 +37,7 @@ bool MSCollisionRay::Collision(const MSCollisionRay & pRay, DX11RenderResource&p
 
 	float lDistance;
 
-
+	
 
 
 	auto lmeshList = pFbxObject.GetCurrentMeshData();
@@ -80,4 +80,9 @@ bool MSCollisionRay::Collision(const MSCollisionRay & pRay, DX11RenderResource&p
 		}
 	}
 	return false;
+}
+
+float MS2CollisionRay::Collision(DXCamera * aCamera, GameObjectBase * aCollision)
+{
+	return 0.0f;
 }

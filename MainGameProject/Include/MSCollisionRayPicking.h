@@ -7,7 +7,9 @@ public:
 	MSCollisionRayPicking();
 
 	//現在の位置を記憶する
+	void SetFramePosition(const DXVector3&pRayPosion);
 	void SetFramePosition(DX11RenderResource&pRayPosion);
+
 	//すべらせる場合はtrueを与える
 	void SetSlipFlag(bool pSlipFlag);
 	//現在の滑りフラグを取得
@@ -24,7 +26,9 @@ public:
 	bool Collision(
 		DXVector3&pResultPosition,
 		DX11RenderResource&pRayPosition,
-		DX11RenderResource&pRayTarget
+		DX11RenderResource&pRayTarget,
+		int* aMeshIndex = nullptr,
+		int* aSubMeshIndex = nullptr
 		);
 private:
 	//滑らせるかどうか

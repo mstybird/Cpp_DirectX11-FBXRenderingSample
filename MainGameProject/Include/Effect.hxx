@@ -47,14 +47,13 @@ namespace Comfort {
 		::Effekseer::Vector3D mUp;
 		void SetDXCamera(DXCamera*aCamera);
 		//		::Effekseer::Matrix44 GetLookAtLH();
-		::Effekseer::Matrix44 GetLookAtRH();
+		::Effekseer::Matrix44 GetLookAtLH();
 
 	};
 
 	struct EffectProjection {
 		float mAngle;
-		float mWidth;
-		float mHeight;
+		float mAspect;
 		float mNear;
 		float mFar;
 		void SetDXProjection(DXProjection*aProjection);
@@ -71,6 +70,7 @@ namespace Comfort {
 
 		void SetPosition(const ::Effekseer::Vector3D& aPosition);
 		void AddPosition(const ::Effekseer::Vector3D& aPosition);
+		void SetRotation(const ::Effekseer::Vector3D& aPosition);
 
 		void Play();
 		void Stop();
@@ -108,7 +108,7 @@ namespace Comfort {
 
 		void SetProjection(EffectProjection* aProjection);
 		void SetCamera(EffectCamera* aProjection);
-
+		void SetCamera(DXCamera*aCamera);
 		void Release();
 
 	private:

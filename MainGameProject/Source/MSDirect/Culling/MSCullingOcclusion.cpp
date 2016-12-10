@@ -11,6 +11,8 @@ ID3D11Device*MSCullingOcculusion::sDevice;
 ID3D11DeviceContext*MSCullingOcculusion::sDeviceContext;
 IDXGISwapChain*MSCullingOcculusion::sSwapChain;
 
+//Direct3D 10, Occulusion Predicate Query
+
 bool MSCullingOcculusion::IsCullingWorld(
 	MS3DRender*pRender,
 	DX11RenderResource*pEyeResource,
@@ -53,9 +55,9 @@ bool MSCullingOcculusion::IsCullingWorld(
 
 		//MS3DRender::Clear({ 1,1,1,1 });
 
-		float ClearColor[4] = { 0.2f,0.2f,0.2f,1.0f };
-		sDeviceContext->ClearRenderTargetView(sRTV, ClearColor);//レンダーターゲットクリア
-		sDeviceContext->ClearDepthStencilView(sDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度ステンシルバッファクリア
+		float ClearColor[4] = { 0.4f,0.2f,0.2f,1.0f };
+		//sDeviceContext->ClearRenderTargetView(sRTV, ClearColor);//レンダーターゲットクリア
+		sDeviceContext->ClearDepthStencilView(sDSV, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);//深度ステンシルバッファクリア
 
 		//障害物を描画する処理
 		DXDisplay lTmpDisplay;
@@ -83,9 +85,11 @@ bool MSCullingOcculusion::IsCullingWorld(
 
 		++count;
 		count %= 4;
+//		sSwapChain->
+		//sSwapChain->Present(0, DXGI_PRESENT_TEST);
 
-		sDeviceContext->OMSetRenderTargets(1, &lRTVCopy, lDSVCopy);
 		sDeviceContext->RSSetViewports(1, lMainViewPort);
+		sDeviceContext->OMSetRenderTargets(1, &lRTVCopy, lDSVCopy);
 	}
 	UINT64 lDrawPixels{};
 	//指定数以上ループした場合、強制で抜ける
@@ -151,6 +155,7 @@ void MSCullingOcculusion::CreateOcclusionQuery()
 
 	lQueryDesc.Query = D3D11_QUERY_OCCLUSION;
 	sDevice->CreateQuery(&lQueryDesc, &sOcculusionQuery);
+	
 }
 
 void MSCullingOcculusion::BeginOcclusionQuery()

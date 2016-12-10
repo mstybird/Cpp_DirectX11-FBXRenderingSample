@@ -16,6 +16,11 @@ MSCollisionRayPicking::MSCollisionRayPicking() :
 {
 }
 
+void MSCollisionRayPicking::SetFramePosition(const DXVector3 & pRayPosion)
+{
+	*mPosBefore = pRayPosion;
+}
+
 void MSCollisionRayPicking::SetFramePosition(DX11RenderResource & pRayPosion)
 {
 	//現在の座標情報を取得
@@ -33,7 +38,8 @@ bool MSCollisionRayPicking::GetSlipFlag()
 }
 
 
-bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResource&pRayPosition, DX11RenderResource & pRayTarget)
+bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResource&pRayPosition, DX11RenderResource & pRayTarget, int* aMeshIndex,
+	int* aSubMeshIndex)
 {
 
 	
@@ -69,12 +75,13 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 		pRayPosition.GetWorld().lock()->GetMatrix().lock()->GetT(lRayAfterPosition);
 
 		
-		auto lMeshList = pRayTarget.mMesh->GetCurrentMeshData();
+		auto lMeshList = pRayTarget.GetMesh()->GetCurrentMeshData();
 		//移動方向にポリゴンがあるかチェック
 		//ここでレイがヒットする一番近いポリゴンを取得する
 		DXVector3 lTmpPosBefore = *mPosBefore;
-		for (auto&lMesh : *lMeshList) {
-			
+		for(int lMeshIndex=0;lMeshIndex<lMeshList->size();++lMeshIndex){
+
+			auto& lMesh = lMeshList->at(lMeshIndex);
 			*mPosBefore = lTmpPosBefore;
 			//変換行列の合成
 			//メッシュに定義されている行列を取得
@@ -84,7 +91,8 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 			//レイ方向を計算
 			D3DXVec3Normalize(&lDirection, &(lRayAfterPosition - *mPosBefore));
 
-			for (auto&lSubMesh : lMesh->subMesh) {
+			for(int lSubIndex=0;lSubIndex<lMesh->subMesh.size();++lSubIndex){
+				auto& lSubMesh = lMesh->subMesh[lSubIndex];
 				for (uint32_t i = 0; i < lSubMesh->PolygonCount; i++) {
 					//判定を行うポリゴンを取得
 					FbxPtrPolygon lPtrPolygon;
@@ -133,6 +141,9 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 								D3DXVec3TransformNormal(&lHitPolygon.second.polygon[i].Normal, &lHitPolygon.second.polygon[i].Normal, &lGlobalMatrix);
 								lHitPolygon.second.polygon[i].Normal.Normalize();
 							}
+							//メッシュインデクスの記憶
+							if(aMeshIndex) *aMeshIndex = lMeshIndex;
+							if(aSubMeshIndex) *aSubMeshIndex = lSubIndex;
 						}
 					}
 				}
@@ -205,7 +216,7 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 
 		//２つの正負が反対であれば、ポリゴンをまたいでいる
 		if (lAns[0] * lAns[1] < 0.0f) {
-			//滑る場合の処理
+			//滑る場合、もしくは距離を返す時の処理
 			if (mSlipFlag == true) {
 				//滑った後の座標が入る一時変数
 				DXVector3 lAfterPos;
@@ -240,6 +251,7 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 						//現在ヒットしているポリゴンより近いポリゴンの衝突した場合
 						if (lNearDistance > lDistance) {
 							lNearDistance = lDistance;
+							
 						}
 					}
 
@@ -247,11 +259,16 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 
 				if (lNearDistance < FLT_MAX) {
 					//当たった場合、滑り後の座標を計算する(少し多めに押し戻す
-					lAfterPos = lRayAfterPosition + polyNormal*(lNearDistance + 0.05f);
-					//すべての処理が終わればセットする
-					pResultPosition = lAfterPos;
+					if (mSlipFlag == true) {
+						lAfterPos = lRayAfterPosition + polyNormal*(lNearDistance + 0.05f);
+						//すべての処理が終わればセットする
+						pResultPosition = lAfterPos;
+					}
 				}
 				else {
+					//メッシュインデクスのリセット
+					if (aMeshIndex) *aMeshIndex = -1;
+					if (aSubMeshIndex) *aSubMeshIndex = -1;
 					return false;
 				}
 
@@ -314,13 +331,19 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 				}
 
 				if (lNearDistance < FLT_MAX) {
-					//当たった場合、滑り後の座標を計算する(少し多めに押し戻す
-					lAfterPos = lRayAfterPosition + lDirection*(lDistance + 0.05f);
-					//すべての処理が終わればセットする
-					pResultPosition = lAfterPos;
+					if (mSlipFlag) {
+						//当たった場合、滑り後の座標を計算する(少し多めに押し戻す
+						lAfterPos = lRayAfterPosition + lDirection*(lDistance + 0.05f);
+						//すべての処理が終わればセットする
+						pResultPosition = lAfterPos;
+					}
 					return true;
 				}
 				else {
+					//メッシュインデクスの記憶
+					if (aMeshIndex) *aMeshIndex = -1;
+					if (aSubMeshIndex) *aSubMeshIndex = -1;
+
 					return false;
 				}
 
@@ -332,5 +355,9 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 
 
 	//レイは当たったものの、衝突はしなかったのでfalseを返す
+	//メッシュインデクスの記憶
+	if (aMeshIndex) *aMeshIndex = -1;
+	if (aSubMeshIndex) *aSubMeshIndex = -1;
+
 	return false;
 }

@@ -1,5 +1,5 @@
 --Frame
-FramePosition={403,207}
+FramePosition={333,207}
 FrameSize={270,134}
 FrameScale={1.0,1.0}
 FrameTexturePath="Resource/UI/Result/Frame.png"
@@ -11,10 +11,10 @@ LogoWinTexturePath="Resource/UI/Result/LogoWin.png"
 LogoLoseTexturePath="Resource/UI/Result/LogoLose.png"
 LogoDrawTexturePath="Resource/UI/Result/LogoDraw.png"
 --Text
-TextPosition={480,260}
+TextPosition={355,260}
 
 --Toggle
-TogglePosition={480,390}
+TogglePosition={353,390}
 --ButtonRetry
 ButtonRetrySize={254,60}
 ButtonRetryScale={1.0,1.0}

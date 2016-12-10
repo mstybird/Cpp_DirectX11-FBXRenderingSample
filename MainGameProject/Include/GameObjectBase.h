@@ -14,6 +14,7 @@ class MSProgress;
 class MSGravity;
 class GameObjectBase {
 	friend class Enemy;
+	friend class CharacterBase;
 public:
 	GameObjectBase();
 	virtual ~GameObjectBase();

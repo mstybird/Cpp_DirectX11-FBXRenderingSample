@@ -5,6 +5,7 @@
 #include"StatusBase.h"
 #include"StatusField.h"
 #include"MS3DRender.h"
+#include<DXMath.hpp>
 NBullet::~NBullet()
 {
 }
@@ -24,7 +25,7 @@ void NBullet::SetEffect(::Comfort::EfkManager * aManager, ::Comfort::EffectDatab
 	lEffect = aDb->Get(aShotID);
 	mShotEffect.SetManager(aManager);
 	mShotEffect.SetEffect(lEffect);
-	lEffect = aDb->Get(aShotID);
+	lEffect = aDb->Get(aKillID);
 	mKillEffect.SetManager(aManager);
 	mKillEffect.SetEffect(lEffect);
 }
@@ -85,8 +86,16 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 
 	bullet->mHitEffect = this->mHitEffect;
 	bullet->mShotEffect = this->mShotEffect;
+	bullet->mKillEffect = this->mKillEffect;
+
 	bullet->mShotEffect.SetPosition({ lSpwanPos.x,lSpwanPos.y,lSpwanPos.z });
+	DXVector3 lRotate = *aShoter->GetWorld()->mRotationCenter;
 	bullet->mShotEffect.Play();
+	bullet->mShotEffect.SetRotation({
+		lRotate.x,
+		lRotate.y,
+		lRotate.z
+	});
 	aOutBulletList.push_back(std::move(bullet));
 
 
@@ -105,7 +114,13 @@ void NBullet::Update()
 		DXVector3 lPosition;
 		GetWorld()->GetMatrix().lock()->GetT(lPosition);
 		this->mHitEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
+		DXVector3 lRotate = *this->GetWorld()->mRotationCenter;
 		this->mHitEffect.Play();
+		mHitEffect.SetRotation({
+			lRotate.x,
+			lRotate.y,
+			lRotate.z
+		});
 
 
 
@@ -128,7 +143,13 @@ void NBullet::Update()
 
 		//キルエフェクト再生
 		this->mKillEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
+		lRotate = *this->GetWorld()->mRotationCenter;
 		this->mKillEffect.Play();
+		mKillEffect.SetRotation({
+			lRotate.x,
+			lRotate.y,
+			lRotate.z
+		});
 
 
 		//ボールを持っていた場合、ボールをフィールドにセット

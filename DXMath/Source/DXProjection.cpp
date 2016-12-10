@@ -64,6 +64,7 @@ void DXProjection::Clone(DXProjection & pOutClone)
 
 std::weak_ptr<DXMatrix> DXProjection::GetMatrix()
 {
+
 	D3DXMatrixPerspectiveFovLH(
 		mMatrix.get(),
 		D3DXToRadian(mAngle),

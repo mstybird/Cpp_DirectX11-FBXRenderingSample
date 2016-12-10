@@ -8,10 +8,14 @@
 #include"DXWorld.h"
 #include"NBullet.h"
 #include"ChangeStates.hxx"
-Player::Player()
+Player::Player():
+	CharacterBase(
+{ 0.0f,6.6f,-10.0f },
+{ 0.0f,0.0f,0.0f }
+)
 {
-	mCameraLen = { 0.0f,50.0f,-0.1f };
-	mCameraOffset = { 0.0f,0.0f,0.0f };
+	mCameraOffset = { 0,0,0 };
+	mCameraLen = { 0.0f,6.6f,-10.0f };
 	//mBulletNormal = std::make_unique<BulletNormal>();
 	mStatus = std::make_unique<StatusPlayer>();
 }
@@ -28,7 +32,7 @@ void Player::Update()
 	//éÄÇÒÇ≈ÇΩÇ∆Ç´ÇÃèàóù
 	UpdateAlive();
 
-	//UpdateMesh();
+	UpdateMesh();
 	UpdateBullets();
 	//UpdateGravity();
 

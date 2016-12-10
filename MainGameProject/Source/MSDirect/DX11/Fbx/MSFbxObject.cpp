@@ -28,15 +28,33 @@ void MSFbxObject::Update()
 	mCollisionSphere = mManager->GetCollisionSphere(mCurrentAnimation, mCurrentFrame);
 }
 
-void MSFbxObject::NextFrame()
+bool MSFbxObject::NextFrame()
 {
+	
 	mStartFrame = mManager->mLoader->Start;
 	mStopFrame = mManager->mLoader->Stop;
 	mCurrentFrame += (mFrameTime*mFrameSpeed);
-	
+	bool lResult{ false };
 	if (mCurrentFrame >= mStopFrame) {
-		mCurrentFrame = mStartFrame;
+		if (mIsLooping == true) {
+			mCurrentFrame = mStartFrame;
+		}
+		else {
+			mCurrentFrame = mStopFrame;
+			lResult = true;
+		}
 	}
+	return lResult;
+}
+
+void MSFbxObject::SetFrontFrame()
+{
+	mCurrentFrame = mStartFrame;
+}
+
+void MSFbxObject::SetLoopFlag(bool aFlag)
+{
+	mIsLooping = aFlag;
 }
 
 std::vector<std::shared_ptr<FBXMesh>>* MSFbxObject::GetCurrentMeshData()

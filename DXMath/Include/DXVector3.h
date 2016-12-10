@@ -45,24 +45,24 @@ public:
 
 	DXVector3&operator=(const DXVector2&pVector2D);
 
-	DXVector3 operator+(float pXYZ);
+	DXVector3 operator+(float pXYZ)const;
 	DXVector3&operator+=(float pXYZ);
-	DXVector3 operator+(const D3DXVECTOR3&pAddVector);
+	DXVector3 operator+(const D3DXVECTOR3&pAddVector)const;
 	DXVector3&operator+=(const D3DXVECTOR3&pAddVector);
 
-	DXVector3 operator-(float pXYZ);
+	DXVector3 operator-(float pXYZ)const;
 	DXVector3&operator-=(float pXYZ);
-	DXVector3 operator-(const D3DXVECTOR3&pSubVector);
+	DXVector3 operator-(const D3DXVECTOR3&pSubVector)const;
 	DXVector3&operator-=(const D3DXVECTOR3&pSubVector);
 
-	DXVector3 operator*(float pXYZ);
+	DXVector3 operator*(float pXYZ)const;
 	DXVector3&operator*=(float pXYZ);
-	DXVector3 operator*(const D3DXVECTOR3&pMulVector);
+	DXVector3 operator*(const D3DXVECTOR3&pMulVector)const;
 	DXVector3&operator*=(const D3DXVECTOR3&pMulVector);
 
-	DXVector3 operator/(float pXYZ);
+	DXVector3 operator/(float pXYZ)const;
 	DXVector3&operator/=(float pXYZ);
-	DXVector3 operator/(const D3DXVECTOR3&pMulVector);
+	DXVector3 operator/(const D3DXVECTOR3&pMulVector)const;
 	DXVector3&operator/=(const D3DXVECTOR3&pMulVector);
 
 };

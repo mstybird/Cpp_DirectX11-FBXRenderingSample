@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="ヘッダー ファイル">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -13,18 +9,82 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="FirstAlpha">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="FirstAlpha\Header">
+      <UniqueIdentifier>{1198ebc9-e91d-40d4-9c58-0b5a227d436b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FirstAlpha\Header\ogg">
+      <UniqueIdentifier>{a17cc076-0617-4e1a-b106-013bb764e1de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FirstAlpha\Source">
+      <UniqueIdentifier>{835b3550-9e5d-4fd0-a9b9-74893a623ba9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FirstAlpha\Source\ogg">
+      <UniqueIdentifier>{71e8fa94-3f6e-42ac-af46-7fa6ce2f02d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SecondBeta">
+      <UniqueIdentifier>{064b6146-0e36-498c-b26a-5d920dde0038}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ComIniter.h">
+      <Filter>FirstAlpha\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Deleter.hxx">
+      <Filter>FirstAlpha\Header</Filter>
+    </ClInclude>
     <ClInclude Include="MSAudio.hxx">
-      <Filter>ソース ファイル</Filter>
+      <Filter>FirstAlpha\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundPlayer.h">
+      <Filter>FirstAlpha\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundBuffer.h">
+      <Filter>FirstAlpha\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundFwd.h">
+      <Filter>FirstAlpha\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundImpl.h">
+      <Filter>FirstAlpha\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamBuffer.h">
+      <Filter>FirstAlpha\Header\ogg</Filter>
+    </ClInclude>
+    <ClInclude Include="OggStreamBuffer.h">
+      <Filter>SecondBeta</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="ComIniter.cpp">
+      <Filter>FirstAlpha\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Deleter.cpp">
+      <Filter>FirstAlpha\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundBuffer.cpp">
+      <Filter>FirstAlpha\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundImpl.cpp">
+      <Filter>FirstAlpha</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundPlayer.cpp">
+      <Filter>FirstAlpha</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamBuffer.cpp">
+      <Filter>FirstAlpha</Filter>
+    </ClCompile>
     <ClCompile Include="MSAudio.cpp">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>FirstAlpha</Filter>
+    </ClCompile>
+    <ClCompile Include="OggStreamBuffer.cpp">
+      <Filter>FirstAlpha</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

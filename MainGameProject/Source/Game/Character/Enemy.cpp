@@ -46,7 +46,7 @@ void Enemy::InitFinal()
 	GetWorld()->GetMatrix().lock()->GetT(lPosition);
 	auto lNearNode = mAI->GetNearNodeList(lPosition)[0];
 	mAI->SetStartNode(lNearNode->GetID());
-	mTransform->mMesh->SetAnimation(0);
+	mTransform->GetMesh()->SetAnimation(0);
 }
 void Enemy::SetAI(NcgLuaManager * aAI)
 {

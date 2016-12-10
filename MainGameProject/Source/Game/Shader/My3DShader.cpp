@@ -29,7 +29,12 @@ void My3DShader::SetConstantBuffer1(
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		D3DXMatrixTranspose(&cb.mWVP, &cb.mWVP);
 		cb.LightDir = D3DXVECTOR4(1, 1, -1, 0);
-
+		if(resource->GetTransVector()->size()>0){
+			cb.mAlpha = resource->GetTransVector()->at(0);
+		}
+		else {
+			cb.mAlpha = 1.0f;
+		}
 		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
 		sDeviceContext->Unmap(mConstantBuffer1, 0);
 	}

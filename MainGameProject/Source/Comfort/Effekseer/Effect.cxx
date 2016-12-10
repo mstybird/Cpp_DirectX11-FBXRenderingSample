@@ -11,30 +11,41 @@ void Comfort::EffectCamera::SetDXCamera(DXCamera * aCamera)
 	mLookAt.X = aCamera->mLookPosition->x;
 	mLookAt.Y = aCamera->mLookPosition->y;
 	mLookAt.Z = aCamera->mLookPosition->z;
-	mUp.X = aCamera->mUpVector->y;
-	mUp.Y = aCamera->mUpVector->x;
-	mUp.Z = aCamera->mUpVector->z;
+	mUp.X = 0;
+	mUp.Y = 1;
+	mUp.Z = 0;
+
+	auto m1 = GetLookAtLH();
+	auto m2 = *aCamera->GetMatrix().lock();
+
+	//mUp.X = aCamera->mUpVector->x;
+	//mUp.Y = aCamera->mUpVector->y;
+	//mUp.Z = aCamera->mUpVector->z;
+	//printf("%.2f:%.2f:%.2f\n", mUp.X, mUp.Y, mUp.Z);
 
 }
 
-::Effekseer::Matrix44 Comfort::EffectCamera::GetLookAtRH()
+::Effekseer::Matrix44 Comfort::EffectCamera::GetLookAtLH()
 {
 	return ::Effekseer::Matrix44().LookAtLH(mEye, mLookAt, mUp);
 }
 
 void Comfort::EffectProjection::SetDXProjection(DXProjection * aProjection)
 {
-	mAngle = D3DXToRadian(aProjection->mAngle);
-	mWidth = 1;
-	mHeight = aProjection->mAspect;
+	mAngle = aProjection->mAngle;
+	mAspect = aProjection->mAspect;
 	mNear = aProjection->mNear;
 	mFar = aProjection->mFar;
+
+
+	auto m1 = GetPerspectiveFovRH();
+	auto m2=aProjection->GetMatrix();
 
 }
 
 ::Effekseer::Matrix44 Comfort::EffectProjection::GetPerspectiveFovRH()
 {
-	return ::Effekseer::Matrix44().PerspectiveFovLH(mAngle, mWidth / mHeight, mNear, mFar);
+	return ::Effekseer::Matrix44().PerspectiveFovLH(D3DXToRadian(mAngle), mAspect, mNear, mFar);
 }
 
 Comfort::EffectDatabase::~EffectDatabase()
@@ -117,6 +128,7 @@ void Comfort::EfkManager::Initialize(::EffekseerRenderer::Renderer *& aRenderer,
 
 	mManager->SetTextureLoader(aRenderer->CreateTextureLoader());
 	mManager->SetModelLoader(aRenderer->CreateModelLoader());
+	mManager->SetCoordinateSystem(Effekseer::CoordinateSystem::LH);
 }
 
 ::Effekseer::Manager *& Comfort::EfkManager::GetManager()
@@ -152,6 +164,7 @@ void Comfort::EfkObject::SetPosition(const::Effekseer::Vector3D & aPosition)
 	mPosition = aPosition;
 	if (mHandle != -1) {
 		mParentManager->SetLocation(mHandle, mPosition);
+		
 	}
 }
 
@@ -160,6 +173,15 @@ void Comfort::EfkObject::AddPosition(const::Effekseer::Vector3D & aPosition)
 	mPosition += aPosition;
 	if (mHandle != -1) {
 		mParentManager->SetLocation(mHandle, mPosition);
+	}
+}
+
+void Comfort::EfkObject::SetRotation(const::Effekseer::Vector3D & aRotate)
+{
+	if (mHandle != -1) {
+		
+		mParentManager->SetRotation(mHandle, { 0,1,0 }, D3DXToRadian(aRotate.Y));
+		
 	}
 }
 
@@ -205,9 +227,16 @@ void Comfort::EfkRenderer::SetProjection(EffectProjection * aProjection)
 
 void Comfort::EfkRenderer::SetCamera(EffectCamera * aCamera)
 {
+
 	mRenderer->SetCameraMatrix(
-		aCamera->GetLookAtRH()
+		aCamera->GetLookAtLH()
 	);
+}
+
+void Comfort::EfkRenderer::SetCamera(DXCamera * aCamera)
+{
+	aCamera->GetMatrix();
+	aCamera->GetMatrix();
 }
 
 void Comfort::EfkRenderer::Release()

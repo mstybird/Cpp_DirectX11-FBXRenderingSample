@@ -44,8 +44,22 @@ public:
 	//指定したリソースとの衝突判定
 	bool CollisionSphere( std::shared_ptr<DX11RenderResource>&pResource);
 	void GetCollisionSphere(std::weak_ptr<std::vector<std::vector<MSCollisionSphere>>>&pOutCollisions);
-	std::shared_ptr<MSFbxObject> mMesh;
+
+	//メッシュ数を取得
+	int GetMeshCount();
+	//メッシュに対するサブメッシュ数を取得
+	int GetSubMeshCount(int aMeshIndex);
+	//メッシュを取得
+	MSFbxObject* GetMesh();
+	//透過率配列を取得
+	std::vector<float>*GetTransVector();
 private:
+	//メッシュデータ
+	std::shared_ptr<MSFbxObject> mMesh;
+	//透明度情報(Mesh<SubMesh>)
+	std::vector<float>mTransparents;
+
+
 	//ワールド行列
 	std::shared_ptr<DXWorld>mWorld;
 	//ビュー行列

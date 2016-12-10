@@ -26,7 +26,7 @@ EPTextOffset={0,-20}
 --ScoreBar
 ScoreBarPosition={210,657}
 ScoreBarSize={534,22}
-ScoreBarInScale={0.9,0.9}
+ScoreBarInScale={0.98,0.8}
 ScoreBarOutTexturePath="Resource/UI/Playing/ScoreBarOut.png"
 ScoreBarLeftTexturePath="Resource/UI/Playing/ScoreBarLeft.png"
 ScoreBarRightTexturePath="Resource/UI/Playing/ScoreBarRight.png"
@@ -39,7 +39,7 @@ TimeTextPosition={860,10}
 
 --Logo
 LogoFinishPosition={480,360}
-LogoFinishSize={480,360}
+LogoFinishSize={480,100}
 LogoFinishScale={1.0,1.0}
 LogoFinishTexturePath="Resource/UI/Playing/LogoFinish.png"
 

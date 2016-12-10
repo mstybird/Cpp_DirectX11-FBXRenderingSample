@@ -28,7 +28,7 @@ namespace ChangeStates {
 			//ˆ—‚È‚µ
 			break;
 		}
-
+		
 		return lResultFlag==MSPRogressFlag::LESSMIN;
 	}
 

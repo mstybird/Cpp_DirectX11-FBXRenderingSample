@@ -124,3 +124,23 @@ void DX11RenderResource::GetCollisionSphere(std::weak_ptr<std::vector<std::vecto
 {
 	pOutCollisions = mCollisions;
 }
+
+int DX11RenderResource::GetMeshCount()
+{
+	return mMesh->GetCurrentMeshData()->size();;
+}
+
+int DX11RenderResource::GetSubMeshCount(int aMeshIndex)
+{
+	return mMesh->GetCurrentMeshData()->at(aMeshIndex)->subMesh.size();
+}
+
+MSFbxObject * DX11RenderResource::GetMesh()
+{
+	return mMesh.get();
+}
+
+std::vector<float>* DX11RenderResource::GetTransVector()
+{
+	return &mTransparents;
+}

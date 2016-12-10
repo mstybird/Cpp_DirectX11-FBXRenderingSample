@@ -15,7 +15,7 @@ public:
 	void SetSize(float aWidth, float aHeight);
 	void SetTextOffset(const DXVector2&aOffset);
 	void SetTextOffset(float aWidth, float aHeight);
-
+	void SetGaugeScale(float aX, float aY);
 	void SetTextures(DX11TextureManager*aTexManager,const int aFrameID, const int aLeftID, const int aRightID);
 
 	void UpdateScore(float aLeft, float aRight);

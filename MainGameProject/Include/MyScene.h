@@ -22,6 +22,14 @@
 #include"Result.h"
 namespace ValueMyScene {
 
+	//Effect50~99
+	namespace Effect {
+		static const int cShotID = 50;
+		static const int cHitID = 51;
+		static const int cGoalInID = 52;
+		static const int cKillID = 53;
+	}
+
 	//UI値:100~499
 	namespace UI {
 
@@ -174,6 +182,16 @@ namespace ValueMyScene {
 	//CharaBase値:1500~1999
 	namespace Chara {
 		static const int cStatusID = 1500;
+
+		//例外(FBX Animation ID)
+		static const int cAnimIdle = 0;
+		static const int cAnimRun = 1;
+		static const int cAnimWalk = 2;
+		static const int cAnimSkill = 3;
+		static const int cAnimAttack = 4;
+		static const int cAnimAttacked = 5;
+
+
 	}
 
 	//Result値:2000~2499
@@ -242,6 +260,7 @@ private:
 	void Update()override;
 	void KeyDown(MSKEY pKey)override;
 	void KeyHold(MSKEY pKey)override;
+	void KeyUp(MSKEY pKey)override;
 	void Render()override;
 	void Destroy() override {}
 

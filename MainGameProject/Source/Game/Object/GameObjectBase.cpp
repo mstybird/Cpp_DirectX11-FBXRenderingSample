@@ -28,7 +28,15 @@ void GameObjectBase::SetShader(MSBase3DShader * aShader)
 }
 void GameObjectBase::SetMesh(MSFbxManager & aSetMesh)
 {
-	mTransform->mMesh->Initialize(aSetMesh);
+	mTransform->GetMesh()->Initialize(aSetMesh);
+	auto lTransArray= mTransform->GetTransVector();
+
+	auto lMeshCount = mTransform->GetMeshCount();
+	lTransArray->resize(lMeshCount);
+	for (auto& lTrans : *lTransArray) {
+		lTrans = 0.5f;
+	}
+
 }
 
 void GameObjectBase::SetMeshScale(float aX, float aY, float aZ)
@@ -38,7 +46,7 @@ void GameObjectBase::SetMeshScale(float aX, float aY, float aZ)
 
 void GameObjectBase::SetCollisionMesh(MSFbxManager & aSetMesh)
 {
-	mCollisionMesh->mMesh->Initialize(aSetMesh);
+	mCollisionMesh->GetMesh()->Initialize(aSetMesh);
 }
 
 void GameObjectBase::SetCollisionScale(float aX, float aY, float aZ)
@@ -82,7 +90,7 @@ bool GameObjectBase::IsActive()
 
 MSFbxManager * GameObjectBase::GetMesh()
 {
-	return mTransform->mMesh->GetManager();;
+	return mTransform->GetMesh()->GetManager();;
 }
 
 DXWorld * GameObjectBase::GetWorld()
@@ -120,8 +128,10 @@ float GameObjectBase::GetDistance(GameObjectBase * aTarget)
 void GameObjectBase::UpdateMesh()
 {
 	//メッシュの更新
-	mTransform->mMesh->NextFrame();
-	mTransform->mMesh->Update();
+	mTransform->GetMesh()->NextFrame();
+	mTransform->GetMesh()->Update();
+	
+
 }
 
 std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosition)

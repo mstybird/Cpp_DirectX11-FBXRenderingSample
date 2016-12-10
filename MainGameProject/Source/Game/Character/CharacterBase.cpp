@@ -10,8 +10,19 @@
 #include"StaticObject.h"
 #include"StatusField.h"
 #include"StatusBulletBase.h"
-#include<cassert>
 #include"BulletManager.h"
+#include"MSCollisionRay.h"
+#include<cassert>
+
+CharacterBase::CharacterBase(const DXVector3 & aCameraLen, const DXVector3 & aCameraOffset)
+	:
+	cCameraLen{ aCameraLen },
+	cCameraOffset{aCameraOffset}
+{
+	mCameraOffset = cCameraOffset;
+	mCameraLen = cCameraLen;
+}
+
 CharacterBase::CharacterBase(){
 
 }
@@ -45,10 +56,48 @@ void CharacterBase::UpdateCamera()
 	//座標を取得
 	auto lLookPosition = *GetWorld()->mPosition;
 	//差分計算
-	auto lEyePosition = lLookPosition + mCameraLen;
+	auto lEyePosition = lLookPosition + cCameraLen;
+
+	for (auto& lCollision : mCollisionTargets) {
+		auto lTmpMesh = lCollision->mTransform;
+		DXVector3 lTmpS;
+		//判定メッシュをコリジョン用に変更
+		lCollision->GetWorld()->GetMatrix().lock()->GetT(lTmpS);
+		lCollision->mCollisionMesh->GetWorld().lock()->SetT(lTmpS);
+		lCollision->mCollisionMesh->GetWorld().lock()->SetRC(*lCollision->GetWorld()->mRotationCenter);
+
+
+		//コリジョンスケールが別で設定されていない場合は
+		//メッシュのコリジョンスケールを使う
+		if (lCollision->mIsCollisionScaleDefault == true) {
+			lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
+			lCollision->mCollisionMesh->GetWorld().lock()->SetS(lTmpS);
+		}
+
+		lCollision->mTransform = lCollision->mCollisionMesh;
+
+		if (lCollision->IsActive() == false) {
+			lCollision->mTransform = lCollision->mCollisionMesh;
+			continue;
+		}
+		MSCollisionRayPicking lRayPick;
+		lRayPick.SetFramePosition(*mTransform->GetCamera().lock()->mEyePosition);
+		lRayPick.SetSlipFlag(false);
+		DXVector3 lDistance;
+		DXVector3 v;
+		int lMeshIndex;
+		int lSubIndex;
+		if (lRayPick.Collision(v, *mTransform, *lCollision->mTransform,&lMeshIndex,&lSubIndex)) {
+			mTransform->GetMesh()->GetCurrentMeshData();
+		}
+
+
+		lCollision->mTransform = lTmpMesh;
+	}
+
 	//カメラ位置をずらす
-	//lLookPosition += mCameraOffset;
-	//lEyePosition += mCameraOffset;
+	lLookPosition += mCameraOffset;
+	lEyePosition += mCameraOffset;
 	GetView()->SetCamera(*GetWorld(), mCameraLen, mCameraOffset);
 }
 

@@ -128,7 +128,7 @@ MSPRogressFlag MSProgress::IsBetweenValue(float aValue)
 	if (aValue > mMax) {
 		lResult = MSPRogressFlag::GREATEMAX;
 	}
-	if (aValue < mMin) {
+	if (aValue <= mMin) {
 		lResult = MSPRogressFlag::LESSMIN;
 	}
 	return lResult;

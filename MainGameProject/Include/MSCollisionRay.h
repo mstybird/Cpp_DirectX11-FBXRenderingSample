@@ -1,6 +1,7 @@
 #pragma once
 #include"MSCollisionBase.h"
 class MSFbxObject;
+class GameObjectBase;
 //ƒŒƒC”»’èŠî’ê—p
 class MSCollisionRay :public MSCollisionBase {
 public:
@@ -27,4 +28,11 @@ public:
 private:
 	//ƒŒƒC”­ŽË•ûŒü
 	std::shared_ptr<DXVector3>mRayDirection;
+};
+
+class MS2CollisionRay {
+	static float Collision(
+		DXCamera*aCamera,
+		GameObjectBase*aCollision
+	);
 };

@@ -1,4 +1,11 @@
 #pragma once
+
+/*
+	レイが当たったメッシュのみ透過させるようにする
+
+*/
+
+
 #include<D3DX9.h>
 
 #include"MSBase3DShader.h"
@@ -21,6 +28,7 @@ public:
 		D3DXMATRIX mW;//ワールド、ビュー、射影の合成変換行列
 		D3DXMATRIX mWVP;//ワールド、ビュー、射影の合成変換行列
 		D3DXVECTOR4 LightDir{ 1,0,-1,0 };
+		ALIGN16 float mAlpha{ 1.0f };
 	};
 
 	//メッシュから取得する

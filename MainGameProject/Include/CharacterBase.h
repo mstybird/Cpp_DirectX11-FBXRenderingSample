@@ -23,6 +23,7 @@ class BulletManager;
 class CharacterBase:public GameObjectBase {
 	friend class BulletObject;
 public:
+	CharacterBase(const DXVector3& cCameraLen, const DXVector3& cCameraOffset);
 	CharacterBase();
 	virtual ~CharacterBase();
 	virtual void Initialize(StatusField&pSetStatus);
@@ -67,6 +68,8 @@ protected:
 	std::vector<GameObjectBase*>mSearchTargets;
 	StatusField*mField;
 	std::shared_ptr<StatusBase>mStatus;
+	const DXVector3 cCameraLen;
+	const DXVector3 cCameraOffset;
 	DXVector3 mCameraLen;
 	DXVector3 mCameraOffset;
 

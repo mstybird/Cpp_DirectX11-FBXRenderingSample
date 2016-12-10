@@ -58,6 +58,12 @@ void ScoreView::SetTextOffset(float aWidth, float aHeight)
 	mTextOffset.Set(aWidth, aHeight);
 }
 
+void ScoreView::SetGaugeScale(float aX, float aY)
+{
+	mScoreBar->SetScale(aX, aY);
+//	mScoreBar->SetGlobalScale(aX, aY);
+}
+
 void ScoreView::SetTextures(DX11TextureManager * aTexManager, const int aFrameID, const int aLeftID, const int aRightID)
 {
 	mScoreBar->SetTextures(
@@ -69,10 +75,17 @@ void ScoreView::SetTextures(DX11TextureManager * aTexManager, const int aFrameID
 
 void ScoreView::UpdateScore(float aLeft, float aRight)
 {
-	mScoreBar->SetParam(aLeft, aRight);
 	std::ostringstream sout;
 	sout << std::setw(4) << std::right << (int)(aLeft+0.5f) << " / " << std::setw(4) << std::left << (int)(aRight + 0.5f);
 	mScoreText = mTextMan.Create(sout.str());
+
+	if (aLeft == 0 && aRight == 0) {
+		aLeft = 1;
+		aRight = 1;
+	}
+	mScoreBar->SetParam(aLeft, aRight);
+
+
 }
 
 void ScoreView::Render(MSSprite2DRender & aRender, UIBase * aParent)

@@ -106,7 +106,7 @@ void MySceneResult::SetButtonPadding(const float aX, const float aY)
 void MySceneResult::SetValues(const ResultValue & aValue)
 {
 	std::ostringstream sout;
-	sout << std::setw(2) << std::setfill('0') << std::right << aValue.mBlackScore << ":" << std::setw(2) << std::setfill('0') << std::left << aValue.mWhiteScore;
+	sout << "Score:" << std::setw(2) << std::setfill('0') << aValue.mBlackScore << ":" << std::setw(2) << std::setfill('0') << aValue.mWhiteScore;
 	mTextScore = mTextMan.Create(sout.str());
 	mTextScore->SetPosition(mTextPos);
 	switch (aValue.mIssue)

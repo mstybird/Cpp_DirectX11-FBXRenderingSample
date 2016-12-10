@@ -9,7 +9,7 @@
 class BarGauge;
 class MSSprite2DRender;
 class DX11TextureManager;
-class StatusBase;
+struct StatusBase;
 class StatusFrame :public UIBase {
 public:
 	StatusFrame();

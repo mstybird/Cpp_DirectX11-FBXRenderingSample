@@ -58,7 +58,7 @@ void DXCamera::SetCamera(DXWorld&pEyePosition, const DXVector3&pDistance)
 
 }
 
-void DXCamera::SetCamera(DXWorld&pEyePosition, DXVector3&pDistance, DXVector3&aDistanceOffset)
+void DXCamera::SetCamera(DXWorld&pEyePosition, const DXVector3&pDistance, const DXVector3&aDistanceOffset)
 {
 	DXMatrix lTmpMatrixTrans;
 	DXMatrix lTmpMatrixRotate;
@@ -94,10 +94,16 @@ void DXCamera::CreateRay(DXVector3 & pOutRay, const DXVector3 & pRayDirection)co
 	DXMatrix lMatrix;
 	D3DXMATRIX mView;
 	//“ªã•ûŒü‚ÌŒvŽZ
+	DXVector3 Dir = *mLookPosition - *mEyePosition;
+	//YŽ²Šp“x
+
+	//
+
+
 	mMatrix->SetLookAtLH(*mEyePosition, *mLookPosition, *mUpVector);
 	D3DXMatrixInverse(&mView, NULL, mMatrix.get());
 	D3DXVec3TransformNormal(&pOutRay, &pRayDirection, &mView);
-
+	pOutRay.Normalize();
 }
 
 void DXCamera::Translation(TYPEMOVE pType, float pSpeed,const DXVector3&pDirection,bool pLockoned)

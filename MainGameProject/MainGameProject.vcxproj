@@ -87,6 +87,7 @@
     <ClInclude Include="Include\GameObjectBase.h" />
     <ClInclude Include="Include\Result.h" />
     <ClInclude Include="Include\ScoreView.h" />
+    <ClInclude Include="Include\StageSelect.h" />
     <ClInclude Include="Include\StaticObject.h" />
     <ClInclude Include="Include\statusbase.h" />
     <ClInclude Include="Include\statusbulletbase.h" />
@@ -170,6 +171,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\HLSL\Simple.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Resource\HLSL\SimpleTexture.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Resource\HLSL\Sprite2D.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Resource\HLSL\Sprite3D.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Resource\HLSL\Text2D.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C433557F-113C-4D21-B652-F6AF721C2101}</ProjectGuid>
