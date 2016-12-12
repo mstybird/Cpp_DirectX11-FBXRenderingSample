@@ -114,14 +114,8 @@ void MyMSScene::Initialize()
 
 void MyMSScene::Update() {
 
-	mPlayer.Update();
-	DXVector3 v;
-	mPlayer.GetWorld()->GetMatrix().lock()->GetT(v);
-	mEfkObj.SetPosition({ v.x,v.y,v.z });
-	::Comfort::EffectCamera cam;
-	//mPlayer.GetView()->SetCamera(*mPlayer.GetWorld(), { 0.0f,6.6f,-10.0f });
-	cam.SetDXCamera(mPlayer.GetView());
-	mEfkRender.SetCamera(&cam);
+
+
 
 
 
@@ -132,6 +126,14 @@ void MyMSScene::Update() {
 		enemy[i]->Update();
 	}
 
+	mField.ClearTrans();
+	mPlayer.Update();
+	DXVector3 v;
+	mPlayer.GetWorld()->GetMatrix().lock()->GetT(v);
+	mEfkObj.SetPosition({ v.x,v.y,v.z });
+	::Comfort::EffectCamera cam;
+	cam.SetDXCamera(mPlayer.GetView());
+	mEfkRender.SetCamera(&cam);
 	
 	UpdateUI();
 

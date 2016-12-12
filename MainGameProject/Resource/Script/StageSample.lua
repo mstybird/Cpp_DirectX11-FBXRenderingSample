@@ -1,0 +1,8 @@
+TitleFilePath="Resource/UI/Result/LogoLose.png"
+StageScriptFilePath="Resource/Stage.lua"
+ModelScriptFilePath="Resource/Model.lua"
+AIMapFilePath="AIMap.lua"
+BlackSpawnMapFilePath="Black.lua"
+WhiteSpawnMapFilePath="White.lua"
+BallSpawnMapFilePath="Ball.lua"
+ThumnailFilePath="Resource/UI/Result/LogoWin.png"

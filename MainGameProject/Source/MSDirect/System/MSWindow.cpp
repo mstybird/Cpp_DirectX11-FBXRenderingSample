@@ -1,6 +1,7 @@
 #include "MSWindow.h"
 #include"MyScene.h"
 #include"Title.h"
+#include"StageSelect.h"
 #include"Helper.h"
 #include"MSDirect.h"
 #include"DX11Resrouce.h"
@@ -84,7 +85,8 @@ void MSWindow::_Run(HINSTANCE hInstance,
 		assert(0);
 		return;
 	}
-	MSDirect::SetScene(std::make_unique<MyMSScene>());
+//	MSDirect::SetScene(std::make_unique<MyMSScene>());
+	MSDirect::SetScene(std::make_unique<SceneStageSelect>());
 
 //	MSDirect::SetScene(std::make_unique<SceneTitle>());
 	_Loop();

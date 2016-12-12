@@ -34,7 +34,7 @@ void GameObjectBase::SetMesh(MSFbxManager & aSetMesh)
 	auto lMeshCount = mTransform->GetMeshCount();
 	lTransArray->resize(lMeshCount);
 	for (auto& lTrans : *lTransArray) {
-		lTrans = 0.5f;
+		lTrans = 1.0f;
 	}
 
 }
@@ -47,6 +47,13 @@ void GameObjectBase::SetMeshScale(float aX, float aY, float aZ)
 void GameObjectBase::SetCollisionMesh(MSFbxManager & aSetMesh)
 {
 	mCollisionMesh->GetMesh()->Initialize(aSetMesh);
+	auto lTransArray = mCollisionMesh->GetTransVector();
+
+	auto lMeshCount = mCollisionMesh->GetMeshCount();
+	lTransArray->resize(lMeshCount);
+	for (auto& lTrans : *lTransArray) {
+		lTrans = 1.0f;
+	}
 }
 
 void GameObjectBase::SetCollisionScale(float aX, float aY, float aZ)

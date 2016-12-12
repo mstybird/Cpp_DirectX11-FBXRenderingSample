@@ -53,12 +53,11 @@ void CharacterBase::InitStatus(const StatusBase * aInitStatus)
 
 void CharacterBase::UpdateCamera()
 {
-	//座標を取得
-	auto lLookPosition = *GetWorld()->mPosition;
-	//差分計算
-	auto lEyePosition = lLookPosition + cCameraLen;
 
 	for (auto& lCollision : mCollisionTargets) {
+
+
+
 		auto lTmpMesh = lCollision->mTransform;
 		DXVector3 lTmpS;
 		//判定メッシュをコリジョン用に変更
@@ -88,16 +87,14 @@ void CharacterBase::UpdateCamera()
 		int lMeshIndex;
 		int lSubIndex;
 		if (lRayPick.Collision(v, *mTransform, *lCollision->mTransform,&lMeshIndex,&lSubIndex)) {
-			mTransform->GetMesh()->GetCurrentMeshData();
+
+
+			lTmpMesh->GetTransVector()->at(lMeshIndex) = 0.2f;
 		}
 
 
 		lCollision->mTransform = lTmpMesh;
 	}
-
-	//カメラ位置をずらす
-	lLookPosition += mCameraOffset;
-	lEyePosition += mCameraOffset;
 	GetView()->SetCamera(*GetWorld(), mCameraLen, mCameraOffset);
 }
 

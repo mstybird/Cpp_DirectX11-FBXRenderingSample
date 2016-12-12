@@ -241,6 +241,9 @@
     <Filter Include="HLSL">
       <UniqueIdentifier>{73d7c834-ac61-4741-8214-81db6e8cf3af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\StageSelect">
+      <UniqueIdentifier>{ab66a1ad-be43-4d01-a300-d90f9f078a0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Comfort\Effekseer\Effect.cxx">
@@ -435,6 +438,8 @@
     <ClCompile Include="Source\Game\Scene\MyScene\TimeOver.cpp">
       <Filter>Game\Scene\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Include\StageSelectList.cpp" />
+    <ClCompile Include="Include\StageSelect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\NoUse\2DSprite.txt">
@@ -655,6 +660,9 @@
     <ClInclude Include="Include\StageSelect.h">
       <Filter>Game\Scene\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Include\StageSelectList.h">
+      <Filter>Game\Scene\StageSelect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="NatvisFile.natvis">
@@ -666,19 +674,9 @@
     <None Include="Resource\HLSL\Text2D.hlsl">
       <Filter>HLSL</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resource\HLSL\Simple.hlsl">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="Resource\HLSL\SimpleTexture.hlsl">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="Resource\HLSL\Sprite2D.hlsl">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="Resource\HLSL\Sprite3D.hlsl">
-      <Filter>HLSL</Filter>
-    </FxCompile>
+    <None Include="Resource\HLSL\Simple.hlsl" />
+    <None Include="Resource\HLSL\SimpleTexture.hlsl" />
+    <None Include="Resource\HLSL\Sprite2D.hlsl" />
+    <None Include="Resource\HLSL\Sprite3D.hlsl" />
   </ItemGroup>
 </Project>

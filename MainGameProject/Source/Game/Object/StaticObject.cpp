@@ -1,6 +1,6 @@
 #include"StaticObject.h"
 #include"MS3DRender.h"
-
+#include"DX11RenderResource.h"
 void StaticObject::Initialize()
 {
 	GameObjectBase::Initialize();
@@ -14,4 +14,11 @@ void StaticObject::Render()
 	if (!mActive)return;
 	mRender->SetShader(mShader);
 	mRender->Render(mTransform.get());
+}
+
+void StaticObject::ClearTrans()
+{
+	for (auto& lTrans : *mTransform->GetTransVector()) {
+		lTrans = 1.0f;
+	}
 }
