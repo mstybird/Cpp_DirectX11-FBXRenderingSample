@@ -47,10 +47,10 @@ void StatusField::InitRenderAndShader(MS3DRender & aRender, MSBase3DShader & aSh
 	mTeamBlack.GetBase()->SetRenderer(&aRender);
 	mTeamWhite.GetBase()->SetRenderer(&aRender);
 }
-void StatusField::CreateFieldNodes()
+void StatusField::CreateFieldNodes(const std::string& aAIMap)
 {
 	Comfort::AIMapImporter im;
-	im.Import("Resource/NodeMap/fieldNodes.anm");
+	im.Import(aAIMap.c_str());
 	auto v = im.GetList();
 	using NodeControl::AddNodeSafe;
 	//ノードの追加
@@ -89,12 +89,12 @@ void StatusField::CreateFieldNodes()
 
 
 }
-void StatusField::CreateSpawnCharaNodes()
+void StatusField::CreateSpawnCharaNodes(const std::string& aSpawnMapBlack, const std::string& aSpawnMapWhite)
 {
 	//黒チームのスポーンデータ
 	{
 		Comfort::SpawnMapImporter lImport;
-		lImport.Import("Resource/NodeMap/spawnTeamBlack.anm");
+		lImport.Import(aSpawnMapBlack.c_str());
 
 
 		using NodeControl::AddNodeSafe;
@@ -116,7 +116,7 @@ void StatusField::CreateSpawnCharaNodes()
 	//黒チームのスポーンデータ
 	{
 		Comfort::SpawnMapImporter lImport;
-		lImport.Import("Resource/NodeMap/spawnTeamWhite.anm");
+		lImport.Import(aSpawnMapWhite.c_str());
 
 
 		using NodeControl::AddNodeSafe;
@@ -137,10 +137,10 @@ void StatusField::CreateSpawnCharaNodes()
 	//AddNodeSafe(mSpawnCharaNodes, new MyNode{ 19,"obj19",{ 11.00,0.00,7.50 } });
 	//AddNodeSafe(mSpawnCharaNodes, new MyNode{ 20,"obj20",{ -16.25,0.00,5.25 } });
 }
-void StatusField::CreateSpawnBallNodes()
+void StatusField::CreateSpawnBallNodes(const std::string& aBallMap)
 {
 	Comfort::SpawnMapImporter lImport;
-	lImport.Import("Resource/NodeMap/spawnBall.anm");
+	lImport.Import(aBallMap.c_str());
 
 
 	using NodeControl::AddNodeSafe;

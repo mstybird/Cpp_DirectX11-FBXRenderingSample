@@ -10,10 +10,9 @@ class BarGauge;
 class MSSprite2DRender;
 class DX11TextureManager;
 struct StageData {
-	//ステージデータの入っているファイルのパス
-	std::string mStageScriptName;
 	//モデルデータの情報が入っているスクリプトファイルパス
 	std::string mModelScriptName;
+
 	//AIマップファイルパス
 	std::string mAIMapFileName;
 	//FileName is spawn map for BlackTeam.
@@ -22,29 +21,18 @@ struct StageData {
 	std::string mWhiteSpawnMapFileName;
 	//FileName is spawn map for Ball.
 	std::string mBallSpawnMapFileName;
-	//mTitleName is Stage Title Name.
-	MSSprite2DResource mStageTitle;
 	//mThumbnail is Stage Thumbnail Image.
 	MSSprite2DResource mThumbnail;
 };
 
-/*
---StageListFrame
-StageListFramePosition={13,13}
-StageListFrameSize={300,140}
-StageListFrameScale={1.0,1.0}
 
-StageListFrameTexturePath="Resource/UI/StageSelect/StageTextList.png"
-
---Thumbnail
-ThumbnailPosition={532,180}
-ThumbnailSize={407,285}
-ThumbnailScale={1.0,1.0}
-*/
 
 namespace ValueStageData {
 
-	static const char* cTitleFilePath = "TitleFilePath";
+	static const char* cButtonNormalFilePath = "ButtonNormalFilePath";
+	static const char* cButtonActiveFilePath = "ButtonActiveFilePath";
+	static const char* cButtonPushFilePath = "ButtonPushFilePath";
+	static const char* cButtonDisableFilePath = "ButtonDisableFilePath";
 	static const char* cStageScriptFilePath = "StageScriptFilePath";
 	static const char* cModelScriptFilePath = "ModelScriptFilePath";
 	static const char* cAIMapFilePath = "AIMapFilePath";
@@ -52,8 +40,11 @@ namespace ValueStageData {
 	static const char* cWhiteSpawnMapFilePath = "WhiteSpawnMapFilePath";
 	static const char* cBallSpawnMapFilePath = "BallSpawnMapFilePath";
 	static const char* cThumnailFilePath = "ThumnailFilePath";
-	static const int cThumnailID = 100;
-	static const int cTitleID= 110;
+	static const int cThumnailID = 1000;
+	static const int cButtonNormalID = 1100;
+	static const int cButtonActiveID = 1200;
+	static const int cButtonPushID = 1300;
+	static const int cButtonDisableID= 1400;
 
 }
 
@@ -61,20 +52,42 @@ class StageSelectList :public UIBase {
 public:
 	//ステージセレクトファイルの読み込み
 	void Initialize(NcgLuaDatabase*aLuaDb, NcgLuaManager* aSelectManager,DX11TextureManager*aTexManager, const std::vector<std::string>&mStageFiles,const int aIDOffset);
-	void UpdateStatus(StatusBase* aStatus);
-
+	//ボタンを一つ戻る
+	void ActiveBack();
+	//ボタンを一つ進める
+	void ActiveNext();
+	//ボタンを押す
+	void PushButton();
+	//アクティブデータの参照を取得する
+	StageData* GetActiveData();
 
 	virtual void Render(MSSprite2DRender& aRender, UIBase*aParent = nullptr)override;
 
 private:
+
+	void SetActiveThumbnail();
+
+	struct Resource3D {
+		std::vector<float>lPosition;
+		std::vector<float>lSize;
+		std::vector<float>lScale;
+		std::vector<float>lOffset;
+	};
 	//リスト表示するフレームの画像
 	MSSprite2DResource mListFrame;
 	//ステージデータ群
 	std::vector<StageData>mStages;
+	//サムネイル
+	std::vector<MSSprite2DResource>mThumnails;
 	//アクティブなサムネイル
-	MSSprite2DResource* mActiveThumnail;
+	MSSprite2DResource* mActiveThumbnail;
 
 	//ステージリスト
 	std::vector<Button>mButtons;
 	Toggle mstageToggle;
+
+	Resource3D ButtonsResource;
+	Resource3D ThumbnailResource;
+	Resource3D FrameResource;
+
 };

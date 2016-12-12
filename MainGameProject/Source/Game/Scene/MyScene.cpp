@@ -4,17 +4,7 @@
 #include<TimeView.h>
 #include"MyScene.h"
 #include"Title.h"
-/*
-タスク：
-攻撃を受けるとダメージ
-弾を二種類用意
-弾ごとにコストを設定
-チャージ速度など
-
-UI設計
-*/
-//ベクトル正規化
-
+#include<fstream>
 //const int ValueMyScene::UI::cUILuaID = 100;
 const int cEnemyCount = 4;
 MyMSScene::MyMSScene()
@@ -34,7 +24,7 @@ MyMSScene::~MyMSScene()
 void MyMSScene::Initialize()
 {
 
-
+	InitializeStageData();
 	InitializeFont();
 	InitializeModel();
 	InitializeEffect();
@@ -350,6 +340,16 @@ void MyMSScene::InitializeFont()
 
 }
 
+void MyMSScene::InitializeStageData()
+{
+	std::ifstream lInFile{ "Temp/Stage.dat" };
+	lInFile >> mStageData.mAIMapFileName;
+	lInFile >> mStageData.mBlackSpawnMapFileName;
+	lInFile >> mStageData.mWhiteSpawnMapFileName;
+	lInFile >> mStageData.mBallSpawnMapFileName;
+	lInFile >> mStageData.mModelScriptName;
+}
+
 void MyMSScene::InitializeUI()
 {
 	using namespace ValueMyScene::UI;
@@ -509,7 +509,7 @@ void MyMSScene::InitializeEffect()
 void MyMSScene::InitializeModel()
 {
 	using namespace ValueMyScene::Model;
-	mLuaDb.Load("Resource/Script/GamePlayModel.lua", cLuaID, "GamePlayUI");
+	mLuaDb.Load(mStageData.mModelScriptName, cLuaID);
 	auto lManager = mLuaDb.GetManager(cLuaID);
 
 	//モデルファイルマップ
@@ -654,9 +654,9 @@ void MyMSScene::InitializeFieldStatus()
 	mFieldStatus.Initialize();
 	mFieldStatus.InitializeTime(70);
 	mFieldStatus.InitEffect(&mEfkManager, &mEfkDb, ValueMyScene::Effect::cGoalInID, ValueMyScene::Effect::cKillID);
-	mFieldStatus.CreateFieldNodes();
-	mFieldStatus.CreateSpawnCharaNodes();
-	mFieldStatus.CreateSpawnBallNodes();
+	mFieldStatus.CreateFieldNodes(mStageData.mAIMapFileName);
+	mFieldStatus.CreateSpawnCharaNodes(mStageData.mBlackSpawnMapFileName,mStageData.mWhiteSpawnMapFileName);
+	mFieldStatus.CreateSpawnBallNodes(mStageData.mBallSpawnMapFileName);
 	mFieldStatus.InitGoalIndex(19, 80);
 	mFieldStatus.mBallIsField = true;
 	mFieldStatus.mBall = &mBall;

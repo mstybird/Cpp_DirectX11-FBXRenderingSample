@@ -42,6 +42,11 @@ namespace ValueSS {
 	static const char* cStageListFrameScale = "StageListFrameScale";
 	static const char* cStageListFrameTexturePath = "StageListFrameTexturePath";
 
+	static const char* cButtonPosition = "ButtonPosition";
+	static const char* cButtonSize = "ButtonSize";
+	static const char* cButtonScale = "ButtonScale";
+	static const char* cButtonOffset = "ButtonOffset";
+
 	static const char* cStagePathList = "StagePathList";
 
 	static const char* cDescTextPosition = "DescTextPosition";
@@ -73,9 +78,10 @@ private:
 	void InitShader();
 	//テクスチャの読み込み
 	void InitUI();
-
+	//選択したステージの一時セーブ
+	void StageSelectSave();
 private:
-
+	
 	//Luaデータベース
 	NcgLuaDatabase mLuaDb;
 	//テクスチャマネージャ
@@ -92,9 +98,6 @@ private:
 	//操作説明テキスト
 	MSSprite2DResource mDescText;
 
-	//サムネイル
-	std::vector<MSSprite2DResource>mThumnails;
-	MSSprite2DResource* mActiveThumbnail;
 
 	//ステージリスト
 	StageSelectList mSelectList;

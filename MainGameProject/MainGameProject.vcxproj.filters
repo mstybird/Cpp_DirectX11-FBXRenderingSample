@@ -438,8 +438,12 @@
     <ClCompile Include="Source\Game\Scene\MyScene\TimeOver.cpp">
       <Filter>Game\Scene\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Include\StageSelectList.cpp" />
-    <ClCompile Include="Include\StageSelect.cpp" />
+    <ClCompile Include="Include\StageSelect.cpp">
+      <Filter>Game\Scene\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\StageSelectList.cpp">
+      <Filter>Game\Scene\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\NoUse\2DSprite.txt">

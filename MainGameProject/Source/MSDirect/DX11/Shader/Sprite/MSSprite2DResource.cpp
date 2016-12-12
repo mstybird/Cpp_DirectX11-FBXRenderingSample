@@ -16,7 +16,8 @@ MSSpriteBaseResource::MSSpriteBaseResource():
 	mSplitImageX{ 0.0f,1.0f },
 	mSplitImageY{ 0.0f,1.0f },
 	mMatrix{ std::make_shared<DXMatrix>() },
-	mUpdateFlag{false}
+	mUpdateFlag{false},
+	mRotation{0.0f}
 {
 }
 void MSSpriteBaseResource::sInitialize(ID3D11Device * pDevice)
@@ -54,6 +55,16 @@ void MSSpriteBaseResource::SetPosition(const DXVector2 & pPosition)
 void MSSpriteBaseResource::SetPosition(const DXVector3 & pPosition)
 {
 	*mPosition = pPosition;
+}
+
+void MSSpriteBaseResource::SetRotation(const float aDegree)
+{
+	mRotation = aDegree;
+}
+
+void MSSpriteBaseResource::AddRotation(const float aDegree)
+{
+	mRotation += aDegree;
 }
 
 void MSSpriteBaseResource::SetPivot(const DXVector2 & pPivot)
@@ -155,12 +166,12 @@ const std::weak_ptr<DXVector2>  MSSpriteBaseResource::GetScale() const
 
 const std::weak_ptr<DXMatrix> MSSpriteBaseResource::GetMatrix()
 {
-	DXMatrix lTrans, lScale;
+	DXMatrix lTrans, lScale, lRotation;
 	
 	lTrans.Translation(*mPosition);
 	lScale.Scaling({ mScale->x,mScale->y });
-	
-	*mMatrix = lScale*lTrans;
+	lRotation.RotationZ(mRotation, TYPE_ANGLE::DEGREE);
+	*mMatrix = lScale*lRotation*lTrans;
 	return mMatrix;
 }
 

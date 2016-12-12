@@ -1,5 +1,7 @@
 #include"DX11FbxLoader.h"
 #include<Shlwapi.h>
+#include<algorithm>
+#include<string>
 #pragma comment(lib,"shlwapi.lib")
 #pragma warning(disable : 4800)
 
@@ -300,11 +302,38 @@ void DX11FbxLoader::LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLa
 				if (lStatus)filePath = lResolvedFileName;
 			}
 
+			//読み込めなかった場合
+			if (!lStatus) {
+
+
+				auto lReplace=[](std::string aString,const std::string aTargetStr,const std::string aReplaceStr)->std::string
+				{
+					std::string::size_type  Pos(aString.find(aTargetStr));
+
+					while (Pos != std::string::npos)
+					{
+						aString.replace(Pos, aTargetStr.length(), aReplaceStr);
+						Pos = aString.find(aTargetStr, Pos + aReplaceStr.length());
+					}
+
+					return std::move(aString);
+				};
+
+				std::string lRelativePath = lFileTexture->GetRelativeFileName();
+				lRelativePath = lReplace(lRelativePath, "../", "");
+				lRelativePath = lReplace(lRelativePath, "..\\", "");
+				//printf("%s\n", lResolvedFileName.Buffer());
+				//モデルファイルのカレントディレクトリからの相対パスで読み込み
+				const FbxString lResolvedFileName = FbxPathUtils::Bind(lAbsFolderName, lRelativePath.c_str());
+
+				lStatus = (bool)PathFileExists(lResolvedFileName.Buffer());
+				if (lStatus)filePath = lResolvedFileName;
+			}
+
 
 			//読み込めなかった場合
 			if (!lStatus) {
 				//カレントディレクトリにあれば読み込む
-				// Load texture from file name only (relative to FBX file)
 				const FbxString lTextureFileName = FbxPathUtils::GetFileName(lFileName);
 				const FbxString lResolvedFileName = FbxPathUtils::Bind(lAbsFolderName, lTextureFileName);
 				lStatus = (bool)PathFileExistsA(lResolvedFileName.Buffer());

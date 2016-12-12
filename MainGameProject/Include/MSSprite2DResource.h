@@ -23,6 +23,8 @@ public:
 	DXTexture* GetTexture();
 	virtual void SetPosition(const DXVector2&pPosition);
 	virtual void SetPosition(const DXVector3&pPosition);
+	void SetRotation(const float aDegree);
+	void AddRotation(const float aDegree);
 	//ピボットを設定する
 	void SetPivot(const DXVector2&pPivot);
 	//ポリゴンサイズを設定する
@@ -62,6 +64,7 @@ protected:
 	std::shared_ptr<DXVector2> mPivot;		//中心となる位置
 	std::shared_ptr<DXVector2> mSize;		//描画サイズ
 	std::shared_ptr<DXVector2> mScale;		//拡大率
+	float mRotation;						//回転角度(ディグリー)
 	DXVector2 mSplitPolygonX;				//ポリゴンの切り取り(水平)
 	DXVector2 mSplitPolygonY;				//ポリゴンの切り取り(垂直)
 	DXVector2 mSplitImageX;					//イマージの切り取り(水平)

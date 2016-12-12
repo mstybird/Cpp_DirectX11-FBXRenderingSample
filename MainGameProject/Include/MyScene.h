@@ -20,6 +20,7 @@
 #include<DX11TextureManager.hpp>
 #include"TimeOver.h"
 #include"Result.h"
+#include"StageSelectList.h"
 namespace ValueMyScene {
 
 	//Effect50~99
@@ -253,6 +254,7 @@ namespace ValueMyScene {
 }
 class MyMSScene :public MSSceneBase {
 public:
+
 	MyMSScene();
 	~MyMSScene();
 private:
@@ -267,6 +269,9 @@ private:
 private:
 	//フォントの初期化
 	void InitializeFont();
+	//ステージデータ情報の読み込み
+	void InitializeStageData();
+
 	//UIの初期化
 	void InitializeUI();
 	//Effectの初期化
@@ -342,4 +347,8 @@ private:
 	int mSceneCounter;
 	//時間制限が来たかどうか
 	bool mIsTimeOver;
+
+	//ステージデータ群
+	StageData mStageData;
+
 };

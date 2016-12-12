@@ -53,9 +53,9 @@ struct StatusField {
 	void InitializeTime(const int mLimitSecond);
 	void InitEffect(::Comfort::EfkManager*aManager, ::Comfort::EffectDatabase*aDb, const int aBallGetID, const int aKillID);
 	void InitRenderAndShader(MS3DRender& aRender, MSBase3DShader&aShader);
-	void CreateFieldNodes();
-	void CreateSpawnCharaNodes();
-	void CreateSpawnBallNodes();
+	void CreateFieldNodes(const std::string& aAIMap);
+	void CreateSpawnCharaNodes(const std::string& aSpawnMapBlack, const std::string& aSpawnMapWhite);
+	void CreateSpawnBallNodes(const std::string& aBallMap);
 	void InitGoalIndex(const int aWhiteGoalIndex, const int aBlackGoalIndex);
 	std::vector<Dijkstra::Node*>GetFieldNodesClone();
 	//キャラクターをリスポーンさせる

@@ -19,15 +19,15 @@ ThumbnailTexturePath="Resource/UI/StageSelect/StageThumbnail.png"
 
 
 --StageListFrame
-StageListFramePosition={13,13}
-StageListFrameSize={300,140}
+StageListFramePosition={13,260}
+StageListFrameSize={400,140}
 StageListFrameScale={1.0,1.0}
 StageListFrameTexturePath="Resource/UI/StageSelect/StageTextList.png"
 
---StageListFrame
-ButtonPosition={13,13}
+--Buttons
+ButtonPosition={13,300}
 ButtonOffset={0,45}
-ButtonSize={100,30}
+ButtonSize={200,40}
 ButtonScale={1.0,1.0}
 
 
@@ -36,7 +36,9 @@ ButtonScale={1.0,1.0}
 
 --StageList
 StagePathList={
+    "Resource/Script/StageSample.lua",
     "Resource/Script/StageSample.lua"
+    
 }
 
 --DescText

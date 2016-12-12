@@ -1,0 +1,5 @@
+Resource/NodeMap/fieldNodes.anm
+Resource/NodeMap/spawnTeamBlack.anm
+Resource/NodeMap/spawnTeamWhite.anm
+Resource/NodeMap/spawnBall.anm
+Resource/Script/GamePlayModel.lua

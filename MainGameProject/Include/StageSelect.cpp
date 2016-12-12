@@ -1,13 +1,19 @@
 #include "StageSelect.h"
 #include"MSDirect.h"
+#include<sstream>
+#include<fstream>
+#include<algorithm>
+#include<direct.h>
 void SceneStageSelect::Initialize()
 {
 	InitShader();
 	InitUI();
+	StageSelectSave();
 }
 
 void SceneStageSelect::Update()
 {
+	mSelectTitle.AddRotation(1.0f);
 }
 
 void SceneStageSelect::KeyDown(MSKEY pKey)
@@ -97,7 +103,7 @@ void SceneStageSelect::InitUI()
 		mSelectTitle.SetPosition({ lPosition[0],lPosition[1] });
 		mSelectTitle.SetSize({ lSize[0], lSize[1] });
 		mSelectTitle.SetScale({ lScale[0], lScale[1] });
-
+		mSelectTitle.SetPivot({ 0.5f,0.5f });
 		ClearTemp();
 	}
 
@@ -135,4 +141,27 @@ void SceneStageSelect::InitUI()
 	}
 
 
+}
+
+void SceneStageSelect::StageSelectSave()
+{
+	std::stringstream lSaveStr;
+	auto lStageData = mSelectList.GetActiveData();
+	lSaveStr << lStageData->mAIMapFileName << std::endl;
+	lSaveStr << lStageData->mBlackSpawnMapFileName << std::endl;
+	lSaveStr << lStageData->mWhiteSpawnMapFileName << std::endl;
+	lSaveStr << lStageData->mBallSpawnMapFileName << std::endl;
+	lSaveStr << lStageData->mModelScriptName;
+	std::ofstream lOutFile;
+
+	lOutFile.open("Temp/Stage.dat");
+	if (!lOutFile) {
+		_mkdir("Temp");
+		lOutFile.open("Temp/Stage.dat");
+	}
+	std::string lOutStr = lSaveStr.str();
+	std::replace(lOutStr.begin(), lOutStr.end(), ' ', (char)-127);
+
+	lOutFile << lOutStr;
+	lOutFile.close();
 }

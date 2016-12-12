@@ -81,7 +81,7 @@ void DXMatrix::RotationY(float pAngle, TYPE_ANGLE pType)
 	if (pType == TYPE_ANGLE::DEGREE) {
 		pAngle = D3DXToRadian(pAngle);
 	}
-	D3DXMatrixRotationX(this, pAngle);
+	D3DXMatrixRotationY(this, pAngle);
 
 }
 
@@ -90,7 +90,7 @@ void DXMatrix::RotationZ(float pAngle, TYPE_ANGLE pType)
 	if (pType == TYPE_ANGLE::DEGREE) {
 		pAngle = D3DXToRadian(pAngle);
 	}
-	D3DXMatrixRotationX(this, pAngle);
+	D3DXMatrixRotationZ(this, pAngle);
 
 }
 
