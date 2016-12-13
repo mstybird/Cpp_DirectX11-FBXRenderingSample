@@ -58,6 +58,8 @@ public:
 	void ActiveNext();
 	//ボタンを押す
 	void PushButton();
+	//ボタンを離す
+	void PopButton();
 	//アクティブデータの参照を取得する
 	StageData* GetActiveData();
 

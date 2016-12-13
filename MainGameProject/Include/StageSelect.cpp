@@ -1,14 +1,18 @@
 #include "StageSelect.h"
 #include"MSDirect.h"
+#include"MyScene.h"
+#include"Title.h"
+#include"MSKeyCodeList.h"
 #include<sstream>
 #include<fstream>
 #include<algorithm>
 #include<direct.h>
+#include<memory>
 void SceneStageSelect::Initialize()
 {
 	InitShader();
 	InitUI();
-	StageSelectSave();
+	
 }
 
 void SceneStageSelect::Update()
@@ -18,12 +22,31 @@ void SceneStageSelect::Update()
 
 void SceneStageSelect::KeyDown(MSKEY pKey)
 {
+	switch (pKey)
+	{
+	case MSKEY::UP:
+		mSelectList.ActiveBack();
+		break;
+	case MSKEY::DOWN:
+		mSelectList.ActiveNext();
+		break;
+	case MSKEY::ENTER:
+		StageSelectSave();
+		MSDirect::SetScene(std::make_unique<MyMSScene>());
+
+		break;
+	case MSKEY::BACKSPACE:
+		MSDirect::SetScene(std::make_unique<SceneTitle>());
+		break;
+	default:
+		break;
+	}
 }
 
 void SceneStageSelect::KeyHold(MSKEY pKey)
 {
-}
 
+}
 void SceneStageSelect::Render()
 {
 	

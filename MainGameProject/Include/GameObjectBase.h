@@ -51,7 +51,7 @@ public:
 	float GetDistance(GameObjectBase*aTarget);
 
 protected:
-	virtual void UpdateMesh();
+	virtual bool UpdateMesh();
 	virtual std::vector<GameObjectBase*> UpdateCollision(bool pIsUpdatePosition);
 	//ƒ‰ƒ€ƒ_—p
 protected:

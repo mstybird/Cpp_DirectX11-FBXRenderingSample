@@ -121,43 +121,28 @@ void Enemy::Update()
 		default:
 			break;
 		}
+		//行動処理が全て終わってから衝突判定
+		UpdateCollision(true);
 	}
 
 
 	UpdateAlive();
 
-	//行動処理が全て終わってから衝突判定
-	UpdateCollision(true);
 	UpdateCamera();
 }
 
-void Enemy::UpdateAlive()
+void Enemy::LivingIsRespawnWaitProc()
 {
 
-	switch (mStatus->mLive)
-	{
-	case CharaStateFlag::ALIVE:
-		break;
-	case CharaStateFlag::DEAD:
-		mStatus->mLive = CharaStateFlag::RESPAWNWAIT;
-		break;
-	case CharaStateFlag::RESPAWNWAIT:
-	{
-		//スポーン
-		//InitStatus();
-		mAI->ClearAI();
-		Respawn();
-		GetWorld()->mPosition;
-		printf("%.2f,%.2f,%.2f\n", GetWorld()->mPosition->x, GetWorld()->mPosition->y, GetWorld()->mPosition->z);
-		auto lNowNode = mAI->GetNearNodeList(*GetWorld()->mPosition)[0];
-		mAI->SetNowNode(lNowNode);
-		mRayPick->SetFramePosition(*mTransform);
+	//スポーン
+	//InitStatus();
+	mAI->ClearAI();
+	Respawn();
+	GetWorld()->mPosition;
+	auto lNowNode = mAI->GetNearNodeList(*GetWorld()->mPosition)[0];
+	mAI->SetNowNode(lNowNode);
+	mRayPick->SetFramePosition(*mTransform);
 
-	}
-		break;
-	default:
-		break;
-	}
 
 }
 
@@ -339,6 +324,14 @@ GameObjectBase * Enemy::IsCulling()
 	//MSCullingFrustum cf;
 	for (auto&lTarget : mSearchTargets) {
 		if (/*cf.IsCullingWorld(*mTransform, *lTarget)*/true) {
+
+			//キャラクターであり、死んでいれば対象外
+			auto lChara = dynamic_cast<CharacterBase*>(lTarget);
+			if (lChara) {
+				if (lChara->GetStatus()->mLive != CharaStateFlag::ALIVE) {
+					continue;
+				}
+			}
 
 			auto lTmpThis = mTransform;
 			DXVector3 lTmpSThis = *GetWorld()->mPosition;
@@ -753,15 +746,21 @@ void Enemy::BetaInSightAttack()
 	//ターゲットの方向を向く
 	float lRotateY = MSHormingY(*mTransform, *GetStatus<EnemyStatus>()->mTargetChara->GetTransform(), 3.0f);
 	if (IsZero(lRotateY, 0.25f)) {
-		//振り向ききれば攻撃
+		//振り向ききれば攻撃登録
 		//弾の発射
-
-		ChangeStates::BulletShot(mBullets, this, mBltManager);
-		//エネルギーがなくなった場合、
-		//次のAIへ移行する
-		if (!ChangeStates::IsAttackDo(this, mBltManager)) {
-			mAI->NextAI();
+		if (mIsBulletShotWaiting == false) {
+			if (ChangeStates::IsAttackDo(this, mBltManager)) {
+				if (!ChangeStates::IsBulletWaiting(this, mBltManager)) {
+					ChangeStates::FirstBulletProc(this, mBltManager);
+					;
+				}
+			}
+			else {
+				mAI->NextAI();
+			}
 		}
+
+
 	}
 	else {
 		//振り向き処理

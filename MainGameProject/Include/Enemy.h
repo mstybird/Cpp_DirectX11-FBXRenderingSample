@@ -31,8 +31,10 @@ public:
 
 	//毎フレーム行うエネミーの更新処理
 	void StopAI();
+	//毎フレーム更新
 	void Update()override;
-	void UpdateAlive()override;
+	//毎フレーム生存チェック
+	void LivingIsRespawnWaitProc()override;
 
 	void Render()override;
 

@@ -23,6 +23,8 @@ public:
 
 	void Create(std::vector<std::unique_ptr<NBullet>>&aOutBulletList, CharacterBase* aShoter);
 
+	void ShotFirstEffect(CharacterBase* aShoter);
+
 	StatusBulletBase* GetStatus() {
 		return &mStatus;
 	}
@@ -44,6 +46,7 @@ private:
 	//”­ŽËŽå
 	CharacterBase* mParentPtr;
 
+	::Comfort::EfkObject mFirstEffect;
 	::Comfort::EfkObject mShotEffect;
 	::Comfort::EfkObject mHitEffect;
 	::Comfort::EfkObject mKillEffect;

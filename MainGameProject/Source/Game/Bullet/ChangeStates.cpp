@@ -46,6 +46,21 @@ namespace ChangeStates {
 		return lHoldEnergy.GetNow() >= lBulletCost;
 	}
 
+	bool IsBulletWaiting(CharacterBase * aAttakcer, BulletManager * aBulletManager)
+	{
+		auto lStatus = aBulletManager->GetActiveStatus(aAttakcer);
+
+		return lStatus->mInterval.GetMaxRemainPer() > 0.0f;
+	}
+
+	void FirstBulletProc(CharacterBase * aAttakcer, BulletManager * aBulletManager)
+	{
+		auto lBullet = aBulletManager->GetActiveBullet(aAttakcer);
+		lBullet->ShotFirstEffect(aAttakcer);
+		aAttakcer->SetBulletShotInterval(10);
+		aAttakcer->SetBulletShotWait(true);
+	}
+
 	bool BulletShot(std::vector<std::unique_ptr<NBullet>>& aBulletList, CharacterBase * aAttakcer, BulletManager*aBulletManager)
 	{
 		auto lBullet = aBulletManager->GetActiveBullet(aAttakcer);

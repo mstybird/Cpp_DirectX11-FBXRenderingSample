@@ -36,6 +36,8 @@ struct StatusBase {
 	//生存関係フラグ
 	CharaStateFlag mLive;
 
+	//死んでからのフレーム数
+	int mDeadFrame;
 
 
 //	int mEnergy;

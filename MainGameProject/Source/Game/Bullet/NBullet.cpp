@@ -5,7 +5,8 @@
 #include"StatusBase.h"
 #include"StatusField.h"
 #include"MS3DRender.h"
-#include<DXMath.hpp>
+#include<DX11RenderResource.h>
+#include<MyScene.h>
 NBullet::~NBullet()
 {
 }
@@ -102,8 +103,28 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 
 }
 
+void NBullet::ShotFirstEffect(CharacterBase * aShoter)
+{
+	mFirstEffect = this->mHitEffect;
+
+	DXMatrix mMatrix = *aShoter->GetWorld()->GetMatrix().lock();
+	DXVector3 lPosition;
+	DXVector3 lOffset{ 0.0f,0.0f,1.0f };
+	D3DXVec3TransformCoord(&lPosition, &lOffset, &mMatrix);
+
+	mFirstEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
+	DXVector3 lRotate = *aShoter->GetWorld()->mRotationCenter;
+	mFirstEffect.Play();
+	mFirstEffect.SetRotation({
+		lRotate.x,
+		lRotate.y,
+		lRotate.z
+	});
+}
+
 void NBullet::Update()
 {
+
 	if (!mActive)return;
 
 	GetWorld()->AddT(this->mStatus.mDirection*this->mStatus.mVelocity);
@@ -137,10 +158,6 @@ void NBullet::Update()
 		//死んでなければ処理しない
 		if (lIsDead == false)break;
 
-		//死んだキャラのステータスを取得
-		auto lStatus = lChara->GetStatus();
-		lStatus->mLive = CharaStateFlag::DEAD;
-
 		//キルエフェクト再生
 		this->mKillEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
 		lRotate = *this->GetWorld()->mRotationCenter;
@@ -151,6 +168,15 @@ void NBullet::Update()
 			lRotate.z
 		});
 
+
+		//死んだキャラのモーションを変更
+		lChara->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimAttacked);
+		lChara->GetTransform()->GetMesh()->SetLoopFlag(false);
+		lChara->GetTransform()->GetMesh()->SetFrontFrame();
+		//死んだキャラのステータスを取得
+		auto lStatus = lChara->GetStatus();
+		lStatus->mLive = CharaStateFlag::DEAD;
+		lStatus->mDeadFrame = 0;
 
 		//ボールを持っていた場合、ボールをフィールドにセット
 		if (lStatus->mBall != nullptr) {

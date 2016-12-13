@@ -132,13 +132,13 @@ float GameObjectBase::GetDistance(GameObjectBase * aTarget)
 	return lDistance;
 }
 
-void GameObjectBase::UpdateMesh()
+bool GameObjectBase::UpdateMesh()
 {
 	//メッシュの更新
-	mTransform->GetMesh()->NextFrame();
+	auto lPlayEnd = mTransform->GetMesh()->NextFrame();
 	mTransform->GetMesh()->Update();
 	
-
+	return lPlayEnd;
 }
 
 std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosition)

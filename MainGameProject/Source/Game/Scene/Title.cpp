@@ -8,6 +8,9 @@ void SceneTitle::Initialize()
 
 	InitUI();
 
+
+	sp=sd.CreateSoundFromFile("Resource/Sound/test.wav");
+	sp.Play();
 }
 void SceneTitle::Update()
 {

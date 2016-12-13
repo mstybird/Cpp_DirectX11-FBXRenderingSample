@@ -47,6 +47,12 @@ bool MSFbxObject::NextFrame()
 	return lResult;
 }
 
+int MSFbxObject::GetAnimation()
+{
+	return mCurrentAnimation;
+}
+
+
 void MSFbxObject::SetFrontFrame()
 {
 	mCurrentFrame = mStartFrame;

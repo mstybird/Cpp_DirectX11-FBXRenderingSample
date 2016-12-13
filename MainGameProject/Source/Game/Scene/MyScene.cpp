@@ -104,12 +104,6 @@ void MyMSScene::Initialize()
 
 void MyMSScene::Update() {
 
-
-
-
-
-
-
 	mEfkManager.Update();
 	mField.Update();
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
@@ -134,37 +128,27 @@ void MyMSScene::Update() {
 
 void MyMSScene::KeyDown(MSKEY pKey)
 {
-	static int count = 0;
+
+	bool lIsRun{ false };
+
 	if (mIsTimeOver == false) {
 		switch (pKey)
 		{
 		case MSKEY::CH_W:
-			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
-			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+			lIsRun = true;
 			break;
 		case MSKEY::CH_S:
-			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
-			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+			lIsRun = true;
 			break;
 		case MSKEY::CH_A:
-			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
-			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+			lIsRun = true;
 			break;
 		case MSKEY::CH_D:
-			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
-			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+			lIsRun = true;
 			break;
 		case MSKEY::SPACE:
 			mPlayer.AddBullet();
 			break;
-		case MSKEY::ENTER:
-		{
-			DXVector3 Pos;
-			mPlayer.GetWorld()->GetMatrix().lock()->GetT(Pos);
-			printf("%.2f,%.2f,%.2f\n", Pos.x, Pos.y, Pos.z);
-			++count;
-		}
-		break;
 		default:
 			break;
 		}
@@ -202,6 +186,13 @@ void MyMSScene::KeyDown(MSKEY pKey)
 			}
 		}
 	}
+
+	if (lIsRun) {
+		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
+		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+
+	}
+
 }
 
 void MyMSScene::KeyHold(MSKEY pKey)

@@ -23,6 +23,13 @@ namespace ChangeStates {
 	//発射可能かどうか
 	//発射予定キャラ、
 	bool IsAttackDo(CharacterBase*lAttackChara, BulletManager*aBulletManager);
+
+	//弾のインターバルが残っているか調べる
+	bool IsBulletWaiting(CharacterBase*lAttakcer, BulletManager*aBulletManager);
+	//弾の発動準備処理
+	void FirstBulletProc(CharacterBase*aAttakcer, BulletManager*aBulletManager);
+
+	//弾の発射
 	bool BulletShot(std::vector<std::unique_ptr<NBullet>>&aBulletList, CharacterBase*lAttakcer, BulletManager*aBulletManager);
 
 }

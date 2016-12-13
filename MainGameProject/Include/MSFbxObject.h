@@ -10,6 +10,7 @@ public:
 	//フレームの更新
 	void Update();
 	//フレームを指定スピードで進める
+	//再生が終了した場合、trueを返す
 	bool NextFrame();
 	//再生速度倍率を変更する
 	void SetSpeed(float aSpeed = 1.0f) {}
@@ -18,6 +19,8 @@ public:
 		mCurrentAnimation = mIndex;
 		mManager->mLoader->SetAnimation(mCurrentAnimation);
 	}
+	//現在のモーションを取得する
+	int GetAnimation();
 	//最初のフレームに移動する
 	void SetFrontFrame();
 	//ループ再生の設定

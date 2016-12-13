@@ -7,6 +7,7 @@
 #include"MSSprite2DResource.h"
 #include"Button.h"
 #include"Toggle.h"
+#include<DXAL.hpp>
 #include<memory>
 #include<iostream>
 #include<vector>
@@ -96,4 +97,7 @@ private:
 	Button mBtnStart;
 	Button mBtnExit;
 	Toggle mButtonList;
+	SoundDevice sd;
+	SoundPlayer sp;
+
 };

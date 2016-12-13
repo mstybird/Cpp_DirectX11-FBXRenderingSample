@@ -58,23 +58,11 @@ void Player::Update()
 
 }
 
-void Player::UpdateAlive()
+void Player::LivingIsRespawnWaitProc()
 {
-	switch (mStatus->mLive)
-	{
-	case CharaStateFlag::ALIVE:
-		break;
-	case CharaStateFlag::DEAD:
-		mStatus->mLive = CharaStateFlag::RESPAWNWAIT;
-		break;
-	case CharaStateFlag::RESPAWNWAIT:
-		//ÉXÉ|Å[Éì
-		Respawn();
 
-		break;
-	default:
-		break;
-	}
+	Respawn();
+
 }
 
 
@@ -87,7 +75,15 @@ void Player::Render()
 
 void Player::AddBullet()
 {
-	ChangeStates::BulletShot(mBullets, this, mBltManager);
+	if(mIsBulletShotWaiting==false){
+		if (ChangeStates::IsAttackDo(this, mBltManager)) {
+			if (!ChangeStates::IsBulletWaiting(this, mBltManager)) {
+				ChangeStates::FirstBulletProc(this, mBltManager);
+			}
+		}
+	}
+
+
 }
 
 

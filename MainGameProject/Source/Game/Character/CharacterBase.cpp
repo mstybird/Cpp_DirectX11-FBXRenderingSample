@@ -12,12 +12,16 @@
 #include"StatusBulletBase.h"
 #include"BulletManager.h"
 #include"MSCollisionRay.h"
+#include"ChangeStates.hxx"
+#include"MyScene.h"
 #include<cassert>
 
 CharacterBase::CharacterBase(const DXVector3 & aCameraLen, const DXVector3 & aCameraOffset)
 	:
 	cCameraLen{ aCameraLen },
-	cCameraOffset{aCameraOffset}
+	cCameraOffset{aCameraOffset},
+	mIsBulletShotWaiting{ false },
+	mBulletShotInterval{ -1 }
 {
 	mCameraOffset = cCameraOffset;
 	mCameraLen = cCameraLen;
@@ -49,6 +53,33 @@ void CharacterBase::InitStatus(const StatusBase * aInitStatus)
 	lStatus->mAllyNear = false;
 	lStatus->mBallAllyNear= false;
 	lStatus->mTargetChara = nullptr;
+}
+
+void CharacterBase::UpdateAlive()
+{
+	switch (mStatus->mLive)
+	{
+	case CharaStateFlag::ALIVE:
+		break;
+	case CharaStateFlag::DEAD:
+		LivingIsDeadProc();
+		if (mStatus->mDeadFrame > 60) {
+			mStatus->mLive = CharaStateFlag::RESPAWNWAIT;
+		}
+		else {
+			++mStatus->mDeadFrame;
+		}
+
+		break;
+	case CharaStateFlag::RESPAWNWAIT:
+	{
+		LivingIsRespawnWaitProc();
+
+	}
+	break;
+	default:
+		break;
+	}
 }
 
 void CharacterBase::UpdateCamera()
@@ -98,6 +129,20 @@ void CharacterBase::UpdateCamera()
 	GetView()->SetCamera(*GetWorld(), mCameraLen, mCameraOffset);
 }
 
+void CharacterBase::UpdateMotion()
+{
+	auto lNowMotion = this->GetTransform()->GetMesh()->GetAnimation();
+
+	switch (lNowMotion)
+	{
+	case ValueMyScene::Chara::cAnimAttacked:
+		break;
+	default:
+		break;
+	}
+
+}
+
 void CharacterBase::SetField(StatusField&pSetStatus)
 {
 	mField = &pSetStatus;
@@ -120,8 +165,36 @@ void CharacterBase::Respawn()
 	mField->Respawn(this);
 }
 
+void CharacterBase::SetBulletShotWait(bool aIsWait)
+{
+	mIsBulletShotWaiting = aIsWait;
+}
+
+void CharacterBase::SetBulletShotInterval(int aIntervalFrame)
+{
+	mBulletShotInterval = aIntervalFrame;
+}
+
+void CharacterBase::LivingIsDeadProc()
+{
+	if (mStatus->mDeadFrame > 60) {
+		mStatus->mLive = CharaStateFlag::RESPAWNWAIT;
+	}
+	else {
+		++mStatus->mDeadFrame;
+	}
+}
+
 void CharacterBase::UpdateBullets()
 {
+	if (mIsBulletShotWaiting==true) {
+		--mBulletShotInterval;
+		if (mBulletShotInterval <= 0) {
+			ChangeStates::BulletShot(mBullets, this, mBltManager);
+			mIsBulletShotWaiting = false;
+		}
+	}
+
 	//アクティブでない弾の削除
 	{
 		auto lBegin = mBullets.begin();

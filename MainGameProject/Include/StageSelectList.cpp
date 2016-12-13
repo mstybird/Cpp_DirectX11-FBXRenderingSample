@@ -127,6 +127,26 @@ void StageSelectList::Initialize(
 
 }
 
+void StageSelectList::ActiveBack()
+{
+	mstageToggle.ActiveBack();
+}
+
+void StageSelectList::ActiveNext()
+{
+	mstageToggle.ActiveNext();
+}
+
+void StageSelectList::PushButton()
+{
+	mstageToggle.PushButton();
+}
+
+void StageSelectList::PopButton()
+{
+	mstageToggle.PopButton();
+}
+
 StageData * StageSelectList::GetActiveData()
 {
 	int lIndex = mstageToggle.GetActiveIndex();
