@@ -7,12 +7,15 @@
 #include"MSSprite2DResource.h"
 #include"Button.h"
 #include"Toggle.h"
+#include<CppTweener.h>
+#include<MSThread.hpp>
 #include<DXAL.hpp>
 #include<memory>
 #include<iostream>
 #include<vector>
 
 namespace ValueTitle{
+	//0~499
 	namespace UI {
 		namespace Lua {
 			static const int cLuaID = 0;
@@ -64,6 +67,15 @@ namespace ValueTitle{
 
 
 	}
+
+	namespace Sound{
+		static const char* cLuaPath = "Resource/Script/TitleSound.lua";
+		static const int cLuaID = 500;
+
+		static const char* cBGMFilePath = "BGMPath";
+		static const char* cSESelectPath = "SESelectPath";
+		static const char* cSEEnterPath = "SEEnterPath";
+	}
 }
 
 class SceneTitle :public MSSceneBase{
@@ -76,12 +88,30 @@ public:
 	void Destroy() override {}
 
 private:
+
+	void UpdateSceneChange();
+
 	//2Dシェーダの初期化
 	void InitShader();
 	//テクスチャの読み込み
 	void InitUI();
+	//サウンドの初期化
+	void InitSound();
 
+	//ステージセレクトシーンチェンジ
+	void SceneChange();
 private:
+
+	enum {
+		eChangeToStageSelect = 0,
+		eChangeToGameEnd
+	};
+
+	enum class SceneSequence {
+		ChangeFirst,
+		ChangeLoop,
+		ChangeEnd
+	};
 
 	//Luaデータベース
 	NcgLuaDatabase mLuaDb;
@@ -97,7 +127,21 @@ private:
 	Button mBtnStart;
 	Button mBtnExit;
 	Toggle mButtonList;
-	SoundDevice sd;
-	SoundPlayer sp;
+	SoundDevice mSoundDevice;
+	SoundPlayer mBGM;
+	SoundPlayer mSESelect;
+	SoundPlayer mSEEnter;
 
+	bool mIsSceneChange = false;
+	//シーン遷移に使う遅延評価スレッド
+	MSThread mScneThread;
+	//シーン遷移に使うシーケンスフラグ
+	SceneSequence mSequence;
+	uint32_t mSceneTime;
+
+	//遷移シーン
+	std::unique_ptr<MSSceneBase> mScene;
+
+	//Tween
+	tween::Tweener mTweener;
 };

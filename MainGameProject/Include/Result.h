@@ -4,6 +4,21 @@
 #include"Toggle.h"
 #include"Button.h"
 #include"StatusField.h"
+#include<DXAL.hpp>
+
+namespace ValueResult {
+	//ID:10000~19999
+	namespace Sound {
+		static const int cLuaID = 10000;
+		
+		static const char* cLuaPath = "Resource/Script/ResultSound.lua";
+		static const char* cTimeUpPath = "SETimeUpPath";
+		static const char* cSelectPath = "SESelectPath";
+		static const char* cEnterPath = "SEEnterPath";
+		static const char* cBGMPath = "BGMPath";
+	}
+}
+
 struct ResultValue {
 	IssueFlag mIssue;
 	int mWhiteScore;
@@ -12,10 +27,12 @@ struct ResultValue {
 
 class DX11TextureManager;
 class MSSprite2DRender;
+class NcgLuaDatabase;
 class MySceneResult {
 public:
 	MySceneResult();
 	~MySceneResult();
+	void InitializeSound(NcgLuaDatabase& aDb);
 	void SetFrameTexture(DX11TextureManager * aManager, const int aFrameID);
 	void SetLogoTexture(DX11TextureManager * aManager, const int aWinID, const int aLoseID, const int aDrawID);
 	void SetButtonRetryTexture(DX11TextureManager * aManager, const int aNormalID, const int aActiveID, const int aPushID, const int aDisableID);
@@ -34,6 +51,14 @@ public:
 
 	//リザルトに使うデータを初期化する
 	void SetValues(const ResultValue& aValue);
+
+	//タイムアップSEを鳴らす
+	void PlaySETimeUp();
+	//BGMを再生する
+	void PlayBGM();
+
+
+
 	//リザルト描画
 	void Render(MSSprite2DRender&aRender);
 
@@ -68,9 +93,22 @@ private:
 	//ロゴ情報
 	DXVector2 mLogoPos;
 	DXVector2 mLogoSize;
-
+	//ボタンリストのトグル
 	Toggle mButtonList;
+	//リトライボタン
 	Button mButtonRetry;
+	//タイトルへ戻るボタン
 	Button mButtonToTitle;
+	//サウンドデバイス
+	SoundDevice mSoundDevice;
+	//リザルトBGM
+	SoundPlayer mBGM;
+	//決定音
+	SoundPlayer mSEEnter;
+	//選択音
+	SoundPlayer mSESelect;
+	//時間切れの音
+	SoundPlayer mSETimeUp;
+
 
 };

@@ -444,6 +444,9 @@
     <ClCompile Include="Include\StageSelectList.cpp">
       <Filter>Game\Scene\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Helper\CppTweener.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\NoUse\2DSprite.txt">
@@ -666,6 +669,9 @@
     </ClInclude>
     <ClInclude Include="Include\StageSelectList.h">
       <Filter>Game\Scene\StageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CppTweener.h">
+      <Filter>Helper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

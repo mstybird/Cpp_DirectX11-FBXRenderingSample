@@ -6,6 +6,7 @@
 #include"MSSprite2DRender.h"
 #include"MSSprite2DResource.h"
 #include"StageSelectList.h"
+#include<DXAL.hpp>
 #include<memory>
 #include<iostream>
 #include<vector>
@@ -19,48 +20,63 @@
 */
 
 namespace ValueSS {
-	static const int cLuaID = 0;
-	static const char* cLuaFilePath = "Resource/Script/StageSelect.lua";
 
-	static const char* cBackgroundPosition = "BackgroundPosition";
-	static const char* cBackgroundSize = "BackgroundSize";
-	static const char* cBackgroundScale = "BackgroundScale";
-	static const char* cBackGroundTexturePath = "BackgroundTexturePath";
+	namespace UI {
+		static const int cLuaID = 0;
+		static const char* cLuaFilePath = "Resource/Script/StageSelect.lua";
 
-	static const char* cTitlePosition = "TitlePosition";
-	static const char* cTitleSize = "TitleSize";
-	static const char* cTitleScale = "TitleScale";
-	static const char* cTitleTexturePath = "TitleTexturePath";
+		static const char* cBackgroundPosition = "BackgroundPosition";
+		static const char* cBackgroundSize = "BackgroundSize";
+		static const char* cBackgroundScale = "BackgroundScale";
+		static const char* cBackGroundTexturePath = "BackgroundTexturePath";
 
-	static const char* cThumnailPosition = "ThumbnailPosition";
-	static const char* cThumnailSize = "ThumbnailSize";
-	static const char* cThumnailScale = "ThumbnailScale";
-	static const char* cThumnailTexturePath = "ThumbnailTexturePath";
+		static const char* cTitlePosition = "TitlePosition";
+		static const char* cTitleSize = "TitleSize";
+		static const char* cTitleScale = "TitleScale";
+		static const char* cTitleTexturePath = "TitleTexturePath";
 
-	static const char* cStageListFramePosition = "StageListFramePosition";
-	static const char* cStageListFrameSize = "StageListFrameSize";
-	static const char* cStageListFrameScale = "StageListFrameScale";
-	static const char* cStageListFrameTexturePath = "StageListFrameTexturePath";
+		static const char* cThumnailPosition = "ThumbnailPosition";
+		static const char* cThumnailSize = "ThumbnailSize";
+		static const char* cThumnailScale = "ThumbnailScale";
+		static const char* cThumnailTexturePath = "ThumbnailTexturePath";
 
-	static const char* cButtonPosition = "ButtonPosition";
-	static const char* cButtonSize = "ButtonSize";
-	static const char* cButtonScale = "ButtonScale";
-	static const char* cButtonOffset = "ButtonOffset";
+		static const char* cStageListFramePosition = "StageListFramePosition";
+		static const char* cStageListFrameSize = "StageListFrameSize";
+		static const char* cStageListFrameScale = "StageListFrameScale";
+		static const char* cStageListFrameTexturePath = "StageListFrameTexturePath";
 
-	static const char* cStagePathList = "StagePathList";
+		static const char* cButtonPosition = "ButtonPosition";
+		static const char* cButtonSize = "ButtonSize";
+		static const char* cButtonScale = "ButtonScale";
+		static const char* cButtonOffset = "ButtonOffset";
 
-	static const char* cDescTextPosition = "DescTextPosition";
-	static const char* cDescTextSize = "DescTextSize";
-	static const char* cDescTextScale = "DescTextScale";
-	static const char* cDescTextTexturePath = "DescTextTexturePath";
+		static const char* cStagePathList = "StagePathList";
 
-	static const int cBackGroundID = 0;
-	static const int cTitleID = 10;
-	static const int cThumnailID = 20;
-	static const int cStageListFrameID = 30;
-	static const int cDescTextID = 30;
-	static const int cStagePathOffsetID = 500;
+		static const char* cDescTextPosition = "DescTextPosition";
+		static const char* cDescTextSize = "DescTextSize";
+		static const char* cDescTextScale = "DescTextScale";
+		static const char* cDescTextTexturePath = "DescTextTexturePath";
 
+		static const int cBackGroundID = 0;
+		static const int cTitleID = 10;
+		static const int cThumnailID = 20;
+		static const int cStageListFrameID = 30;
+		static const int cDescTextID = 30;
+		static const int cStagePathOffsetID = 500;
+
+	}
+
+	//ID:5000~
+	namespace Sound {
+		static const int cLuaID = 5000;
+		static const char* cLuaPath = "Resource/Script/StageSelectSound.lua";
+
+
+		static const char* cBGMFilePath = "BGMPath";
+		static const char* cSESelectPath = "SESelectPath";
+		static const char* cSEEnterPath = "SEEnterPath";
+
+	}
 
 }
 
@@ -78,6 +94,8 @@ private:
 	void InitShader();
 	//テクスチャの読み込み
 	void InitUI();
+	//サウンドの読み込み
+	void InitSound();
 	//選択したステージの一時セーブ
 	void StageSelectSave();
 private:
@@ -101,5 +119,8 @@ private:
 
 	//ステージリスト
 	StageSelectList mSelectList;
-
+	SoundDevice mSoundDevice;
+	SoundPlayer mBGM;
+	SoundPlayer mSESelect;
+	SoundPlayer mSEEnter;
 };

@@ -61,7 +61,7 @@ void MySceneTimeOver::UpdateStart(const IssueFlag aIsWin)
 	mIsUpdating = true;
 }
 
-void MySceneTimeOver::Update()
+SceneTimeOverSequence MySceneTimeOver::Update()
 {
 	switch (mSequence)
 	{
@@ -84,6 +84,7 @@ void MySceneTimeOver::Update()
 		break;
 	}
 	++mFrameCounter;
+	return mSequence;
 }
 
 bool MySceneTimeOver::IsUpdateing()

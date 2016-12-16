@@ -1,4 +1,5 @@
 #include "Result.h"
+#include<NcgLua.hpp>
 #include<iomanip>
 #include <sstream>
 MySceneResult::MySceneResult()
@@ -38,6 +39,29 @@ MySceneResult::MySceneResult()
 
 MySceneResult::~MySceneResult()
 {
+}
+
+void MySceneResult::InitializeSound(NcgLuaDatabase& aDb)
+{
+	using namespace ValueResult::Sound;
+	aDb.Load(cLuaPath, cLuaID);
+	std::string lFileName;
+	auto lManager = aDb.GetManager(cLuaID);
+	lManager->GetGlobal(cBGMPath, lFileName);
+	mBGM = mSoundDevice.CreateSoundFromFile(lFileName);
+
+	lManager->GetGlobal(cSelectPath, lFileName);
+	mSESelect = mSoundDevice.CreateSoundFromFile(lFileName);
+
+	lManager->GetGlobal(cEnterPath, lFileName);
+	mSEEnter = mSoundDevice.CreateSoundFromFile(lFileName);
+
+	lManager->GetGlobal(cTimeUpPath, lFileName);
+	mSETimeUp = mSoundDevice.CreateSoundFromFile(lFileName);
+
+
+	mBGM.SetLoop(true);
+
 }
 
 void MySceneResult::SetFrameTexture(DX11TextureManager * aManager, const int aFrameID)
@@ -127,6 +151,16 @@ void MySceneResult::SetValues(const ResultValue & aValue)
 	mActiveLogo->SetSize(mLogoSize);
 }
 
+void MySceneResult::PlaySETimeUp()
+{
+	mSETimeUp.Play();
+}
+
+void MySceneResult::PlayBGM()
+{
+	mBGM.Play();
+}
+
 
 
 void MySceneResult::Render(MSSprite2DRender & aRender)
@@ -144,16 +178,19 @@ void MySceneResult::Render(MSSprite2DRender & aRender)
 void MySceneResult::ButtonBack()
 {
 	mButtonList.ActiveBack();
+	mSESelect.Play();
 }
 
 void MySceneResult::ButtonNext()
 {
 	mButtonList.ActiveNext();
+	mSESelect.Play();
 }
 
 void MySceneResult::ButtonPush()
 {
 	mButtonList.PushButton();
+	mSEEnter.Play();
 }
 
 void MySceneResult::ButtonUp()

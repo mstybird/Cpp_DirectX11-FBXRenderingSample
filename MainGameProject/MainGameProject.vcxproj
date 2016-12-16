@@ -73,6 +73,7 @@
     <ClCompile Include="Source\Game\UI\TimeView.cpp" />
     <ClCompile Include="Source\Game\UI\Toggle.cpp" />
     <ClCompile Include="Source\Game\UI\UIBase.cpp" />
+    <ClCompile Include="Source\Helper\CppTweener.cpp" />
     <ClCompile Include="Source\Helper\Helper.cpp" />
     <ClCompile Include="Source\MSDirect\Collision\MSCollisionBase.cpp" />
     <ClCompile Include="Source\MSDirect\Collision\MSCollisionRay.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="Source\MSDirect\Utility\MSProgresData.cxx" />
     <ClCompile Include="Source\MSDirect\Utility\MSUtility.cpp" />
     <ClInclude Include="Include\Button.h" />
+    <ClInclude Include="Include\CppTweener.h" />
     <ClInclude Include="Include\GameObjectBase.h" />
     <ClInclude Include="Include\Result.h" />
     <ClInclude Include="Include\ScoreView.h" />
@@ -305,13 +307,13 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)x86_$(PlatformShortName)</TargetName>
     <OutDir>$(ProjectDir)exe\</OutDir>
-    <IncludePath>$(SolutionDir)DirectXAudioLibrary\Include;$(ProjectDir)Include;$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include</IncludePath>
+    <IncludePath>$(SolutionDir)MSThreadLibrary\Include;$(SolutionDir)DirectXAudioLibrary\Include;$(ProjectDir)Include;$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug(LIB)|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)x86_$(PlatformShortName)</TargetName>
     <OutDir>$(ProjectDir)exe\</OutDir>
-    <IncludePath>$(SolutionDir)DirectXAudioLibrary\Include;$(ProjectDir)Include;$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include</IncludePath>
+    <IncludePath>$(SolutionDir)MSThreadLibrary\Include;$(SolutionDir)DirectXAudioLibrary\Include;$(ProjectDir)Include;$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -323,13 +325,13 @@
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)x86_$(PlatformShortName)</TargetName>
     <OutDir>$(ProjectDir)exe\</OutDir>
-    <IncludePath>$(SolutionDir)DirectXAudioLibrary\Include;$(ProjectDir)Include;$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include</IncludePath>
+    <IncludePath>$(SolutionDir)MSThreadLibrary\Include;$(SolutionDir)DirectXAudioLibrary\Include;$(ProjectDir)Include;$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release(LIB)|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)x86_$(PlatformShortName)</TargetName>
     <OutDir>$(ProjectDir)exe\</OutDir>
-    <IncludePath>$(SolutionDir)DirectXAudioLibrary\Include;$(ProjectDir)Include;$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include</IncludePath>
+    <IncludePath>$(SolutionDir)MSThreadLibrary\Include;$(SolutionDir)DirectXAudioLibrary\Include;$(ProjectDir)Include;$(SolutionDir)CppBuiltInLua\Include;$(SolutionDir)AIMapImporter\Include;$(SolutionDir)SpawnMapImporter\Include;C:\Workspace\Github\Cpp_DirectX11-FBXRenderingSample\CppBuiltInLua\Include;$(SolutionDir)Effekseer\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)DX11TextureManager\Include;$(ProjectDir)Include\DX11FbxLoader;$(SolutionDir)DXMath\Include;$(SolutionDir)DirectX(June 2010)\Include;$(SolutionDir)DX11FBXLoader\Include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -351,7 +353,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)DirectXAudioLibrary\Library;$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DXMath\Library;$(SolutionDir)CppBuiltInLua\Library;$(SolutionDir)SpawnMapImporter\Library;$(SolutionDir)AIMapImporter\Library;$(SolutionDir)FBXRenderSample\NcgLua;$(SolutionDir)Effekseer\lib;$(SolutionDir)DX11FbxLoader\FBXSDK\$(PlatformShortName)\debug;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)MSThreadLibrary\Library;$(SolutionDir)DirectXAudioLibrary\Library;$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DXMath\Library;$(SolutionDir)CppBuiltInLua\Library;$(SolutionDir)SpawnMapImporter\Library;$(SolutionDir)AIMapImporter\Library;$(SolutionDir)FBXRenderSample\NcgLua;$(SolutionDir)Effekseer\lib;$(SolutionDir)DX11FbxLoader\FBXSDK\$(PlatformShortName)\debug;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug(LIB)|Win32'">
@@ -368,7 +370,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)DirectXAudioLibrary\Library;$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DXMath\Library;$(SolutionDir)CppBuiltInLua\Library;$(SolutionDir)SpawnMapImporter\Library;$(SolutionDir)AIMapImporter\Library;$(SolutionDir)FBXRenderSample\NcgLua;$(SolutionDir)Effekseer\lib;$(SolutionDir)DX11FbxLoader\FBXSDK\$(PlatformShortName)\debug;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)MSThreadLibrary\Library;$(SolutionDir)DirectXAudioLibrary\Library;$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DXMath\Library;$(SolutionDir)CppBuiltInLua\Library;$(SolutionDir)SpawnMapImporter\Library;$(SolutionDir)AIMapImporter\Library;$(SolutionDir)FBXRenderSample\NcgLua;$(SolutionDir)Effekseer\lib;$(SolutionDir)DX11FbxLoader\FBXSDK\$(PlatformShortName)\debug;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -417,7 +419,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)DirectXAudioLibrary\Library;$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DXMath\Library;$(SolutionDir)CppBuiltInLua\Library;$(SolutionDir)SpawnMapImporter\Library;$(SolutionDir)AIMapImporter\Library;$(SolutionDir)FBXRenderSample\NcgLua;$(SolutionDir)Effekseer\lib;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)MSThreadLibrary\Library;$(SolutionDir)DirectXAudioLibrary\Library;$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DXMath\Library;$(SolutionDir)CppBuiltInLua\Library;$(SolutionDir)SpawnMapImporter\Library;$(SolutionDir)AIMapImporter\Library;$(SolutionDir)FBXRenderSample\NcgLua;$(SolutionDir)Effekseer\lib;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release(LIB)|Win32'">
@@ -438,7 +440,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)DirectXAudioLibrary\Library;$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DXMath\Library;$(SolutionDir)CppBuiltInLua\Library;$(SolutionDir)SpawnMapImporter\Library;$(SolutionDir)AIMapImporter\Library;$(SolutionDir)FBXRenderSample\NcgLua;$(SolutionDir)Effekseer\lib;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)MSThreadLibrary\Library;$(SolutionDir)DirectXAudioLibrary\Library;$(SolutionDir)DX11TextureManager\Library;$(SolutionDir)DX11FbxLoader\Library;$(SolutionDir)DXMath\Library;$(SolutionDir)CppBuiltInLua\Library;$(SolutionDir)SpawnMapImporter\Library;$(SolutionDir)AIMapImporter\Library;$(SolutionDir)FBXRenderSample\NcgLua;$(SolutionDir)Effekseer\lib;$(SolutionDir)DirectX(June 2010)\Lib\$(PlatformShortName)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

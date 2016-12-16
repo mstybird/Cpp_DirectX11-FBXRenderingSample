@@ -4,6 +4,7 @@
 #include"NBullet.h"
 #include"StatusBulletBase.h"
 #include"BulletManager.h"
+#include"MyScene.h"
 namespace ChangeStates {
 	bool Damage(NBullet * aAttackObj, CharacterBase * aDamageChara)
 	{
@@ -57,7 +58,10 @@ namespace ChangeStates {
 	{
 		auto lBullet = aBulletManager->GetActiveBullet(aAttakcer);
 		lBullet->ShotFirstEffect(aAttakcer);
-		aAttakcer->SetBulletShotInterval(10);
+		aAttakcer->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimSkill);
+		aAttakcer->GetTransform()->GetMesh()->SetLoopFlag(false);
+		aAttakcer->GetTransform()->GetMesh()->SetFrontFrame();
+		aAttakcer->SetBulletShotInterval(50);
 		aAttakcer->SetBulletShotWait(true);
 	}
 

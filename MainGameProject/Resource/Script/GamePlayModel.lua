@@ -22,7 +22,7 @@ CharaWhiteCollisionScale=0.01
 CharaWhiteCollisionAnimation=false
 
 BaseBlackDesignModel="Resource/Model/Base.fbx"
-BaseBlackDesignScale=1.0
+BaseBlackDesignScale=0.03
 BaseBlackDesignAnimation=false
 BaseBlackCollisionModel="Resource/Model/box.fbx"
 BaseBlackCollisionScale=0.02
@@ -30,7 +30,7 @@ BaseBlackCollisionAnimation=false
 
 
 BaseWhiteDesignModel="Resource/Model/Base.fbx"
-BaseWhiteDesignScale=1.0
+BaseWhiteDesignScale=0.03
 BaseWhiteDesignAnimation=false
 BaseWhiteCollisionModel="Resource/Model/box.fbx"
 BaseWhiteCollisionScale=0.02

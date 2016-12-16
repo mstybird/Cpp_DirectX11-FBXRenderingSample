@@ -10,4 +10,4 @@ BlackSpawnMapFilePath="Resource/NodeMap/spawnTeamBlack.anm"
 WhiteSpawnMapFilePath="Resource/NodeMap/spawnTeamWhite.anm"
 BallSpawnMapFilePath="Resource/NodeMap/spawnBall.anm"
 
-ThumnailFilePath="Resource/UI/Result/LogoWin.png"
+ThumnailFilePath="Resource/Stage/Image/Default.png"

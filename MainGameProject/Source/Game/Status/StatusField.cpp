@@ -6,6 +6,8 @@
 #include"StatusBase.h"
 #include"StatusEnemy.h"
 #include"Enemy.h"
+#include"DX11RenderResource.h"
+#include"MyScene.h"
 #include<SpawnMapImporter.hpp>
 #include<AIMapImport.hpp>
 #include<cassert>
@@ -185,6 +187,9 @@ void StatusField::Respawn(CharacterBase * aSpawnChara)
 	aSpawnChara->GetWorld()->SetT(lPosition);
 	aSpawnChara->SetActive(true);
 	aSpawnChara->InitStatus(aSpawnChara->GetDefaultStatus());
+	aSpawnChara->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
+	aSpawnChara->GetTransform()->GetMesh()->SetLoopFlag(true);
+	aSpawnChara->GetTransform()->GetMesh()->SetFrontFrame();
 	
 }
 void StatusField::RegisterTeamMember(CharacterBase * aRegistMember, eTeamType aType)
@@ -379,6 +384,16 @@ void StatusField::GetRemainTime(int & aMinutes, int & aSeconds)
 {
 	aMinutes = mRemainTime / 60;
 	aSeconds = mRemainTime % 60;
+}
+
+void StatusField::Update()
+{
+	mTeamWhite.GetBase()->UpdateMesh();
+	mTeamBlack.GetBase()->UpdateMesh();
+
+	mTeamWhite.GetBase()->GetWorld()->AddRC(0.0f, 1.0f, 0.0f);
+	mTeamBlack.GetBase()->GetWorld()->AddRC(0.0f, 1.0f, 0.0f);
+
 }
 
 void NodeControl::AddNodeSafe(std::vector<Dijkstra::Node*>& aNodeList, Dijkstra::Node * aAddNode)

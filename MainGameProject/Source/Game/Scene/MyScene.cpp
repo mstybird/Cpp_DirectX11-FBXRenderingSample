@@ -6,7 +6,7 @@
 #include"Title.h"
 #include<fstream>
 //const int ValueMyScene::UI::cUILuaID = 100;
-const int cEnemyCount = 4;
+const int cEnemyCount = 3;
 MyMSScene::MyMSScene()
 {
 	mIsTimeOver = false;
@@ -23,7 +23,6 @@ MyMSScene::~MyMSScene()
 
 void MyMSScene::Initialize()
 {
-
 	InitializeStageData();
 	InitializeFont();
 	InitializeModel();
@@ -50,6 +49,7 @@ void MyMSScene::Initialize()
 	shader.InitVertex("Resource/HLSL/Simple.hlsl");
 	shader.InitPixel("Resource/HLSL/Simple.hlsl");
 
+	InitializeSound();
 	InitializeBall();
 	InitializeCharaFirst();
 	//敵数、プレイヤーを含むチーム分けも中で初期化している
@@ -100,12 +100,22 @@ void MyMSScene::Initialize()
 	mEfkRender.SetProjection(&proj);
 	mEfkObj.Play();
 	mFieldStatus.GameStart();
+	//ゲーム開始前フラグを立てる
+	mIsReady = true;
+	mBGM.SetLoop(true);
+	mBGM.Play();
+
+
+	InitializeEnd();
+
 }
 
 void MyMSScene::Update() {
 
+
 	mEfkManager.Update();
 	mField.Update();
+	mFieldStatus.Update();
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->Update();
 	}
@@ -119,6 +129,8 @@ void MyMSScene::Update() {
 	cam.SetDXCamera(mPlayer.GetView());
 	mEfkRender.SetCamera(&cam);
 	
+
+	UpdateReady();
 	UpdateUI();
 
 	UpdateTimeOver();
@@ -128,7 +140,7 @@ void MyMSScene::Update() {
 
 void MyMSScene::KeyDown(MSKEY pKey)
 {
-
+	if (mIsReady)return;
 	bool lIsRun{ false };
 
 	if (mIsTimeOver == false) {
@@ -195,12 +207,21 @@ void MyMSScene::KeyDown(MSKEY pKey)
 
 }
 
+/*
+カメラをマウスに
+*/
+
 void MyMSScene::KeyHold(MSKEY pKey)
 {
+	if (mIsReady)return;
 
 	if (mIsTimeOver == true)return;
 		DXVector3 data;
-		float speed = 0.25f;
+		float speed = 0.14f;
+
+		int lNowAnimation = mPlayer.GetTransform()->GetMesh()->GetAnimation();
+
+
 		switch (pKey)
 		{
 		case MSKEY::CH_0:
@@ -219,16 +240,24 @@ void MyMSScene::KeyHold(MSKEY pKey)
 			render.SetRenderTarget(*enemy[3]->GetTransform());
 			break;
 		case MSKEY::CH_W:
-			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,1 });
+			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill) {
+				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,1 });
+			}
 			break;
 		case MSKEY::CH_S:
-			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,-1 });
+			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill) {
+				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,-1 });
+			}
 			break;
 		case MSKEY::CH_A:
-			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { -1,0,0 });
+			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill) {
+				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { -1,0,0 });
+			}
 			break;
 		case MSKEY::CH_D:
-			mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
+			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill) {
+				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
+			}
 			break;
 		case MSKEY::LEFT:
 			mPlayer.GetWorld()->AddRC({ 0.0f,-2.5f,0.0f });
@@ -246,6 +275,7 @@ void MyMSScene::KeyHold(MSKEY pKey)
 
 void MyMSScene::KeyUp(MSKEY pKey)
 {
+	if (mIsReady)return;
 	switch (pKey) {
 	case MSKEY::CH_W:
 		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
@@ -278,12 +308,28 @@ void MyMSScene::Render()
 	mPlayer.Render();
 	mBall.Render();
 	mField.Render();
-	mEfkRender.RenderAll(&mEfkManager);
+
+
 
 	mFieldStatus.GetTeamBase(eTeamType::White)->Render();
 	mFieldStatus.GetTeamBase(eTeamType::Black)->Render();
-
+	mEfkRender.RenderAll(&mEfkManager);
 	ui.Render(m2DRender);
+
+
+	if (mSceneCounter>60&& mSceneCounter < 180) {
+		m2DRender.Render(mLogoReady);
+	}
+	else if (mSceneCounter == 180) {
+		for (auto&lEnemy : enemy) {
+			lEnemy->StartAI();
+		}
+		mIsReady = false;
+	}
+	else if (mSceneCounter > 60 && mSceneCounter < 210) {
+		m2DRender.Render(mLogoStart);
+	}
+
 
 	if (mIsTimeOver == true) {
 		if (mTimeOver.IsUpdateing()) {
@@ -341,6 +387,17 @@ void MyMSScene::InitializeStageData()
 	lInFile >> mStageData.mModelScriptName;
 }
 
+void MyMSScene::InitializeSound()
+{
+	using namespace ValueMyScene::Sound;
+	mLuaDb.Load(cLuaPath, cLuaID);
+	auto lManager = mLuaDb.GetManager(cLuaID);
+	std::string lFileName;
+	lManager->GetGlobal(cBGMPath, lFileName);
+	mBGM = mSoundDevice.CreateSoundFromFile(lFileName);
+	mResult.InitializeSound(mLuaDb);
+}
+
 void MyMSScene::InitializeUI()
 {
 	using namespace ValueMyScene::UI;
@@ -369,9 +426,14 @@ void MyMSScene::InitializeUI()
 		lFileNameMap[cScoreBarLeftID] = lFileName;
 		lManager->GetGlobal(cScoreBarRightTexturScoreath, lFileName);
 		lFileNameMap[cScoreBarRightID] = lFileName;
-
+		lManager->GetGlobal(cLogoReadyTexturePath, lFileName);
+		lFileNameMap[cLogoReadyID] = lFileName;
+		lManager->GetGlobal(cLogoStartTexturePath, lFileName);
+		lFileNameMap[cLogoStartID] = lFileName;
 		mTexManager.RegisterFileList(lFileNameMap);
 	}
+
+
 
 
 	std::vector<float>lPosition;
@@ -472,10 +534,40 @@ void MyMSScene::InitializeUI()
 		ClearTemp();
 	}
 
+	//時間表示座標の設定
 	{
 		auto lTimeView = ui.GetTimeView();
 		lManager->GetGlobal(cTimeTextPosition, lPosition);
 		lTimeView->SetGlobalPosition(lPosition[0], lPosition[1]);
+		ClearTemp();
+
+	}
+
+	//開始前ロゴReadyの初期座標
+	{
+		lManager->GetGlobal(cLogoReadyPosition, lPosition);
+		lManager->GetGlobal(cLogoReadySize, lSize);
+		lManager->GetGlobal(cLogoReadyScale, lScale);
+
+		mLogoReady.SetPivot({ 0.5f,0.5f });
+		mLogoReady.SetPosition({lPosition[0], lPosition[1]});
+		mLogoReady.SetSize({ lSize[0],lSize[1] });
+		mLogoReady.SetTexture(mTexManager, cLogoReadyID);
+		ClearTemp();
+
+	}
+
+	//開始前ロゴの初期座標
+	{
+		lManager->GetGlobal(cLogoStartPosition, lPosition);
+		lManager->GetGlobal(cLogoStartSize, lSize);
+		lManager->GetGlobal(cLogoStartScale, lScale);
+
+		mLogoStart.SetPivot({ 0.5f,0.5f });
+		mLogoStart.SetPosition({ lPosition[0], lPosition[1] });
+		mLogoStart.SetSize({ lSize[0],lSize[1] });
+		mLogoStart.SetTexture(mTexManager, cLogoStartID);
+		ClearTemp();
 
 	}
 
@@ -643,7 +735,6 @@ void MyMSScene::InitializeModel()
 void MyMSScene::InitializeFieldStatus()
 {
 	mFieldStatus.Initialize();
-	mFieldStatus.InitializeTime(70);
 	mFieldStatus.InitEffect(&mEfkManager, &mEfkDb, ValueMyScene::Effect::cGoalInID, ValueMyScene::Effect::cKillID);
 	mFieldStatus.CreateFieldNodes(mStageData.mAIMapFileName);
 	mFieldStatus.CreateSpawnCharaNodes(mStageData.mBlackSpawnMapFileName,mStageData.mWhiteSpawnMapFileName);
@@ -663,11 +754,9 @@ void MyMSScene::InitializeFieldStatus()
 	mFieldStatus.RegisterTeamMember(enemy[0].get(), eTeamType::Black);
 	mFieldStatus.RegisterTeamMember(enemy[1].get(), eTeamType::White);
 	mFieldStatus.RegisterTeamMember(enemy[2].get(), eTeamType::Black);
-	mFieldStatus.RegisterTeamMember(enemy[3].get(), eTeamType::White);
 	mFieldStatus.RegisterTeamMember(&mPlayer, eTeamType::White);
 	SetMeshResouce(mFieldStatus.GetTeamBase(eTeamType::Black), ValueMyScene::Model::cBaseBlackDesignID, ValueMyScene::Model::cBaseBlackCollisionID);
 	SetMeshResouce(mFieldStatus.GetTeamBase(eTeamType::White), ValueMyScene::Model::cBaseWhiteDesignID, ValueMyScene::Model::cBaseWhiteCollisionID);
-
 	{
 		DXVector3 lWhitePosition;
 		DXVector3 lBlackPosition;
@@ -675,6 +764,14 @@ void MyMSScene::InitializeFieldStatus()
 		lBlackPosition = mFieldStatus.GetNodePosition(80);
 		mFieldStatus.GetTeamBase(eTeamType::White)->GetWorld()->SetT(lWhitePosition);
 		mFieldStatus.GetTeamBase(eTeamType::Black)->GetWorld()->SetT(lBlackPosition);
+		mFieldStatus.GetTeamBase(eTeamType::White)->GetWorld()->AddT(0.0f, 0.5f, 0.0f);
+		mFieldStatus.GetTeamBase(eTeamType::Black)->GetWorld()->AddT(0.0f, 0.5f, 0.0f);
+
+		mFieldStatus.GetTeamBase(eTeamType::White)->GetTransform()->GetMesh()->SetAnimation(0);
+		mFieldStatus.GetTeamBase(eTeamType::White)->GetTransform()->GetMesh()->SetLoopFlag(true);
+		mFieldStatus.GetTeamBase(eTeamType::Black)->GetTransform()->GetMesh()->SetAnimation(0);
+		mFieldStatus.GetTeamBase(eTeamType::Black)->GetTransform()->GetMesh()->SetLoopFlag(true);
+
 		mFieldStatus.InitRenderAndShader(render, shader);
 	}
 
@@ -727,7 +824,7 @@ void MyMSScene::InitializeEnemy()
 	//全キャラ分
 	for (uint16_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->SetDefaultStatus(mDefaultStatus);
-
+		enemy[i]->StopAI();
 		//AIの設定
 		enemy[i]->SetAI(mLuaDb.GetManager(0));
 		//チーム別にメッシュを変えて差別化をする
@@ -1023,6 +1120,30 @@ StatusBulletBase MyMSScene::LoadBulletStatus(const std::string& aFileName, const
 	return lStatus;
 }
 
+void MyMSScene::UpdateReady()
+{
+	//開始前の処理が終わっていれば今後処理しない
+	if (mIsReady == false)return;
+	if (mSceneCounter < 60) {
+		mFieldStatus.GameStart();
+		mFieldStatus.InitializeTime(90);
+		
+	}
+	else if (mSceneCounter < 180) {
+		mFieldStatus.GameStart();
+		mFieldStatus.InitializeTime(90);
+	}
+	else if(mSceneCounter==180) {
+		for (auto&lEnemy : enemy) {
+			lEnemy->StartAI();
+		}
+		mIsReady = false;
+	}
+	else if (mSceneCounter < 210) {
+
+	}
+}
+
 void MyMSScene::UpdateUI()
 {
 	int lMinutes, lSeconds;
@@ -1056,6 +1177,8 @@ void MyMSScene::UpdateTimeOver()
 			for (auto&lEnemy : enemy) {
 				lEnemy->StopAI();
 			}
+			mResult.PlaySETimeUp();
+			
 
 		}
 	}
@@ -1063,9 +1186,12 @@ void MyMSScene::UpdateTimeOver()
 	if (mIsTimeOver == true) {
 		mTimeOver.Update();
 
+
+
 		//Updateが終わったらリザルト移行
 		if (mTimeOver.IsUpdateing()==false) {
-
+			/*mBGM.Stop(true);
+			mResult.PlayBGM();*/
 		}
 
 	}

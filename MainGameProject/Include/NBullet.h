@@ -34,6 +34,13 @@ public:
 		return static_cast<T*>(mStatus.get());
 	}
 
+
+	//衝突しないオブジェクトを遅延追加する
+	void AddNoCollisionObject(GameObjectBase* aObject);
+
+	//衝突しないオブジェクトをクリアする
+	void ClearNocollisionList();
+
 	virtual void UpdateStatus() {}
 
 	//弾の更新
@@ -45,6 +52,9 @@ private:
 	StatusBulletBase mStatus;
 	//発射主
 	CharacterBase* mParentPtr;
+
+	//衝突しないオブジェクトリスト
+	std::vector<GameObjectBase*>mNoCollisions;
 
 	::Comfort::EfkObject mFirstEffect;
 	::Comfort::EfkObject mShotEffect;

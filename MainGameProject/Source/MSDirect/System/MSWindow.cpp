@@ -35,10 +35,18 @@ INT WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR,INT)
 	DXVector3 v;
 	v.Set(0);
 	printf("%f\n", v.x);
+
+	if (CoInitializeEx(nullptr, COINIT_MULTITHREADED)) {
+		printf("Failed To Initialize COM\n");
+	}
+
 	g_pMain=new MSWindow;
 	g_pMain->_Run(hInstance, 0, 0, WINDOW_WIDTH,
 		WINDOW_HEIGHT, APP_NAME);
 	delete g_pMain;
+
+	CoUninitialize();
+
 
 //#ifdef _DEBUG
 	fclose(fp);

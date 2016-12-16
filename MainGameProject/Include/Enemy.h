@@ -28,8 +28,9 @@ public:
 
 	//ステータスの参照を取得する
 	//EnemyStatus* GetStatus();
-
-	//毎フレーム行うエネミーの更新処理
+	//AIの開始(再開)
+	void StartAI();
+	//AIの停止
 	void StopAI();
 	//毎フレーム更新
 	void Update()override;

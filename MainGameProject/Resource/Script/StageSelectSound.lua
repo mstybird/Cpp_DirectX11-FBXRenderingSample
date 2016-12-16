@@ -1,3 +1,3 @@
-BGM="Resource/Sound/BGMStageSelect.wav"
-SESelect="Resource/Sound/SESelect.wav"
-SEEnter="Resource/Sound/SEEnter.wav"
+BGMPath="Resource/Sound/BGMStageSelect.wav"
+SESelectPath="Resource/Sound/SESelect.wav"
+SEEnterPath="Resource/Sound/SEEnter.wav"

@@ -21,8 +21,9 @@
 #include"TimeOver.h"
 #include"Result.h"
 #include"StageSelectList.h"
+#include<DXAL.hpp>
 namespace ValueMyScene {
-
+	
 	//Effect50~99
 	namespace Effect {
 		static const int cShotID = 50;
@@ -53,23 +54,30 @@ namespace ValueMyScene {
 		static const int cLogoLoseID = 142;
 		static const int cLogoDrawID = 143;
 
+		static const int cLogoReadyID = 200;
+		static const int cLogoStartID = 210;
+
+		//ステータスフレーム
 		static const char* cStatusFramePositionName = "StatusFramePosition";
 		static const char* cStatusFrameSize = "StatusFrameSize";
 		static const char* cStatusFrameScale = "StatusFrameScale";
 		static const char* cStatusFrameTexturePath = "StatusFrameTexturePath";
 
+		//HPバー
 		static const char* cHPBarPosition = "HPBarPosition";
 		static const char* cHPBarSize = "HPBarSize";
 		static const char* cHPBarInScale = "HPBarInScale";
 		static const char* cHPBarOutTexturePath = "HPBarOutTexturePath";
 		static const char* cHPBarInTexturePath = "HPBarInTexturePath";
 
+		//EPバー
 		static const char* cEPBarPosition = "EPBarPosition";
 		static const char* cEPBarSize = "EPBarSize";
 		static const char* cEPBarInScale = "EPBarInScale";
 		static const char* cEPBarOutTexturePath = "EPBarOutTexturePath";
 		static const char* cEPBarInTexturePath = "EPBarInTexturePath";
 
+		//スコアバー
 		static const char* cScoreBarPosition = "ScoreBarPosition";
 		static const char* cScoreBarSize = "ScoreBarSize";
 		static const char* cScoreBarInScale = "ScoreBarInScale";
@@ -81,8 +89,20 @@ namespace ValueMyScene {
 		static const char* cHPTextOffset = "HPTextOffset";
 		static const char* cEPTextOffset = "EPTextOffset";
 		static const char* cScoreTextOffset = "ScoreTextOffset";
-
 		static const char* cTimeTextPosition = "TimeTextPosition";
+
+		//開始前ロゴ(Ready)
+		static const char* cLogoReadyPosition = "LogoReadyPosition";
+		static const char* cLogoReadySize = "LogoReadySize";
+		static const char* cLogoReadyScale = "LogoReadyScale";
+		static const char* cLogoReadyTexturePath = "LogoReadyTexturePath";
+
+		//開始前ロゴ(Start)
+		static const char* cLogoStartPosition = "LogoStartPosition";
+		static const char* cLogoStartSize = "LogoStartSize";
+		static const char* cLogoStartScale = "LogoStartScale";
+		static const char* cLogoStartTexturePath = "LogoStartTexturePath";
+
 
 	}
 
@@ -191,6 +211,7 @@ namespace ValueMyScene {
 		static const int cAnimSkill = 3;
 		static const int cAnimAttack = 4;
 		static const int cAnimAttacked = 5;
+		static const int cAnimDown = 6;
 
 
 	}
@@ -250,6 +271,14 @@ namespace ValueMyScene {
 
 
 	}
+	//ID:2500~2999
+	namespace Sound {
+		static const int cLuaID = 2500;
+
+		static const char* cLuaPath = "Resource/Script/GamePlaySound.lua";
+		static const char* cBGMPath = "BGMPath";
+
+	}
 
 }
 class MyMSScene :public MSSceneBase {
@@ -271,7 +300,8 @@ private:
 	void InitializeFont();
 	//ステージデータ情報の読み込み
 	void InitializeStageData();
-
+	//サウンドの初期化
+	void InitializeSound();
 	//UIの初期化
 	void InitializeUI();
 	//Effectの初期化
@@ -288,6 +318,10 @@ private:
 	void SetMeshResouce(GameObjectBase*aObject, const int aDesignID, const int aCollisionID);
 	StatusBulletBase LoadBulletStatus(const std::string& aFileName, const int aBulletID);
 
+	//ゲーム開始前の処理
+	void UpdateReady();
+
+	//UIの更新
 	void UpdateUI();
 	//タイムオーバー時の処理
 	void UpdateTimeOver();
@@ -347,8 +381,15 @@ private:
 	int mSceneCounter;
 	//時間制限が来たかどうか
 	bool mIsTimeOver;
-
+	//ゲームが始まる前ならtrue
+	bool mIsReady;
 	//ステージデータ群
 	StageData mStageData;
 
+	//ReadyLogo
+	MSSprite2DResource mLogoReady;
+	MSSprite2DResource mLogoStart;
+
+	SoundDevice mSoundDevice;
+	SoundPlayer mBGM;
 };

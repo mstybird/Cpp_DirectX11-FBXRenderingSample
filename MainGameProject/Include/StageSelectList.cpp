@@ -24,7 +24,7 @@ void StageSelectList::Initialize(
 
 	//リストフレーム
 	{
-		using namespace ValueSS;
+		using namespace ValueSS::UI;
 		Resource3D lRes;
 		std::string lFileName;
 
@@ -48,7 +48,7 @@ void StageSelectList::Initialize(
 		それぞれの座標、サイズなどを読み込む
 	*/
 	{
-		using namespace ValueSS;
+		using namespace ValueSS::UI;
 		aSelectManager->GetGlobal(cButtonPosition, ButtonsResource.lPosition);
 		aSelectManager->GetGlobal(cButtonSize, ButtonsResource.lSize);
 		aSelectManager->GetGlobal(cButtonScale, ButtonsResource.lScale);
@@ -155,7 +155,7 @@ StageData * StageSelectList::GetActiveData()
 
 void StageSelectList::Render(MSSprite2DRender & aRender, UIBase * aParent)
 {
-	aRender.Render(mListFrame);
+	//aRender.Render(mListFrame);
 	if (mActiveThumbnail != nullptr) {
 		aRender.Render(*mActiveThumbnail);
 	}

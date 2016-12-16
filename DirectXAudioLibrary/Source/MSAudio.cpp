@@ -34,7 +34,6 @@ namespace {
 }
 
 SoundDevice::SoundDevice():
-	mComIniter{},
 	mXAudio{CreateXAudio(),IXAudio2Deleter},
 	mMasteringVoice{CreateMasteringVoice(mXAudio),MasteringVoiceDeleter},
 	mDatabase{mXAudio}

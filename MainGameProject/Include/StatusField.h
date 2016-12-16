@@ -97,6 +97,10 @@ struct StatusField {
 	bool IsTimeOver();
 	//残り時間を分と秒で取得する
 	void GetRemainTime(int&aMinutes, int&aSeconds);
+
+	//毎フレーム行う処理
+	void Update();
+
 	StatusTeam mTeamWhite;	//白チーム
 	StatusTeam mTeamBlack;	//黒チーム
 private:

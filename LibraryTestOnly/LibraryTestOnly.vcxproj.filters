@@ -18,5 +18,13 @@
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="CppTweener.cpp">
+      <Filter>リソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CppTweener.h">
+      <Filter>リソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

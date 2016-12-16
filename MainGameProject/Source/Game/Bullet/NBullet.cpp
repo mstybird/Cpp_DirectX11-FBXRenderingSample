@@ -41,6 +41,7 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 	//リソースの初期化
 	bullet->Initialize();
 	bullet->InitStatus(&mStatus);
+
 	MS3DRender* lRender;
 	aShoter->GetRenderer(lRender);
 	bullet->SetRenderer(lRender);
@@ -78,6 +79,8 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 	for (auto&lTarget : *aShoter->GetSearchTargets()) {
 		bullet->AddCollisionTarget(lTarget);
 	}
+	//非衝突オブジェクトの追加
+	bullet->AddNoCollisionObject(aShoter->GetField()->mBall);
 
 	//レイピックの初期化
 	bullet->mRayPick->SetFramePosition(*bullet->mTransform);
@@ -122,6 +125,16 @@ void NBullet::ShotFirstEffect(CharacterBase * aShoter)
 	});
 }
 
+void NBullet::AddNoCollisionObject(GameObjectBase * aObject)
+{
+	mNoCollisions.push_back(aObject);
+}
+
+void NBullet::ClearNocollisionList()
+{
+	mNoCollisions.clear();
+}
+
 void NBullet::Update()
 {
 
@@ -131,7 +144,20 @@ void NBullet::Update()
 	GetWorld()->AddRC(4.0f, 6.0f, 10.0f);
 	//当たった場合
 	auto lHitTargets = UpdateCollision(false);
+
 	for (auto&lHitTarget : lHitTargets) {
+
+		bool lIsSkip = false;
+		//衝突しないオブジェクトだった場合除外する
+		for (auto& lNoCollision : mNoCollisions) {
+			if (lNoCollision == lHitTarget) {
+				lIsSkip = true;
+				break;
+			}
+		}
+		if (lIsSkip)continue;
+
+
 		DXVector3 lPosition;
 		GetWorld()->GetMatrix().lock()->GetT(lPosition);
 		this->mHitEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
@@ -156,7 +182,20 @@ void NBullet::Update()
 		auto lIsDead = ChangeStates::Damage(this, lChara);
 		//死んだらそのターゲットに死亡フラグをセット
 		//死んでなければ処理しない
-		if (lIsDead == false)break;
+		if (lIsDead == false) {
+			//死んだキャラのモーションを変更
+
+			lChara->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimAttacked);
+			lChara->GetTransform()->GetMesh()->SetLoopFlag(false);
+			lChara->GetTransform()->GetMesh()->SetFrontFrame();
+			break;
+		}
+		else {
+			//死んだキャラのモーションを変更
+			lChara->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimDown);
+			lChara->GetTransform()->GetMesh()->SetLoopFlag(false);
+			lChara->GetTransform()->GetMesh()->SetFrontFrame();
+		}
 
 		//キルエフェクト再生
 		this->mKillEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
@@ -169,10 +208,7 @@ void NBullet::Update()
 		});
 
 
-		//死んだキャラのモーションを変更
-		lChara->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimAttacked);
-		lChara->GetTransform()->GetMesh()->SetLoopFlag(false);
-		lChara->GetTransform()->GetMesh()->SetFrontFrame();
+
 		//死んだキャラのステータスを取得
 		auto lStatus = lChara->GetStatus();
 		lStatus->mLive = CharaStateFlag::DEAD;

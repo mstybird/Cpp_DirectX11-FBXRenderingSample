@@ -304,7 +304,6 @@
     <None Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\DAL\ComIniter.h" />
     <ClInclude Include="Include\DAL\Deleter.hxx" />
     <ClInclude Include="Include\DAL\MSAudio.hxx" />
     <ClInclude Include="Include\DAL\SoundBuffer.h" />
@@ -314,7 +313,6 @@
     <ClInclude Include="Include\DXAL.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ComIniter.cpp" />
     <ClCompile Include="Source\Deleter.cpp" />
     <ClCompile Include="Source\MSAudio.cpp" />
     <ClCompile Include="Source\SoundBuffer.cpp" />

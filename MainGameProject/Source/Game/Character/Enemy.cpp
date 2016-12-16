@@ -62,6 +62,11 @@ void Enemy::SetGoalIndex(int aIndex)
 
 
 
+void Enemy::StartAI()
+{
+	mIsStopAI = false;
+}
+
 void Enemy::StopAI()
 {
 	mIsStopAI = true;
@@ -69,7 +74,7 @@ void Enemy::StopAI()
 
 void Enemy::Update()
 {
-	UpdateMesh();
+	UpdateMotion();
 	UpdateBullets();
 	
 	if (mIsStopAI)return;
@@ -768,7 +773,7 @@ void Enemy::BetaInSightAttack()
 	}
 
 	////敵が視界にいるか毎フレーム調べる
-	auto lLookTarget = IsCulling();
+	//auto lLookTarget = IsCulling();
 	//if (dynamic_cast<CharacterBase*>(lLookTarget)) {
 
 
@@ -776,14 +781,14 @@ void Enemy::BetaInSightAttack()
 	//}
 
 
-	//途中ボールに当たった場合、回収する
-	auto lHitBall = UtlCollisionBall();
-	if (lHitBall) {
-		GetStatus()->mBall = lHitBall;
-		mField->SetBallHolder(this);
-		//回収後AIを進める
-		mAI->ClearAI();
-	}
+	////途中ボールに当たった場合、回収する
+	//auto lHitBall = UtlCollisionBall();
+	//if (lHitBall) {
+	//	GetStatus()->mBall = lHitBall;
+	//	mField->SetBallHolder(this);
+	//	//回収後AIを進める
+	//	mAI->ClearAI();
+	//}
 
 }
 

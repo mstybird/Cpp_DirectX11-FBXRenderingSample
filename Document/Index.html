@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Struggle - TOP</title>
+	<!-- BootstrapのCSS読み込み -->
+	<link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- jQuery読み込み -->
+	<script src="js/jquery.min.js"></script>
+	<!-- BootstrapのJS読み込み -->
+	<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+	
+	<!--カスタムCSS-->
+	<link href="css/common.css" rel="stylesheet"/>
+</head>
+<body>
+	<!--トップナビゲーションバー-->
+	<nav class="navbar navbar-default navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarEexample">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="Index.html">
+					<img src="image/Title.png" class="inheritHeight"/>
+
+				</a>
+			</div>
+
+			<div class="collapse navbar-collapse" id="navbarEexample">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="Index.html">TOP</a></li>
+					<li><a href="res/system.html">ゲームシステム</a></li>
+					<li><a href="res/roadmap.html">開発ロードマップ</a></li>
+					<li><a href="res/develop.html">開発詳細</a></li>
+				</ul>
+				<p class="navbar-text navbar-right">課題制作作品「Struggle」のドキュメントです。</p>
+			</div>
+
+		</div>
+
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<article class="col-xs-12 col-md-8 container">
+				<div class="container-fluid ItemElement" >
+
+					<div class="jumbotron" style="margin-top:2em;">
+						<h1><img src="image/Title.png" class="inheritHeight" /></h1>
+						<p>
+							このゲームは、二つのチームに分かれて、ボールを奪い合う争奪アクションゲームです。<br />
+							ボールを奪い、拠点へ持ち帰ることでスコアが加算され、最終的により多くのスコアを得たチームの勝利となります。
+						</p>
+						<!--ゲーム画面-->
+						<img src="image/ss_GameScene.png" class="text-center" style="width:80%" />
+						<br />
+						<br />
+						<p><a class="btn btn-primary btn-lg" href="res/system.html" role="button">ゲームについて詳しく</a></p>
+
+					</div>
+
+
+
+					<h1>
+						ドキュメントインデックス
+					</h1>
+					<div class="list-group">
+						<a href="res/system.html" class="list-group-item">
+							<h4>ゲームシステム</h4>
+							<p class="list-group-item-text">
+								ゲームの遊び方説明
+							</p>
+						</a>
+						<a href="res/roadmap.html" class="list-group-item">
+							<h4>開発ロードマップ</h4>
+							<p class="list-group-item-text">
+								開発ペースの詳細をロードマップ形式で公開
+							</p>
+
+						</a>
+						<a href="res/develop.html" class="list-group-item">
+							<h4>開発詳細</h4>
+							<p class="list-group-item-text">
+								コーディングルール、使用ツール、開発環境など、<br />
+								作業の重み付け(スケジュール等)を記載
+							</p>
+						</a>
+					</div>
+
+				</div>
+			</article>
+			<aside class="col-xs-12 col-md-4 container">
+				<div class="container-fluid ItemElement">
+					<br />
+
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							サイドメニュー
+						</div>
+						<div class="panel-body">
+							<div class="list-group">
+								<a class="list-group-item" href="res/system.html">
+									ゲームシステム
+								</a>
+								<a class="list-group-item active" href="res/roadmap.html">
+									開発ロードマップ
+								</a>
+								<a class="list-group-item" href="res/develop.html">
+									開発詳細
+								</a>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</aside>
+		</div>
+
+
+	</div>
+</body>
+</html>

@@ -36,7 +36,7 @@ public:
 	void UpdateStart(const IssueFlag aIsWin);
 
 	//タイムオーバー処理の更新
-	void Update();
+	SceneTimeOverSequence Update();
 
 	//まだ更新中か(Updateを終了してもいいかどうか)
 	bool IsUpdateing();

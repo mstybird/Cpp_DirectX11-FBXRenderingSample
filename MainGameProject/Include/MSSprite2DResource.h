@@ -53,6 +53,8 @@ public:
 
 	//頂点バッファ
 	ID3D11Buffer*mVertexBuffer;
+public:
+	std::shared_ptr<DXVector3>mPosition;	//描画位置
 protected:
 	//ポリゴン生成用
 	virtual void CreatePolygon(SpriteVertex pPolygon[4]) = 0;
@@ -60,7 +62,6 @@ protected:
 	DXTexture* mTexture;
 	//このインスタンスがテクスチャの実態を保持しているかどうか
 	
-	std::shared_ptr<DXVector3>mPosition;	//描画位置
 	std::shared_ptr<DXVector2> mPivot;		//中心となる位置
 	std::shared_ptr<DXVector2> mSize;		//描画サイズ
 	std::shared_ptr<DXVector2> mScale;		//拡大率

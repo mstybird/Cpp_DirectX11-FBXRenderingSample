@@ -11,13 +11,19 @@
 void SceneStageSelect::Initialize()
 {
 	InitShader();
+	printf("OK:Shader\n");
 	InitUI();
-	
+	printf("OK:UI\n");
+	InitSound();
+	mBGM.Play();
+	printf("OK:Sound\n");
+	InitializeEnd();
+	printf("OK:All\n");
+
 }
 
 void SceneStageSelect::Update()
 {
-	mSelectTitle.AddRotation(1.0f);
 }
 
 void SceneStageSelect::KeyDown(MSKEY pKey)
@@ -26,16 +32,24 @@ void SceneStageSelect::KeyDown(MSKEY pKey)
 	{
 	case MSKEY::UP:
 		mSelectList.ActiveBack();
+		mSESelect.Stop(true);
+		mSESelect.Play();
 		break;
 	case MSKEY::DOWN:
 		mSelectList.ActiveNext();
+		mSESelect.Stop(true);
+		mSESelect.Play();
 		break;
 	case MSKEY::ENTER:
+		mSEEnter.Stop(true);
+		mSEEnter.Play();
 		StageSelectSave();
 		MSDirect::SetScene(std::make_unique<MyMSScene>());
 
 		break;
 	case MSKEY::BACKSPACE:
+		mSEEnter.Stop(true);
+		mSEEnter.Play();
 		MSDirect::SetScene(std::make_unique<SceneTitle>());
 		break;
 	default:
@@ -69,10 +83,11 @@ void SceneStageSelect::InitShader()
 
 void SceneStageSelect::InitUI()
 {
-	using namespace ValueSS;
+	using namespace ValueSS::UI;
 	mLuaDb.Load(cLuaFilePath, cLuaID);
 	auto lManager = mLuaDb.GetManager(cLuaFilePath);
 	//
+	printf("Ok:Lua[%s]\n", cLuaFilePath);
 	std::unordered_map<int, std::string>lFileNameMap;
 	std::string lFileName;
 	{
@@ -87,10 +102,11 @@ void SceneStageSelect::InitUI()
 
 		lManager->GetGlobal(cDescTextTexturePath, lFileName);
 		lFileNameMap[cDescTextID] = lFileName;
-
+		printf("Ok:Load Value\n");
 		mTexManager.RegisterFileList(lFileNameMap);
+		printf("Ok:Regist Texture\n");
 	}
-
+	printf("OK:Texture\n");
 
 	std::vector<float>lPosition;
 	std::vector<float>lSize;
@@ -163,6 +179,23 @@ void SceneStageSelect::InitUI()
 
 	}
 
+
+}
+
+void SceneStageSelect::InitSound()
+{
+	using namespace ValueSS::Sound;
+	mLuaDb.Load(cLuaPath, cLuaID);
+	auto lManager = mLuaDb.GetManager(cLuaID);
+	std::string lFileName;
+	lManager->GetGlobal(cBGMFilePath, lFileName);
+	mBGM = mSoundDevice.CreateSoundFromFile(lFileName);
+
+	lManager->GetGlobal(cSESelectPath, lFileName);
+	mSESelect = mSoundDevice.CreateSoundFromFile(lFileName);
+
+	lManager->GetGlobal(cSEEnterPath, lFileName);
+	mSEEnter = mSoundDevice.CreateSoundFromFile(lFileName);
 
 }
 

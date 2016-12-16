@@ -7,7 +7,7 @@ public:
 	//シーンの一度のみの初期化
 	virtual void Initialize() {};
 	//シーン初期化完了フラグセット
-	virtual void InitalizeEnd()final {};
+	virtual void InitializeEnd()final { bInitializeFlag = true; };
 	//フレームの更新処理
 	virtual void Update() {};
 	//描画処理
@@ -18,11 +18,14 @@ public:
 	
 	virtual ~MSSceneBase() {};
 
+
+	virtual bool IsInitialized()final { return bInitializeFlag; }
+
 	//イベントプロシージャ
 	virtual void KeyDown(MSKEY pKey) {};
 	virtual void KeyHold(MSKEY pKey) {};
 	virtual void KeyUp(MSKEY pKey) {};
 private:
 	//シーンが初期化されるとtrueになる
-	bool bInitializeFlag;
+	bool bInitializeFlag = false;
 };

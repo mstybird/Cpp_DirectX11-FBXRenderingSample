@@ -31,8 +31,7 @@ void Player::Update()
 {
 	//€‚ñ‚Å‚½‚Æ‚«‚Ìˆ—
 	UpdateAlive();
-
-	UpdateMesh();
+	UpdateMotion();
 	UpdateBullets();
 	//UpdateGravity();
 

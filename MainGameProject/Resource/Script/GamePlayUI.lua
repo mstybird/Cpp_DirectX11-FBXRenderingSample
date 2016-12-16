@@ -42,7 +42,7 @@ LogoFinishPosition={480,360}
 LogoFinishSize={480,100}
 LogoFinishScale={1.0,1.0}
 LogoFinishTexturePath="Resource/UI/Playing/LogoFinish.png"
-
+--LogoIssue
 LogoIssuePosition={480,360}
 LogoIssueSize={480,360}
 LogoIssueScale={1.0,1.0}
@@ -50,3 +50,13 @@ LogoIssueWinTexturePath="Resource/UI/Playing/LogoWin.png"
 LogoIssueLoseTexturePath="Resource/UI/Playing/LogoLose.png"
 LogoIssueDrawTexturePath="Resource/UI/Playing/LogoDraw.png"
 
+--ReadyLogo
+LogoReadyPosition={480,360}
+LogoReadySize={480,360}
+LogoReadyScale={1.0,1.0}
+LogoReadyTexturePath="Resource/UI/Playing/Ready.png"
+--StarLogo
+LogoStartPosition={480,360}
+LogoStartSize={480,360}
+LogoStartScale={1.0,1.0}
+LogoStartTexturePath="Resource/UI/Playing/Start.png"

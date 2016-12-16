@@ -46,6 +46,9 @@ std::pair<XAUDIO2_BUFFER, MSSourceVoice> SoundImpl::Load(const std::string & aFi
 		0,
 		nullptr
 	};
+
+	
+
 	//–Â‚ç‚·”gŒ`‚Ì“o˜^
 	if (FAILED(lVoice->SubmitSourceBuffer(&submit))) {
 		printf("Failed To Create Submit For SoundBuffer.\n");

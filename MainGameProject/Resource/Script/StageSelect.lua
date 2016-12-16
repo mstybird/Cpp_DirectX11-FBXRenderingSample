@@ -5,7 +5,7 @@ BackgroundScale={1.0,1.0}
 BackgroundTexturePath="Resource/UI/StageSelect/Background.png"
 
 --Title
-TitlePosition={225,46}
+TitlePosition={480,46}
 TitleSize={510,90}
 TitleScale={1.0,1.0}
 TitleTexturePath="Resource/UI/StageSelect/StageSelectTitle.png"
@@ -43,6 +43,6 @@ StagePathList={
 
 --DescText
 DescTextPosition={19,679}
-DescTextSize={668,34}
+DescTextSize={575,42}
 DescTextScale={1.0,1.0}
 DescTextTexturePath="Resource/UI/StageSelect/DescText.png"

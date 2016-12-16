@@ -271,7 +271,9 @@ void MSDirect::Loop()
 
 void MSDirect::SetScene(std::unique_ptr<MSSceneBase>&& pScene)
 {
-	pScene->Initialize();
+	if (pScene->IsInitialized() == false) {
+		pScene->Initialize();
+	}
 	std::unique_ptr<MSSceneBase> lBufferPtr = std::move(sMSDirect->scene);
 	sMSDirect->scene = std::move(pScene);
 	lBufferPtr.reset();

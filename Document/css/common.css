@@ -1,0 +1,14 @@
+﻿body {
+	background:url(../image/Background.png);
+}
+
+.inheritHeight{
+	height:inherit;
+	padding-bottom:inherit;
+
+}
+
+.ItemElement {
+	background: url(../image/bg_article.png) no-repeat center;
+	background-size: cover;
+}

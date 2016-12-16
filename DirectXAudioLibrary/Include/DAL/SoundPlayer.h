@@ -11,6 +11,7 @@ public:
 	void Stop(bool aReStart);
 	void SetVolume(float aVolume);
 	float Volume()const;
+	void SetLoop(const bool aIsLoop);
 private:
 	MSSourceVoice mVoice;
 	XAUDIO2_BUFFER mBuffer;

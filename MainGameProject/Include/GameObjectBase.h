@@ -49,9 +49,9 @@ public:
 
 	//自身ともう一つのオブジェクトの距離を計算する
 	float GetDistance(GameObjectBase*aTarget);
+	virtual bool UpdateMesh();
 
 protected:
-	virtual bool UpdateMesh();
 	virtual std::vector<GameObjectBase*> UpdateCollision(bool pIsUpdatePosition);
 	//ラムダ用
 protected:

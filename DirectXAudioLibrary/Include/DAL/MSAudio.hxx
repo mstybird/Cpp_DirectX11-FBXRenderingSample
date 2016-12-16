@@ -1,6 +1,5 @@
 #pragma once
 #include"Deleter.hxx"
-#include"ComIniter.h"
 #include"SoundImpl.h"
 #include<memory>
 #pragma comment(lib,"winmm.lib")
@@ -19,7 +18,6 @@ public:
 
 	SoundPlayer CreateSoundFromFile(const std::string&aFileName);
 
-	ComIniter mComIniter;
 	MSXAudio2 mXAudio;
 	MSMasterVoice mMasteringVoice;
 

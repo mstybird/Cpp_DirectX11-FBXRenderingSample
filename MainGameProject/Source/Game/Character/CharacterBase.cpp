@@ -60,15 +60,10 @@ void CharacterBase::UpdateAlive()
 	switch (mStatus->mLive)
 	{
 	case CharaStateFlag::ALIVE:
+		mStatus->mDeadFrame = 0;
 		break;
 	case CharaStateFlag::DEAD:
 		LivingIsDeadProc();
-		if (mStatus->mDeadFrame > 60) {
-			mStatus->mLive = CharaStateFlag::RESPAWNWAIT;
-		}
-		else {
-			++mStatus->mDeadFrame;
-		}
 
 		break;
 	case CharaStateFlag::RESPAWNWAIT:
@@ -131,11 +126,22 @@ void CharacterBase::UpdateCamera()
 
 void CharacterBase::UpdateMotion()
 {
+	//モーションがループする or モーションが停止してないならば処理しない
+
+	if(UpdateMesh()==false)return;
+
 	auto lNowMotion = this->GetTransform()->GetMesh()->GetAnimation();
 
 	switch (lNowMotion)
 	{
+	case ValueMyScene::Chara::cAnimAttack:
 	case ValueMyScene::Chara::cAnimAttacked:
+	case ValueMyScene::Chara::cAnimSkill:
+	case ValueMyScene::Chara::cAnimWalk:
+		//アイドル状態に戻す
+		this->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
+		this->GetTransform()->GetMesh()->SetLoopFlag(true);
+		this->GetTransform()->GetMesh()->SetFrontFrame();
 		break;
 	default:
 		break;
@@ -177,7 +183,7 @@ void CharacterBase::SetBulletShotInterval(int aIntervalFrame)
 
 void CharacterBase::LivingIsDeadProc()
 {
-	if (mStatus->mDeadFrame > 60) {
+	if (mStatus->mDeadFrame > 120) {
 		mStatus->mLive = CharaStateFlag::RESPAWNWAIT;
 	}
 	else {

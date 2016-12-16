@@ -1,41 +1,54 @@
 #include "Title.h"
 #include"MyScene.h"
+#include"StageSelect.h"
 #include"MSDirect.h"
 #include"MS3DRender.h"
+#include<thread>
 void SceneTitle::Initialize()
 {
 	InitShader();
-
+	printf("OK:Shader\n");
 	InitUI();
-
-
-	sp=sd.CreateSoundFromFile("Resource/Sound/test.wav");
-	sp.Play();
+	printf("OK:UI\n");
+	InitSound();
+	printf("OK:Sound\n");
+	mBGM.Play();
+	InitializeEnd();
+	printf("OK:All\n");
 }
 void SceneTitle::Update()
 {
+	UpdateSceneChange();
 }
 void SceneTitle::KeyDown(MSKEY pKey)
 {
+	if (mIsSceneChange)return;
 	switch (pKey)
 	{
 	case MSKEY::UP:
 		mButtonList.ActiveBack();
+		mSESelect.Stop(true);
+		mSESelect.Play();
 		break;
 	case MSKEY::DOWN:
 		mButtonList.ActiveNext();
-		break;
-	case MSKEY::CH_Z:
-		mButtonList.PushButton();
+		mSESelect.Stop(true);
+		mSESelect.Play();
 		break;
 	case MSKEY::ENTER:
+		mSEEnter.Stop(true);
+		mSEEnter.Play();
+		mButtonList.PushButton();
 		switch (mButtonList.GetActiveIndex()) 
 		{
-		case 0:
-			MSDirect::SetScene(std::make_unique<MyMSScene>());
+		case eChangeToStageSelect:
+		{
+			SceneChange();
+
+		}
 			break;
-		case 1:
-			PostQuitMessage(0);
+		case eChangeToGameEnd:
+			PostQuitMessage(EXIT_SUCCESS);
 			break;
 		default:
 			break;
@@ -57,6 +70,46 @@ void SceneTitle::Render()
 	m2DRender.Render(mBackground);
 	m2DRender.Render(mTitle);
 	mButtonList.Render(m2DRender);
+}
+
+void SceneTitle::UpdateSceneChange()
+{
+	if (mIsSceneChange == false)return;
+
+	switch (mSequence)
+	{
+	case SceneTitle::SceneSequence::ChangeFirst:
+		mSceneTime = clock();
+		mSequence = SceneSequence::ChangeLoop;
+		{
+			tween::TweenerParam lParam(2000, tween::ELASTIC, tween::EASE_IN);
+			lParam.addProperty(&mTitle.mPosition->y, -150);
+			mTweener.addTween(lParam);
+		}
+		//フォールスルー
+	case SceneTitle::SceneSequence::ChangeLoop:
+	{
+		auto lNowTime = clock();
+		if (mSceneTime + 2200 > lNowTime) {
+			mTweener.step(lNowTime);
+		}
+		else {
+			mSequence = SceneSequence::ChangeEnd;
+		}
+		
+
+
+	}
+
+		break;
+	case SceneTitle::SceneSequence::ChangeEnd:
+		mScneThread.Wait();
+		MSDirect::SetScene(std::move(mScene));
+		break;
+	default:
+		break;
+	}
+
 }
 
 void SceneTitle::InitShader()
@@ -177,4 +230,32 @@ void SceneTitle::InitUI()
 		mBtnExit.SetSize(lSize[0], lSize[1]);
 
 	}
+}
+
+void SceneTitle::InitSound()
+{
+	using namespace ValueTitle::Sound;
+	mLuaDb.Load(cLuaPath, cLuaID);
+	auto lManager = mLuaDb.GetManager(cLuaID);
+	std::string lFileName;
+	lManager->GetGlobal(cBGMFilePath, lFileName);
+	mBGM = mSoundDevice.CreateSoundFromFile(lFileName);
+
+	lManager->GetGlobal(cSESelectPath, lFileName);
+	mSESelect = mSoundDevice.CreateSoundFromFile(lFileName);
+
+	lManager->GetGlobal(cSEEnterPath, lFileName);
+	mSEEnter = mSoundDevice.CreateSoundFromFile(lFileName);
+
+
+}
+
+void SceneTitle::SceneChange()
+{
+	mScene = std::make_unique<SceneStageSelect>();
+
+	mScneThread.SetFunction([&]() {mScene->Initialize(); });
+	mScneThread.Start();
+	mIsSceneChange = true;
+
 }
