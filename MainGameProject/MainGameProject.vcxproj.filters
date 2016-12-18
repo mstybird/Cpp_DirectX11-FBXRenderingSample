@@ -688,5 +688,8 @@
     <None Include="Resource\HLSL\SimpleTexture.hlsl" />
     <None Include="Resource\HLSL\Sprite2D.hlsl" />
     <None Include="Resource\HLSL\Sprite3D.hlsl" />
+    <None Include="ClassDiagram.cd">
+      <Filter>Reference\Dictionary</Filter>
+    </None>
   </ItemGroup>
 </Project>

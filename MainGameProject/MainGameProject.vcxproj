@@ -195,6 +195,7 @@
     <Natvis Include="NatvisFile.natvis" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="PropertySheet.props" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,845 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
+  <Class Name="Comfort::EffectDatabase" Collapsed="true">
+    <Position X="31.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAmBAAAAAAAQBAAAAACAAAAAAAAAAAAAAAQBAAQAA=</HashCode>
+      <FileName>Include\Effect.hxx</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Comfort::EfkManager" Collapsed="true">
+    <Position X="33.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAgAAAQAAAAQAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Include\Effect.hxx</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Comfort::EfkObject" Collapsed="true">
+    <Position X="35" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAgAEAACAAAAggAoAAAAAAAQwA=</HashCode>
+      <FileName>Include\Effect.hxx</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Comfort::EfkRenderer" Collapsed="true">
+    <Position X="26.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAASAAAAACAAIAAAAEACAAAAAAABAAAAA=</HashCode>
+      <FileName>Include\Effect.hxx</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Dijkstra::Manager" Collapsed="true">
+    <Position X="13.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAQSHAJgABEQAAAoAAAABAAABACIBAAUIIBQoIA=</HashCode>
+      <FileName>Include\Dijkstra.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EnemyAI" Collapsed="true">
+    <Position X="13.25" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARiABAgAAIAAAAAAAAAAAAAAACQAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Include\EnemyAI.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BulletManager" Collapsed="true">
+    <Position X="26.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAgAAAIAQEAAAEAAABAAAAAAGBAAAQEAAACAgA=</HashCode>
+      <FileName>Include\BulletManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BulletNormal" Collapsed="true">
+    <Position X="0.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAgAQAAAAAAAAAAAAAAAEAAABACAAAAAAA=</HashCode>
+      <FileName>Include\BulletNormal.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BulletObject" Collapsed="true">
+    <Position X="0.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAESEAgAQAQAQAACAAAAEAAAAAEAAAlgAAAAAAAA=</HashCode>
+      <FileName>Include\BulletObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NBullet" Collapsed="true">
+    <Position X="2.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAIAiEQICQgAAQAAAAAgAEAABAAEAAAFAAAAAAAAA=</HashCode>
+      <FileName>Include\NBullet.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CharacterBase" Collapsed="true">
+    <Position X="6.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABgIgAkSMYgBIBAAAAAGJABAAAAIYIAEAQCACCA=</HashCode>
+      <FileName>Include\CharacterBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Enemy" Collapsed="true">
+    <Position X="5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EgUcAhAAZAAQAYAYAAAQAEAAEABBAQAQAJIAwAAAAAA=</HashCode>
+      <FileName>Include\Enemy.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="7.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgBAAAAAAAQAAAAAAAAAAAABAAAAAABAAAQAAABA=</HashCode>
+      <FileName>Include\Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObjectBase" Collapsed="true">
+    <Position X="5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQEBQBAgIEDMRAAEABAAEAAJAAAACAAJBABAIAACAU=</HashCode>
+      <FileName>Include\GameObjectBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaticObject" Collapsed="true">
+    <Position X="9.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAEAgQAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Include\StaticObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneStageSelect" Collapsed="true">
+    <Position X="0.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQACAABBAQAgQABAAACAEEAAIBAAAAAADAEAGAAgAA=</HashCode>
+      <FileName>Include\StageSelect.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyMSScene" Collapsed="true">
+    <Position X="2.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQwGBAjAAVC0Z0BCBsWCFAAAILApBAAAHAAsEAUAEI=</HashCode>
+      <FileName>Include\MyScene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneTitle" Collapsed="true">
+    <Position X="5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASQACAAABAQggQABAAACAUBAAIRAAQAAALAEICAAgAQ=</HashCode>
+      <FileName>Include\Title.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MySceneResult" Collapsed="true">
+    <Position X="29.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ARAIMCIIAgQAAiSBIJMwkQAACgRAAAUAAFgEAQQgAAE=</HashCode>
+      <FileName>Include\Result.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MySceneTimeOver" Collapsed="true">
+    <Position X="31.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QQSEIAAAIAALQAIAAAIAkAAIABEiAAQAABQAAAYFgAA=</HashCode>
+      <FileName>Include\TimeOver.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StageSelectList" Collapsed="true">
+    <Position X="12.25" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="UIBase" FixedToPoint="true">
+      <Path>
+        <Point X="10.75" Y="4.062" />
+        <Point X="10.75" Y="4.375" />
+        <Point X="13" Y="4.375" />
+        <Point X="13" Y="4.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>QQCABAAgBAAAAQAAAAAAQAAAAAEAABgAABASAyAAAAA=</HashCode>
+      <FileName>Include\StageSelectList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="My3DShader" Collapsed="true">
+    <Position X="5" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAACAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Include\My3DShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MySprite2DShader" Collapsed="true">
+    <Position X="0.5" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAIAAAAA=</HashCode>
+      <FileName>Include\MySprite2DShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="My3DSpriteShader" Collapsed="true">
+    <Position X="2.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAACA=</HashCode>
+      <FileName>Include\MySprite3DShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StatusStatic" Collapsed="true">
+    <Position X="13" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\StatusStatic.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Button" Collapsed="true">
+    <Position X="1" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gMAABEAQCAAAMgACEAoIACAAACAAAAAAABBAAIUAIAA=</HashCode>
+      <FileName>Include\Button.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ScoreView" Collapsed="true">
+    <Position X="3.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEABAAAAIAAIkAAAAAAAAABIgBAQAAAE=</HashCode>
+      <FileName>Include\ScoreView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StatusFrame" Collapsed="true">
+    <Position X="5.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAEAgAQAAGAAAAIAAQAAiFAAAgAABAAAAIAIAE=</HashCode>
+      <FileName>Include\StatusFrame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeView" Collapsed="true">
+    <Position X="7.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAQAAAAAAAAAAAAQBAAABAAAAAAAAE=</HashCode>
+      <FileName>Include\TimeView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Toggle" Collapsed="true">
+    <Position X="10" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAAAAAAAICCAAAAAAAQAAAAAAAIBgCABABAqAAAAA=</HashCode>
+      <FileName>Include\Toggle.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BarGauge" Collapsed="true">
+    <Position X="14.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAgAAAAAAAAAAwAAKAAAAAAAIAAAAAhIBAASAAAI=</HashCode>
+      <FileName>Include\BarGauge.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BarGaugeVS" Collapsed="true">
+    <Position X="16.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAgAAAgAEGAAAgAAKAAAAAAAIAAAIAhACAgQAAAA=</HashCode>
+      <FileName>Include\BarGaugeVS.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MySceneUI" Collapsed="true">
+    <Position X="19" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAggAAAAAAAIAgEACABAAAAAAAFA=</HashCode>
+      <FileName>Include\MySceneUI.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIBase" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCIAAAEgAAAAAAIAIAAAAACACCAhAAABAAAAAAAAA=</HashCode>
+      <FileName>Include\UIBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSFbxDatabase" Collapsed="true">
+    <Position X="29.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgBAAAAAAAABAAAAACAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Include\MSFbxDatabase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSFbxManager" Collapsed="true">
+    <Position X="31.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAEIAiIwABAQEIgAACQAAAAEBQAACAADCABAA=</HashCode>
+      <FileName>Include\MSFbxManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSFbxObject" Collapsed="true">
+    <Position X="33.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CIQABUAAACAECQAAICQAKhAIAAACAAAIAAAQAAAgAqg=</HashCode>
+      <FileName>Include\MSFbxObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DX11RenderResource" Collapsed="true">
+    <Position X="29.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AABAgQAYAQBBAAQAIQACIAACIAAAAARAIwIBEAYAACA=</HashCode>
+      <FileName>Include\DX11RenderResource.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MS3DRender" Collapsed="true">
+    <Position X="33.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAQQAAAAJAAABAAEAAEACBBAAgEBBAAA=</HashCode>
+      <FileName>Include\MS3DRender.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSBase3DShader" Collapsed="true">
+    <Position X="5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AJAAAAggAAAAACASAAAQAACgAAAAAAAAAgCCAQAAAAA=</HashCode>
+      <FileName>Include\MSBase3DShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSBaseShader" Collapsed="true">
+    <Position X="2.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAgAAAAIAAAAAAAAAIAAAAAACABEAAAAACAAAAAAA=</HashCode>
+      <FileName>Include\MSBaseShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSBaseShaderResource" Collapsed="true">
+    <Position X="17.5" Y="9.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AFAAAAAAAAAAAAAAAAAYAAAAAAAAAEAAhAAAAACAAAA=</HashCode>
+      <FileName>Include\MSBaseShaderResource.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSPixelShader" Collapsed="true">
+    <Position X="16.25" Y="10.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAACAAAAAAAAAAAAAAAAAAAAAAAEAABABAAgAAAAA=</HashCode>
+      <FileName>Include\MSPixelShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSVertexShader" Collapsed="true">
+    <Position X="18.5" Y="10.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAACAAAAACAAAAAAAAAAAAAEAIBABBAAAAAAA=</HashCode>
+      <FileName>Include\MSVertexShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSBaseSpriteShader" Collapsed="true">
+    <Position X="1.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAgAAAAAAACQAAAAAAAAACAAAAAAgACAAAQAAA=</HashCode>
+      <FileName>Include\MSBase2DSpriteShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSSpriteBaseRender" Collapsed="true">
+    <Position X="9.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQQAAAAJAAAAAAAACEAABBAAgEAAAAA=</HashCode>
+      <FileName>Include\MSSprite2DRender.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSSprite2DRender" Collapsed="true">
+    <Position X="8.25" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAABAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Include\MSSprite2DRender.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSSprite3DRender" Collapsed="true">
+    <Position X="10.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAIAAAAEAAAACABAAAAAAAAA=</HashCode>
+      <FileName>Include\MSSprite2DRender.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSSpriteBaseResource" Collapsed="true">
+    <Position X="14.75" Y="6.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>QIAEAAgCBCAABADAAACICQBgBCBJCghAoQQAAgAAAhg=</HashCode>
+      <FileName>Include\MSSprite2DResource.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSSprite2DResource" Collapsed="true">
+    <Position X="12.5" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\MSSprite2DResource.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSSprite3DResource" Collapsed="true">
+    <Position X="14.75" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\MSSprite2DResource.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TextureTextLine" Collapsed="true">
+    <Position X="26.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAQAABAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TextGraphic" Collapsed="true">
+    <Position X="33.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AMAAAAgAAAQAAAAAAAAIQAACAACAAkAAEBAAABAAUwQ=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FontLog" Collapsed="true">
+    <Position X="29.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FontDatabase" Collapsed="true">
+    <Position X="28" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAQAAAAAAIKAAAAAAQAAgACAIgABAAAAA=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CharDatabase" Collapsed="true">
+    <Position X="28" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAgAAAAAAAAAAAAAAICIAAAACAAEAAAAAgCDQAEQA=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TextManager" Collapsed="true">
+    <Position X="35" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIAAAAAAAAAAAAAQAEAIAACAAACjAEAAAAAAAAAAMAA=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSCollisionBase" Collapsed="true">
+    <Position X="10.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAAAAAACAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Include\MSCollisionBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSCollisionRay" Collapsed="true">
+    <Position X="13" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAIAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\MSCollisionRay.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MS2CollisionRay" Collapsed="true">
+    <Position X="31.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\MSCollisionRay.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSCollisionRayPicking" Collapsed="true">
+    <Position X="8.5" Y="11.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIACAgEAAAAAAAAAAAAAAAAAAAAhAAAAAAA=</HashCode>
+      <FileName>Include\MSCollisionRayPicking.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSCollisionSphere" Collapsed="true">
+    <Position X="10.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACgEAAAAAIAAAAAAAAAAAAAAAAAACAAAAAAAAAgQAAA=</HashCode>
+      <FileName>Include\MSCollisionSphere.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSCullingFrustum" Collapsed="true">
+    <Position X="35" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\MSCullingFrustum.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSCullingOcculusion" Collapsed="true">
+    <Position X="26.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAQAAAAAICAAAAARQAEAAACAAMBAQAAA=</HashCode>
+      <FileName>Include\MSCullingOcclusion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSDirect" Collapsed="true">
+    <Position X="28" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIQIABAEIQAACAEBAIDADAhAMA4AAASQAAAAIKA=</HashCode>
+      <FileName>Include\MSDirect.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSSceneBase" Collapsed="true">
+    <Position X="2.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAgwAAAAgAAAAAAABgAAAAADAABAAAAAA=</HashCode>
+      <FileName>Include\MSSceneBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSWindow" Collapsed="true">
+    <Position X="28" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEABAAACIAAAAAACAAAAAAAABAAAAEAMAAAgAAAAA=</HashCode>
+      <FileName>Include\MSWindow.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSGravity" Collapsed="true">
+    <Position X="35" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAEACACAAAAQBEAAAYAAAAAAAAQAAIAAAAAAAQAAA=</HashCode>
+      <FileName>Include\MSGravity.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSProgress" Collapsed="true">
+    <Position X="26.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFEAAABAQAEABQAAAABAABACAAIAABJAAAAEABAgAAQ=</HashCode>
+      <FileName>Include\MSProgressData.hxx</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Easing" Collapsed="true">
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAACAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Back" Collapsed="true">
+    <Position X="8" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Bounce" Collapsed="true">
+    <Position X="10.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Circ" Collapsed="true">
+    <Position X="12.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Cubic" Collapsed="true">
+    <Position X="14.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Elastic" Collapsed="true">
+    <Position X="17" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Expo" Collapsed="true">
+    <Position X="19.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Quad" Collapsed="true">
+    <Position X="21.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Quart" Collapsed="true">
+    <Position X="23.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Quint" Collapsed="true">
+    <Position X="1.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Sine" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Linear" Collapsed="true">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAEBAQAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::TweenerParam" Collapsed="true">
+    <Position X="31.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAAAgAAAAAAAAAAgQI4gEAggAkhIEQAAAACABAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::TweenerListener" Collapsed="true">
+    <Position X="29.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAARAAAAAAAAARAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tween::Tweener" Collapsed="true">
+    <Position X="28" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEBAAIAAABAAEAgGgEIAgIAAAAAABIAAAAAI=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Comfort::EffectCamera" Collapsed="true">
+    <Position X="26.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ICAAAAAAAAAAAAAAAAAAAQAAACAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Include\Effect.hxx</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Comfort::EffectProjection" Collapsed="true">
+    <Position X="28" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEACAgAAIgAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\Effect.hxx</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Dijkstra::Node" Collapsed="true">
+    <Position X="16.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAEAAAAAAAJAAEAAAAiCAAIAAAAAAAAAgABAEAAAA=</HashCode>
+      <FileName>Include\Dijkstra.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MyNode" Collapsed="true">
+    <Position X="16.25" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAgAgAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Include\EnemyAI.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ResultValue" Collapsed="true">
+    <Position X="26.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAAAEAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\Result.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="StageData" Collapsed="true">
+    <Position X="29.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAEAAAAAABAAAAAAAABAAAAAIAAAAAAAAAAQA=</HashCode>
+      <FileName>Include\StageSelectList.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="StatusBase" Collapsed="true">
+    <Position X="10.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAICAAABAAAAgAAAAAAAAAAAABAAAAAAAAEAAQACEA=</HashCode>
+      <FileName>Include\statusbase.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="StatusBulletBase" Collapsed="true">
+    <Position X="16.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAABCAIAAAAAQAAkgAAAAAAAA=</HashCode>
+      <FileName>Include\statusbulletbase.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="StatusBulletNormal" Collapsed="true">
+    <Position X="16.25" Y="13.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\StatusBulletNormal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="EnemyStatus" Collapsed="true">
+    <Position X="8.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAADAAggAAAIAAAAAAAAAAAACCAAAAAAA=</HashCode>
+      <FileName>Include\StatusEnemy.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="StatusField" Collapsed="true">
+    <Position X="31.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ARRiigiAgQACEYAhgKAACAiAREIAAEEEgAAAgIBAAAA=</HashCode>
+      <FileName>Include\StatusField.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="StatusPlayer" Collapsed="true">
+    <Position X="10.75" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\StatusPlayer.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MeshBuffer" Collapsed="true">
+    <Position X="35" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAQAAAAAAAAAIAAAAAIAAIAAAAAAAg=</HashCode>
+      <FileName>Include\MSFbxManager.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SpriteVertex" Collapsed="true">
+    <Position X="28" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Include\MSBase2DSpriteShader.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="IRECT" Collapsed="true">
+    <Position X="33.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAhAAAAIAAAAAAAAQEAAgAA=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TextureChar" Collapsed="true">
+    <Position X="17" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="FontDesc" Collapsed="true">
+    <Position X="29.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="FontResource" Collapsed="true">
+    <Position X="31.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAACAAA=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="tween::TweenerProperty" Collapsed="true">
+    <Position X="33.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAgAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="tween::TweenerCallBack" Collapsed="true">
+    <Position X="26.25" Y="10.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="SceneTimeOverSequence" Collapsed="true">
+    <Position X="26.25" Y="9.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAFAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Include\TimeOver.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CharaStateFlag" Collapsed="true">
+    <Position X="33.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAQEAAAAAAA=</HashCode>
+      <FileName>Include\statusbase.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BulletDamageType" Collapsed="true">
+    <Position X="29.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAABCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\statusbulletbase.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EnemyLockOnType" Collapsed="true">
+    <Position X="26.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAIAAAAAIAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Include\StatusEnemy.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eNowAIStatus" Collapsed="true">
+    <Position X="28" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\StatusEnemy.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IssueFlag" Collapsed="true">
+    <Position X="29.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\StatusField.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ButtonState" Collapsed="true">
+    <Position X="31.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAgAAAgAAAACAA=</HashCode>
+      <FileName>Include\Button.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eGaugeDirection" Collapsed="true">
+    <Position X="35" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <FileName>Include\UIBase.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TextAlign" Collapsed="true">
+    <Position X="28" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAgAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="RegisterFlag" Collapsed="true">
+    <Position X="35" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\Graphic_Text.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MSKEY" Collapsed="true">
+    <Position X="31.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>YAH+rQWQIAAAC4CAfv//oQ2kgoIKAAh6AEBA/K8nAQI=</HashCode>
+      <FileName>Include\MSKeyCodeList.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MSPRogressFlag" Collapsed="true">
+    <Position X="33.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>Include\MSProgressData.hxx</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EnemyAIType::Type" Collapsed="true">
+    <Position X="29.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAABDEACAIAAAAAABAAIAQACAAAEgAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\EnemyAI.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="tween::__unnamed_enum_03fd_1" Collapsed="true">
+    <Position X="26.25" Y="8" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AgQAAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAABAFACoA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="tween::__unnamed_enum_03fd_2" Collapsed="true">
+    <Position X="28" Y="8" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Include\CppTweener.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>
