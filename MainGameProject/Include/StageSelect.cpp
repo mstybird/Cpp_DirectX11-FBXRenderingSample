@@ -15,7 +15,6 @@ void SceneStageSelect::Initialize()
 	InitUI();
 	printf("OK:UI\n");
 	InitSound();
-	mBGM.Play();
 	printf("OK:Sound\n");
 	InitializeEnd();
 	printf("OK:All\n");
@@ -24,6 +23,8 @@ void SceneStageSelect::Initialize()
 
 void SceneStageSelect::Update()
 {
+	mBGM.Play();
+	UpdateSceneChange();
 }
 
 void SceneStageSelect::KeyDown(MSKEY pKey)
@@ -44,13 +45,23 @@ void SceneStageSelect::KeyDown(MSKEY pKey)
 		mSEEnter.Stop(true);
 		mSEEnter.Play();
 		StageSelectSave();
-		MSDirect::SetScene(std::make_unique<MyMSScene>());
+
+		mScene = std::make_unique<MyMSScene>();
+
+		mScneThread.SetFunction([&]() {mScene->Initialize(); });
+		mScneThread.Start();
+		mIsSceneChange = true;
 
 		break;
 	case MSKEY::BACKSPACE:
 		mSEEnter.Stop(true);
 		mSEEnter.Play();
-		MSDirect::SetScene(std::make_unique<SceneTitle>());
+
+		mScene = std::make_unique<SceneTitle>();
+
+		mScneThread.SetFunction([&]() {mScene->Initialize(); });
+		mScneThread.Start();
+		mIsSceneChange = true;
 		break;
 	default:
 		break;
@@ -220,4 +231,51 @@ void SceneStageSelect::StageSelectSave()
 
 	lOutFile << lOutStr;
 	lOutFile.close();
+}
+
+void SceneStageSelect::UpdateSceneChange()
+{
+	if (mIsSceneChange == false)return;
+
+	switch (mSequence)
+	{
+	case SceneSequence::eChangeFirst:
+		mSceneTime = clock();
+		mSequence = SceneSequence::eChangeLoop;
+		{
+			
+			tween::TweenerParam lParam(2000, tween::EASE_IN_OUT, tween::EASE_IN);
+			lParam.addProperty(&mSelectTitle.mPosition->y, -100);
+			mTweener.addTween(lParam);
+		}
+		//フォールスルー
+	case SceneSequence::eChangeLoop:
+	{
+		auto lNowTime = clock();
+		if (mIsMoveThumbnail == false) {
+			if (mSceneTime + 700 < lNowTime) {
+				tween::TweenerParam lParam(2000, tween::EASE_IN, tween::EASE_IN);
+				lParam.addProperty(&mSelectList.GetActiveThumbnail()->mPosition->x, 1050);
+				mIsMoveThumbnail = true;
+			}
+			mTweener.step(lNowTime);
+
+		}
+		else if (mSceneTime + 2800 < lNowTime) {
+			mSequence = SceneSequence::eChangeEnd;
+		}
+		mTweener.step(lNowTime);
+
+
+
+	}
+
+	break;
+	case SceneSequence::eChangeEnd:
+		mScneThread.Wait();
+		MSDirect::SetScene(std::move(mScene));
+		break;
+	default:
+		break;
+	}
 }

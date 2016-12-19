@@ -200,8 +200,14 @@ void MyMSScene::KeyDown(MSKEY pKey)
 	}
 
 	if (lIsRun) {
+		int lNowAnimation = mPlayer.GetTransform()->GetMesh()->GetAnimation();
+
+		if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
+			lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+
 		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
 		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		}
 
 	}
 
@@ -221,6 +227,7 @@ void MyMSScene::KeyHold(MSKEY pKey)
 
 		int lNowAnimation = mPlayer.GetTransform()->GetMesh()->GetAnimation();
 
+		if (mPlayer.GetStatus()->mLive != CharaStateFlag::ALIVE)return;
 
 		switch (pKey)
 		{
@@ -240,22 +247,26 @@ void MyMSScene::KeyHold(MSKEY pKey)
 			render.SetRenderTarget(*enemy[3]->GetTransform());
 			break;
 		case MSKEY::CH_W:
-			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill) {
+			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
+				lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
 				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,1 });
 			}
 			break;
 		case MSKEY::CH_S:
-			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill) {
+			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
+				lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
 				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,-1 });
 			}
 			break;
 		case MSKEY::CH_A:
-			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill) {
+			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
+				lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
 				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { -1,0,0 });
 			}
 			break;
 		case MSKEY::CH_D:
-			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill) {
+			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
+				lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
 				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
 			}
 			break;
@@ -276,22 +287,35 @@ void MyMSScene::KeyHold(MSKEY pKey)
 void MyMSScene::KeyUp(MSKEY pKey)
 {
 	if (mIsReady)return;
+	int lNowAnimation = mPlayer.GetTransform()->GetMesh()->GetAnimation();
 	switch (pKey) {
 	case MSKEY::CH_W:
-		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
-		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
+			lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
+			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		}
 		break;
 	case MSKEY::CH_S:
-		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
-		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
+			lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
+			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		}
 		break;
 	case MSKEY::CH_A:
-		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
-		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
+			lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
+			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		}
 		break;
 	case MSKEY::CH_D:
-		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
-		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
+			lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
+			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+		}	
 		break;
 	}
 }
@@ -1126,12 +1150,12 @@ void MyMSScene::UpdateReady()
 	if (mIsReady == false)return;
 	if (mSceneCounter < 60) {
 		mFieldStatus.GameStart();
-		mFieldStatus.InitializeTime(90);
+		mFieldStatus.InitializeTime(60);
 		
 	}
 	else if (mSceneCounter < 180) {
 		mFieldStatus.GameStart();
-		mFieldStatus.InitializeTime(90);
+		mFieldStatus.InitializeTime(60);
 	}
 	else if(mSceneCounter==180) {
 		for (auto&lEnemy : enemy) {

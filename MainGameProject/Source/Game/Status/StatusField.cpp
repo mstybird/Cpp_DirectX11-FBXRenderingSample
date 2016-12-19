@@ -394,6 +394,8 @@ void StatusField::Update()
 	mTeamWhite.GetBase()->GetWorld()->AddRC(0.0f, 1.0f, 0.0f);
 	mTeamBlack.GetBase()->GetWorld()->AddRC(0.0f, 1.0f, 0.0f);
 
+	mBall->GetWorld()->AddRC({ 1.5f,3.0f,4.5f });
+
 }
 
 void NodeControl::AddNodeSafe(std::vector<Dijkstra::Node*>& aNodeList, Dijkstra::Node * aAddNode)

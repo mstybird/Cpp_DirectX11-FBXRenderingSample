@@ -45,22 +45,6 @@ private:
 	//AIを更新する
 	void UpdateAI();
 
-	//探索(無計画)
-	//void UpdateSearching();
-	////ターゲットの位置に移動する
-	//void UpdateMoveToTarget();
-	////エネルギーチャージ
-	//void UpdateChargeEnergy();
-	////隠れる
-	//void UpdateMovingHide();
-	////攻撃
-	//void UpdateEnergyShot();
-	////ゴールへと移動する
-	//void UpdateMoveToGoal();
-	////ボールを手に入れにいく
-	//void UpdateMoveToBall();
-	////ボールを持っている敵を攻撃しにいく
-	//void UpdateMoveToBallTarget();
 
 	/*
 		最新AI
@@ -101,7 +85,10 @@ private:
 	//ノード間移動処理
 	bool MoveNode();
 	//視界処理
-	GameObjectBase* IsCulling();
+	std::vector<GameObjectBase*> IsCulling();
+
+	bool CharacterSearchToClear(const std::vector<GameObjectBase*>& aLookTargets);
+	bool CharacterSearchToNextAI(const std::vector<GameObjectBase*>& aLookTargets);
 
 private:
 

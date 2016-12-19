@@ -305,12 +305,12 @@ bool Enemy::MoveNode()
 	if (!lAINode)return false;
 	float lAng = MSHormingY(*mTransform, lAINode->Position, 6.0f);
 	GetWorld()->AddRC(0, lAng, 0);
-	if (IsZero(lAng, 5.99f)) {
+	if (IsZero(lAng, 120.0f)) {
 		GetWorld()->AddT(DXWorld::TYPE_ROTATE, 0.1f, { 0,0,1 });
 		DXVector3 lLength;
 		GetWorld()->GetMatrix().lock()->GetT(lLength);
 		lLength = lLength - lAINode->Position;
-		if (lLength.GetDistance() < 0.5f) {
+		if (lLength.GetDistance() < 1.0f) {
 			if (lAINode->GetID() == 1) {
 				++count;
 			}
@@ -322,8 +322,11 @@ bool Enemy::MoveNode()
 }
 
 
-GameObjectBase * Enemy::IsCulling()
+std::vector<GameObjectBase*> Enemy::IsCulling()
 {
+	//視界内のオブジェクトリスト
+	std::vector<GameObjectBase*> lTargetList;
+
 	GameObjectBase* lLookTargetPtr{};
 	//視界処理
 	//MSCullingFrustum cf;
@@ -396,15 +399,50 @@ GameObjectBase * Enemy::IsCulling()
 				}
 			}
 			)) {
-				lLookTargetPtr = lTarget;
+				lTargetList.push_back(lTarget);
 			}
 
 			mTransform = lTmpThis;
 
 		}
 	}
-	return lLookTargetPtr;
+	return std::move(lTargetList);
 }
+
+
+bool Enemy::CharacterSearchToClear(const std::vector<GameObjectBase*>& aLookTargets)
+{
+
+	for (auto&lTarget : aLookTargets) {
+		if (dynamic_cast<CharacterBase*>(lTarget)) {
+			//敵発見処理
+			GetStatus<EnemyStatus>()->mTargetting = true;
+			GetStatus<EnemyStatus>()->mTargetChara = lTarget;
+			mAI->ClearAI();
+			return true;
+		}
+
+	}
+	return false;
+
+}
+
+bool Enemy::CharacterSearchToNextAI(const std::vector<GameObjectBase*>& aLookTargets)
+{
+	for (auto&lTarget : aLookTargets) {
+		if (dynamic_cast<CharacterBase*>(lTarget)) {
+			//敵発見処理
+			GetStatus<EnemyStatus>()->mTargetting = true;
+			GetStatus<EnemyStatus>()->mTargetChara = lTarget;
+			mAI->NextAI();
+			return true;
+		}
+
+	}
+	return false;
+}
+
+
 void Enemy::BetaMoveToBall()
 {
 	//想定できる状況
@@ -429,21 +467,24 @@ void Enemy::BetaMoveToBall()
 	}
 
 	//視界処理
-	auto lLookTarget = IsCulling();
+	auto lLookTargets = IsCulling();
 
 	//視界に入ったのがキャラクターの場合、
 	//攻撃対象としてロックオン
-	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
-		//追従対象をキャラクターに移す
-		GetStatus<EnemyStatus>()->mIsTargetingBall = false;
-		GetStatus<EnemyStatus>()->mTargetting = true;
-		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
-		mAI->ClearAI();
-		return;
-	}
-	//視界に入ったのがボールの場合
-	else if (dynamic_cast<Ball*>(lLookTarget)) {
-		GetStatus<EnemyStatus>()->mIsTargetingBall = true;
+	for (auto&lTarget : lLookTargets) {
+		if (dynamic_cast<CharacterBase*>(lTarget)) {
+			//追従対象をキャラクターに移す
+			GetStatus<EnemyStatus>()->mIsTargetingBall = false;
+			GetStatus<EnemyStatus>()->mTargetting = true;
+			GetStatus<EnemyStatus>()->mTargetChara = lTarget;
+			mAI->ClearAI();
+			return;
+		}
+		//視界に入ったのがボールの場合
+		else if (dynamic_cast<Ball*>(lTarget)) {
+			GetStatus<EnemyStatus>()->mIsTargetingBall = true;
+		}
+
 	}
 
 	//ボールを補足済みかそうでないかで処理を変更
@@ -506,14 +547,19 @@ void Enemy::BetaMoveToGoal()
 	}
 
 	//移動中に敵と遭遇した場合、現在のAIを破棄する
-	auto lLookTarget = IsCulling();
-	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
-		//追従対象をキャラクターに移す
-		GetStatus<EnemyStatus>()->mTargetting = true;
-		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
-		mAI->ClearAI();
-		return;
+	auto lLookTargets = IsCulling();
+
+	for (auto&lTarget : lLookTargets) {
+		if (dynamic_cast<CharacterBase*>(lTarget)) {
+			//追従対象をキャラクターに移す
+			GetStatus<EnemyStatus>()->mTargetting = true;
+			GetStatus<EnemyStatus>()->mTargetChara = lTarget;
+			mAI->ClearAI();
+			return;
+		}
+
 	}
+
 
 	if (!MoveNode()) {
 
@@ -690,17 +736,22 @@ void Enemy::BetaChargeEnergy()
 	}
 
 	//移動中に敵を発見した場合、一定以上エネルギーが溜まっていればAIを破棄する
-	auto lLookTarget = IsCulling();
-	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
+	auto lLookTargets = IsCulling();
 
-		if (GetStatus<EnemyStatus>()->mEnergy.GetNowPer() >= 0.6f) {
-			GetStatus<EnemyStatus>()->mTargetting = true;
-			GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
-			mAI->ClearAI();
-			return;
+	for (auto&lTarget: lLookTargets) {
+		if (dynamic_cast<CharacterBase*>(lTarget)) {
+
+			if (GetStatus<EnemyStatus>()->mEnergy.GetNowPer() >= 0.6f) {
+				GetStatus<EnemyStatus>()->mTargetting = true;
+				GetStatus<EnemyStatus>()->mTargetChara = lTarget;
+				mAI->ClearAI();
+				return;
+			}
+
 		}
 
 	}
+
 
 	//エネルギーチャージ
 	if (GetStatus<EnemyStatus>()->mEnergy.GetNowPer() < 1.0f) {
@@ -742,6 +793,7 @@ void Enemy::BetaInSightAttack()
 		if (lTargetChara->GetStatus()->mLive != CharaStateFlag::ALIVE) {
 			//ターゲティングも初期化する
 			GetStatus<EnemyStatus>()->mTargetting = false;
+			GetStatus<EnemyStatus>()->mTargetChara = nullptr;
 			mAI->ClearAI();
 			return;
 		}
@@ -772,23 +824,27 @@ void Enemy::BetaInSightAttack()
 		GetWorld()->AddRC(0, lRotateY, 0);
 	}
 
-	////敵が視界にいるか毎フレーム調べる
-	//auto lLookTarget = IsCulling();
-	//if (dynamic_cast<CharacterBase*>(lLookTarget)) {
+	//敵が視界にいるか毎フレーム調べる
+	auto lLookTargets = IsCulling();
+	bool lIsLooking = false;
+	if (GetStatus<EnemyStatus>()->mTargetChara != nullptr) {
+		for (auto&lTarget : lLookTargets) {
+			//現在捉えている敵だった場合視界内にいる
+			if (GetStatus<EnemyStatus>()->mTargetChara == lTarget) {
+				lIsLooking = true;
+				printf("Searched\n");
+				break;
+			}
+		}
+	}
 
-
-
-	//}
-
-
-	////途中ボールに当たった場合、回収する
-	//auto lHitBall = UtlCollisionBall();
-	//if (lHitBall) {
-	//	GetStatus()->mBall = lHitBall;
-	//	mField->SetBallHolder(this);
-	//	//回収後AIを進める
-	//	mAI->ClearAI();
-	//}
+	if (lIsLooking == false) {
+		printf("%d------------\n", lLookTargets.size());
+		GetStatus<EnemyStatus>()->mTargetting = false;
+		GetStatus<EnemyStatus>()->mLastLookPosiion = *GetStatus<EnemyStatus>()->mTargetChara->GetWorld()->mPosition;
+		//GetStatus<EnemyStatus>()->mTargetChara = nullptr;
+		mAI->ClearAI();
+	}
 
 }
 
@@ -844,13 +900,8 @@ void Enemy::BetaMoveToBallHoldAlly()
 	}
 
 	//移動中に敵を発見した場合、現在のAIを破棄する
-	auto lLookTarget = IsCulling();
-	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
-		//敵発見処理
-		GetStatus<EnemyStatus>()->mTargetting = true;
-		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
-		mAI->ClearAI();
-	}
+	auto lLookTargets = IsCulling();
+	CharacterSearchToClear(lLookTargets);
 
 
 	//途中ボールに当たった場合、回収する
@@ -896,16 +947,9 @@ void Enemy::BetaSearchEnemyShort()
 	}
 
 	//敵との遭遇
-	auto lLookTarget = IsCulling();
-	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
-		//発見したらシーケンスをすすめる
-		mAI->NextAI();
-		//敵を視認中
-		GetStatus<EnemyStatus>()->mTargetting = true;
-		//捉えたターゲットを記憶
-		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
-		return;
-	}
+	auto lLookTargets = IsCulling();
+
+	CharacterSearchToNextAI(lLookTargets);
 
 
 	//ボール所持者がいなくなった場合
@@ -1009,19 +1053,12 @@ void Enemy::BetaMoveToLookingTarget()
 	}
 	
 	//戻る最中に視界に入れば発見。そのターゲットをロックオンする
-	auto lLookTarget = IsCulling();
-	if (lLookTarget) {
-		//ボール以外の場合
-		if (!dynamic_cast<Ball*>(lLookTarget)) {
-			//発見したらシーケンスをすすめる
-			mAI->NextAI();
-			//敵を視認中
-			GetStatus<EnemyStatus>()->mTargetting = true;
-			//捉えたターゲットを記憶
-			GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
-			return;
-		}
+	auto lLookTargets = IsCulling();
+
+	if (CharacterSearchToNextAI(lLookTargets)) {
+		return;
 	}
+
 	
 	
 	if (!MoveNode()) {
@@ -1051,15 +1088,13 @@ void Enemy::BetaMoveToBallTarget()
 		mAI->CreateRoot(lGoalID);
 	}
 
-	auto lLookTarget = IsCulling();
+	auto lLookTargets = IsCulling();
 	//キャラクターであればロックオン
 	//キャラクターであればロックオン
-	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
-		GetStatus<EnemyStatus>()->mTargetting = true;
-		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
-		mAI->ClearAI();
+	if (CharacterSearchToClear(lLookTargets)) {
 		return;
 	}
+
 	
 	bool lMoveEnd = MoveNode();
 	//ボールを落とした(フィールドに出現した場合)AIクリア
@@ -1137,11 +1172,7 @@ void Enemy::BetaSearchForAllyArea()
 		return;
 	}
 	//移動中に敵を発見した場合、現在のAIを破棄する
-	auto lLookTarget = IsCulling();
-	if (dynamic_cast<CharacterBase*>(lLookTarget)) {
-		//敵発見処理
-		GetStatus<EnemyStatus>()->mTargetting = true;
-		GetStatus<EnemyStatus>()->mTargetChara = lLookTarget;
-		mAI->ClearAI();
-	}
+	auto lLookTargets = IsCulling();
+
+	CharacterSearchToClear(lLookTargets);
 }

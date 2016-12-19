@@ -162,6 +162,13 @@ void StageSelectList::Render(MSSprite2DRender & aRender, UIBase * aParent)
 	mstageToggle.Render(aRender, this);
 }
 
+MSSprite2DResource * StageSelectList::GetActiveThumbnail()
+{
+	int lIndex = mstageToggle.GetActiveIndex();
+
+	return &mStages[lIndex].mThumbnail;
+}
+
 void StageSelectList::SetActiveThumbnail()
 {
 	int lIndex = mstageToggle.GetActiveIndex();

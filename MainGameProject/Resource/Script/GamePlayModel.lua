@@ -14,18 +14,18 @@ CharaBlackCollisionScale=0.01
 CharaBlackCollisionAnimation=false
 
 
-CharaWhiteDesignModel="Resource/Model/FoxyGirl_Static.fbx"
+CharaWhiteDesignModel="Resource/Model/FoxyGirl_Static_white.fbx"
 CharaWhiteDesignScale=0.25
 CharaWhiteDesignAnimation=false
 CharaWhiteCollisionModel="Resource/Model/box.fbx"
 CharaWhiteCollisionScale=0.01
 CharaWhiteCollisionAnimation=false
 
-BaseBlackDesignModel="Resource/Model/Base.fbx"
+BaseBlackDesignModel="Resource/Model/Base_black.fbx"
 BaseBlackDesignScale=0.03
 BaseBlackDesignAnimation=false
 BaseBlackCollisionModel="Resource/Model/box.fbx"
-BaseBlackCollisionScale=0.02
+BaseBlackCollisionScale=0.04
 BaseBlackCollisionAnimation=false
 
 
@@ -33,7 +33,7 @@ BaseWhiteDesignModel="Resource/Model/Base.fbx"
 BaseWhiteDesignScale=0.03
 BaseWhiteDesignAnimation=false
 BaseWhiteCollisionModel="Resource/Model/box.fbx"
-BaseWhiteCollisionScale=0.02
+BaseWhiteCollisionScale=0.04
 BaseWhiteCollisionAnimation=false
 
 

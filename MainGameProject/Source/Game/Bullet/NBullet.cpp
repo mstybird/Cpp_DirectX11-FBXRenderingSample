@@ -183,11 +183,14 @@ void NBullet::Update()
 		//死んだらそのターゲットに死亡フラグをセット
 		//死んでなければ処理しない
 		if (lIsDead == false) {
-			//死んだキャラのモーションを変更
+			//当たったキャラのモーションを変更
 
-			lChara->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimAttacked);
-			lChara->GetTransform()->GetMesh()->SetLoopFlag(false);
-			lChara->GetTransform()->GetMesh()->SetFrontFrame();
+			//攻撃モーション中の場合はキャンセルしない
+			if (lChara->GetTransform()->GetMesh()->GetAnimation() != ValueMyScene::Chara::cAnimSkill) {
+				lChara->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimAttacked);
+				lChara->GetTransform()->GetMesh()->SetLoopFlag(false);
+				lChara->GetTransform()->GetMesh()->SetFrontFrame();
+			}
 			break;
 		}
 		else {

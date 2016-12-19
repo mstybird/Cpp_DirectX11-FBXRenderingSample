@@ -165,8 +165,8 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.OutputWindow = mHwnd;
-	sd.SampleDesc.Count = 1;
-	sd.SampleDesc.Quality = 0;
+	sd.SampleDesc.Count = 4;
+	sd.SampleDesc.Quality = 0.5;
 	sd.Windowed = TRUE;
 
 	//タイマーのセット
@@ -181,7 +181,6 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 	{
 		return FALSE;
 	}
-
 
 	//各種テクスチャーと、それに付帯する各種ビューを作成
 	//バックバッファーテクスチャーを取得（既にあるので作成ではない）
@@ -198,8 +197,8 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 	descDepth.MipLevels = 1;
 	descDepth.ArraySize = 1;
 	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
-	descDepth.SampleDesc.Count = 1;
-	descDepth.SampleDesc.Quality = 0;
+	descDepth.SampleDesc.Count = 4;
+	descDepth.SampleDesc.Quality = 0.5;
 	descDepth.Usage = D3D11_USAGE_DEFAULT;
 	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	descDepth.CPUAccessFlags = 0;
@@ -265,8 +264,13 @@ void MSDirect::Loop()
 {
 
 	scene->Update();
-	scene->Render();
-	m_pSwapChain->Present(1, 0);
+	if (mIsSceneChanging == false) {
+		scene->Render();
+		m_pSwapChain->Present(1, 0);
+	}
+	else {
+		mIsSceneChanging = false;
+	}
 }
 
 void MSDirect::SetScene(std::unique_ptr<MSSceneBase>&& pScene)
@@ -277,6 +281,7 @@ void MSDirect::SetScene(std::unique_ptr<MSSceneBase>&& pScene)
 	std::unique_ptr<MSSceneBase> lBufferPtr = std::move(sMSDirect->scene);
 	sMSDirect->scene = std::move(pScene);
 	lBufferPtr.reset();
+	sMSDirect->mIsSceneChanging = true;
 }
 
 D3D11_VIEWPORT * MSDirect::GetViewPort()

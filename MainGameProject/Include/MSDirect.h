@@ -49,4 +49,5 @@ private:
 	std::unordered_map<MSKEY, bool> KeyList;
 	std::unique_ptr<MSSceneBase>scene;
 	//	MSSceneBase scene;
+	bool mIsSceneChanging = false;
 };

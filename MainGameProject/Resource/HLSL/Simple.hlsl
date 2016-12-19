@@ -36,9 +36,6 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL, float2 Tex : TEXCOOR
 	VS_OUTPUT output = (VS_OUTPUT)0;
 	output.Pos = mul(Pos, g_mWVP);
 	output.UV = Tex;
-	Normal.w = 0;
-	Normal = mul(Normal, g_mW);
-	Normal = normalize(Normal);
 	output.Color = 1.0 * g_Diffuse * dot(Normal, g_vLightDir);//この式はランバートの余弦則
 
 	return output;

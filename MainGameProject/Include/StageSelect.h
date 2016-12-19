@@ -7,6 +7,8 @@
 #include"MSSprite2DResource.h"
 #include"StageSelectList.h"
 #include<DXAL.hpp>
+#include<CppTweener.h>
+#include<MSThread.hpp>
 #include<memory>
 #include<iostream>
 #include<vector>
@@ -98,8 +100,17 @@ private:
 	void InitSound();
 	//選択したステージの一時セーブ
 	void StageSelectSave();
+
+	//シーン遷移の処理
+	void UpdateSceneChange();
 private:
 	
+	enum class SceneSequence {
+		eChangeFirst,
+		eChangeLoop,
+		eChangeEnd
+	};
+
 	//Luaデータベース
 	NcgLuaDatabase mLuaDb;
 	//テクスチャマネージャ
@@ -123,4 +134,16 @@ private:
 	SoundPlayer mBGM;
 	SoundPlayer mSESelect;
 	SoundPlayer mSEEnter;
+
+	bool mIsSceneChange = false;
+	//シーン遷移に使う遅延評価スレッド
+	MSThread mScneThread;
+	//シーン遷移に使うシーケンスフラグ
+	SceneSequence mSequence;
+	uint32_t mSceneTime;
+	//遷移シーン
+	std::unique_ptr<MSSceneBase> mScene;
+	//Tween
+	tween::Tweener mTweener;
+	bool mIsMoveThumbnail = false;
 };

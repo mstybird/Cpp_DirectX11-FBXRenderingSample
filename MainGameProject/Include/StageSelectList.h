@@ -47,7 +47,12 @@ namespace ValueStageData {
 	static const int cButtonDisableID= 1400;
 
 }
-
+	struct Resource3D {
+		std::vector<float>lPosition;
+		std::vector<float>lSize;
+		std::vector<float>lScale;
+		std::vector<float>lOffset;
+	};
 class StageSelectList :public UIBase {
 public:
 	//ステージセレクトファイルの読み込み
@@ -64,17 +69,16 @@ public:
 	StageData* GetActiveData();
 
 	virtual void Render(MSSprite2DRender& aRender, UIBase*aParent = nullptr)override;
+	MSSprite2DResource* GetActiveThumbnail();
+
+	Resource3D* GetResThumbnail() { return &ButtonsResource; }
+	Resource3D* GetResToggle() { return &ThumbnailResource; }
 
 private:
 
 	void SetActiveThumbnail();
 
-	struct Resource3D {
-		std::vector<float>lPosition;
-		std::vector<float>lSize;
-		std::vector<float>lScale;
-		std::vector<float>lOffset;
-	};
+
 	//リスト表示するフレームの画像
 	MSSprite2DResource mListFrame;
 	//ステージデータ群
@@ -87,7 +91,6 @@ private:
 	//ステージリスト
 	std::vector<Button>mButtons;
 	Toggle mstageToggle;
-
 	Resource3D ButtonsResource;
 	Resource3D ThumbnailResource;
 	Resource3D FrameResource;

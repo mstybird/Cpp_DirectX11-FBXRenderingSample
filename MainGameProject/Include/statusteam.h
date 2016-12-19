@@ -48,7 +48,7 @@ private:
 	//拠点(ゴールデータ)
 	StaticObject mBase;
 	//ゴールの範囲
-	float mBaseScale = 1.0f;
+	float mBaseScale = 2.0f;
 	//ゴールインデックス
 	int mGoalIndex = -1;
 	//チームメンバーリスト
