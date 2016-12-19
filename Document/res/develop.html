@@ -50,9 +50,134 @@
 			<article class="col-xs-12 col-md-8 container">
 				<!--メイン項目-->
 				<div class="container-fluid ItemElement">
+					<h1>開発環境</h1>
+					<table class="table table-bordered" style="background-color:white">
+						<tr>
+							<th>使用IDE</th>
+							<td>Visual Studio 2015</td>
+						</tr>
+						<tr>
+							<th>マップ制作</th>
+							<td>Unity5.4.2f2</td>
+						</tr>
+
+						<tr>
+								<th>使用言語</th>
+								<td>C++14,Lua(5.3.3)</td>
+							</tr>
+						<tr>
+							<th>外部の使用API,SDK,ライブラリ</th>
+							<td>DirectX9.0c, DirectX11.0, FBXSDK2016.1.2, Effekseer For Runtime</td>
+						</tr>
+						<tr>
+							<th>一回の作業時間</th>
+							<td>5分~6時間</td>
+						</tr>
+						<tr>
+							<th>一日の作業時間</th>
+							<td>5分~10時間</td>
+						</tr>
+					</table>
+					<h1>開発目的</h1>
+					<div class="list-group">
+						<div class="list-group-item">
+							<h4>過去にゲームとして公開した経験がないため、その経験づくり</h4>
+							<p class="list-group-item-text">
+								プログラムを公開したことはあっても、ゲームとして公開したことがないので、この経験を通じて、多くのゲームを公開していきたい。<br />
+								それによって、もっと面白いゲームを作るキッカケやノウハウを得る機会を増やしたい為。
+
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>今後のゲーム開発のノウハウ収集</h4>
+							<p class="list-group-item-text">
+								趣味でも仕事でもゲームを作っていきたいので、今後の創作に役立つ幅広いノウハウを収集するため。<br />
+								プログラミングだけでなく、デザイナー・エフェクターなど、プログラム以外の知識も最低限浅く広く得ることで、<br />
+								今後のチーム開発での連携を円滑に行うことができるようにする目的。
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>失敗を経験して、今後の成功につなげるための経験づくり</h4>
+							<p class="list-group-item-text">
+								失敗をしたということは、今後その失敗を繰り返さないようにするにはどうするべきか考えるきっかけとなるため、かなり重要視している。<br />
+								失敗点を自身の弱みとして分析し、それを強みに変えることはできなくても、弱みを消すことはできるため、失敗を重要視することで、自身の欠点を減らしていっている。
+
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>保守性のあるプログラムの構築技術習得</h4>
+							<p class="list-group-item-text">
+								ゲームジャムのような非常に短期間での開発なら話は別ですが、長期にわたって利用されるサービスを想定すると、機能追加によるコードの修正など多くの変更が考えられるため、その変更に耐えやすい設計の知識を深めるため。
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>上記に加えて、汎用性のあるライブラリの開発への挑戦</h4>
+							<p class="list-group-item-text">
+								ライブラリ化することで、そのプロジェクトから機能が独立し、別のプロジェクトとして開発を進めることができる他、既存のプログラムの大きな仕様変更を除くと、多少の変更があってもマージしやすいため。
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>3年生のときのチーム製作で役立つノウハウ集め、資産構築</h4>
+							<p class="list-group-item-text">
+								チームメンバーを集う際にどのような人を集めるべきか等、正しい判断ができるようにするため。<br />
+								プログラムに限らず、デザインやサウンドなどの浅くても多少の知識がなければ、上手くコストを計算できず、負担をかけすぎるリスクが伴うため。
+							</p>
+						</div>
+					</div>
 
 
+					<h1>実装済みシステム</h1>
+					<div class="list-group">
+						<div class="list-group-item">
+							<h4>経路探索にはダイクストラ法を採用</h4>
+							<p class="list-group-item-text">
+								ナビゲーションメッシュも考えたが、開発スケジュールに対して作業完了の目途を推測できなかったため、<br />
+								作業完了の目途を立てることができたダイクストラ法を採用し、リスク回避を選択。
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>思考ルーチンにはHTNプランニング手法を採用</h4>
+							<p class="list-group-item-text">
+								思考パターンは条件分岐が増えるとかなり複雑化し、保守性が落ちるため、
+								Luaを用いて、HTNプランニングで実装。
+								これにより思考ルーチン部分はコンパイルが不要になるため、作業が止まる時間を減らすことができた。
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>キャラクターの発見はオクルージョンカリングで実装</h4>
+							<p class="list-group-item-text">
+								視界に映っているキャラクターのピクセル数を用いて、視界内かどうか調べている。<br />
+								この際、処理速度を高速化するために、画面上には出ないローポリゴンモデル(立方体)を使用している。
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>Cocos2d-xのシーンの概念を実装</h4>
+							<p class="list-group-item-text">
+								共通コードを隠蔽化することで、ゲームの開発に必要なソースコードを減らせるようにできたほか、<br />
+								次に表示するシーンを初期化のみ別スレッドで動かすことも簡単にできるようになり、プレイヤーに対してローディング時のストレスを軽減。
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>3DモデルのフォーマットにはFBXを採用</h4>
+							<p class="list-group-item-text">
+								DirectX11以降はXフォーマットがサポートされなくなったため、一般的かつ読み込み用SDKが標準で用意されているFBXを採用。<br />
 
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>UIはUnityの親子構造を参考に、親子関係を持つUIを実装</h4>
+							<p class="list-group-item-text">
+								親子関係を持たせることで、座標データなどを親から継承させることができ、修正作業がより簡単に、なおかつ修正忘れによるバグの削減を減らすことができると考えたため、親子関係を持たせて実装。
+							</p>
+						</div>
+						<div class="list-group-item">
+							<h4>エフェクトは今後作業を分担できるようにEffekseerを導入</h4>
+							<p class="list-group-item-text">
+								エフェクトはプログラマでなくても外部で作成できるソフトウェアが数多く存在し、そちらを利用するほうが作業工数を大幅に減らせると考えて導入。
+								3年生になった際のゲームのチーム製作でも活かせるとも考えたため。
+							</p>
+						</div>
+					</div>
 
 				</div>
 			</article>

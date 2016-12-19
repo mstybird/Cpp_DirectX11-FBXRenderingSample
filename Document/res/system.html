@@ -50,10 +50,91 @@
 			<article class="col-xs-12 col-md-8 container">
 				<!--メイン項目-->
 				<div class="container-fluid ItemElement">
+					<h1>ゲーム概要</h1>
+					<p>
+						このゲームは、魔法を駆使しながらフィールドにあるボールを奪い合うゲームです。<br />
+						奪ったボールを拠点まで持ち帰ることで得点となります。<br />
+						制限時間内により多くの得点を獲得したチームの勝利となります。
+					</p>
+					<h1>操作方法</h1>
+					<table class="table table-bordered" style="background-color:white">
+							<tr>
+								<th>キー</th>
+								<th>内容</th>
+							</tr>
+						<tbody>
+							<tr>
+								<th><code>W</code></th>
+								<td>前進</td>
+							</tr>
+							<tr>
+								<th><code>A</code></th>
+								<td>左移動</td>
+							</tr>
+							<tr>
+								<th><code>S</code></th>
+								<td>後退</td>
+							</tr>
+							<tr>
+								<th><code>D</code></th>
+								<td>右移動</td>
+							</tr>
+							<tr>
+								<th><code>SPACE</code></th>
+								<td>攻撃</td>
+							</tr>
+							<tr>
+								<th><code>←</code></th>
+								<td>カメラ回転(反時計回り)</td>
+							</tr>
+							<tr>
+								<th><code>→</code></th>
+								<td>カメラ回転(時計回り)</td>
+							</tr>
+						</tbody>
+					</table>
 
-
-
-
+					<h1>ゲーム内オブジェクト</h1>
+					<p>
+						<img src="../image/ss_gameDesc.png" />
+					</p>
+					<table class="table table-bordered" style="background-color:white">
+						<tr>
+							<th>1</th>
+							<th>キャラクター</th>
+							<td>操作キャラクターです</td>
+						</tr>
+						<tr>
+							<th>2</th>
+							<th>ボール</th>
+							<td>争奪する対象のボールです。これを拠点まで持ち帰ることで得点となります。<br />拠点まで持ち帰られると、ランダムな場所に再出現します。</td>
+						</tr>
+						<tr>
+							<th>3</th>
+							<th>拠点</th>
+							<td>ここにボールを持った状態で訪れると、得点となります。</td>
+						</tr>
+						<tr>
+							<th>4</th>
+							<th>HPゲージ</th>
+							<td>ダメージを受けるとゲージが減少します。ゲージがなくなる(HPが0)と倒されて、再度ランダムな場所に再出現します。</td>
+						</tr>
+						<tr>
+							<th>5</th>
+							<th>EPゲージ</th>
+							<td>攻撃に必要なエネルギーポイントです。このゲージがなくなると攻撃できなくなります。</td>
+						</tr>
+						<tr>
+							<th>6</th>
+							<th>制限時間</th>
+							<td>ゲームの制限時間です。時間切れになるとゲームが終了し、リザルトへと移行します。</td>
+						</tr>
+						<tr>
+							<th>7</th>
+							<th>スコアゲージ</th>
+							<td>現在のスコアです。緑ゲージが味方チームスコア。赤ゲージが敵チームスコアとなっています。</td>
+						</tr>
+					</table>
 				</div>
 			</article>
 			<aside class="col-xs-12 col-md-4 container">

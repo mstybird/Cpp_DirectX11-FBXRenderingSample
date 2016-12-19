@@ -6,7 +6,7 @@ BulletCollisionScale=0.01
 BulletCollisionAnimation=false
 
 
-CharaBlackDesignModel="Resource/Model/FoxyGirl_Static.fbx"
+CharaBlackDesignModel="Resource/Model/FoxyGirl_Static_black.fbx"
 CharaBlackDesignScale=0.25
 CharaBlackDesignAnimation=false
 CharaBlackCollisionModel="Resource/Model/box.fbx"
