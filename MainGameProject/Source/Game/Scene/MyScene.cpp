@@ -161,6 +161,9 @@ void MyMSScene::KeyDown(MSKEY pKey)
 		case MSKEY::SPACE:
 			mPlayer.AddBullet();
 			break;
+		case MSKEY::CH_T:
+			mFieldStatus.InitializeTime(0);
+			break;
 		default:
 			break;
 		}
@@ -248,25 +251,29 @@ void MyMSScene::KeyHold(MSKEY pKey)
 			break;
 		case MSKEY::CH_W:
 			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
-				lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+				lNowAnimation != ValueMyScene::Chara::cAnimAttacked&&
+				lNowAnimation != ValueMyScene::Chara::cAnimDown) {
 				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,1 });
 			}
 			break;
 		case MSKEY::CH_S:
 			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
-				lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+				lNowAnimation != ValueMyScene::Chara::cAnimAttacked&&
+				lNowAnimation != ValueMyScene::Chara::cAnimDown) {
 				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 0,0,-1 });
 			}
 			break;
 		case MSKEY::CH_A:
 			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
-				lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+				lNowAnimation != ValueMyScene::Chara::cAnimAttacked&&
+				lNowAnimation != ValueMyScene::Chara::cAnimDown) {
 				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { -1,0,0 });
 			}
 			break;
 		case MSKEY::CH_D:
 			if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
-				lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+				lNowAnimation != ValueMyScene::Chara::cAnimAttacked&&
+				lNowAnimation != ValueMyScene::Chara::cAnimDown) {
 				mPlayer.GetWorld()->AddT(DXWorld::TYPE_ROTATE, speed, { 1,0,0 });
 			}
 			break;
@@ -291,28 +298,32 @@ void MyMSScene::KeyUp(MSKEY pKey)
 	switch (pKey) {
 	case MSKEY::CH_W:
 		if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
-			lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+			lNowAnimation != ValueMyScene::Chara::cAnimAttacked&&
+			lNowAnimation != ValueMyScene::Chara::cAnimDown) {
 			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
 			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
 		}
 		break;
 	case MSKEY::CH_S:
 		if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
-			lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+			lNowAnimation != ValueMyScene::Chara::cAnimAttacked&&
+			lNowAnimation != ValueMyScene::Chara::cAnimDown) {
 			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
 			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
 		}
 		break;
 	case MSKEY::CH_A:
 		if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
-			lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+			lNowAnimation != ValueMyScene::Chara::cAnimAttacked&&
+			lNowAnimation != ValueMyScene::Chara::cAnimDown) {
 			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
 			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
 		}
 		break;
 	case MSKEY::CH_D:
 		if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
-			lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
+			lNowAnimation != ValueMyScene::Chara::cAnimAttacked&&
+			lNowAnimation != ValueMyScene::Chara::cAnimDown) {
 			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
 			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
 		}	
@@ -1150,12 +1161,12 @@ void MyMSScene::UpdateReady()
 	if (mIsReady == false)return;
 	if (mSceneCounter < 60) {
 		mFieldStatus.GameStart();
-		mFieldStatus.InitializeTime(60);
+		mFieldStatus.InitializeTime(300);
 		
 	}
 	else if (mSceneCounter < 180) {
 		mFieldStatus.GameStart();
-		mFieldStatus.InitializeTime(60);
+		mFieldStatus.InitializeTime(300);
 	}
 	else if(mSceneCounter==180) {
 		for (auto&lEnemy : enemy) {
