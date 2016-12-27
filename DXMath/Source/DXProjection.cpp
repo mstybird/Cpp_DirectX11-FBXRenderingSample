@@ -5,8 +5,7 @@ float DXProjection::mAspect;
 DXProjection::DXProjection():
 	mAngle{45},
 	mNear{0.0f},
-	mFar{100.0f},
-	mMatrix{std::make_shared<DXMatrix>()}
+	mFar{100.0f}
 {
 }
 DXProjection::~DXProjection()
@@ -62,12 +61,12 @@ void DXProjection::Clone(DXProjection & pOutClone)
 	pOutClone.mNear = mNear;
 }
 
-std::weak_ptr<DXMatrix> DXProjection::GetMatrix()
+DXMatrix* DXProjection::GetMatrix()
 {
 
 	D3DXMatrixPerspectiveFovLH(
-		mMatrix.get(),
+		&mMatrix,
 		D3DXToRadian(mAngle),
 		mAspect, mNear, mFar);
-	return mMatrix;
+	return &mMatrix;
 }

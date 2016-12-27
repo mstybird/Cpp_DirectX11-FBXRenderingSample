@@ -26,6 +26,14 @@ void GameObjectBase::SetShader(MSBase3DShader * aShader)
 {
 	mShader = aShader;
 }
+void GameObjectBase::SetCollisionShader(MSBase3DShader * aShader)
+{
+	mCollisionShader = aShader;
+}
+MSBase3DShader * GameObjectBase::GetCollisionShader()
+{
+	return mCollisionShader;
+}
 void GameObjectBase::SetMesh(MSFbxManager & aSetMesh)
 {
 	mTransform->GetMesh()->Initialize(aSetMesh);
@@ -58,7 +66,7 @@ void GameObjectBase::SetCollisionMesh(MSFbxManager & aSetMesh)
 
 void GameObjectBase::SetCollisionScale(float aX, float aY, float aZ)
 {
-	mCollisionMesh->GetWorld().lock()->SetS(aX, aY, aZ);
+	mCollisionMesh->GetWorld()->SetS(aX, aY, aZ);
 	mIsCollisionScaleDefault = false;
 }
 
@@ -102,17 +110,17 @@ MSFbxManager * GameObjectBase::GetMesh()
 
 DXWorld * GameObjectBase::GetWorld()
 {
-	return mTransform->GetWorld().lock().get();
+	return mTransform->GetWorld();
 }
 
 DXCamera * GameObjectBase::GetView()
 {
-	return mTransform->GetCamera().lock().get();
+	return mTransform->GetCamera();
 }
 
 DXProjection * GameObjectBase::GetProj()
 {
-	return mTransform->GetProjection().lock().get();
+	return mTransform->GetProjection();
 }
 
 DX11RenderResource * GameObjectBase::GetTransform()
@@ -125,8 +133,8 @@ float GameObjectBase::GetDistance(GameObjectBase * aTarget)
 	DXVector3 lBallHolderPos;
 	DXVector3 lThisPos;
 	float lDistance;
-	lBallHolderPos = *aTarget->GetWorld()->mPosition;
-	lThisPos = *GetWorld()->mPosition;
+	lBallHolderPos = aTarget->GetWorld()->mPosition;
+	lThisPos = GetWorld()->mPosition;
 	lDistance = (lBallHolderPos - lThisPos).GetDistance();
 
 	return lDistance;
@@ -141,6 +149,33 @@ bool GameObjectBase::UpdateMesh()
 	return lPlayEnd;
 }
 
+std::shared_ptr<DX11RenderResource> GameObjectBase::LoadTransform( GameObjectBase* aTransform)
+{
+	auto lTmpMesh = aTransform->mTransform;
+
+	DXVector3 lTmpS;
+	//判定メッシュをコリジョン用に変更
+	aTransform->GetWorld()->GetMatrix()->GetT(lTmpS);
+	aTransform->mCollisionMesh->GetWorld()->SetT(lTmpS);
+	aTransform->mCollisionMesh->GetWorld()->SetRC(aTransform->GetWorld()->mRotationCenter);
+
+	aTransform->mTransform = aTransform->mCollisionMesh;
+
+	if (aTransform->IsActive() == false) {
+		aTransform->mTransform = lTmpMesh;
+		return{};
+	}
+
+	return lTmpMesh;
+}
+
+CBResource0 * GameObjectBase::GetFrameResource()
+{
+	return &mFrameResource;
+}
+
+
+
 std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosition)
 {
 	std::vector<GameObjectBase*>lHitTargets{};
@@ -152,16 +187,16 @@ std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosit
 		auto lTmpMesh = lCollision->mTransform;
 		DXVector3 lTmpS;
 		//判定メッシュをコリジョン用に変更
-		lCollision->GetWorld()->GetMatrix().lock()->GetT(lTmpS);
-		lCollision->mCollisionMesh->GetWorld().lock()->SetT(lTmpS);
-		lCollision->mCollisionMesh->GetWorld().lock()->SetRC(*lCollision->GetWorld()->mRotationCenter);
+		lCollision->GetWorld()->GetMatrix()->GetT(lTmpS);
+		lCollision->mCollisionMesh->GetWorld()->SetT(lTmpS);
+		lCollision->mCollisionMesh->GetWorld()->SetRC(lCollision->GetWorld()->mRotationCenter);
 
 
 		//コリジョンスケールが別で設定されていない場合は
 		//メッシュのコリジョンスケールを使う
 		if (lCollision->mIsCollisionScaleDefault == true) {
-			lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
-			lCollision->mCollisionMesh->GetWorld().lock()->SetS(lTmpS);
+			lCollision->GetWorld()->GetMatrix()->GetS(lTmpS);
+			lCollision->mCollisionMesh->GetWorld()->SetS(lTmpS);
 		}
 
 		lCollision->mTransform = lCollision->mCollisionMesh;

@@ -5,6 +5,8 @@
 #include<DX11FBXLoader.hpp>
 #include"DXMath.hpp"
 #include"MSBase3DShader.h"
+#include<GameObjectBase.h>
+#include<MSDirect.h>
 #include<vector>
 ID3D11Device*MS3DRender::sDevice;				//DirectX11デバイス
 ID3D11DeviceContext*MS3DRender::sDeviceContext;	//DirectX11デバイスコンテキスト
@@ -30,7 +32,7 @@ void MS3DRender::Clear(D3DXVECTOR4 pColor)
 
 
 
-void MS3DRender::Render(DX11RenderResource*resource)
+void MS3DRender::Render(GameObjectBase*aObject, bool aIsCustomRender)
 {
 	//shader->SetConstantBuffer1(resource,&display);
 	//シェーダの設定
@@ -39,36 +41,49 @@ void MS3DRender::Render(DX11RenderResource*resource)
 	//プリミティブトポロジーの登録
 	sDeviceContext->IASetPrimitiveTopology(mPrimitiveTopology);
 
-	
+	auto lResource = aObject->GetTransform();
 
-	auto meshData = resource->GetMesh()->GetCurrentMeshData();
-	auto lVertexBufferArray = resource->GetMesh()->GetCurrentVertexBuffer();
-	auto lIndexBufferArray = resource->GetMesh()->GetCurrentIndexBuffer();
-	auto lIndexBufferLengthArray = resource->GetMesh()->GetCurrentIndexBufferCount();
+	auto meshData = lResource->GetMesh()->GetCurrentMeshData();
+	auto lVertexBufferArray = lResource->GetMesh()->GetCurrentVertexBuffer();
+	auto lIndexBufferArray = lResource->GetMesh()->GetCurrentIndexBuffer();
+	auto lIndexBufferLengthArray = lResource->GetMesh()->GetCurrentIndexBufferCount();
+
+
 
 	//auto meshData = fbxManager.lock()->GetMeshData();
+	shader->SetConstantBuffer0(*aObject->GetFrameResource());
+	sDeviceContext->VSSetConstantBuffers(0, 1, shader->GetCB0());
+	sDeviceContext->PSSetConstantBuffers(0, 1, shader->GetCB0());
 	//メッシュの個数分
 	for (unsigned int i = 0; i < lVertexBufferArray->size(); i++) {
 		//メッシュ単位の設定
-		shader->SetConstantBuffer1(*meshData->at(i), resource, display.get());
+		shader->SetConstantBuffer1(*meshData->at(i), lResource, display.get());
 		//全てのメッシュに対して共通のデータを登録
-		sDeviceContext->VSSetConstantBuffers(0, 1, shader->GetCB1());
-		sDeviceContext->PSSetConstantBuffers(0, 1, shader->GetCB1());
+		sDeviceContext->VSSetConstantBuffers(1, 1, shader->GetCB1());
+		sDeviceContext->PSSetConstantBuffers(1, 1, shader->GetCB1());
 		//サブメッシュの個数分
 		for (unsigned int j = 0; j < meshData->at(i)->subMesh.size(); j++) {
 			shader->SetConstantBuffer2(meshData->at(i)->subMesh.at(j));
-			sDeviceContext->VSSetConstantBuffers(1, 1, shader->GetCB2());
-			sDeviceContext->PSSetConstantBuffers(1, 1, shader->GetCB2());
-			UINT stride = shader->GetVertexSize();
-			UINT offset = 0;
-			ID3D11Buffer* lVertexBuffer = lVertexBufferArray->at(i)[j];
+			sDeviceContext->VSSetConstantBuffers(2, 1, shader->GetCB2());
+			sDeviceContext->PSSetConstantBuffers(2, 1, shader->GetCB2());
 
-			sDeviceContext->IASetVertexBuffers(0, 1, &lVertexBuffer, &stride, &offset);
-			stride = sizeof(int);
-			offset = 0;
-			sDeviceContext->IASetIndexBuffer(lIndexBufferArray->at(i)[j], DXGI_FORMAT_R32_UINT, 0);
-			sDeviceContext->DrawIndexed(lIndexBufferLengthArray->at(i)[j], 0, 0);
+			if (aIsCustomRender == true) {
+				shader->CustomRender(aObject);
+			}
+			else {
+
+				UINT stride = shader->GetVertexSize();
+				UINT offset = 0;
+				ID3D11Buffer* lVertexBuffer = lVertexBufferArray->at(i)[j];
+
+				sDeviceContext->IASetVertexBuffers(0, 1, &lVertexBuffer, &stride, &offset);
+				stride = sizeof(int);
+				offset = 0;
+				sDeviceContext->IASetIndexBuffer(lIndexBufferArray->at(i)[j], DXGI_FORMAT_R32_UINT, 0);
+				sDeviceContext->DrawIndexed(lIndexBufferLengthArray->at(i)[j], 0, 0);
 			
+
+			}
 		}
 	}
 

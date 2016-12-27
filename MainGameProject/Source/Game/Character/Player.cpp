@@ -68,7 +68,7 @@ void Player::LivingIsRespawnWaitProc()
 void Player::Render()
 {
 	mRender->SetShader(mShader);
-	mRender->Render(mTransform.get());
+	mRender->Render(this);
 	RenderBullets();
 }
 

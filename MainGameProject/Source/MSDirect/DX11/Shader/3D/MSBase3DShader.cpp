@@ -3,7 +3,8 @@
 
 
 
-MSBase3DShader::MSBase3DShader(int constBufferSize1, int constBufferSize2, unsigned int constVertexSize) :
+MSBase3DShader::MSBase3DShader(int constBufferSize0, int constBufferSize1, int constBufferSize2, unsigned int constVertexSize) :
+	CONSTANTBUFFERSIZE0{ constBufferSize0 },
 	CONSTANTBUFFERSIZE1{ constBufferSize1 },
 	CONSTANTBUFFERSIZE2{ constBufferSize2 },
 	VERTEXSIZE{ constVertexSize }
@@ -40,6 +41,10 @@ void MSBase3DShader::Init()
 	}
 }
 
+void MSBase3DShader::CustomRender(GameObjectBase * aObject)
+{
+}
+
 MSVertexShader * MSBase3DShader::GetVS()
 {
 	return &mVertexShader;
@@ -48,6 +53,11 @@ MSVertexShader * MSBase3DShader::GetVS()
 MSPixelShader * MSBase3DShader::GetPS()
 {
 	return &mPixelShader;
+}
+
+ID3D11Buffer ** MSBase3DShader::GetCB0()
+{
+	return &mConstantBuffer0;
 }
 
 ID3D11Buffer ** MSBase3DShader::GetCB1()

@@ -245,7 +245,7 @@ void SceneStageSelect::UpdateSceneChange()
 		{
 			
 			tween::TweenerParam lParam(2000, tween::EASE_IN_OUT, tween::EASE_IN);
-			lParam.addProperty(&mSelectTitle.mPosition->y, -100);
+			lParam.addProperty(&mSelectTitle.mPosition.y, -100);
 			mTweener.addTween(lParam);
 		}
 		//フォールスルー
@@ -255,7 +255,7 @@ void SceneStageSelect::UpdateSceneChange()
 		if (mIsMoveThumbnail == false) {
 			if (mSceneTime + 700 < lNowTime) {
 				tween::TweenerParam lParam(2000, tween::EASE_IN, tween::EASE_IN);
-				lParam.addProperty(&mSelectList.GetActiveThumbnail()->mPosition->x, 1050);
+				lParam.addProperty(&mSelectList.GetActiveThumbnail()->mPosition.x, 1050);
 				mIsMoveThumbnail = true;
 			}
 			mTweener.step(lNowTime);

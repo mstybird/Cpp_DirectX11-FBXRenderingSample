@@ -12,7 +12,7 @@ float MSHormingY(DX11RenderResource & pEyeResource, DX11RenderResource & pTarget
 	//視点リソースの角度を求める
 	DXVector3 lEyeDir;
 	float lEyeRot;
-	D3DXVec3TransformNormal(&lEyeDir, &DXVector3{ 0,0,1 }, pEyeResource.GetWorld().lock()->GetMatrix().lock().get());
+	D3DXVec3TransformNormal(&lEyeDir, &DXVector3{ 0,0,1 }, pEyeResource.GetWorld()->GetMatrix());
 	lEyeDir.Normalize();
 	lEyeRot = D3DXVec3Dot(&DXVector3(0, 0, 1), &lEyeDir);
 	lEyeRot = D3DXToDegree(acos(lEyeRot));
@@ -21,9 +21,10 @@ float MSHormingY(DX11RenderResource & pEyeResource, DX11RenderResource & pTarget
 	//視点からターゲットへの角度を求める
 	DXVector3 lTargetPos, lEyePos;
 	//ターゲと
-	pTargetResource.GetWorld().lock()->GetMatrix().lock()->GetT(lTargetPos);
+	
+	pTargetResource.GetWorld()->GetMatrix()->GetT(lTargetPos);
 	//自身
-	pEyeResource.GetWorld().lock()->GetMatrix().lock()->GetT(lEyePos);
+	pEyeResource.GetWorld()->GetMatrix()->GetT(lEyePos);
 	lEyePos = lEyePos - lTargetPos;
 	lEyePos.Normalize();
 	float lToTargetRot = D3DXVec3Dot(&DXVector3(0, 0, 1), &lEyePos);
@@ -68,7 +69,7 @@ float MSHormingY(DX11RenderResource & pEyeResource, DXVector3 & pTargetPos, cons
 	//視点リソースの角度を求める
 	DXVector3 lEyeDir;
 	float lEyeRot;
-	D3DXVec3TransformNormal(&lEyeDir, &DXVector3{ 0,0,1 }, pEyeResource.GetWorld().lock()->GetMatrix().lock().get());
+	D3DXVec3TransformNormal(&lEyeDir, &DXVector3{ 0,0,1 }, pEyeResource.GetWorld()->GetMatrix());
 	lEyeDir.Normalize();
 	lEyeRot = D3DXVec3Dot(&DXVector3(0, 0, 1), &lEyeDir);
 	lEyeRot = D3DXToDegree(acos(lEyeRot));
@@ -79,7 +80,7 @@ float MSHormingY(DX11RenderResource & pEyeResource, DXVector3 & pTargetPos, cons
 	//ターゲと
 	lTargetPos = pTargetPos;
 	//自身
-	pEyeResource.GetWorld().lock()->GetMatrix().lock()->GetT(lEyePos);
+	pEyeResource.GetWorld()->GetMatrix()->GetT(lEyePos);
 	lEyePos = lEyePos - lTargetPos;
 	lEyePos.Normalize();
 	float lToTargetRot = D3DXVec3Dot(&DXVector3(0, 0, 1), &lEyePos);
@@ -139,7 +140,7 @@ float MSGetToRotateY(DX11RenderResource & pEyeResource, DX11RenderResource & pTa
 	//視点リソースの角度を求める
 	DXVector3 lEyeDir;
 	float lEyeRot;
-	D3DXVec3TransformNormal(&lEyeDir, &DXVector3{ 0,0,1 }, pEyeResource.GetWorld().lock()->GetMatrix().lock().get());
+	D3DXVec3TransformNormal(&lEyeDir, &DXVector3{ 0,0,1 }, pEyeResource.GetWorld()->GetMatrix());
 	lEyeDir.Normalize();
 	lEyeRot = D3DXVec3Dot(&DXVector3(0, 0, 1), &lEyeDir);
 	lEyeRot = D3DXToDegree(acos(lEyeRot));
@@ -148,9 +149,9 @@ float MSGetToRotateY(DX11RenderResource & pEyeResource, DX11RenderResource & pTa
 	//視点からターゲットへの角度を求める
 	DXVector3 lTargetPos, lEyePos;
 	//ターゲと
-	pTargetResource.GetWorld().lock()->GetMatrix().lock()->GetT(lTargetPos);
+	pTargetResource.GetWorld()->GetMatrix()->GetT(lTargetPos);
 	//自身
-	pEyeResource.GetWorld().lock()->GetMatrix().lock()->GetT(lEyePos);
+	pEyeResource.GetWorld()->GetMatrix()->GetT(lEyePos);
 	lEyePos = lEyePos - lTargetPos;
 	lEyePos.Normalize();
 	float lToTargetRot = D3DXVec3Dot(&DXVector3(0, 0, 1), &lEyePos);

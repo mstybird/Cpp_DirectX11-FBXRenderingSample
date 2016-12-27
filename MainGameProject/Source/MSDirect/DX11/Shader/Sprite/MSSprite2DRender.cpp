@@ -47,12 +47,13 @@ void MSSprite2DRender::Render(MSSpriteBaseResource&pSprite)
 	;
 	sDeviceContext->PSSetSamplers(0, 1, &pSprite.GetTexture()->mSampleLinear);
 	sDeviceContext->PSSetShaderResources(0, 1, &pSprite.GetTexture()->mTexture);
-	auto lRTV = MSDirect::GetRTV();
-	auto lDSV = MSDirect::GetDSV();
-	sDeviceContext->OMSetRenderTargets(1, &lRTV, nullptr);
+	auto lView = MSDirect::GetActiveView();
+	//auto lRTV = MSDirect::GetRTV();
+	//auto lDSV = MSDirect::GetDSV();
+	sDeviceContext->OMSetRenderTargets(1, lView->GetRTV(), nullptr);
 	sDeviceContext->OMSetBlendState(pSprite.GetTexture()->mBlendState, nullptr, 0xFFFF'FFFF);
 	sDeviceContext->Draw(4, 0);
-	sDeviceContext->OMSetRenderTargets(1, &lRTV, lDSV);
+	sDeviceContext->OMSetRenderTargets(1, lView->GetRTV(), *lView->GetDSV());
 
 }
 

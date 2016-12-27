@@ -36,9 +36,9 @@ MSDirect::MSDirect() :
 	m_pDevice{ nullptr },
 	m_pDeviceContext{ nullptr },
 	m_pSwapChain{ nullptr },
-	m_pBackBuffer_TexRTV{ nullptr },
-	m_pBackBuffer_DSTexDSV{ nullptr },
-	m_pBackBuffer_DSTex{ nullptr },
+	//m_pBackBuffer_TexRTV{ nullptr },
+	//m_pBackBuffer_DSTexDSV{ nullptr },
+	//m_pBackBuffer_DSTex{ nullptr },
 	m_pRasterizerState{ nullptr }
 {
 
@@ -49,9 +49,9 @@ MSDirect::~MSDirect() {
 	SAFE_RELEASE(m_pDevice);
 	SAFE_RELEASE(m_pDeviceContext);
 	SAFE_RELEASE(m_pSwapChain);
-	SAFE_RELEASE(m_pBackBuffer_TexRTV);
-	SAFE_RELEASE(m_pBackBuffer_DSTexDSV);
-	SAFE_RELEASE(m_pBackBuffer_DSTex);
+	//SAFE_RELEASE(mView.m_pBackBuffer_TexRTV);
+	//SAFE_RELEASE(mView.m_pBackBuffer_DSTexDSV);
+	//SAFE_RELEASE(mView.m_pBackBuffer_DSTex);
 	SAFE_RELEASE(m_pRasterizerState);
 
 }
@@ -182,33 +182,44 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 		return FALSE;
 	}
 
-	//各種テクスチャーと、それに付帯する各種ビューを作成
-	//バックバッファーテクスチャーを取得（既にあるので作成ではない）
-	ID3D11Texture2D *pBackBuffer_Tex;
-	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer_Tex);
-	//そのテクスチャーに対しレンダーターゲットビュー(RTV)を作成
-	m_pDevice->CreateRenderTargetView(pBackBuffer_Tex, NULL, &m_pBackBuffer_TexRTV);
-	SAFE_RELEASE(pBackBuffer_Tex);
 
-	//デプスステンシルビュー用のテクスチャーを作成
-	D3D11_TEXTURE2D_DESC descDepth;
-	descDepth.Width = WINDOW_WIDTH;
-	descDepth.Height = WINDOW_HEIGHT;
-	descDepth.MipLevels = 1;
-	descDepth.ArraySize = 1;
-	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
-	descDepth.SampleDesc.Count = 4;
-	descDepth.SampleDesc.Quality = 0.5;
-	descDepth.Usage = D3D11_USAGE_DEFAULT;
-	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	descDepth.CPUAccessFlags = 0;
-	descDepth.MiscFlags = 0;
-	m_pDevice->CreateTexture2D(&descDepth, NULL, &m_pBackBuffer_DSTex);
-	//そのテクスチャーに対しデプスステンシルビュー(DSV)を作成
-	m_pDevice->CreateDepthStencilView(m_pBackBuffer_DSTex, NULL, &m_pBackBuffer_DSTexDSV);
 
+	////各種テクスチャーと、それに付帯する各種ビューを作成
+	////バックバッファーテクスチャーを取得（既にあるので作成ではない）
+	//ID3D11Texture2D *pBackBuffer_Tex;
+	//m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer_Tex);
+	////そのテクスチャーに対しレンダーターゲットビュー(RTV)を作成
+	//m_pDevice->CreateRenderTargetView(pBackBuffer_Tex, NULL, &mView.m_pBackBuffer_TexRTV);
+	//SAFE_RELEASE(pBackBuffer_Tex);
+
+	////デプスステンシルビュー用のテクスチャーを作成
+	//D3D11_TEXTURE2D_DESC descDepth;
+	//descDepth.Width = WINDOW_WIDTH;
+	//descDepth.Height = WINDOW_HEIGHT;
+	//descDepth.MipLevels = 1;
+	//descDepth.ArraySize = 1;
+	//descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+	//descDepth.SampleDesc.Count = 4;
+	//descDepth.SampleDesc.Quality = 0.5;
+	//descDepth.Usage = D3D11_USAGE_DEFAULT;
+	//descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	//descDepth.CPUAccessFlags = 0;
+	//descDepth.MiscFlags = 0;
+	//m_pDevice->CreateTexture2D(&descDepth, NULL, &mView.m_pBackBuffer_DSTex);
+	////そのテクスチャーに対しデプスステンシルビュー(DSV)を作成
+	//m_pDevice->CreateDepthStencilView(mView.m_pBackBuffer_DSTex, NULL, &mView.m_pBackBuffer_DSTexDSV);
+	//
 	//レンダーターゲットビューと深度ステンシルビューをパイプラインにバインド
-	m_pDeviceContext->OMSetRenderTargets(1, &m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV);
+
+
+	MSView::Initialize(m_pDevice, m_pDeviceContext, m_pSwapChain);
+	mView.SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	mView.SetSampleRate(4, 0);
+	mView.CreateRTV();
+	mView.CreateDSV();
+
+	m_pDeviceContext->OMSetRenderTargets(1, mView.GetRTV(), *mView.GetDSV());
+
 	//ビューポートの設定
 	//D3D11_VIEWPORT vp;
 
@@ -228,14 +239,14 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 
 	m_pDevice->CreateRasterizerState(&rdc, &m_pRasterizerState);
 	m_pDeviceContext->RSSetState(m_pRasterizerState);
-
+	
 	//各ラッパーにDirectX11デバイス等を登録
 	MSBaseShaderResource::sInitialize(m_pDevice, m_pDeviceContext);
 	//MSPixelShader::sInitialize(m_pDevice, m_pDeviceContext);
 	MSBaseShader::Init(m_pDevice, m_pDeviceContext);
 	MSSpriteBaseResource::sInitialize(m_pDevice);
-	MSSpriteBaseRender::Initialize(m_pDevice, m_pDeviceContext, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV);
-	MS3DRender::Initialize(m_pDevice, m_pDeviceContext, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV);
+	MSSpriteBaseRender::Initialize(m_pDevice, m_pDeviceContext, *mView.GetRTV(), *mView.GetDSV());
+	MS3DRender::Initialize(m_pDevice, m_pDeviceContext, *mView.GetRTV(), *mView.GetDSV());
 
 	MSFbxManager::InitDevice(m_pDevice, m_pDeviceContext);
 	DXProjection::SetAspect((FLOAT)WINDOW_WIDTH, (FLOAT)WINDOW_HEIGHT);
@@ -251,6 +262,8 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 
 	CharDatabase::SetDevice(m_pDevice);
 	CharDatabase::SetDeviceContext(m_pDeviceContext);
+
+	SetDefaultView();
 
 	this->KeyList = MSKeyList;
 
@@ -289,14 +302,36 @@ D3D11_VIEWPORT * MSDirect::GetViewPort()
 	return &sMSDirect->mViewPort;
 }
 
-ID3D11RenderTargetView * MSDirect::GetRTV()
+//ID3D11RenderTargetView * MSDirect::GetRTV()
+//{
+//	return sMSDirect->mView.m_pBackBuffer_TexRTV;
+//}
+//
+//ID3D11DepthStencilView * MSDirect::GetDSV()
+//{
+//	return sMSDirect->mView.m_pBackBuffer_DSTexDSV;
+//}
+
+MSView * MSDirect::GetView()
 {
-	return sMSDirect->m_pBackBuffer_TexRTV;
+	return &sMSDirect->mView;
 }
 
-ID3D11DepthStencilView * MSDirect::GetDSV()
+MSView * MSDirect::GetActiveView()
 {
-	return sMSDirect->m_pBackBuffer_DSTexDSV;
+	return sMSDirect->mActiveView;
+}
+
+MSView* MSDirect::SetActiveView(MSView * pView)
+{
+	auto lPrevView = sMSDirect->mActiveView;
+	sMSDirect->mActiveView = pView;
+	return lPrevView;
+}
+
+void MSDirect::SetDefaultView()
+{
+	sMSDirect->mActiveView = &sMSDirect->mView;
 }
 
 ID3D11Device * MSDirect::GetDevice()

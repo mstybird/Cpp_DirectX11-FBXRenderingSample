@@ -16,7 +16,7 @@ namespace NodeControl {
 	);
 	template<typename T>
 	bool IsBetweenIndex(std::vector<T>aVector,unsigned int aIndex) {
-		auto lMin{ 0 };
+		auto lMin{ 0U };
 		auto lMax{ aVector.size() };
 		return (lMin <= aIndex) && (aIndex <= lMax);
 	}

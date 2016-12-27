@@ -1,6 +1,6 @@
 #pragma once
 #include"MSCollisionBase.h"
-
+#include<DXMath.hpp>
 //境界球判定用
 class MSCollisionSphere :public MSCollisionBase {
 public:
@@ -18,7 +18,7 @@ public:
 	void GetCenterPosition(DXVector3&pOutCenter)const;
 private:
 	float mRadius;//当たり判定半径
-	std::shared_ptr<DXVector3>mCenter;//中心座標
+	DXVector3 mCenter;//中心座標
 };
 /*
 	A>B

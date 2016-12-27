@@ -9,7 +9,7 @@ public:
 	//指定した方向にレイを飛ばす
 	void SetRay(const DXVector3&pRayDirection);
 	//カメラが向いている方向でレイを作成
-	void SetRay(const DXCamera&pRayCamera);
+	void SetRay( DXCamera&pRayCamera);
 
 	/*
 	レイ判定

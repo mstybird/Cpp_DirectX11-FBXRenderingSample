@@ -19,11 +19,11 @@ bool MSCullingFrustum::IsCullingWorld(
 	DXVector3 lTargetScaleVector;
 	float lTargetScale;
 	//ターゲットの拡大率を調整する必要があるので、位置と拡大率療法取得できるようにする
-	DXMatrix& lTargetMatrix = *pTargetResource.GetWorld().lock()->GetMatrix().lock();
+	DXMatrix& lTargetMatrix = *pTargetResource.GetWorld()->GetMatrix();
 	//float Radius;
 	auto lCollisions = pTargetResource.GetMesh()->GetCurrentCollisionSpheres();
 
-	pCameraResource.GetWorld().lock()->GetMatrix().lock()->GetT(lCameraPos);
+	pCameraResource.GetWorld()->GetMatrix()->GetT(lCameraPos);
 	//位置を取得
 	lTargetMatrix.GetT(lTargetPos);
 	//拡大率を取得
@@ -38,15 +38,15 @@ bool MSCullingFrustum::IsCullingWorld(
 		lTargetScale = lTargetScaleVector.z;
 	}
 
-	pTargetResource.GetWorld().lock()->GetMatrix().lock()->GetT(lTargetPos);
+	pTargetResource.GetWorld()->GetMatrix()->GetT(lTargetPos);
 	//ワールド空間からビュー空間に変換
 	DXCamera c;
 	DXVector3 lCameraDir{ 0,0, 1 };
 	lCameraDir *= -1;
-	c.SetCamera(*pCameraResource.GetWorld().lock(),lCameraDir);
-	D3DXVec3TransformCoord(&lTargetPos, &lTargetPos, c.GetMatrix().lock().get());
+	c.SetCamera(*pCameraResource.GetWorld(),lCameraDir);
+	D3DXVec3TransformCoord(&lTargetPos, &lTargetPos, c.GetMatrix());
 
-	DXProjection& lEyeProjection = *pCameraResource.GetProjection().lock();
+	DXProjection& lEyeProjection = *pCameraResource.GetProjection();
 	float& lFarClip = lEyeProjection.mFar;
 	float& lNearClip = lEyeProjection.mNear;
 	float& lAspect = lEyeProjection.mAspect;

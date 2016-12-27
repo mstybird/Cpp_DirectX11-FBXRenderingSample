@@ -46,6 +46,7 @@ void MyMSScene::Initialize()
 	//レンダラーシェーダーにはアドレスを記憶させるようにする
 	mBall.SetRenderer(&render);
 	mBall.SetShader(&shader);
+	mBall.SetCollisionShader(&shader);
 	shader.InitVertex("Resource/HLSL/Simple.hlsl");
 	shader.InitPixel("Resource/HLSL/Simple.hlsl");
 
@@ -70,6 +71,7 @@ void MyMSScene::Initialize()
 	SetMeshResouce(&mField, ValueMyScene::Model::cFieldDesignID, ValueMyScene::Model::cFieldCollisionID);
 	mField.SetRenderer(&render);
 	mField.SetShader(&shader);
+	mField.SetCollisionShader(&shader);
 	mField.GetWorld()->SetT(0, -1, 0);
 
 	
@@ -123,7 +125,7 @@ void MyMSScene::Update() {
 	mField.ClearTrans();
 	mPlayer.Update();
 	DXVector3 v;
-	mPlayer.GetWorld()->GetMatrix().lock()->GetT(v);
+	mPlayer.GetWorld()->GetMatrix()->GetT(v);
 	mEfkObj.SetPosition({ v.x,v.y,v.z });
 	::Comfort::EffectCamera cam;
 	cam.SetDXCamera(mPlayer.GetView());
@@ -899,6 +901,7 @@ void MyMSScene::InitializeEnemy()
 
 		enemy[i]->SetRenderer(&render);
 		enemy[i]->SetShader(&shader);
+		enemy[i]->SetCollisionShader(&shader);
 		//enemy[i]->SetBulletMesh(*mdDB.Get(cbox));
 		enemy[i]->Respawn();
 		if (mFieldStatus.GetTeamAlly(&mPlayer)->IsMember(enemy[i].get()) == false) {
@@ -941,6 +944,7 @@ void MyMSScene::InitializePlayer()
 
 	mPlayer.SetRenderer(&render);
 	mPlayer.SetShader(&shader);
+	mPlayer.SetCollisionShader(&shader);
 	mPlayer.SetDefaultStatus(mDefaultStatus);
 	mPlayer.Respawn();
 

@@ -83,7 +83,7 @@ void SceneTitle::UpdateSceneChange()
 		mSequence = SceneSequence::ChangeLoop;
 		{
 			tween::TweenerParam lParam(2000, tween::ELASTIC, tween::EASE_IN);
-			lParam.addProperty(&mTitle.mPosition->y, -150);
+			lParam.addProperty(&mTitle.mPosition.y, -150);
 			mTweener.addTween(lParam);
 		}
 		//フォールスルー

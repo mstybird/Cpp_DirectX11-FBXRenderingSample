@@ -1,6 +1,6 @@
 #pragma once
 #include<memory>
-class DXMatrix;
+#include"DXMatrix.h"
 class DXProjection {
 public:
 	DXProjection();
@@ -24,12 +24,12 @@ public:
 
 	void Clone(DXProjection&pOutClone);
 
-	std::weak_ptr<DXMatrix>GetMatrix();
+	DXMatrix* GetMatrix();
 
 	float mAngle;//‹–ìŠp
 	float mNear;	//‹„‘ä‚Ìè‘O
 	float mFar;		//‹„‘ä‚Ìˆê”Ô‰œ
-	std::shared_ptr<DXMatrix>mMatrix;
+	DXMatrix mMatrix;	//ŒvZ—p
 
 	static float mAspect;
 

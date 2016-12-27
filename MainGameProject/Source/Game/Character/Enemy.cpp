@@ -43,7 +43,7 @@ void Enemy::InitFinal()
 	mRayPick->SetFramePosition(*mTransform);
 	//一番近いノードを初期座標としておく
 	DXVector3 lPosition;
-	GetWorld()->GetMatrix().lock()->GetT(lPosition);
+	GetWorld()->GetMatrix()->GetT(lPosition);
 	auto lNearNode = mAI->GetNearNodeList(lPosition)[0];
 	mAI->SetStartNode(lNearNode->GetID());
 	mTransform->GetMesh()->SetAnimation(0);
@@ -144,7 +144,7 @@ void Enemy::LivingIsRespawnWaitProc()
 	mAI->ClearAI();
 	Respawn();
 	GetWorld()->mPosition;
-	auto lNowNode = mAI->GetNearNodeList(*GetWorld()->mPosition)[0];
+	auto lNowNode = mAI->GetNearNodeList(GetWorld()->mPosition)[0];
 	mAI->SetNowNode(lNowNode);
 	mRayPick->SetFramePosition(*mTransform);
 
@@ -275,7 +275,7 @@ void Enemy::Render()
 {
 	assert(mRender);
 	mRender->SetShader(mShader);
-	mRender->Render(mTransform.get());
+	mRender->Render(this);
 	RenderBullets();
 
 }
@@ -308,7 +308,7 @@ bool Enemy::MoveNode()
 	if (IsZero(lAng, 120.0f)) {
 		GetWorld()->AddT(DXWorld::TYPE_ROTATE, 0.1f, { 0,0,1 });
 		DXVector3 lLength;
-		GetWorld()->GetMatrix().lock()->GetT(lLength);
+		GetWorld()->GetMatrix()->GetT(lLength);
 		lLength = lLength - lAINode->Position;
 		if (lLength.GetDistance() < 1.0f) {
 			if (lAINode->GetID() == 1) {
@@ -342,15 +342,15 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 			}
 
 			auto lTmpThis = mTransform;
-			DXVector3 lTmpSThis = *GetWorld()->mPosition;
-			mCollisionMesh->GetWorld().lock()->SetT(lTmpSThis);
-			mCollisionMesh->GetWorld().lock()->SetRC(*GetWorld()->mRotationCenter);
+			DXVector3 lTmpSThis = GetWorld()->mPosition;
+			mCollisionMesh->GetWorld()->SetT(lTmpSThis);
+			mCollisionMesh->GetWorld()->SetRC(GetWorld()->mRotationCenter);
 			if (mIsCollisionScaleDefault == true) {
-				GetWorld()->GetMatrix().lock()->GetS(lTmpSThis);
-				mCollisionMesh->GetWorld().lock()->SetS(lTmpSThis);
+				GetWorld()->GetMatrix()->GetS(lTmpSThis);
+				mCollisionMesh->GetWorld()->SetS(lTmpSThis);
 			}
-			auto& lThisCam = *mTransform->GetCamera().lock();
-			auto& lThisProj = *mTransform->GetProjection().lock();
+			auto& lThisCam = *mTransform->GetCamera();
+			auto& lThisProj = *mTransform->GetProjection();
 			mCollisionMesh->SetCamera(lThisCam);
 			mCollisionMesh->SetProjection(lThisProj);
 
@@ -359,7 +359,7 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 
 
 			if (MSCullingOcculusion::IsCullingWorld(
-				mRender, mTransform.get(), lTarget->GetTransform(), 0.003f,
+				mRender, this, lTarget, 0.003f,
 				[&,this]() {
 
 
@@ -368,16 +368,16 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 					auto lTmpMesh = lCollision->mTransform;
 					DXVector3 lTmpS;
 					//判定メッシュをコリジョン用に変更
-					lCollision->GetWorld()->GetMatrix().lock()->GetT(lTmpS);
-					lCollision->mCollisionMesh->GetWorld().lock()->SetT(lTmpS);
-					lCollision->mCollisionMesh->GetWorld().lock()->SetRC(*lCollision->GetWorld()->mRotationCenter);
+					lCollision->GetWorld()->GetMatrix()->GetT(lTmpS);
+					lCollision->mCollisionMesh->GetWorld()->SetT(lTmpS);
+					lCollision->mCollisionMesh->GetWorld()->SetRC(lCollision->GetWorld()->mRotationCenter);
 
 
 					//コリジョンスケールが別で設定されていない場合は
 					//メッシュのコリジョンスケールを使う
 					if (lCollision->mIsCollisionScaleDefault == true) {
-						lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
-						lCollision->mCollisionMesh->GetWorld().lock()->SetS(lTmpS);
+						lCollision->GetWorld()->GetMatrix()->GetS(lTmpS);
+						lCollision->mCollisionMesh->GetWorld()->SetS(lTmpS);
 					}
 
 					lCollision->mTransform = lCollision->mCollisionMesh;
@@ -391,7 +391,7 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 						lCollision->mTransform = lTmpMesh;
 						continue;
 					}
-					mRender->Render(lCollision->GetTransform());
+					mRender->Render(lCollision);
 
 					lCollision->mTransform = lTmpMesh;
 
@@ -459,7 +459,7 @@ void Enemy::BetaMoveToBall()
 		GetStatus<EnemyStatus>()->mAIType = EnemyAIType::eMoveToBall;
 		//ボールのある場所をゴールとする
 		DXVector3 lBallPos;
-		mField->mBall->GetWorld()->GetMatrix().lock()->GetT(lBallPos);
+		mField->mBall->GetWorld()->GetMatrix()->GetT(lBallPos);
 		auto lGoalID = mAI->GetNearNodeList(lBallPos)[0]->GetID();
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
 		mAI->GenerateRoot();
@@ -590,7 +590,7 @@ void Enemy::BetaMoveToHide()
 		GetStatus<EnemyStatus>()->mAIType = EnemyAIType::eMoveToHide;
 		//自身の座標を一時退避
 		DXVector3 lTempPosition;
-		GetWorld()->GetMatrix().lock()->GetT(lTempPosition);
+		GetWorld()->GetMatrix()->GetT(lTempPosition);
 		//近い順にノードを取得
 		decltype(auto) lNearNodeList = mAI->GetNearNodeList(lTempPosition);
 		//自身から一番近いノードをレイ発射位置とする
@@ -614,16 +614,16 @@ void Enemy::BetaMoveToHide()
 				auto lTmpMesh = lCollision->mTransform;
 				DXVector3 lTmpS;
 				//判定メッシュをコリジョン用に変更
-				lCollision->GetWorld()->GetMatrix().lock()->GetT(lTmpS);
-				lCollision->mCollisionMesh->GetWorld().lock()->SetT(lTmpS);
-				lCollision->mCollisionMesh->GetWorld().lock()->SetRC(*lCollision->GetWorld()->mRotationCenter);
+				lCollision->GetWorld()->GetMatrix()->GetT(lTmpS);
+				lCollision->mCollisionMesh->GetWorld()->SetT(lTmpS);
+				lCollision->mCollisionMesh->GetWorld()->SetRC(lCollision->GetWorld()->mRotationCenter);
 
 
 				//コリジョンスケールが別で設定されていない場合は
 				//メッシュのコリジョンスケールを使う
 				if (lCollision->mIsCollisionScaleDefault == true) {
-					lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
-					lCollision->mCollisionMesh->GetWorld().lock()->SetS(lTmpS);
+					lCollision->GetWorld()->GetMatrix()->GetS(lTmpS);
+					lCollision->mCollisionMesh->GetWorld()->SetS(lTmpS);
 				}
 
 				lCollision->mTransform = lCollision->mCollisionMesh;
@@ -651,7 +651,7 @@ void Enemy::BetaMoveToHide()
 		//移動ルートの確定
 		mAI->CreateRoot(lGoalNodePtr->GetID());
 		//最後にターゲットを見た位置を記憶する
-		GetStatus<EnemyStatus>()->mTargetChara->GetTransform()->GetWorld().lock()->GetMatrix().lock()->GetT(GetStatus<EnemyStatus>()->mLastLookPosiion);
+		GetStatus<EnemyStatus>()->mTargetChara->GetTransform()->GetWorld()->GetMatrix()->GetT(GetStatus<EnemyStatus>()->mLastLookPosiion);
 		//隠れるため、必然的に視界から見失う
 		GetStatus<EnemyStatus>()->mTargetting = false;
 
@@ -679,16 +679,16 @@ void Enemy::BetaMoveToHide()
 		auto lTmpMesh = lCollision->mTransform;
 		DXVector3 lTmpS;
 		//判定メッシュをコリジョン用に変更
-		lCollision->GetWorld()->GetMatrix().lock()->GetT(lTmpS);
-		lCollision->mCollisionMesh->GetWorld().lock()->SetT(lTmpS);
-		lCollision->mCollisionMesh->GetWorld().lock()->SetRC(*lCollision->GetWorld()->mRotationCenter);
+		lCollision->GetWorld()->GetMatrix()->GetT(lTmpS);
+		lCollision->mCollisionMesh->GetWorld()->SetT(lTmpS);
+		lCollision->mCollisionMesh->GetWorld()->SetRC(lCollision->GetWorld()->mRotationCenter);
 
 
 		//コリジョンスケールが別で設定されていない場合は
 		//メッシュのコリジョンスケールを使う
 		if (lCollision->mIsCollisionScaleDefault == true) {
-			lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
-			lCollision->mCollisionMesh->GetWorld().lock()->SetS(lTmpS);
+			lCollision->GetWorld()->GetMatrix()->GetS(lTmpS);
+			lCollision->mCollisionMesh->GetWorld()->SetS(lTmpS);
 		}
 
 		lCollision->mTransform = lCollision->mCollisionMesh;
@@ -841,7 +841,7 @@ void Enemy::BetaInSightAttack()
 	if (lIsLooking == false) {
 		printf("%d------------\n", lLookTargets.size());
 		GetStatus<EnemyStatus>()->mTargetting = false;
-		GetStatus<EnemyStatus>()->mLastLookPosiion = *GetStatus<EnemyStatus>()->mTargetChara->GetWorld()->mPosition;
+		GetStatus<EnemyStatus>()->mLastLookPosiion = GetStatus<EnemyStatus>()->mTargetChara->GetWorld()->mPosition;
 		//GetStatus<EnemyStatus>()->mTargetChara = nullptr;
 		mAI->ClearAI();
 	}
@@ -875,7 +875,7 @@ void Enemy::BetaMoveToBallHoldAlly()
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
 		mAI->GenerateRoot();
 
-		DXVector3& lPosition = *mField->mBallHoldChara->GetWorld()->mPosition;
+		DXVector3& lPosition = mField->mBallHoldChara->GetWorld()->mPosition;
 		auto lNearNode = mAI->GetNearNodeList(lPosition)[0];
 
 		mAI->CreateRoot(lNearNode->GetID());
@@ -891,7 +891,7 @@ void Enemy::BetaMoveToBallHoldAlly()
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
 		mAI->GenerateRoot();
 
-		DXVector3& lPosition = *mField->mBallHoldChara->GetWorld()->mPosition;
+		DXVector3& lPosition = mField->mBallHoldChara->GetWorld()->mPosition;
 		auto lNearNode = mAI->GetNearNodeList(lPosition)[0];
 
 		mAI->CreateRoot(lNearNode->GetID());
@@ -966,8 +966,8 @@ void Enemy::BetaSearchEnemyShort()
 		DXVector3 lBallHolderPos;
 		DXVector3 lThisPos;
 		float lDistance;
-		lBallHolderPos = *mField->mBallHoldChara->GetWorld()->mPosition;
-		lThisPos = *GetWorld()->mPosition;
+		lBallHolderPos = mField->mBallHoldChara->GetWorld()->mPosition;
+		lThisPos = GetWorld()->mPosition;
 		lDistance = (lBallHolderPos - lThisPos).GetDistance();
 		if (lDistance < 10.0f) {
 			mAI->ClearAI();
@@ -1081,7 +1081,7 @@ void Enemy::BetaMoveToBallTarget()
 		printf("Task:%s\n", "MoveToBallTarget");
 		GetStatus<EnemyStatus>()->mAIType = EnemyAIType::eMoveToBallTarget;
 		DXVector3 lBallPos;
-		mField->mBallHoldChara->GetWorld()->GetMatrix().lock()->GetT(lBallPos);
+		mField->mBallHoldChara->GetWorld()->GetMatrix()->GetT(lBallPos);
 		auto lGoalID = mAI->GetNearNodeList(lBallPos)[0]->GetID();
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
 		mAI->GenerateRoot();
@@ -1107,7 +1107,7 @@ void Enemy::BetaMoveToBallTarget()
 	if (!lMoveEnd) {
 		//再度敵を探す
 		DXVector3 lBallPos;
-		mField->mBallHoldChara->GetWorld()->GetMatrix().lock()->GetT(lBallPos);
+		mField->mBallHoldChara->GetWorld()->GetMatrix()->GetT(lBallPos);
 		auto lGoalID = mAI->GetNearNodeList(lBallPos)[0]->GetID();
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
 		mAI->GenerateRoot();
@@ -1152,7 +1152,7 @@ void Enemy::BetaSearchForAllyArea()
 			lGoalNode = mAI->GetNodeRandom();
 			//異なっていれば移動可能なノード
 		} while (lGoalNode->mTeamType != lEnemyTeamType);
-		//auto lGoalID = mAI->GetNearNodeList(*mField->mBallHoldChara->mTransform->GetWorld().lock()->mPosition)[0]->GetID();
+		//auto lGoalID = mAI->GetNearNodeList(*mField->mBallHoldChara->mTransform->GetWorld()->mPosition)[0]->GetID();
 
 		mAI->SetStartNode(mAI->GetNowNode()->GetID());
 		mAI->GenerateRoot();

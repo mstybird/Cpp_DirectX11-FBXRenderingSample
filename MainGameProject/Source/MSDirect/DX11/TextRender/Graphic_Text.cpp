@@ -134,34 +134,34 @@ void TextureChar::CreatePolygon(SpriteVertex pPolygon[4])
 {
 	//ポリゴンそのものはローカル座標で作成
 	//Pivotの値を使用して中心位置を調整する
-	DXVector2 lPivotPos{ mSize->x*mPivot->x,mSize->y*mPivot->y };
+	DXVector2 lPivotPos{ mSize.x*mPivot.x,mSize.y*mPivot.y };
 	pPolygon[0] = {
 		{ 0 - lPivotPos.x, 0 - lPivotPos.y,0 },{ mSplitImageX.x,mSplitImageY.x }	//左上
 	};
 	pPolygon[1] = {
-		{ mSize->x - lPivotPos.x,0 - lPivotPos.y,0 },{ mSplitImageX.y,mSplitImageY.x }	//右上
+		{ mSize.x - lPivotPos.x,0 - lPivotPos.y,0 },{ mSplitImageX.y,mSplitImageY.x }	//右上
 	};
 	pPolygon[2] = {
-		{ 0 - lPivotPos.x,mSize->y - lPivotPos.y,0 },{ mSplitImageX.x,mSplitImageX.y }	//左下
+		{ 0 - lPivotPos.x,mSize.y - lPivotPos.y,0 },{ mSplitImageX.x,mSplitImageX.y }	//左下
 	};
 	pPolygon[3] = {
-		{ mSize->x - lPivotPos.x,mSize->y - lPivotPos.y,0 },{ mSplitImageX.y,mSplitImageX.y }	//右下
+		{ mSize.x - lPivotPos.x,mSize.y - lPivotPos.y,0 },{ mSplitImageX.y,mSplitImageX.y }	//右下
 	};
 
 
 	//位置が確定
 	//位置をずらす
-	pPolygon[0].Pos.x += mSize->x*mSplitPolygonX.x;
-	pPolygon[0].Pos.y += mSize->y*mSplitPolygonY.x;
+	pPolygon[0].Pos.x += mSize.x*mSplitPolygonX.x;
+	pPolygon[0].Pos.y += mSize.y*mSplitPolygonY.x;
 
-	pPolygon[1].Pos.x -= mSize->x*(1.0f - mSplitPolygonX.y);
-	pPolygon[1].Pos.y += mSize->y*mSplitPolygonY.x;
+	pPolygon[1].Pos.x -= mSize.x*(1.0f - mSplitPolygonX.y);
+	pPolygon[1].Pos.y += mSize.y*mSplitPolygonY.x;
 
-	pPolygon[2].Pos.x += mSize->x*mSplitPolygonX.x;
-	pPolygon[2].Pos.y -= mSize->y*(1.0f - mSplitPolygonY.y);
+	pPolygon[2].Pos.x += mSize.x*mSplitPolygonX.x;
+	pPolygon[2].Pos.y -= mSize.y*(1.0f - mSplitPolygonY.y);
 
-	pPolygon[3].Pos.x -= mSize->x*(1.0f - mSplitPolygonX.y);
-	pPolygon[3].Pos.y -= mSize->y*(1.0f - mSplitPolygonY.y);
+	pPolygon[3].Pos.x -= mSize.x*(1.0f - mSplitPolygonX.y);
+	pPolygon[3].Pos.y -= mSize.y*(1.0f - mSplitPolygonY.y);
 
 	SpriteVertex aPolygon[4];
 	aPolygon[0] = pPolygon[0];

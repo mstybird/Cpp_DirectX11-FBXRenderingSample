@@ -2,6 +2,7 @@
 #include"DX11Resrouce.h"
 #include"DXMath.hpp"
 #include"MSDirect.h"
+#include"GameObjectBase.h"
 ID3D11RenderTargetView* MSCullingOcculusion::sRTV;
 ID3D11DepthStencilView* MSCullingOcculusion::sDSV;
 ID3D11Texture2D* MSCullingOcculusion::sDS2D;
@@ -15,8 +16,8 @@ IDXGISwapChain*MSCullingOcculusion::sSwapChain;
 
 bool MSCullingOcculusion::IsCullingWorld(
 	MS3DRender*pRender,
-	DX11RenderResource*pEyeResource,
-	DX11RenderResource*pTargetResource,
+	GameObjectBase*pEyeResource,
+	GameObjectBase*pTargetResource,
 	float pPixelper,
 	std::function<void(void)>pRenderFunc
 	)
@@ -25,10 +26,10 @@ bool MSCullingOcculusion::IsCullingWorld(
 
 	//元に戻すためのカメラのコピーを生成
 	DXCamera lEyeCameraCopy;
-	pEyeResource->GetCamera().lock()->Clone(lEyeCameraCopy);
+	pEyeResource->GetTransform()->GetCamera()->Clone(lEyeCameraCopy);
 
 	//カメラをワールド行列を使って正面方向に作成する
-	pEyeResource->GetCamera().lock()->SetCamera(*pEyeResource->GetWorld().lock(), { 0,0,-1 });
+	pEyeResource->GetTransform()->GetCamera()->SetCamera(*pEyeResource->GetWorld(), { 0,0,-1 });
 	//視野を設定
 	//pEyeResource.SetProjection(pEyeProjection);
 
@@ -36,11 +37,12 @@ bool MSCullingOcculusion::IsCullingWorld(
 	{
 		//描画先をクエリ処理用に変更
 
-		ID3D11RenderTargetView* lRTVCopy;
-		ID3D11DepthStencilView* lDSVCopy;
+		//ID3D11RenderTargetView* lRTVCopy;
+		//ID3D11DepthStencilView* lDSVCopy;
 		D3D11_VIEWPORT* lMainViewPort = MSDirect::GetViewPort();
-		lRTVCopy = MSDirect::GetRTV();
-		lDSVCopy = MSDirect::GetDSV();
+		auto lActiveView = MSDirect::GetActiveView();
+		//lRTVCopy = MSDirect::GetRTV();
+		//lDSVCopy = MSDirect::GetDSV();
 
 
 		D3D11_VIEWPORT vp;
@@ -62,7 +64,9 @@ bool MSCullingOcculusion::IsCullingWorld(
 		//障害物を描画する処理
 		DXDisplay lTmpDisplay;
 		pRender->GetDisplay(lTmpDisplay);
-		pRender->SetRenderTarget(*pEyeResource);
+		pRender->SetRenderTarget(*pEyeResource->GetTransform());
+
+		pRender->SetShader(pEyeResource->GetCollisionShader());
 		pRenderFunc();
 
 
@@ -76,7 +80,7 @@ bool MSCullingOcculusion::IsCullingWorld(
 		EndOcclusionQuery();
 		pRender->SetRenderTarget(lTmpDisplay);
 		//カメラと視野をもとに戻す
-		pEyeResource->SetCamera(lEyeCameraCopy);
+		pEyeResource->GetTransform()->SetCamera(lEyeCameraCopy);
 		//描画先を元に戻す
 		static int count = 0;
 		if (count == 0) {
@@ -89,7 +93,10 @@ bool MSCullingOcculusion::IsCullingWorld(
 		//sSwapChain->Present(0, DXGI_PRESENT_TEST);
 
 		sDeviceContext->RSSetViewports(1, lMainViewPort);
-		sDeviceContext->OMSetRenderTargets(1, &lRTVCopy, lDSVCopy);
+
+		//MSDirect::SetActiveView(lActiveView);
+
+		sDeviceContext->OMSetRenderTargets(1, lActiveView->GetRTV(), *lActiveView->GetDSV());
 	}
 	UINT64 lDrawPixels{};
 	//指定数以上ループした場合、強制で抜ける

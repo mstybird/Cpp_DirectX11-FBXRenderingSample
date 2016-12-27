@@ -35,7 +35,7 @@ void DXVector3::Normalize()
 	D3DXVec3Normalize(this, this);
 }
 
-float DXVector3::GetMedian()
+float DXVector3::GetMedian()const
 {
 	return (x + y + z) / 3.0f;
 }

@@ -7,15 +7,15 @@
 ID3D11Device* MSSpriteBaseResource::sDevice{ nullptr };
 MSSpriteBaseResource::MSSpriteBaseResource():
 	mVertexBuffer{ nullptr },
-	mPosition{std::make_shared<DXVector3>(0.0f,0.0f,0.0f)},
-	mPivot{ std::make_shared<DXVector2>(0.0f,0.0f) },
-	mSize{ std::make_shared<DXVector2>(100.0f,100.0f) },
-	mScale{ std::make_shared<DXVector2>(1.0f,1.0f) },
+	mPosition{0.0f,0.0f,0.0f},
+	mPivot{ 0.0f,0.0f },
+	mSize{100.0f,100.0f },
+	mScale{1.0f,1.0f},
 	mSplitPolygonX{ 0.0f,1.0f },
 	mSplitPolygonY{ 0.0f,1.0f },
 	mSplitImageX{ 0.0f,1.0f },
 	mSplitImageY{ 0.0f,1.0f },
-	mMatrix{ std::make_shared<DXMatrix>() },
+	mMatrix{},
 	mUpdateFlag{false},
 	mRotation{0.0f}
 {
@@ -49,12 +49,12 @@ DXTexture* MSSpriteBaseResource::GetTexture()
 
 void MSSpriteBaseResource::SetPosition(const DXVector2 & pPosition)
 {
-	*mPosition = pPosition;
+	mPosition = pPosition;
 }
 
 void MSSpriteBaseResource::SetPosition(const DXVector3 & pPosition)
 {
-	*mPosition = pPosition;
+	mPosition = pPosition;
 }
 
 void MSSpriteBaseResource::SetRotation(const float aDegree)
@@ -69,21 +69,21 @@ void MSSpriteBaseResource::AddRotation(const float aDegree)
 
 void MSSpriteBaseResource::SetPivot(const DXVector2 & pPivot)
 {
-	if (*mPivot == pPivot)return;
-	*mPivot = pPivot;
+	if (mPivot == pPivot)return;
+	mPivot = pPivot;
 	mUpdateFlag = true;
 }
 
 void MSSpriteBaseResource::SetSize(const DXVector2 & pSize)
 {
-	if (*mSize == pSize)return;
-	*mSize = pSize;
+	if (mSize == pSize)return;
+	mSize = pSize;
 	mUpdateFlag = true;
 }
 
 void MSSpriteBaseResource::SetScale(const DXVector2 & pScale)
 {
-	*mScale = pScale;
+	mScale = pScale;
 }
 
 void MSSpriteBaseResource::SetSplitSize(const float pLeft, const float pRight, const float pTop, const float pBottom)
@@ -144,44 +144,44 @@ void MSSpriteBaseResource::SetSplitImage(const float pLeft, const float pRight, 
 	mUpdateFlag = true;
 }
 
-const std::weak_ptr<DXVector3>  MSSpriteBaseResource::GetPosition() const
+const DXVector3* MSSpriteBaseResource::GetPosition() const
 {
-	return mPosition;
+	return &mPosition;
 }
 
-const std::weak_ptr<DXVector2>  MSSpriteBaseResource::GetPivot() const
+const DXVector2* MSSpriteBaseResource::GetPivot() const
 {
-	return mPivot;
+	return &mPivot;
 }
 
-const std::weak_ptr<DXVector2>  MSSpriteBaseResource::GetSize() const
+const DXVector2* MSSpriteBaseResource::GetSize() const
 {
-	return mSize;
+	auto v = &mSize;
+	return &mSize;
 }
 
-const std::weak_ptr<DXVector2>  MSSpriteBaseResource::GetScale() const
+const DXVector2* MSSpriteBaseResource::GetScale() const
 {
-	return mScale;
+	return &mScale;
 }
 
-const std::weak_ptr<DXMatrix> MSSpriteBaseResource::GetMatrix()
+DXMatrix* MSSpriteBaseResource::GetMatrix()
 {
 	DXMatrix lTrans, lScale, lRotation;
 	
-	lTrans.Translation(*mPosition);
-	lScale.Scaling({ mScale->x,mScale->y });
+	lTrans.Translation(mPosition);
+	lScale.Scaling({ mScale.x,mScale.y });
 	lRotation.RotationZ(mRotation, TYPE_ANGLE::DEGREE);
-	*mMatrix = lScale*lRotation*lTrans;
-	return mMatrix;
+	mMatrix = lScale*lRotation*lTrans;
+	return &mMatrix;
 }
 
-DXMatrix MSSpriteBaseResource::GetMatrixWVP(DXDisplay& pDisplay)
+void MSSpriteBaseResource::GetMatrixWVP(DXMatrix*pOut, DXDisplay& pDisplay)
 {
-	DXMatrix lResult{};
-	lResult = *GetMatrix().lock() *
-		*pDisplay.GetCamera().lock()->GetMatrix().lock() *
-		*pDisplay.GetProjection().lock()->GetMatrix().lock();
-	return std::move(lResult);
+	*pOut = *GetMatrix() *
+		*pDisplay.GetCamera()->GetMatrix() *
+		*pDisplay.GetProjection()->GetMatrix();
+	return;
 }
 
 bool MSSpriteBaseResource::IsUpdateBuffering()
@@ -195,7 +195,7 @@ void MSSpriteBaseResource::CreateBuffer()
 	SAFE_RELEASE(mVertexBuffer);
 
 	//Pivotの値を使用して中心位置を調整する
-	DXVector2 lPivotPos{ mSize->x*mPivot->x,mSize->y*mPivot->y };
+	DXVector2 lPivotPos{ mSize.x*mPivot.x,mSize.y*mPivot.y };
 
 	SpriteVertex vertices[4];
 	CreatePolygon(vertices);
@@ -229,52 +229,52 @@ void MSSprite2DResource::SetPosition(const DXVector3 & pPosition)
 void MSSprite2DResource::CreatePolygon(SpriteVertex pPolygon[4])
 {
 	//Pivotの値を使用して中心位置を調整する
-	DXVector2 lPivotPos{ mSize->x*mPivot->x,mSize->y*mPivot->y };
+	DXVector2 lPivotPos{ mSize.x*mPivot.x,mSize.y*mPivot.y };
 	pPolygon[0] = {
 		{ 0 - lPivotPos.x, 0 - lPivotPos.y ,0}, { mSplitImageX.x,mSplitImageY.x }	//左上
 	};
 	pPolygon[1] = {
-	{ mSize->x - lPivotPos.x,0 - lPivotPos.y ,0 },{ mSplitImageX.y,mSplitImageY.x }	//右上
+	{ mSize.x - lPivotPos.x,0 - lPivotPos.y ,0 },{ mSplitImageX.y,mSplitImageY.x }	//右上
 	};
 	pPolygon[2] = {
-	{ 0 - lPivotPos.x,mSize->y - lPivotPos.y ,0 },{ mSplitImageX.x,mSplitImageX.y }	//左下
+	{ 0 - lPivotPos.x,mSize.y - lPivotPos.y ,0 },{ mSplitImageX.x,mSplitImageX.y }	//左下
 	};
 	pPolygon[3] = {
-	{ mSize->x - lPivotPos.x,mSize->y - lPivotPos.y,0 },{ mSplitImageX.y,mSplitImageX.y }	//右下
+	{ mSize.x - lPivotPos.x,mSize.y - lPivotPos.y,0 },{ mSplitImageX.y,mSplitImageX.y }	//右下
 	};
 
 
 	//位置が確定
 	//位置をずらす
-	pPolygon[0].Pos.x += mSize->x*mSplitPolygonX.x;
-	pPolygon[0].Pos.y += mSize->y*mSplitPolygonY.x;
+	pPolygon[0].Pos.x += mSize.x*mSplitPolygonX.x;
+	pPolygon[0].Pos.y += mSize.y*mSplitPolygonY.x;
 
-	pPolygon[1].Pos.x -= mSize->x*(1.0f - mSplitPolygonX.y);
-	pPolygon[1].Pos.y += mSize->y*mSplitPolygonY.x;
+	pPolygon[1].Pos.x -= mSize.x*(1.0f - mSplitPolygonX.y);
+	pPolygon[1].Pos.y += mSize.y*mSplitPolygonY.x;
 
-	pPolygon[2].Pos.x += mSize->x*mSplitPolygonX.x;
-	pPolygon[2].Pos.y -= mSize->y*(1.0f - mSplitPolygonY.y);
+	pPolygon[2].Pos.x += mSize.x*mSplitPolygonX.x;
+	pPolygon[2].Pos.y -= mSize.y*(1.0f - mSplitPolygonY.y);
 
-	pPolygon[3].Pos.x -= mSize->x*(1.0f - mSplitPolygonX.y);
-	pPolygon[3].Pos.y -= mSize->y*(1.0f - mSplitPolygonY.y);
+	pPolygon[3].Pos.x -= mSize.x*(1.0f - mSplitPolygonX.y);
+	pPolygon[3].Pos.y -= mSize.y*(1.0f - mSplitPolygonY.y);
 }
 
 void MSSprite3DResource::CreatePolygon(SpriteVertex pPolygon[4])
 {
 	//Pivotの値を使用して中心位置を調整する
-	DXVector2 lPivotPos{ mSize->x*mPivot->x,mSize->y*mPivot->y };
+	DXVector2 lPivotPos{ mSize.x*mPivot.x,mSize.y*mPivot.y };
 
 	//Direct3D空間上ではY軸は上
 	pPolygon[0] = {
-		{ 0 - lPivotPos.x, mSize->y - lPivotPos.y,0 },{ 0,0 }
+		{ 0 - lPivotPos.x, mSize.y - lPivotPos.y,0 },{ 0,0 }
 	};
 	pPolygon[1] = {
-		{ mSize->x - lPivotPos.x,mSize->y - lPivotPos.y,0 },{ 1,0 }
+		{ mSize.x - lPivotPos.x,mSize.y - lPivotPos.y,0 },{ 1,0 }
 	};
 	pPolygon[2] = {
 		{ 0 - lPivotPos.x,0 - lPivotPos.y,0 },{ 0,1 }
 	};
 	pPolygon[3] = {
-		{ mSize->x - lPivotPos.x,0 - lPivotPos.y,0 },{ 1,1 }
+		{ mSize.x - lPivotPos.x,0 - lPivotPos.y,0 },{ 1,1 }
 	};
 }

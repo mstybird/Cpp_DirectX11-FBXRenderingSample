@@ -2,6 +2,7 @@
 #include<memory>
 #include<D3DX11.h>
 #include<unordered_map>
+#include"MSLayout.h"
 class MSSceneBase;
 enum class MSKEY;
 
@@ -14,8 +15,12 @@ public:
 	static void SetScene(std::unique_ptr<MSSceneBase>&&pScene);
 	//ビューポートを取得する
 	static D3D11_VIEWPORT*GetViewPort();
-	static ID3D11RenderTargetView* GetRTV();
-	static ID3D11DepthStencilView* GetDSV();
+	//static ID3D11RenderTargetView* GetRTV();
+	//static ID3D11DepthStencilView* GetDSV();
+	static MSView* GetView();
+	static MSView* GetActiveView();
+	static MSView* SetActiveView(MSView* pView);
+	static void SetDefaultView();
 
 
 	static ID3D11Device*GetDevice();
@@ -41,11 +46,18 @@ private:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;
 	IDXGISwapChain* m_pSwapChain;
-	ID3D11RenderTargetView* m_pBackBuffer_TexRTV;
-	ID3D11DepthStencilView* m_pBackBuffer_DSTexDSV;
-	ID3D11Texture2D* m_pBackBuffer_DSTex;
+
+
+	MSView mView;	//MSDirectが持つビュー情報
+	MSView* mActiveView;//現在アクティブなビュー
+
+	//ID3D11RenderTargetView* m_pBackBuffer_TexRTV;
+	//ID3D11DepthStencilView* m_pBackBuffer_DSTexDSV;
+	//ID3D11Texture2D* m_pBackBuffer_DSTex;
+
 	ID3D11RasterizerState* m_pRasterizerState;
 	D3D11_VIEWPORT mViewPort;
+
 	std::unordered_map<MSKEY, bool> KeyList;
 	std::unique_ptr<MSSceneBase>scene;
 	//	MSSceneBase scene;

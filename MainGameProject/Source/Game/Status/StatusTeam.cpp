@@ -26,8 +26,8 @@ bool StatusTeam::IsCollisionBase(GameObjectBase * aCollider)
 {
 	DXVector3 lColliderPos;
 	DXVector3 lBasePos;
-	aCollider->GetWorld()->GetMatrix().lock()->GetT(lColliderPos);
-	mBase.GetWorld()->GetMatrix().lock()->GetT(lBasePos);
+	aCollider->GetWorld()->GetMatrix()->GetT(lColliderPos);
+	mBase.GetWorld()->GetMatrix()->GetT(lBasePos);
 
 	float lDistance = (lColliderPos - lBasePos).GetDistance();
 	return lDistance < mBaseScale;

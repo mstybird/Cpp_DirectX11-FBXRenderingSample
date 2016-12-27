@@ -137,7 +137,7 @@ private:
 	MSThread mScneThread;
 	//シーン遷移に使うシーケンスフラグ
 	SceneSequence mSequence;
-	uint32_t mSceneTime;
+	int32_t mSceneTime;
 
 	//遷移シーン
 	std::unique_ptr<MSSceneBase> mScene;

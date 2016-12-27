@@ -267,13 +267,14 @@ eTeamType StatusField::GetTeamType(CharacterBase * aChara)
 			return eTeamType::White;
 		}
 	}
+	return{};//–{—ˆ’Ê‚ç‚È‚¢
 }
 void StatusField::GetBall(CharacterBase * aChara)
 {
 	aChara->GetStatus()->mBall = mBall;
 	SetBallHolder(aChara);
 	DXVector3 lPosition;
-	aChara->GetWorld()->GetMatrix().lock()->GetT(lPosition);
+	aChara->GetWorld()->GetMatrix()->GetT(lPosition);
 
 	this->mEfkBallGet.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
 	this->mEfkBallGet.Play();

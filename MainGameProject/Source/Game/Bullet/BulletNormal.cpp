@@ -43,7 +43,7 @@ void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBullet
 	std::unique_ptr<BulletNormal>lBullet = std::make_unique<BulletNormal>();
 	lBullet->Initialize();
 	//初期位置設定
-	auto& lShotPos = *aShoter->GetWorld()->GetMatrix().lock();
+	auto& lShotPos = *aShoter->GetWorld()->GetMatrix();
 	//弾発射方向の確定
 	DXVector3 lDir;
 	auto v = lBullet->mDirection;
@@ -114,7 +114,7 @@ void BulletNormal::Update()
 		//ボールを持っていた場合、ボールをフィールドにセット
 		if (lStatus->mBall != nullptr) {
 			DXVector3 lPosition;
-			lChara->GetWorld()->GetMatrix().lock()->GetT(lPosition);
+			lChara->GetWorld()->GetMatrix()->GetT(lPosition);
 			lChara->GetField()->RespawnBall(&lPosition);
 			lStatus->mBall = nullptr;
 		}
@@ -133,5 +133,5 @@ void BulletNormal::Render()
 	if (!mActive)return;
 	assert(mRender);
 	mRender->SetShader(mShader);
-	mRender->Render(mTransform.get());
+	mRender->Render(this);
 }

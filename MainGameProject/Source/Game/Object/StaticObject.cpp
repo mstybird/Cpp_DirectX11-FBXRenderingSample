@@ -13,7 +13,7 @@ void StaticObject::Render()
 {
 	if (!mActive)return;
 	mRender->SetShader(mShader);
-	mRender->Render(mTransform.get());
+	mRender->Render(this);
 }
 
 void StaticObject::ClearTrans()

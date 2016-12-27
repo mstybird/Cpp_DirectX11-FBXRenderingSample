@@ -24,7 +24,7 @@ void MSCollisionRayPicking::SetFramePosition(const DXVector3 & pRayPosion)
 void MSCollisionRayPicking::SetFramePosition(DX11RenderResource & pRayPosion)
 {
 	//現在の座標情報を取得
-	pRayPosion.GetWorld().lock()->GetMatrix().lock()->GetT(*mPosBefore);
+	pRayPosion.GetWorld()->GetMatrix()->GetT(*mPosBefore);
 }
 
 void MSCollisionRayPicking::SetSlipFlag(bool pSlipFlag)
@@ -69,10 +69,10 @@ bool MSCollisionRayPicking::Collision(DXVector3&pResultPosition, DX11RenderResou
 		DXVector3 lPosition[3];		//レイ判定使う最終的な3頂点
 
 									//ターゲットリソース上の行列を取得
-		DXMatrix&lResourceMatrix = *pRayTarget.GetWorld().lock()->GetMatrix().lock();
+		DXMatrix&lResourceMatrix = *pRayTarget.GetWorld()->GetMatrix();
 
 		//更新後のリソースから位置を取得
-		pRayPosition.GetWorld().lock()->GetMatrix().lock()->GetT(lRayAfterPosition);
+		pRayPosition.GetWorld()->GetMatrix()->GetT(lRayAfterPosition);
 
 		
 		auto lMeshList = pRayTarget.GetMesh()->GetCurrentMeshData();

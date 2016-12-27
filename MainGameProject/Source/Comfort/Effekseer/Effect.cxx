@@ -5,20 +5,20 @@
 
 void Comfort::EffectCamera::SetDXCamera(DXCamera * aCamera)
 {
-	mEye.X = aCamera->mEyePosition->x;
-	mEye.Y = aCamera->mEyePosition->y;
-	mEye.Z = aCamera->mEyePosition->z;
-	mLookAt.X = aCamera->mLookPosition->x;
-	mLookAt.Y = aCamera->mLookPosition->y;
-	mLookAt.Z = aCamera->mLookPosition->z;
+	mEye.X = aCamera->mEyePosition.x;
+	mEye.Y = aCamera->mEyePosition.y;
+	mEye.Z = aCamera->mEyePosition.z;
+	mLookAt.X = aCamera->mLookPosition.x;
+	mLookAt.Y = aCamera->mLookPosition.y;
+	mLookAt.Z = aCamera->mLookPosition.z;
 	mUp.X = 0;
 	mUp.Y = 1;
 	mUp.Z = 0;
 
 	auto m1 = GetLookAtLH();
-	auto m2 = *aCamera->GetMatrix().lock();
+	auto m2 = *aCamera->GetMatrix();
 
-	//mUp.X = aCamera->mUpVector->x;
+	//mUp.X = aCamera.mUpVector->x;
 	//mUp.Y = aCamera->mUpVector->y;
 	//mUp.Z = aCamera->mUpVector->z;
 	//printf("%.2f:%.2f:%.2f\n", mUp.X, mUp.Y, mUp.Z);

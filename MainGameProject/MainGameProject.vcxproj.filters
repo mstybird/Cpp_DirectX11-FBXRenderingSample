@@ -447,6 +447,15 @@
     <ClCompile Include="Source\Helper\CppTweener.cpp">
       <Filter>Helper</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Render\MSLayout.cpp">
+      <Filter>MSDirect\DX11\Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Shader\3D\CBResource0.cpp">
+      <Filter>MSDirect\DX11\Shader\3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MSDirect\DX11\Shader\3D\MSLight.cpp">
+      <Filter>MSDirect\DX11\Shader\3D\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\NoUse\2DSprite.txt">
@@ -672,6 +681,15 @@
     </ClInclude>
     <ClInclude Include="Include\CppTweener.h">
       <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSLayout.h">
+      <Filter>MSDirect\DX11\Render\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CBResource0.h">
+      <Filter>MSDirect\DX11\Shader\3D\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MSLight.h">
+      <Filter>MSDirect\DX11\Shader\3D\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

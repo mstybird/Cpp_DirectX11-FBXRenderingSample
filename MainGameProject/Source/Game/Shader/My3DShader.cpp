@@ -7,12 +7,17 @@
 #include<iostream>
 My3DShader::My3DShader() :
 	MSBase3DShader(
+		sizeof(MyFBXCONSTANTBUFFER0),
 		sizeof(MyFBXCONSTANTBUFFER1),
 		sizeof(MyFBXCONSTANTBUFFER2),
 		sizeof(FbxVertex))
 {
 }
 
+
+void My3DShader::SetConstantBuffer0(CBResource0 & aResource)
+{
+}
 
 void My3DShader::SetConstantBuffer1(
 	FBXMesh& fbxMesh,
@@ -24,11 +29,10 @@ void My3DShader::SetConstantBuffer1(
 	D3D11_MAPPED_SUBRESOURCE pData;
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
 		
-		cb.mW = *fbxMesh.mWorld * *resource->GetMatrixWorld().lock();
-		cb.mWVP = *resource->GetMatrixWVP(*fbxMesh.mWorld,*pDisplay);
+		cb.mW = *fbxMesh.mWorld * *resource->GetMatrixWorld();
+		resource->GetMatrixWVP(&cb.mWVP,*fbxMesh.mWorld,*pDisplay);
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		D3DXMatrixTranspose(&cb.mWVP, &cb.mWVP);
-		cb.LightDir = D3DXVECTOR4(1, 1, -1, 0);
 		if(resource->GetTransVector()->size()>0){
 			cb.mAlpha = resource->GetTransVector()->at(0);
 		}

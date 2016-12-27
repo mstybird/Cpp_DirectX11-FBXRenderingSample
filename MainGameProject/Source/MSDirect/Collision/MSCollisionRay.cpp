@@ -21,7 +21,7 @@ void MSCollisionRay::SetRay(const DXVector3 & pRayDirection)
 }
 
 
-void MSCollisionRay::SetRay(const DXCamera & pRayCamera)
+void MSCollisionRay::SetRay( DXCamera & pRayCamera)
 {
 	pRayCamera.CreateRay(*mRayDirection.get(), { 0.0f,0.0f,1.0f });
 }
@@ -41,7 +41,7 @@ bool MSCollisionRay::Collision(const MSCollisionRay & pRay, DX11RenderResource&p
 
 
 	auto lmeshList = pFbxObject.GetCurrentMeshData();
-	DXMatrix lResourceMatrix = *pResource.GetWorld().lock()->GetMatrix().lock();
+	DXMatrix lResourceMatrix = *pResource.GetWorld()->GetMatrix();
 	for (auto&lMesh : *lmeshList) {
 
 		//•ÏŠ·s—ñ‚Ì‡¬
@@ -62,7 +62,7 @@ bool MSCollisionRay::Collision(const MSCollisionRay & pRay, DX11RenderResource&p
 				}
 				//ƒŒƒC”»’è
 				DXVector3 lRayPos;
-				pRayPosition.GetCamera().lock()->GetEyeT(lRayPos);
+				pRayPosition.GetCamera()->GetEyeT(lRayPos);
 				//				pRayPosition.GetWorld().lock()->GetMatrix().lock()->GetT(lRayPos);
 				if (D3DXIntersectTri(
 					&lPosition[0],

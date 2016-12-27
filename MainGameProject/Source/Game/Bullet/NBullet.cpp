@@ -47,7 +47,7 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 	bullet->SetRenderer(lRender);
 
 	//初期位置設定
-	auto& lShotPos = *aShoter->GetWorld()->GetMatrix().lock();
+	auto& lShotPos = *aShoter->GetWorld()->GetMatrix();
 	//弾発射方向の確定
 	D3DXVec3TransformNormal(&bullet->mStatus.mDirection, &D3DXVECTOR3(0, 0, 1), &lShotPos);
 
@@ -64,7 +64,7 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 
 	lShotPos.GetT(lSpwanPos);
 	bullet->GetWorld()->SetT(lSpwanPos);
-	lScaling = *GetWorld()->mScale;
+	lScaling = GetWorld()->mScale;
 	bullet->GetWorld()->SetS(lScaling);
 
 	//衝突対象を登録
@@ -93,7 +93,7 @@ void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, Char
 	bullet->mKillEffect = this->mKillEffect;
 
 	bullet->mShotEffect.SetPosition({ lSpwanPos.x,lSpwanPos.y,lSpwanPos.z });
-	DXVector3 lRotate = *aShoter->GetWorld()->mRotationCenter;
+	DXVector3 lRotate = aShoter->GetWorld()->mRotationCenter;
 	bullet->mShotEffect.Play();
 	bullet->mShotEffect.SetRotation({
 		lRotate.x,
@@ -110,13 +110,13 @@ void NBullet::ShotFirstEffect(CharacterBase * aShoter)
 {
 	mFirstEffect = this->mHitEffect;
 
-	DXMatrix mMatrix = *aShoter->GetWorld()->GetMatrix().lock();
+	DXMatrix mMatrix = *aShoter->GetWorld()->GetMatrix();
 	DXVector3 lPosition;
 	DXVector3 lOffset{ 0.0f,0.0f,1.0f };
 	D3DXVec3TransformCoord(&lPosition, &lOffset, &mMatrix);
 
 	mFirstEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
-	DXVector3 lRotate = *aShoter->GetWorld()->mRotationCenter;
+	DXVector3 lRotate = aShoter->GetWorld()->mRotationCenter;
 	mFirstEffect.Play();
 	mFirstEffect.SetRotation({
 		lRotate.x,
@@ -159,9 +159,9 @@ void NBullet::Update()
 
 
 		DXVector3 lPosition;
-		GetWorld()->GetMatrix().lock()->GetT(lPosition);
+		GetWorld()->GetMatrix()->GetT(lPosition);
 		this->mHitEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
-		DXVector3 lRotate = *this->GetWorld()->mRotationCenter;
+		DXVector3 lRotate = this->GetWorld()->mRotationCenter;
 		this->mHitEffect.Play();
 		mHitEffect.SetRotation({
 			lRotate.x,
@@ -202,7 +202,7 @@ void NBullet::Update()
 
 		//キルエフェクト再生
 		this->mKillEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
-		lRotate = *this->GetWorld()->mRotationCenter;
+		lRotate = this->GetWorld()->mRotationCenter;
 		this->mKillEffect.Play();
 		mKillEffect.SetRotation({
 			lRotate.x,
@@ -220,7 +220,7 @@ void NBullet::Update()
 		//ボールを持っていた場合、ボールをフィールドにセット
 		if (lStatus->mBall != nullptr) {
 			DXVector3 lPosition;
-			lChara->GetWorld()->GetMatrix().lock()->GetT(lPosition);
+			lChara->GetWorld()->GetMatrix()->GetT(lPosition);
 			lChara->GetField()->RespawnBall(&lPosition);
 			lStatus->mBall = nullptr;
 		}
@@ -239,5 +239,5 @@ void NBullet::Render()
 	if (!mActive)return;
 	assert(mRender);
 	mRender->SetShader(mShader);
-	mRender->Render(mTransform.get());
+	mRender->Render(this);
 }

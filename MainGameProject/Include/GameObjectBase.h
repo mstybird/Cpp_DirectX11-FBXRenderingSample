@@ -1,8 +1,9 @@
 #pragma once
 #include<vector>
 #include<memory>
-class DX11RenderResource;
 #include"MSCollisionRayPicking.h"
+#include"CBResource0.h"
+class DX11RenderResource;
 class DXWorld;
 class DXCamera;
 class DXProjection;
@@ -24,7 +25,8 @@ public:
 	virtual void Render() = 0;
 
 	void SetShader(MSBase3DShader*aShader);
-
+	void SetCollisionShader(MSBase3DShader*aShader);
+	MSBase3DShader* GetCollisionShader();
 	virtual void SetMesh(MSFbxManager&aSetMesh);
 	void SetMeshScale(float aX, float aY, float aZ);
 	void SetCollisionMesh(MSFbxManager&aSetMesh);
@@ -51,6 +53,11 @@ public:
 	float GetDistance(GameObjectBase*aTarget);
 	virtual bool UpdateMesh();
 
+	std::shared_ptr<DX11RenderResource> LoadTransform( GameObjectBase*aTransform);
+
+	//フレーム毎のリソースを取得
+	CBResource0* GetFrameResource();
+
 protected:
 	virtual std::vector<GameObjectBase*> UpdateCollision(bool pIsUpdatePosition);
 	//ラムダ用
@@ -62,6 +69,12 @@ protected:
 	MS3DRender*mRender;
 	//このオブジェクトの描画に使うシェーダ
 	MSBase3DShader* mShader;
+	//カリング処理に使うシェーダ	
+	MSBase3DShader* mCollisionShader;
+
+	//フレーム毎に渡すオブジェクト内共通のリソース
+	CBResource0 mFrameResource;
+
 	//このオブジェクトがアクティブかどうか
 	bool mActive;
 	//コリジョンのサイズ(拡大率)はメッシュのサイズと同じにするかどうか

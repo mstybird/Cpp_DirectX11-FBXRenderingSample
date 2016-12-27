@@ -87,16 +87,16 @@ void CharacterBase::UpdateCamera()
 		auto lTmpMesh = lCollision->mTransform;
 		DXVector3 lTmpS;
 		//判定メッシュをコリジョン用に変更
-		lCollision->GetWorld()->GetMatrix().lock()->GetT(lTmpS);
-		lCollision->mCollisionMesh->GetWorld().lock()->SetT(lTmpS);
-		lCollision->mCollisionMesh->GetWorld().lock()->SetRC(*lCollision->GetWorld()->mRotationCenter);
+		lCollision->GetWorld()->GetMatrix()->GetT(lTmpS);
+		lCollision->mCollisionMesh->GetWorld()->SetT(lTmpS);
+		lCollision->mCollisionMesh->GetWorld()->SetRC(lCollision->GetWorld()->mRotationCenter);
 
 
 		//コリジョンスケールが別で設定されていない場合は
 		//メッシュのコリジョンスケールを使う
 		if (lCollision->mIsCollisionScaleDefault == true) {
-			lCollision->GetWorld()->GetMatrix().lock()->GetS(lTmpS);
-			lCollision->mCollisionMesh->GetWorld().lock()->SetS(lTmpS);
+			lCollision->GetWorld()->GetMatrix()->GetS(lTmpS);
+			lCollision->mCollisionMesh->GetWorld()->SetS(lTmpS);
 		}
 
 		lCollision->mTransform = lCollision->mCollisionMesh;
@@ -106,7 +106,7 @@ void CharacterBase::UpdateCamera()
 			continue;
 		}
 		MSCollisionRayPicking lRayPick;
-		lRayPick.SetFramePosition(*mTransform->GetCamera().lock()->mEyePosition);
+		lRayPick.SetFramePosition(mTransform->GetCamera()->mEyePosition);
 		lRayPick.SetSlipFlag(false);
 		DXVector3 lDistance;
 		DXVector3 v;

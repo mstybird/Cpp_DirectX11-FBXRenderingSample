@@ -17,7 +17,7 @@ void MySprite2DShader::SetConstantBuffer(MSSpriteBaseResource&pResource, D3D11_V
 
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
 
-		cb.mW = *pResource.GetMatrix().lock();
+		cb.mW = *pResource.GetMatrix();
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		cb.ViewPortWidth = pViewPort.Width;
 		cb.ViewPortHeight = pViewPort.Height;

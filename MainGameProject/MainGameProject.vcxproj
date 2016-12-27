@@ -86,7 +86,10 @@
     <ClCompile Include="Source\MSDirect\DX11\Fbx\MSFbxObject.cpp" />
     <ClCompile Include="Source\MSDirect\DX11\Render\DX11RenderResource.cpp" />
     <ClCompile Include="Source\MSDirect\DX11\Render\MS3DRender.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Render\MSLayout.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Shader\3D\CBResource0.cpp" />
     <ClCompile Include="Source\MSDirect\DX11\Shader\3D\MSBase3DShader.cpp" />
+    <ClCompile Include="Source\MSDirect\DX11\Shader\3D\MSLight.cpp" />
     <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSBaseShader.cpp" />
     <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSBaseShaderResource.cpp" />
     <ClCompile Include="Source\MSDirect\DX11\Shader\Base\MSPixelShader.cpp" />
@@ -103,8 +106,11 @@
     <ClCompile Include="Source\MSDirect\Utility\MSProgresData.cxx" />
     <ClCompile Include="Source\MSDirect\Utility\MSUtility.cpp" />
     <ClInclude Include="Include\Button.h" />
+    <ClInclude Include="Include\CBResource0.h" />
     <ClInclude Include="Include\CppTweener.h" />
     <ClInclude Include="Include\GameObjectBase.h" />
+    <ClInclude Include="Include\MSLayout.h" />
+    <ClInclude Include="Include\MSLight.h" />
     <ClInclude Include="Include\Result.h" />
     <ClInclude Include="Include\ScoreView.h" />
     <ClInclude Include="Include\StageSelect.h" />

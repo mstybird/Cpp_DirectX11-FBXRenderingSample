@@ -5,9 +5,7 @@
 #include"DXProjection.h"
 #include"DXDisplay.h"
 #include"MSCollisionSphere.h"
-DX11RenderResource::DX11RenderResource():
-	mWorld{std::make_shared<DXWorld>()},
-	mMesh{std::make_shared<MSFbxObject>()}
+DX11RenderResource::DX11RenderResource()
 {
 
 }
@@ -19,78 +17,73 @@ DX11RenderResource::~DX11RenderResource()
 
 void DX11RenderResource::InitRenderMatrix()
 {
-	mView = std::make_shared<DXCamera>();
-	mProj = std::make_shared<DXProjection>();
 }
 
-std::weak_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWorld()
+D3DXMATRIX* DX11RenderResource::GetMatrixWorld()
 {
-	return mWorld->GetMatrix();
+	return mWorld.GetMatrix();
 }
 
-std::weak_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixView()
+D3DXMATRIX* DX11RenderResource::GetMatrixView()
 {
-	return mView->GetMatrix();
+	return mView.GetMatrix();
 }
 
-std::weak_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixProjection()
+D3DXMATRIX* DX11RenderResource::GetMatrixProjection()
 {
-	return mProj->GetMatrix();
+	return mProj.GetMatrix();
 }
 
-std::unique_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWVP(const DXDisplay& pDisplay)
+void DX11RenderResource::GetMatrixWVP(D3DXMATRIX* pOut, const DXDisplay& pDisplay)
 {
 	
-	std::unique_ptr<D3DXMATRIX> lResult = std::make_unique<D3DXMATRIX>();
-	*lResult=*mWorld->GetMatrix().lock() * *pDisplay.GetCamera().lock()->GetMatrix().lock() * *pDisplay.GetProjection().lock()->GetMatrix().lock();
-	return std::move(lResult);
+	*pOut = *mWorld.GetMatrix() * *pDisplay.GetCamera()->GetMatrix()* *pDisplay.GetProjection()->GetMatrix();
+
+	//std::unique_ptr<D3DXMATRIX> lResult = std::make_unique<D3DXMATRIX>();
+	//*lResult=*mWorld->GetMatrix().lock() * *pDisplay.GetCamera().lock()->GetMatrix().lock() * *pDisplay.GetProjection().lock()->GetMatrix().lock();
+	return;
 }
 
-std::unique_ptr<D3DXMATRIX> DX11RenderResource::GetMatrixWVP(const D3DXMATRIX& pAddWorldMatrix, const DXDisplay& pDisplay)
+void DX11RenderResource::GetMatrixWVP(D3DXMATRIX* pOut, const D3DXMATRIX& pAddWorldMatrix, const DXDisplay& pDisplay)
 {
-	std::unique_ptr<D3DXMATRIX> lResult = std::make_unique<D3DXMATRIX>();
-	*lResult = pAddWorldMatrix * *mWorld->GetMatrix().lock() *
-		*pDisplay.GetCamera().lock()->GetMatrix().lock() *
-		*pDisplay.GetProjection().lock()->GetMatrix().lock();
-	return std::move(lResult);
+	*pOut=pAddWorldMatrix* *mWorld.GetMatrix() * *pDisplay.GetCamera()->GetMatrix()* *pDisplay.GetProjection()->GetMatrix();
+
+	//std::unique_ptr<D3DXMATRIX> lResult = std::make_unique<D3DXMATRIX>();
+	//*lResult = pAddWorldMatrix * *mWorld->GetMatrix().lock() *
+	//	*pDisplay.GetCamera().lock()->GetMatrix().lock() *
+	//	*pDisplay.GetProjection().lock()->GetMatrix().lock();
+	return;
 }
 
 void DX11RenderResource::SetWorld(const DXWorld & pWorld)
 {
-	*mWorld = pWorld;
+	mWorld = pWorld;
 }
 
 void DX11RenderResource::SetCamera(const DXCamera & pCamera)
 {
-
-	if (!mView) {
-		mView = std::make_shared<DXCamera>();
-	}
-	*mView = pCamera;
+	mView = pCamera;
 }
 
 void DX11RenderResource::SetProjection(const DXProjection & pProjection)
 {
-	if (!mProj) {
-		mProj = std::make_shared<DXProjection>();
-	}
 
-	*mProj = pProjection;
+	mProj = pProjection;
 }
 
-std::weak_ptr<DXWorld> DX11RenderResource::GetWorld()
+DXWorld* DX11RenderResource::GetWorld()
 {
-	return mWorld;
+	return &mWorld;
 }
 
-std::weak_ptr<DXCamera> DX11RenderResource::GetCamera()
+DXCamera* DX11RenderResource::GetCamera()
 {
-	return mView;
+	return &mView;
 }
 
-std::weak_ptr<DXProjection> DX11RenderResource::GetProjection()
+DXProjection* DX11RenderResource::GetProjection()
 {
-	return mProj;
+	return &mProj;
 }
 
 void DX11RenderResource::SetCollisionSphere(const std::shared_ptr<std::vector<std::vector<MSCollisionSphere>>>&pCollisions)
@@ -107,8 +100,8 @@ bool DX11RenderResource::CollisionSphere(std::shared_ptr<DX11RenderResource>&pRe
 				for (auto&pCollision : pX) {
 
 					if (MSCollisionSphere::Collision(
-						tCollision, *this->GetWorld().lock(),
-						pCollision, *pResource->GetWorld().lock()
+						tCollision, *this->GetWorld(),
+						pCollision, *pResource->GetWorld()
 						)) {
 						return true;
 					}
@@ -137,6 +130,7 @@ int DX11RenderResource::GetSubMeshCount(int aMeshIndex)
 
 MSFbxObject * DX11RenderResource::GetMesh()
 {
+	if (!mMesh)mMesh = std::make_shared<MSFbxObject>();
 	return mMesh.get();
 }
 
