@@ -29,6 +29,7 @@ public:
 	//バッファの取得
 	std::vector<std::shared_ptr<FBXMesh>>* GetCurrentMeshData();
 	std::vector<std::vector<ID3D11Buffer*>>*GetCurrentVertexBuffer();
+	std::vector<std::vector<ID3D11Buffer*>>*GetCurrentVertexCollisionBuffer();
 	std::vector<std::vector<ID3D11Buffer*>>*GetCurrentIndexBuffer();
 	std::vector<std::vector<uint32_t>>*GetCurrentIndexBufferCount();
 	std::vector<std::vector<MSCollisionSphere>>*GetCurrentCollisionSpheres();
@@ -49,6 +50,7 @@ private:
 
 	std::vector<std::shared_ptr<FBXMesh>>* mMeshData;
 	std::vector<std::vector<ID3D11Buffer*>>* mVertexBuffer;
+	std::vector<std::vector<ID3D11Buffer*>>* mVertexCollisionBuffer;
 	std::vector<std::vector<ID3D11Buffer*>>* mIndexBuffer;
 	std::vector<std::vector<uint32_t>>* mIndexBufferLength;
 	std::vector<std::vector<MSCollisionSphere>>* mCollisionSphere;

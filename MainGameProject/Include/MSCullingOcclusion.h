@@ -21,9 +21,10 @@ public:
 		pRenderFunc		:障害となるオブジェクトの描画処理
 	*/
 	static bool IsCullingWorld(
+		std::vector<GameObjectBase*>*pHitList,
 		MS3DRender*pRender,
 		GameObjectBase*pEyeResource,
-		GameObjectBase*pTargetResource,
+		std::vector<GameObjectBase*>*pTargetResource,
 		float pPixelper,
 		std::function<void(void)>pRenderFunc
 		);

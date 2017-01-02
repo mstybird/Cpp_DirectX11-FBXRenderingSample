@@ -5,6 +5,7 @@
 #include<DX11FBXLoader.hpp>
 #include"DXMath.hpp"
 #include"MSBase3DShader.h"
+#include<DX11FBXLoader.hpp>
 #include<GameObjectBase.h>
 #include<MSDirect.h>
 #include<vector>
@@ -32,8 +33,10 @@ void MS3DRender::Clear(D3DXVECTOR4 pColor)
 
 
 
-void MS3DRender::Render(GameObjectBase*aObject, bool aIsCustomRender)
+void MS3DRender::Render(GameObjectBase*aObject, bool aIsCustomRender, bool aIsCollision)
 {
+
+
 	//shader->SetConstantBuffer1(resource,&display);
 	//シェーダの設定
 	shader->GetVS()->SetShader();
@@ -45,9 +48,15 @@ void MS3DRender::Render(GameObjectBase*aObject, bool aIsCustomRender)
 
 	auto meshData = lResource->GetMesh()->GetCurrentMeshData();
 	auto lVertexBufferArray = lResource->GetMesh()->GetCurrentVertexBuffer();
+	auto lVertexCollisionBufferArray = lResource->GetMesh()->GetCurrentVertexCollisionBuffer();
 	auto lIndexBufferArray = lResource->GetMesh()->GetCurrentIndexBuffer();
 	auto lIndexBufferLengthArray = lResource->GetMesh()->GetCurrentIndexBufferCount();
 
+
+	{
+		auto lFrameResource = aObject->GetFrameResource();
+		lFrameResource->vEye = { display->GetCamera()->mEyePosition };
+	}
 
 
 	//auto meshData = fbxManager.lock()->GetMeshData();
@@ -72,14 +81,27 @@ void MS3DRender::Render(GameObjectBase*aObject, bool aIsCustomRender)
 			}
 			else {
 
-				UINT stride = shader->GetVertexSize();
-				UINT offset = 0;
-				ID3D11Buffer* lVertexBuffer = lVertexBufferArray->at(i)[j];
+				UINT stride;
+				UINT offset{ 0 };
+				ID3D11Buffer* lVertexBuffer;
+
+				if (aIsCollision == true) {
+					stride = sizeof(DXVector3);
+					lVertexBuffer = lVertexCollisionBufferArray->at(i)[j];
+				}
+				else {
+					stride = shader->GetVertexSize();
+					lVertexBuffer = lVertexBufferArray->at(i)[j];
+
+				}
 
 				sDeviceContext->IASetVertexBuffers(0, 1, &lVertexBuffer, &stride, &offset);
 				stride = sizeof(int);
 				offset = 0;
 				sDeviceContext->IASetIndexBuffer(lIndexBufferArray->at(i)[j], DXGI_FORMAT_R32_UINT, 0);
+
+
+
 				sDeviceContext->DrawIndexed(lIndexBufferLengthArray->at(i)[j], 0, 0);
 			
 

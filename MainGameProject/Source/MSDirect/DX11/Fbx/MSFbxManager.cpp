@@ -48,72 +48,6 @@ void MSFbxManager::LoadFile(std::string pFileName, bool animationLoad)
 
 	RegisterMesh(mLoader->GetStartFrame(), mLoader->GetDefaultAnimation());
 
-	//lMeshBuffer->mMeshData = mLoader->GetGeometryData2(mLoader->GetStartFrame());
-
-	////バッファリソースの作成
-	////メッシュの数取得
-	//mLoader->GetMeshCount(mMeshCount);
-	////メッシュごとの頂点数取得
-	//mLoader->GetMeshVertexCount(mMeshVertexCount);
-	////メッシュごとのインデクス数取得
-	//mLoader->GetMeshIndexCount(mMeshIndexCount);
-	//
-	//mVertexBuffer.clear();
-	//mIndexBuffer.clear();
-
-	//mVertexBuffer.resize(lMeshBuffer->mMeshData->size());
-	//mIndexBuffer.resize(lMeshBuffer->mMeshData->size());
-	//mMeshVBDesc.resize(lMeshBuffer->mMeshData->size());
-	//mMeshIBDesc.resize(lMeshBuffer->mMeshData->size());
-
-	//for (unsigned int i = 0; i < lMeshBuffer->mMeshData->size(); i++) {
-	//	//サブメッシュの数だけ作成
-	//	mVertexBuffer[i].resize(lMeshBuffer->mMeshData->at(i)->subMesh.size());
-	//	mIndexBuffer[i].resize(lMeshBuffer->mMeshData->at(i)->subMesh.size());
-	//	mMeshVBDesc[i].resize(lMeshBuffer->mMeshData->at(i)->subMesh.size());
-	//	mMeshIBDesc[i].resize(lMeshBuffer->mMeshData->at(i)->subMesh.size());
-
-	//	//バッファデスクリプションはここで作成する
-	//	for (unsigned int j = 0; j < lMeshBuffer->mMeshData->at(i)->subMesh.size(); j++) {
-	//		{
-	//			mMeshVBDesc[i][j].Usage = D3D11_USAGE_DEFAULT;
-	//			mMeshVBDesc[i][j].ByteWidth = sizeof(FbxVertex)*lMeshBuffer->mMeshData->at(i)->subMesh.at(j)->PosLength;
-	//			mMeshVBDesc[i][j].BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	//			mMeshVBDesc[i][j].CPUAccessFlags = 0;
-	//			mMeshVBDesc[i][j].MiscFlags = 0;
-	//		}
-	//		{
-	//			//インデックスバッファーデスクリプションを作成
-	//			mMeshIBDesc[i][j].Usage = D3D11_USAGE_DEFAULT;
-	//			mMeshIBDesc[i][j].ByteWidth = lMeshBuffer->mMeshData->at(i)->subMesh.at(j)->IndexLength * sizeof(int);
-	//			mMeshIBDesc[i][j].BindFlags = D3D11_BIND_INDEX_BUFFER;
-	//			mMeshIBDesc[i][j].CPUAccessFlags = 0;
-	//			mMeshIBDesc[i][j].MiscFlags = 0;
-	//		}
-	//	}
-	//} 
-
-	////アニメーションしない場合はこの時点でメッシュデータを作成しておく
-	//if (true) {
-
-	//	for (unsigned int i = 0; i < lMeshBuffer->mMeshData->size(); i++) {
-	//		for (unsigned int j = 0; j < lMeshBuffer->mMeshData->at(i)->subMesh.size(); j++) {
-
-	//			D3D11_SUBRESOURCE_DATA InitData;
-	//			InitData.pSysMem = lMeshBuffer->mMeshData->at(i)->subMesh.at(j)->Data.data();
-	//			sDevice->CreateBuffer(&mMeshVBDesc[i][j], &InitData, &mVertexBuffer[i][j]);
-
-	//			//インデックスバッファーを作成
-	//			InitData.pSysMem = lMeshBuffer->mMeshData->at(i)->subMesh.at(j)->Index;
-	//			InitData.SysMemPitch = 0;
-	//			InitData.SysMemSlicePitch = 0;
-	//			sDevice->CreateBuffer(&mMeshIBDesc[i][j], &InitData, &mIndexBuffer[i][j]);
-	//		}
-	//	}
-	//}
-
-
-
 }
 
 void MSFbxManager::RegisterMesh(FbxTime & mCurrentFrame, const int pAnimationIndex)
@@ -144,9 +78,11 @@ void MSFbxManager::RegisterMesh(FbxTime & mCurrentFrame, const int pAnimationInd
 
 
 	lMeshBuffer->mVertexBuffer.resize(lMeshBuffer->mMeshData->size());
+	lMeshBuffer->mVertexCollisionBuffer.resize(lMeshBuffer->mMeshData->size());
 	lMeshBuffer->mIndexBuffer.resize(lMeshBuffer->mMeshData->size());
 	for (unsigned int i = 0; i < lMeshBuffer->mMeshData->size(); i++) {
 		lMeshBuffer->mVertexBuffer[i].resize(lMeshBuffer->mMeshData->at(i)->subMesh.size());
+		lMeshBuffer->mVertexCollisionBuffer[i].resize(lMeshBuffer->mMeshData->at(i)->subMesh.size());
 		lMeshBuffer->mIndexBuffer[i].resize(lMeshBuffer->mMeshData->at(i)->subMesh.size());
 		for (unsigned int j = 0; j < lMeshBuffer->mMeshData->at(i)->subMesh.size(); j++) {
 
@@ -178,6 +114,25 @@ void MSFbxManager::RegisterMesh(FbxTime & mCurrentFrame, const int pAnimationInd
 			ID3D11Buffer* IB;
 			sDevice->CreateBuffer(&mIBDesc, &InitData, &IB);
 			lMeshBuffer->mIndexBuffer[i][j] = IB;
+
+
+			//コリジョンバッファ(頂点のみ)の作成
+			std::vector<DXVector3> mPositions;
+			mPositions.reserve(lMeshBuffer->mMeshData->at(i)->subMesh.at(j)->PosLength);
+			for (int k = 0; k < lMeshBuffer->mMeshData->at(i)->subMesh.at(j)->PosLength; ++k) {
+				mPositions.push_back(lMeshBuffer->mMeshData->at(i)->subMesh.at(j)->Data[k].Pos);
+			}
+
+			//頂点バッファ情報初期化
+			D3D11_BUFFER_DESC mVBCDesc;
+			mVBCDesc.Usage = D3D11_USAGE_DEFAULT;
+			mVBCDesc.ByteWidth = sizeof(DXVector3)*lMeshBuffer->mMeshData->at(i)->subMesh.at(j)->PosLength;
+			mVBCDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+			mVBCDesc.CPUAccessFlags = 0;
+			mVBCDesc.MiscFlags = 0;
+			InitData.pSysMem = mPositions.data();
+			sDevice->CreateBuffer(&mVBCDesc, &InitData, &lMeshBuffer->mVertexCollisionBuffer[i][j]);
+
 		}
 	}
 
@@ -208,6 +163,7 @@ void MSFbxManager::Release()
 			for (auto i = 0; i < lMeshBuffer.second.mVertexBuffer.size(); ++i) {
 				for (auto j = 0; j < lMeshBuffer.second.mVertexBuffer.at(i).size(); j++) {
 					SAFE_RELEASE(lMeshBuffer.second.mVertexBuffer[i][j]);
+					SAFE_RELEASE(lMeshBuffer.second.mVertexCollisionBuffer[i][j]);
 					SAFE_RELEASE(lMeshBuffer.second.mIndexBuffer[i][j]);
 				}
 			}
@@ -257,6 +213,11 @@ std::vector<std::shared_ptr<FBXMesh>>* MSFbxManager::GetMeshData(int aAnimation,
 std::vector<std::vector<ID3D11Buffer*>> * MSFbxManager::GetVertexBuffer(int aAnimation, FbxTime aTime)
 {
 	return &mMeshBuffer[aAnimation][aTime.Get()].mVertexBuffer;
+}
+
+std::vector<std::vector<ID3D11Buffer*>>* MSFbxManager::GetVertexCollisionBuffer(int aAnimation, FbxTime aTime)
+{
+	return &mMeshBuffer[aAnimation][aTime.Get()].mVertexCollisionBuffer;
 }
 
 std::vector<std::vector<ID3D11Buffer*>> * MSFbxManager::GetIndexBuffer(int aAnimation, FbxTime aTime)

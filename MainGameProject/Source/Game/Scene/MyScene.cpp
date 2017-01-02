@@ -43,12 +43,17 @@ void MyMSScene::Initialize()
 	mLuaDb.Load("Resource/AIPlanning/EnemyTask.lua", 0, "EnemyAI");
 
 	shader.Init();
+	shader.InitVertex("Resource/HLSL/ShadowMap.hlsl");
+	shader.InitPixel("Resource/HLSL/ShadowMap.hlsl");
+	mCollisionShader.Init();
+	mCollisionShader.InitVertex("Resource/HLSL/Collision3D.hlsl");
+	mCollisionShader.InitPixel("Resource/HLSL/Collision3D.hlsl");
+
+
 	//レンダラーシェーダーにはアドレスを記憶させるようにする
 	mBall.SetRenderer(&render);
 	mBall.SetShader(&shader);
-	mBall.SetCollisionShader(&shader);
-	shader.InitVertex("Resource/HLSL/Simple.hlsl");
-	shader.InitPixel("Resource/HLSL/Simple.hlsl");
+	mBall.SetCollisionShader(&mCollisionShader);
 
 	InitializeSound();
 	InitializeBall();
@@ -71,7 +76,7 @@ void MyMSScene::Initialize()
 	SetMeshResouce(&mField, ValueMyScene::Model::cFieldDesignID, ValueMyScene::Model::cFieldCollisionID);
 	mField.SetRenderer(&render);
 	mField.SetShader(&shader);
-	mField.SetCollisionShader(&shader);
+	mField.SetCollisionShader(&mCollisionShader);
 	mField.GetWorld()->SetT(0, -1, 0);
 
 	
@@ -901,7 +906,7 @@ void MyMSScene::InitializeEnemy()
 
 		enemy[i]->SetRenderer(&render);
 		enemy[i]->SetShader(&shader);
-		enemy[i]->SetCollisionShader(&shader);
+		enemy[i]->SetCollisionShader(&mCollisionShader);
 		//enemy[i]->SetBulletMesh(*mdDB.Get(cbox));
 		enemy[i]->Respawn();
 		if (mFieldStatus.GetTeamAlly(&mPlayer)->IsMember(enemy[i].get()) == false) {
@@ -944,7 +949,7 @@ void MyMSScene::InitializePlayer()
 
 	mPlayer.SetRenderer(&render);
 	mPlayer.SetShader(&shader);
-	mPlayer.SetCollisionShader(&shader);
+	mPlayer.SetCollisionShader(&mCollisionShader);
 	mPlayer.SetDefaultStatus(mDefaultStatus);
 	mPlayer.Respawn();
 

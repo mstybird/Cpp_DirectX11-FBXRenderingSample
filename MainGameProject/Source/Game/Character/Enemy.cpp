@@ -330,8 +330,104 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 	GameObjectBase* lLookTargetPtr{};
 	//視界処理
 	//MSCullingFrustum cf;
+
+	std::vector<GameObjectBase*> lTargets;
 	for (auto&lTarget : mSearchTargets) {
-		if (/*cf.IsCullingWorld(*mTransform, *lTarget)*/true) {
+		//キャラクターであり、死んでいれば対象外
+		auto lChara = dynamic_cast<CharacterBase*>(lTarget);
+		if (lChara) {
+			if (lChara->GetStatus()->mLive != CharaStateFlag::ALIVE) {
+				continue;
+			}
+		}
+
+		lTargets.push_back(lTarget);
+
+	}
+
+	{
+		auto lTmpThis = mTransform;
+		DXVector3 lTmpSThis = GetWorld()->mPosition;
+		mCollisionMesh->GetWorld()->SetT(lTmpSThis);
+		mCollisionMesh->GetWorld()->SetRC(GetWorld()->mRotationCenter);
+		if (mIsCollisionScaleDefault == true) {
+			GetWorld()->GetMatrix()->GetS(lTmpSThis);
+			mCollisionMesh->GetWorld()->SetS(lTmpSThis);
+		}
+		auto& lThisCam = *mTransform->GetCamera();
+		auto& lThisProj = *mTransform->GetProjection();
+		mCollisionMesh->SetCamera(lThisCam);
+		mCollisionMesh->SetProjection(lThisProj);
+
+
+		mTransform = mCollisionMesh;
+
+		/*
+		ここを最適化
+		*/
+
+		MSCullingOcculusion::IsCullingWorld(
+			&lTargetList, mRender, this, &lTargets, 0.003f,
+			[&, this]() {
+
+
+			for (auto&lCollision : mCollisionTargets) {
+
+				auto lTmpMesh = lCollision->mTransform;
+				DXVector3 lTmpS;
+				//判定メッシュをコリジョン用に変更
+				lCollision->GetWorld()->GetMatrix()->GetT(lTmpS);
+				lCollision->mCollisionMesh->GetWorld()->SetT(lTmpS);
+				lCollision->mCollisionMesh->GetWorld()->SetRC(lCollision->GetWorld()->mRotationCenter);
+
+
+				//コリジョンスケールが別で設定されていない場合は
+				//メッシュのコリジョンスケールを使う
+				if (lCollision->mIsCollisionScaleDefault == true) {
+					lCollision->GetWorld()->GetMatrix()->GetS(lTmpS);
+					lCollision->mCollisionMesh->GetWorld()->SetS(lTmpS);
+				}
+
+				lCollision->mTransform = lCollision->mCollisionMesh;
+
+				if (lCollision->IsActive() == false) {
+					lCollision->mTransform = lTmpMesh;
+					continue;
+				}
+				//登録済みコリジョンがカリングターゲットと同じだった場合は障害物として描画しない
+
+				bool lSameFlag{ false };
+				for (auto&lTarget : lTargets) {
+					if (lTarget == lCollision) {
+						lCollision->mTransform = lTmpMesh;
+						lSameFlag = true;
+						break;
+					}
+				}
+				if (lSameFlag == true) {
+					continue;
+				}
+
+				mRender->SetShader(mCollisionShader);
+				mRender->Render(lCollision, false, true);
+
+				lCollision->mTransform = lTmpMesh;
+
+
+			}
+		}
+		);
+
+		/*) {
+			lTargetList.push_back(lTarget);
+		}*/
+
+		mTransform = lTmpThis;
+
+	}
+	/*
+	for (auto&lTarget : mSearchTargets) {
+		if (true) {
 
 			//キャラクターであり、死んでいれば対象外
 			auto lChara = dynamic_cast<CharacterBase*>(lTarget);
@@ -356,6 +452,9 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 
 
 			mTransform = mCollisionMesh;
+
+
+			//	ここを最適化
 
 
 			if (MSCullingOcculusion::IsCullingWorld(
@@ -391,7 +490,8 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 						lCollision->mTransform = lTmpMesh;
 						continue;
 					}
-					mRender->Render(lCollision);
+					mRender->SetShader(mCollisionShader);
+					mRender->Render(lCollision,false,true);
 
 					lCollision->mTransform = lTmpMesh;
 
@@ -406,6 +506,9 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 
 		}
 	}
+
+	*/
+
 	return std::move(lTargetList);
 }
 
@@ -832,14 +935,12 @@ void Enemy::BetaInSightAttack()
 			//現在捉えている敵だった場合視界内にいる
 			if (GetStatus<EnemyStatus>()->mTargetChara == lTarget) {
 				lIsLooking = true;
-				printf("Searched\n");
 				break;
 			}
 		}
 	}
 
 	if (lIsLooking == false) {
-		printf("%d------------\n", lLookTargets.size());
 		GetStatus<EnemyStatus>()->mTargetting = false;
 		GetStatus<EnemyStatus>()->mLastLookPosiion = GetStatus<EnemyStatus>()->mTargetChara->GetWorld()->mPosition;
 		//GetStatus<EnemyStatus>()->mTargetChara = nullptr;

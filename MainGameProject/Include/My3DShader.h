@@ -34,25 +34,28 @@ public:
 		D3DXMATRIX mW;//ワールド、ビュー、射影の合成変換行列
 		D3DXMATRIX mWVP;//ワールド、ビュー、射影の合成変換行列
 		//D3DXVECTOR4 LightDir{ 1,0,-1,0 };
-		ALIGN16 float mAlpha{ 1.0f };
+		//ALIGN16 float mAlpha{ 1.0f };
 	};
 
 	//メッシュから取得する
 	struct MyFBXCONSTANTBUFFER2
 	{
 
-		D3DXVECTOR4 Diffuse;
-		ALIGN16 float ColorPer;
+		D3DXVECTOR4 Ambient;//アンビエント光
+		D3DXVECTOR4 Diffuse;//ディフューズ色
+		D3DXVECTOR4 Specular;//鏡面反射
+
+		//ALIGN16 float ColorPer;
 	};
 
 	virtual void SetConstantBuffer0(CBResource0&aResource)override;
 
 	//メッシュ単位に設定用
-	void SetConstantBuffer1(
+	virtual void SetConstantBuffer1(
 		FBXMesh& fbxMesh,
 		DX11RenderResource* resource, 
 		DXDisplay* pDisplay)override;
-	void SetConstantBuffer2(std::weak_ptr<FBXModelData>modelData)override;
+	virtual void SetConstantBuffer2(std::weak_ptr<FBXModelData>modelData)override;
 
 private:
 	void SetLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>&pLayout)override;

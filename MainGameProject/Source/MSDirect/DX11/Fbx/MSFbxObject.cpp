@@ -23,6 +23,7 @@ void MSFbxObject::Update()
 
 	mMeshData = mManager->GetMeshData(mCurrentAnimation, mCurrentFrame);
 	mVertexBuffer = mManager->GetVertexBuffer(mCurrentAnimation, mCurrentFrame);
+	mVertexCollisionBuffer = mManager->GetVertexCollisionBuffer(mCurrentAnimation, mCurrentFrame);
 	mIndexBuffer = mManager->GetIndexBuffer(mCurrentAnimation, mCurrentFrame);
 	mIndexBufferLength = mManager->GetIndexBufferCount(mCurrentAnimation, mCurrentFrame);
 	mCollisionSphere = mManager->GetCollisionSphere(mCurrentAnimation, mCurrentFrame);
@@ -72,6 +73,11 @@ std::vector<std::shared_ptr<FBXMesh>>* MSFbxObject::GetCurrentMeshData()
 std::vector<std::vector<ID3D11Buffer*>> * MSFbxObject::GetCurrentVertexBuffer()
 {
 	return mVertexBuffer;
+}
+
+std::vector<std::vector<ID3D11Buffer*>>* MSFbxObject::GetCurrentVertexCollisionBuffer()
+{
+	return mVertexCollisionBuffer;
 }
 
 std::vector<std::vector<ID3D11Buffer*>> * MSFbxObject::GetCurrentIndexBuffer()

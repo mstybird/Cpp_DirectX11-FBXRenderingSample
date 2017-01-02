@@ -456,6 +456,9 @@
     <ClCompile Include="Source\MSDirect\DX11\Shader\3D\MSLight.cpp">
       <Filter>MSDirect\DX11\Shader\3D\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Shader\3DCollisionShader.cpp">
+      <Filter>Game\Shader\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\NoUse\2DSprite.txt">
@@ -691,6 +694,9 @@
     <ClInclude Include="Include\MSLight.h">
       <Filter>MSDirect\DX11\Shader\3D\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Include\3DCollisionShader.h">
+      <Filter>Game\Shader\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="NatvisFile.natvis">
@@ -702,12 +708,28 @@
     <None Include="Resource\HLSL\Text2D.hlsl">
       <Filter>HLSL</Filter>
     </None>
-    <None Include="Resource\HLSL\Simple.hlsl" />
-    <None Include="Resource\HLSL\SimpleTexture.hlsl" />
-    <None Include="Resource\HLSL\Sprite2D.hlsl" />
-    <None Include="Resource\HLSL\Sprite3D.hlsl" />
     <None Include="ClassDiagram.cd">
       <Filter>Reference\Dictionary</Filter>
     </None>
+    <None Include="Resource\HLSL\Simple.hlsl">
+      <Filter>HLSL</Filter>
+    </None>
+    <None Include="Resource\HLSL\SimpleTexture.hlsl">
+      <Filter>HLSL</Filter>
+    </None>
+    <None Include="Resource\HLSL\Sprite2D.hlsl">
+      <Filter>HLSL</Filter>
+    </None>
+    <None Include="Resource\HLSL\Sprite3D.hlsl">
+      <Filter>HLSL</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resource\HLSL\ShadowMap.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\HLSL\Collision3D.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

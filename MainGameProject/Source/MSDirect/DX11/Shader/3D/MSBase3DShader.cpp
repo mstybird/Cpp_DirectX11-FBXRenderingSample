@@ -16,6 +16,24 @@ MSBase3DShader::MSBase3DShader(int constBufferSize0, int constBufferSize1, int c
 void MSBase3DShader::Init()
 {
 	D3D11_BUFFER_DESC cb;
+
+	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cb.ByteWidth = CONSTANTBUFFERSIZE0;
+	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cb.MiscFlags = 0;
+	cb.StructureByteStride = 0;
+	cb.Usage = D3D11_USAGE_DYNAMIC;
+
+	if (CONSTANTBUFFERSIZE0 > 0) {
+		if (FAILED(sDevice->CreateBuffer(&cb, NULL, &mConstantBuffer0)))
+		{
+			assert(0);
+		}
+	}
+	else {
+		mConstantBuffer0 = nullptr;
+	}
+
 	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cb.ByteWidth = CONSTANTBUFFERSIZE1;
 	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -23,9 +41,14 @@ void MSBase3DShader::Init()
 	cb.StructureByteStride = 0;
 	cb.Usage = D3D11_USAGE_DYNAMIC;
 
-	if (FAILED(sDevice->CreateBuffer(&cb, NULL, &mConstantBuffer1)))
-	{
-		assert(0);
+	if (CONSTANTBUFFERSIZE1 > 0) {
+		if (FAILED(sDevice->CreateBuffer(&cb, NULL, &mConstantBuffer1)))
+		{
+			assert(0);
+		}
+	}
+	else {
+		mConstantBuffer1 = nullptr;
 	}
 
 	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -35,9 +58,14 @@ void MSBase3DShader::Init()
 	cb.StructureByteStride = 0;
 	cb.Usage = D3D11_USAGE_DYNAMIC;
 
-	if (FAILED(sDevice->CreateBuffer(&cb, NULL, &mConstantBuffer2)))
-	{
-		assert(0);
+	if (CONSTANTBUFFERSIZE2 > 0) {
+		if (FAILED(sDevice->CreateBuffer(&cb, NULL, &mConstantBuffer2)))
+		{
+			assert(0);
+		}
+	}
+	else {
+		mConstantBuffer2 = nullptr;
 	}
 }
 

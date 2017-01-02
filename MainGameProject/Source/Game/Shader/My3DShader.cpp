@@ -3,6 +3,7 @@
 #include"DX11RenderResource.h"
 #include<DX11FBXLoader.hpp>
 #include"DX11TextureManager.hpp"
+#include"CBResource0.h"
 #include<vector>
 #include<iostream>
 My3DShader::My3DShader() :
@@ -17,6 +18,16 @@ My3DShader::My3DShader() :
 
 void My3DShader::SetConstantBuffer0(CBResource0 & aResource)
 {
+	MyFBXCONSTANTBUFFER0 cb;
+	D3D11_MAPPED_SUBRESOURCE pData;
+	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+
+		cb.vDirectLightDir = { 1,1,0,0 };
+		cb.vEye = aResource.vEye;
+		cb.vEye.w = 0;
+		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
+		sDeviceContext->Unmap(mConstantBuffer0, 0);
+	}
 }
 
 void My3DShader::SetConstantBuffer1(
@@ -33,12 +44,12 @@ void My3DShader::SetConstantBuffer1(
 		resource->GetMatrixWVP(&cb.mWVP,*fbxMesh.mWorld,*pDisplay);
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		D3DXMatrixTranspose(&cb.mWVP, &cb.mWVP);
-		if(resource->GetTransVector()->size()>0){
-			cb.mAlpha = resource->GetTransVector()->at(0);
-		}
-		else {
-			cb.mAlpha = 1.0f;
-		}
+		//if(resource->GetTransVector()->size()>0){
+		//	cb.mAlpha = resource->GetTransVector()->at(0);
+		//}
+		//else {
+		//	cb.mAlpha = 1.0f;
+		//}
 		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
 		sDeviceContext->Unmap(mConstantBuffer1, 0);
 	}
@@ -56,17 +67,16 @@ void My3DShader::SetConstantBuffer2(std::weak_ptr<FBXModelData> modelData)
 	if (modelData.lock()->Diffuse.lock()->mTexture) {
 		lSampler = modelData.lock()->Diffuse.lock()->mTexture->GetSampler();
 		lTexture = modelData.lock()->Diffuse.lock()->mTexture->GetTexture();
-
-		cb.ColorPer = 0.0f;
-
 	}
 	else {
-		//テクスチャがない場合はマテリアルカラー
-		cb.ColorPer = 1.0f;
-
 	}
-	cb.Diffuse = modelData.lock()->Diffuse.lock()->Color;
+	//cb.Ambient = modelData.lock()->Ambient.lock()->Color;
+	//cb.Diffuse = modelData.lock()->Diffuse.lock()->Color;
+	//cb.Specular = modelData.lock()->Specular.lock()->Color;
 
+	cb.Ambient = D3DXVECTOR4( 0.3,0.3,0.3,1.0 );
+	cb.Diffuse = D3DXVECTOR4(1,1,1,1);
+	cb.Specular = D3DXVECTOR4(0.2,0.2,0.2,1.0);
 
 	if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer2, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
 		memcpy(pData.pData,(void*)(&cb), sizeof(cb));

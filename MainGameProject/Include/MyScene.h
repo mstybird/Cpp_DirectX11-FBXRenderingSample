@@ -21,6 +21,7 @@
 #include"TimeOver.h"
 #include"Result.h"
 #include"StageSelectList.h"
+#include"3DCollisionShader.h"
 #include<DXAL.hpp>
 namespace ValueMyScene {
 	
@@ -331,6 +332,8 @@ private:
 	MSFbxDatabase mdDB;
 	//描画に使うシェーダ
 	My3DShader shader;
+	//カリングに使うシェーダ
+	Collision3DShader mCollisionShader;
 	//シーンに一つ
 	MS3DRender render;
 

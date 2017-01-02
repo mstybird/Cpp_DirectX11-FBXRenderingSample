@@ -19,6 +19,7 @@ class MSFbxObject;
 
 struct MeshBuffer {
 	std::vector<std::vector<ID3D11Buffer*>>mVertexBuffer;
+	std::vector<std::vector<ID3D11Buffer*>>mVertexCollisionBuffer;
 	std::vector<std::vector<ID3D11Buffer*>>mIndexBuffer;
 	std::vector<std::vector<uint32_t>>mIndexLength;
 	//コリジョンデータ
@@ -59,7 +60,8 @@ public:
 	//void RegisterCollision(const std::shared_ptr<DX11RenderResource>&pResource);
 
 	std::vector<std::shared_ptr<FBXMesh>>*GetMeshData(int aAnimation, FbxTime aTime);
-	std::vector<std::vector<ID3D11Buffer*>>*GetVertexBuffer(int aAnimation,FbxTime aTime);
+	std::vector<std::vector<ID3D11Buffer*>>*GetVertexBuffer(int aAnimation, FbxTime aTime);
+	std::vector<std::vector<ID3D11Buffer*>>*GetVertexCollisionBuffer(int aAnimation,FbxTime aTime);
 	std::vector<std::vector<ID3D11Buffer*>>*GetIndexBuffer(int aAnimation, FbxTime aTime);
 	std::vector<std::vector<uint32_t>>*GetIndexBufferCount(int aAnimation, FbxTime aTime);
 	std::vector<std::vector<MSCollisionSphere>>*GetCollisionSphere(int aAnimation, FbxTime aTime);

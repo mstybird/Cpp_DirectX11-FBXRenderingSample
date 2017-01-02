@@ -55,6 +55,7 @@
     <ClCompile Include="Source\Game\Scene\MyScene\Result.cpp" />
     <ClCompile Include="Source\Game\Scene\MyScene\TimeOver.cpp" />
     <ClCompile Include="Source\Game\Scene\Title.cpp" />
+    <ClCompile Include="Source\Game\Shader\3DCollisionShader.cpp" />
     <ClCompile Include="Source\Game\Shader\My3DShader.cpp" />
     <ClCompile Include="Source\Game\Shader\MySprite2DShader.cpp" />
     <ClCompile Include="Source\Game\Shader\MySprite3DShader.cpp" />
@@ -105,6 +106,7 @@
     <ClCompile Include="Source\MSDirect\Utility\MSGravity.cpp" />
     <ClCompile Include="Source\MSDirect\Utility\MSProgresData.cxx" />
     <ClCompile Include="Source\MSDirect\Utility\MSUtility.cpp" />
+    <ClInclude Include="Include\3DCollisionShader.h" />
     <ClInclude Include="Include\Button.h" />
     <ClInclude Include="Include\CBResource0.h" />
     <ClInclude Include="Include\CppTweener.h" />
@@ -218,6 +220,16 @@
       <FileType>Document</FileType>
     </None>
     <None Include="Resource\HLSL\Text2D.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\HLSL\ShadowMap.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\HLSL\Collision3D.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
