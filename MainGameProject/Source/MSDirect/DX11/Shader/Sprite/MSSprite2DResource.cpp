@@ -20,6 +20,9 @@ MSSpriteBaseResource::MSSpriteBaseResource():
 	mRotation{0.0f}
 {
 }
+MSSpriteBaseResource::~MSSpriteBaseResource()
+{
+}
 void MSSpriteBaseResource::sInitialize(ID3D11Device * pDevice)
 {
 	sDevice = pDevice;

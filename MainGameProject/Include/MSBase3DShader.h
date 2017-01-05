@@ -9,6 +9,7 @@ class DX11RenderResource;
 class DXDisplay;
 struct CBResource0;
 class GameObjectBase;
+class MS3DRender;
 class MSBase3DShader abstract :public MSBaseShader {
 protected:
 	MSBase3DShader(
@@ -18,9 +19,9 @@ protected:
 		unsigned int constVertexSize
 	);
 public:
-	void Init()override;
+	virtual void Init()override;
 
-	virtual void CustomRender(GameObjectBase*aObject);
+	virtual void CustomRender(MS3DRender* aRender,GameObjectBase * aObject, const int aIndexX, const int aIndexY);
 
 	virtual void SetConstantBuffer0(CBResource0&aResource) = 0;
 	//ÉÅÉbÉVÉÖíPà Ç…ó^Ç¶ÇÈ

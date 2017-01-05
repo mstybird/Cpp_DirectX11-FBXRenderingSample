@@ -61,14 +61,18 @@ float4 PS(VS_OUTPUT input) : SV_Target
 	float4 ambient = g_Ambient;
 	//拡散反射光　項
 	float NL = saturate(dot(input.Normal, input.Light));
-	float4 diffuse = g_texDecal.Sample(g_samLinear, input.Tex);
+
+	float4 diffuse = 
+		g_Diffuse * g_Diffuse.a + 
+		g_texDecal.Sample(g_samLinear, input.Tex) * (1.0- g_Diffuse.a);
+
 	//鏡面反射光　項
 	float3 reflect = normalize(2 * NL*input.Normal - input.Light);
 	float4 specular = 2*pow(saturate(dot(reflect,input.EyeVector)), 20);
 	//フォンモデル最終色　３つの項の合計
 	float4 color = diffuse + specular;
 	//アルファブレンド
-	color.a = 1;
+	color.a = (1.0-g_Diffuse.a);
 
 	return color;
 }

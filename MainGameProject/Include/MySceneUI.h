@@ -10,6 +10,7 @@ class MySceneUI:public UIBase {
 public:
 	MySceneUI();
 	virtual ~MySceneUI();
+	void Release();
 	void UpdateAll() {}
 	virtual void Render(MSSprite2DRender& aRender, UIBase*aParent = nullptr);
 	StatusFrame* GetStatusFrame();

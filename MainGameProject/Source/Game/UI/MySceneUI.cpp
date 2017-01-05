@@ -15,6 +15,13 @@ MySceneUI::~MySceneUI()
 {
 }
 
+void MySceneUI::Release()
+{
+	mStatusFrame.reset();
+	mScoreView.reset();
+	mTimeView.reset();
+}
+
 void MySceneUI::Render(MSSprite2DRender & aRender, UIBase * aParent)
 {
 	mScoreView->Render(aRender, this);

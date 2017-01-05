@@ -15,6 +15,7 @@ NBullet::~NBullet()
 void NBullet::InitStatus(StatusBulletBase* aBulletStatus)
 {
 	mStatus = *aBulletStatus;
+	mFrameResource.vLightDir = { 1,1,0,0 };
 }
 
 void NBullet::SetEffect(::Comfort::EfkManager * aManager, ::Comfort::EffectDatabase * aDb, const int aHitID, const int aShotID, const int aKillID)
@@ -141,7 +142,7 @@ void NBullet::Update()
 	if (!mActive)return;
 
 	GetWorld()->AddT(this->mStatus.mDirection*this->mStatus.mVelocity);
-	GetWorld()->AddRC(4.0f, 6.0f, 10.0f);
+	GetWorld()->AddRC(0.0f, 3.0f, 0.0f);
 	//“–‚½‚Á‚½ê‡
 	auto lHitTargets = UpdateCollision(false);
 
@@ -240,4 +241,5 @@ void NBullet::Render()
 	assert(mRender);
 	mRender->SetShader(mShader);
 	mRender->Render(this);
+	mRender->Render(this,true);
 }

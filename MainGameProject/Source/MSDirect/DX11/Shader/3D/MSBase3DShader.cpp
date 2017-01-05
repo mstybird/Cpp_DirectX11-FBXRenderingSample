@@ -69,7 +69,7 @@ void MSBase3DShader::Init()
 	}
 }
 
-void MSBase3DShader::CustomRender(GameObjectBase * aObject)
+void MSBase3DShader::CustomRender(MS3DRender* aRender, GameObjectBase * aObject, const int aIndexX, const int aIndexY)
 {
 }
 

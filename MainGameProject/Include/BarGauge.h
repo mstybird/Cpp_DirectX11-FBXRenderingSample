@@ -12,7 +12,7 @@ class BarGauge :public UIBase{
 public:
 
 	BarGauge();
-
+	~BarGauge();
 	void SetTextures(
 		std::pair<DX11TextureManager, int>aOutImage,
 		std::pair<DX11TextureManager, int>aInImage

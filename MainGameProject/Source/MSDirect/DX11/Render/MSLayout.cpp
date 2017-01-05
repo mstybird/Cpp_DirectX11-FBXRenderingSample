@@ -18,7 +18,7 @@ MSView::MSView():
 	mDepthDesc.Height = 480U;
 	mDepthDesc.MipLevels = 1;
 	mDepthDesc.ArraySize = 1;
-	mDepthDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	mDepthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	mDepthDesc.SampleDesc.Count = 4U;
 	mDepthDesc.SampleDesc.Quality = 0U;
 	mDepthDesc.Usage = D3D11_USAGE_DEFAULT;

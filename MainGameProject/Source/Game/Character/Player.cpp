@@ -69,6 +69,7 @@ void Player::Render()
 {
 	mRender->SetShader(mShader);
 	mRender->Render(this);
+	mRender->Render(this, true);
 	RenderBullets();
 }
 

@@ -19,11 +19,14 @@ MyMSScene::~MyMSScene()
 	mEfkManager.Release();
 	//音声破棄はこのタイミング
 	mEfkRender.Release();
+	enemy.clear();
+	ui.Release();
 }
 
 void MyMSScene::Initialize()
 {
 	InitializeStageData();
+
 	InitializeFont();
 	InitializeModel();
 	InitializeEffect();
@@ -344,12 +347,12 @@ void MyMSScene::Render()
 
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	//画面クリア
+	mField.Render();
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->Render();
 	}
 	mPlayer.Render();
 	mBall.Render();
-	mField.Render();
 
 
 

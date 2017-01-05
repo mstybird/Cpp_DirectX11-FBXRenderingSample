@@ -723,13 +723,9 @@
     <None Include="Resource\HLSL\Sprite3D.hlsl">
       <Filter>HLSL</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resource\HLSL\ShadowMap.hlsl">
+    <None Include="Resource\HLSL\Collision3D.hlsl" />
+    <None Include="Resource\HLSL\ShadowMap.hlsl">
       <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="Resource\HLSL\Collision3D.hlsl">
-      <Filter>HLSL</Filter>
-    </FxCompile>
+    </None>
   </ItemGroup>
 </Project>

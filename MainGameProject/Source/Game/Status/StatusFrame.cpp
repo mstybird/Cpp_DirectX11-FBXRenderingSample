@@ -38,6 +38,17 @@ StatusFrame::StatusFrame():
 	mTextMan.SetDefaultSize(640, 960);
 	mTextMan.SetFont(0);
 }
+StatusFrame::~StatusFrame()
+{
+
+
+	int a = 0;
+	mHpBar.reset();
+	printf("Hello\n");
+	//mHpText.reset();
+	//mEpBar.reset();
+	//mEpText.reset();
+}
 BarGauge * StatusFrame::GetHPBar()
 {
 	return mHpBar.get();

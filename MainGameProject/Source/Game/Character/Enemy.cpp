@@ -276,6 +276,7 @@ void Enemy::Render()
 	assert(mRender);
 	mRender->SetShader(mShader);
 	mRender->Render(this);
+	mRender->Render(this,true);
 	RenderBullets();
 
 }

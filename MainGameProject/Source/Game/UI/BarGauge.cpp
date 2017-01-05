@@ -5,6 +5,10 @@ BarGauge::BarGauge()
 {
 	mInImage.SetPivot({ 0.5f,0.5f });
 }
+BarGauge::~BarGauge()
+{
+	printf("GG");
+}
 void BarGauge::SetTextures(std::pair<DX11TextureManager, int> aOutImage, std::pair<DX11TextureManager, int> aInImage)
 {
 	mOutImage.SetTexture(aOutImage.first, aOutImage.second);

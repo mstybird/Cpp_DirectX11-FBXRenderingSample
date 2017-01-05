@@ -26,7 +26,7 @@ void MS3DRender::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext * pDevic
 void MS3DRender::Clear(D3DXVECTOR4 pColor)
 {
 	sDeviceContext->ClearRenderTargetView(sRenderTargetView, pColor);
-	sDeviceContext->ClearDepthStencilView(sDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	sDeviceContext->ClearDepthStencilView(sDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 
@@ -56,6 +56,7 @@ void MS3DRender::Render(GameObjectBase*aObject, bool aIsCustomRender, bool aIsCo
 	{
 		auto lFrameResource = aObject->GetFrameResource();
 		lFrameResource->vEye = { display->GetCamera()->mEyePosition };
+		
 	}
 
 
@@ -63,21 +64,20 @@ void MS3DRender::Render(GameObjectBase*aObject, bool aIsCustomRender, bool aIsCo
 	shader->SetConstantBuffer0(*aObject->GetFrameResource());
 	sDeviceContext->VSSetConstantBuffers(0, 1, shader->GetCB0());
 	sDeviceContext->PSSetConstantBuffers(0, 1, shader->GetCB0());
+	sDeviceContext->VSSetConstantBuffers(1, 1, shader->GetCB1());
+	sDeviceContext->PSSetConstantBuffers(1, 1, shader->GetCB1());
+	sDeviceContext->VSSetConstantBuffers(2, 1, shader->GetCB2());
+	sDeviceContext->PSSetConstantBuffers(2, 1, shader->GetCB2());
 	//メッシュの個数分
 	for (unsigned int i = 0; i < lVertexBufferArray->size(); i++) {
 		//メッシュ単位の設定
 		shader->SetConstantBuffer1(*meshData->at(i), lResource, display.get());
 		//全てのメッシュに対して共通のデータを登録
-		sDeviceContext->VSSetConstantBuffers(1, 1, shader->GetCB1());
-		sDeviceContext->PSSetConstantBuffers(1, 1, shader->GetCB1());
 		//サブメッシュの個数分
 		for (unsigned int j = 0; j < meshData->at(i)->subMesh.size(); j++) {
 			shader->SetConstantBuffer2(meshData->at(i)->subMesh.at(j));
-			sDeviceContext->VSSetConstantBuffers(2, 1, shader->GetCB2());
-			sDeviceContext->PSSetConstantBuffers(2, 1, shader->GetCB2());
-
 			if (aIsCustomRender == true) {
-				shader->CustomRender(aObject);
+				shader->CustomRender(this,aObject, j, i);
 			}
 			else {
 

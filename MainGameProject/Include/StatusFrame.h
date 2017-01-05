@@ -13,6 +13,7 @@ struct StatusBase;
 class StatusFrame :public UIBase {
 public:
 	StatusFrame();
+	~StatusFrame();
 	BarGauge*GetHPBar();
 	BarGauge*GetEPBar();
 

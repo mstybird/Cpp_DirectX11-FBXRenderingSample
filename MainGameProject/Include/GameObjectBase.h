@@ -80,4 +80,5 @@ protected:
 	//コリジョンのサイズ(拡大率)はメッシュのサイズと同じにするかどうか
 	//一度でもコリジョン用のサイズを設定した場合、フラグはfalseになる
 	bool mIsCollisionScaleDefault;
+
 };

@@ -16,6 +16,7 @@ struct SpriteVertex;
 class MSSpriteBaseResource abstract{
 public:
 	MSSpriteBaseResource();
+	virtual ~MSSpriteBaseResource();
 	static void sInitialize(ID3D11Device*pDevice);
 	//描画するテクスチャの設定
 	void SetTexture(DX11TextureManager&pTextureManager, const int pID);

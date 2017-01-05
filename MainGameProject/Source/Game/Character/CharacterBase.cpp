@@ -25,6 +25,7 @@ CharacterBase::CharacterBase(const DXVector3 & aCameraLen, const DXVector3 & aCa
 {
 	mCameraOffset = cCameraOffset;
 	mCameraLen = cCameraLen;
+	mFrameResource.vLightDir = { 1,0,1,0 };
 }
 
 CharacterBase::CharacterBase(){

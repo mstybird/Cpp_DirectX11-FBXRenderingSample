@@ -3,8 +3,7 @@
 #include<DXMath.hpp>
 struct CBResource0 {
 public:
-	MSLight mLight;
-
+	D3DXVECTOR4 vLightDir;
 	D3DXVECTOR4 vEye;//カメラ位置
 	D3DXVECTOR4 vAmbient;//アンビエント光
 	D3DXVECTOR4 vDiffuse;//ディフューズ色
