@@ -176,7 +176,7 @@ void My3DShader::CustomRender(MS3DRender* aRender,GameObjectBase * aObject,const
 	FBXModelData* lMesh = aObject->GetTransform()->GetMesh()->GetCurrentMeshData()->at(aIndexY)->subMesh.at(aIndexX).get();
 	D3DXMATRIX* mObjectWorld = aObject->GetTransform()->GetWorld()->GetMatrix();
 	D3DXMATRIX* lFbxWorld = aObject->GetTransform()->GetMesh()->GetCurrentMeshData()->at(aIndexY)->mWorld.get();
-	D3DXMATRIX mWorld = *mObjectWorld;
+	D3DXMATRIX mWorld = *mObjectWorld * *lFbxWorld;
 	//CreateVolume
 	{
 		mVolume.mNumVolumeVertices = 0;
@@ -288,7 +288,9 @@ void My3DShader::CustomRender(MS3DRender* aRender,GameObjectBase * aObject,const
 
 
 		MyFBXCONSTANTBUFFER2 cb2;
+		cb2.Ambient = D3DXVECTOR4(0, 0, 0, 1);
 		cb2.Diffuse = D3DXVECTOR4(0, 0, 0, 1);
+		cb2.Specular = D3DXVECTOR4(0, 0, 0, 1);
 		D3D11_MAPPED_SUBRESOURCE lData;
 		if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer2, 0, D3D11_MAP_WRITE_DISCARD, 0, &lData))) {
 			memcpy(lData.pData, (void*)(&cb2), sizeof(cb2));
@@ -328,7 +330,9 @@ void My3DShader::CustomRender(MS3DRender* aRender,GameObjectBase * aObject,const
 
 		//シェーダのコンスタントバッファを渡す
 		MyFBXCONSTANTBUFFER2 cb2;
-		cb2.Diffuse = D3DXVECTOR4(1.2,0.2,0.2,0.6);
+		cb2.Ambient = D3DXVECTOR4(0.2, 0.2, 0.2, 0);
+		cb2.Diffuse = D3DXVECTOR4(0.2, 0.2, 0.2, 0.9);
+		cb2.Specular = D3DXVECTOR4(0.2, 0.2, 0.2, 0);
 		D3D11_MAPPED_SUBRESOURCE lData;
 		if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer2, 0, D3D11_MAP_WRITE_DISCARD, 0, &lData))) {
 			memcpy(lData.pData, (void*)(&cb2), sizeof(cb2));

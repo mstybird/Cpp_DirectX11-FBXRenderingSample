@@ -25,12 +25,12 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 INT WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR,INT)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-//#ifdef _DEBUG
+#ifdef _DEBUG
 	AllocConsole();
 	FILE *fp;
 	AllocConsole();
 	freopen_s(&fp, "CON", "w", stdout);
-//#endif
+#endif
 
 	DXVector3 v;
 	v.Set(0);
@@ -48,10 +48,10 @@ INT WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR,INT)
 	CoUninitialize();
 
 
-//#ifdef _DEBUG
+#ifdef _DEBUG
 	fclose(fp);
 	FreeConsole();
-//#endif
+#endif
 	int a = 0;
 
 	return 0;
@@ -93,10 +93,10 @@ void MSWindow::_Run(HINSTANCE hInstance,
 		assert(0);
 		return;
 	}
-	MSDirect::SetScene(std::make_unique<MyMSScene>());
+//	MSDirect::SetScene(std::make_unique<MyMSScene>());
 //	MSDirect::SetScene(std::make_unique<SceneStageSelect>());
 
-//	MSDirect::SetScene(std::move(std::make_unique<SceneTitle>()));
+	MSDirect::SetScene(std::move(std::make_unique<SceneTitle>()));
 	_Loop();
 	Destroy();
 

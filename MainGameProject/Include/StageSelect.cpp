@@ -29,6 +29,7 @@ void SceneStageSelect::Update()
 
 void SceneStageSelect::KeyDown(MSKEY pKey)
 {
+	if (mIsSceneChange)return;
 	switch (pKey)
 	{
 	case MSKEY::UP:

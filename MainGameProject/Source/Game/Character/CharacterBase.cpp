@@ -25,7 +25,6 @@ CharacterBase::CharacterBase(const DXVector3 & aCameraLen, const DXVector3 & aCa
 {
 	mCameraOffset = cCameraOffset;
 	mCameraLen = cCameraLen;
-	mFrameResource.vLightDir = { 1,0,1,0 };
 }
 
 CharacterBase::CharacterBase(){
@@ -39,6 +38,7 @@ CharacterBase::~CharacterBase()
 void CharacterBase::Initialize(StatusField&pSetStatus)
 {
 	GameObjectBase::Initialize();
+	mFrameResource.vLightDir = { 1,0,1,0 };
 	mField = &pSetStatus;
 	//ƒm[ƒ}ƒ‹’e
 //	mBulletNormal->Initialize();

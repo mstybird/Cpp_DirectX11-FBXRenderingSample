@@ -212,14 +212,15 @@ void MyMSScene::KeyDown(MSKEY pKey)
 		}
 	}
 
-	if (lIsRun) {
+	if (lIsRun && (mPlayer.GetStatus()->mLive == CharaStateFlag::ALIVE)) {
+
 		int lNowAnimation = mPlayer.GetTransform()->GetMesh()->GetAnimation();
 
 		if (lNowAnimation != ValueMyScene::Chara::cAnimSkill&&
 			lNowAnimation != ValueMyScene::Chara::cAnimAttacked) {
 
-		mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
-		mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
+			mPlayer.GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimRun);
+			mPlayer.GetTransform()->GetMesh()->SetLoopFlag(true);
 		}
 
 	}
@@ -303,6 +304,7 @@ void MyMSScene::KeyHold(MSKEY pKey)
 
 void MyMSScene::KeyUp(MSKEY pKey)
 {
+	if (mPlayer.GetStatus()->mLive != CharaStateFlag::ALIVE)return;
 	if (mIsReady)return;
 	int lNowAnimation = mPlayer.GetTransform()->GetMesh()->GetAnimation();
 	switch (pKey) {
@@ -348,10 +350,10 @@ void MyMSScene::Render()
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	//画面クリア
 	mField.Render();
+	mPlayer.Render();
 	for (uint32_t i = 0; i < enemy.size(); ++i) {
 		enemy[i]->Render();
 	}
-	mPlayer.Render();
 	mBall.Render();
 
 

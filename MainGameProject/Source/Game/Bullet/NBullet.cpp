@@ -241,5 +241,5 @@ void NBullet::Render()
 	assert(mRender);
 	mRender->SetShader(mShader);
 	mRender->Render(this);
-	mRender->Render(this,true);
+	//mRender->Render(this,true);
 }

@@ -19,6 +19,7 @@
 #include"BulletManager.h"
 Enemy::Enemy()
 {
+
 	mCameraLen = { 0.0f,0.0f,-0.1f };
 	mCameraOffset = { 0.0f,0.0f,0.0f };
 	//mBulletNormal = std::make_unique<BulletNormal>();
