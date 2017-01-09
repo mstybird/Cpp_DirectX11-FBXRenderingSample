@@ -49,8 +49,8 @@ bool MSCullingOcculusion::IsCullingWorld(
 
 
 		D3D11_VIEWPORT vp;
-		vp.Width = 640;
-		vp.Height = 480;
+		vp.Width = 480;
+		vp.Height = 320;
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
@@ -89,12 +89,11 @@ bool MSCullingOcculusion::IsCullingWorld(
 			//指定数以上ループした場合、強制で抜ける
 			UINT size = sizeof(UINT64);
 			//ピクセル数を取得
-
-			while (S_OK != sDeviceContext->GetData(sOcculusionQuery, &lDrawPixels, size, 0));
+			while (S_OK != sDeviceContext->GetData(sOcculusionQuery, &lDrawPixels, size,D3D11_ASYNC_GETDATA_FLAG::D3D11_ASYNC_GETDATA_DONOTFLUSH));
 
 
 			//見えたと判定する必要なピクセル数の計算
-			UINT64 lCheckPixels = (UINT64)((640 * 480)*pPixelper);
+			UINT64 lCheckPixels = (UINT64)((480 * 320)*pPixelper);
 
 			if (lDrawPixels > lCheckPixels) {
 				pHitList->push_back(lTarget);
@@ -109,19 +108,7 @@ bool MSCullingOcculusion::IsCullingWorld(
 		sDeviceContext->RSSetViewports(1, lMainViewPort);
 		sDeviceContext->OMSetRenderTargets(1, lActiveView->GetRTV(), *lActiveView->GetDSV());
 	}
-	//UINT64 lDrawPixels{};
-	////指定数以上ループした場合、強制で抜ける
-	//UINT size = sizeof(UINT64);
-	////ピクセル数を取得
-	//
-	//while (S_OK != sDeviceContext->GetData(sOcculusionQuery, &lDrawPixels, size, 0));
-	//
 
-	////見えたと判定する必要なピクセル数の計算
-	//UINT64 lCheckPixels = (UINT64)((640 * 480)*pPixelper);
-	//if (lDrawPixels != 0) {
-	//	int a = 10;
-	//}
 
 	return true;
 }

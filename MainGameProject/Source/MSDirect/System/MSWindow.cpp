@@ -7,6 +7,7 @@
 #include"DX11Resrouce.h"
 #include<cassert>
 #include<memory>
+#include<chrono>
 /*
 	メモ：
 	次の作業
@@ -32,9 +33,6 @@ INT WINAPI WinMain(HINSTANCE hInstance,HINSTANCE,LPSTR,INT)
 	freopen_s(&fp, "CON", "w", stdout);
 #endif
 
-	DXVector3 v;
-	v.Set(0);
-	printf("%f\n", v.x);
 
 	if (CoInitializeEx(nullptr, COINIT_MULTITHREADED)) {
 		printf("Failed To Initialize COM\n");
@@ -95,7 +93,6 @@ void MSWindow::_Run(HINSTANCE hInstance,
 	}
 //	MSDirect::SetScene(std::make_unique<MyMSScene>());
 //	MSDirect::SetScene(std::make_unique<SceneStageSelect>());
-
 	MSDirect::SetScene(std::move(std::make_unique<SceneTitle>()));
 	_Loop();
 	Destroy();
@@ -112,6 +109,9 @@ HRESULT MSWindow::_Loop()
 	// メッセージループ
 	MSG msg = { 0 };
 	ZeroMemory(&msg, sizeof(msg));
+
+	auto start = std::chrono::system_clock::now();
+
 	while (msg.message != WM_QUIT)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -121,9 +121,21 @@ HRESULT MSWindow::_Loop()
 		}
 		else
 		{
+			start = std::chrono::system_clock::now();
 			//アプリケーションの処理はここから飛ぶ。
 			//App();
 			mDirectX.lock()->Loop();
+
+			auto end = std::chrono::system_clock::now();
+
+			long long lDuration;
+			do {
+				end = std::chrono::system_clock::now();
+				auto diff = end - start;
+				lDuration = std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
+				
+			} while (lDuration<16);
+			
 
 		}
 	}
@@ -166,6 +178,19 @@ HRESULT MSWindow::InitWindow(HINSTANCE hInstance,
 //ウィンドウプロシージャー
 LRESULT MSWindow::MsgProc(HWND hWnd,UINT iMsg,WPARAM wParam,LPARAM lParam)
 {
+
+
+	switch (iMsg)
+	{
+	case WM_CREATE:
+		SetTimer(hWnd, 1, 3, nullptr);
+		break;
+	case WM_TIMER:
+
+		break;
+	default:
+		break;
+	}
 
 	if (!mDirectX.expired()) {
 		return mDirectX.lock()->MessageProcedule(hWnd, iMsg, wParam, lParam);

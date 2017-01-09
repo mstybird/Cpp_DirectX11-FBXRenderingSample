@@ -165,7 +165,7 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.OutputWindow = mHwnd;
-	sd.SampleDesc.Count = 4;
+	sd.SampleDesc.Count = 2;
 	sd.SampleDesc.Quality = 0.5;
 	sd.Windowed = TRUE;
 
@@ -214,7 +214,7 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 
 	MSView::Initialize(m_pDevice, m_pDeviceContext, m_pSwapChain);
 	mView.SetSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	mView.SetSampleRate(4, 0);
+	mView.SetSampleRate(2, 0.5);
 	mView.CreateRTV();
 	mView.CreateDSV();
 
@@ -279,7 +279,7 @@ void MSDirect::Loop()
 	scene->Update();
 	if (mIsSceneChanging == false) {
 		scene->Render();
-		m_pSwapChain->Present(1, 0);
+		m_pSwapChain->Present(0, 0);
 	}
 	else {
 		mIsSceneChanging = false;

@@ -432,6 +432,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalOptions>/wd 4005 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

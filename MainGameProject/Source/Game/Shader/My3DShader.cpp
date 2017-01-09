@@ -180,11 +180,12 @@ void My3DShader::CustomRender(MS3DRender* aRender,GameObjectBase * aObject,const
 	//CreateVolume
 	{
 		mVolume.mNumVolumeVertices = 0;
-		DXVector3 vVertex0;
-		DXVector3 vVertex1;
-		DXVector3 vVertex2;
-		DXVector3 vVertex3;
-		DXVector3 vVertex4;
+		//DXVector3 vVertex0;
+		//DXVector3 vVertex1;
+		//DXVector3 vVertex2;
+		//DXVector3 vVertex3;
+		//DXVector3 vVertex4;
+		FbxVertex vVertices[5];
 		std::vector<int>lEdges;
 		lEdges.resize(lMesh->PolygonCount * 6);
 		
@@ -222,13 +223,13 @@ void My3DShader::CustomRender(MS3DRender* aRender,GameObjectBase * aObject,const
 			WORD wPolyIndex0 = lMesh->Index[3 * i + 0];
 			WORD wPolyIndex1 = lMesh->Index[3 * i + 1];
 			WORD wPolyIndex2 = lMesh->Index[3 * i + 2];
-			vVertex0 = lMesh->Data[wPolyIndex0].Pos;
-			vVertex1 = lMesh->Data[wPolyIndex1].Pos;
-			vVertex2 = lMesh->Data[wPolyIndex2].Pos;
+			vVertices[0].Pos = lMesh->Data[wPolyIndex0].Pos;
+			vVertices[1].Pos = lMesh->Data[wPolyIndex1].Pos;
+			vVertices[2].Pos = lMesh->Data[wPolyIndex2].Pos;
 
 			D3DXVECTOR3 vNormal;
-			D3DXVECTOR3 vCross1(vVertex2 - vVertex1);
-			D3DXVECTOR3 vCross2(vVertex1 - vVertex0);
+			D3DXVECTOR3 vCross1(vVertices[2].Pos - vVertices[1].Pos);
+			D3DXVECTOR3 vCross2(vVertices[1].Pos - vVertices[0].Pos);
 			D3DXVec3Cross(&vNormal, &vCross1, &vCross2);
 
 			if (D3DXVec3Dot(&vNormal, &lLightDir) <= 0)//裏側のポリゴン全部が該当してしまう。最適化の余地あり
@@ -254,19 +255,17 @@ void My3DShader::CustomRender(MS3DRender* aRender,GameObjectBase * aObject,const
 		lLightDir = -lLightDir;
 		FbxVertex*lVertices = (FbxVertex*)lData.pData;
 		for (int i = 0; i < lNumEdges; ++i) {
-			vVertex1 = lMesh->Data[lEdges[2 * i]].Pos;
-			vVertex2 = lMesh->Data[lEdges[2 * i + 1]].Pos;
-			vVertex3 = vVertex1 + lLightDir * 10000;
-			vVertex4 = vVertex2 + lLightDir * 10000;
+			memcpy(&vVertices[1], &lMesh->Data[lEdges[2 * i]], sizeof(FbxVertex) * 2);
+			vVertices[1].Pos = lMesh->Data[lEdges[2 * i]].Pos;
+			vVertices[2].Pos = lMesh->Data[lEdges[2 * i + 1]].Pos;
+			vVertices[3].Pos = vVertices[1].Pos + lLightDir * 10000;
+			vVertices[4].Pos = vVertices[2].Pos + lLightDir * 10000;
 
+			memcpy(&lVertices[mVolume.mNumVolumeVertices], &vVertices[1], sizeof(FbxVertex) * 3);
 
-			lVertices[mVolume.mNumVolumeVertices].Pos = vVertex1;
-			lVertices[mVolume.mNumVolumeVertices + 1].Pos = vVertex2;
-			lVertices[mVolume.mNumVolumeVertices + 2].Pos = vVertex3;
-
-			lVertices[mVolume.mNumVolumeVertices + 3].Pos = vVertex2;
-			lVertices[mVolume.mNumVolumeVertices + 4].Pos = vVertex4;
-			lVertices[mVolume.mNumVolumeVertices + 5].Pos = vVertex3;
+			lVertices[mVolume.mNumVolumeVertices + 3].Pos = vVertices[2].Pos;
+			lVertices[mVolume.mNumVolumeVertices + 4].Pos = vVertices[4].Pos;
+			lVertices[mVolume.mNumVolumeVertices + 5].Pos = vVertices[3].Pos;
 			mVolume.mNumVolumeVertices += 6;
 		}
 
@@ -331,7 +330,7 @@ void My3DShader::CustomRender(MS3DRender* aRender,GameObjectBase * aObject,const
 		//シェーダのコンスタントバッファを渡す
 		MyFBXCONSTANTBUFFER2 cb2;
 		cb2.Ambient = D3DXVECTOR4(0.2, 0.2, 0.2, 0);
-		cb2.Diffuse = D3DXVECTOR4(0.2, 0.2, 0.2, 0.9);
+		cb2.Diffuse = D3DXVECTOR4(0.2, 0.2, 0.2, 0.7);
 		cb2.Specular = D3DXVECTOR4(0.2, 0.2, 0.2, 0);
 		D3D11_MAPPED_SUBRESOURCE lData;
 		if (SUCCEEDED(sDeviceContext->Map(mConstantBuffer2, 0, D3D11_MAP_WRITE_DISCARD, 0, &lData))) {

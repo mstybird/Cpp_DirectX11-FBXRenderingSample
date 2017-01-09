@@ -277,7 +277,7 @@ void Enemy::Render()
 	assert(mRender);
 	mRender->SetShader(mShader);
 	mRender->Render(this);
-	mRender->Render(this,true);
+	//mRender->Render(this,true);
 	RenderBullets();
 
 }
@@ -367,9 +367,15 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 		/*
 		‚±‚±‚ðÅ“K‰»
 		*/
-
+		float lSearchPixelPer;
+		if (this->GetStatus<EnemyStatus>()->mTargetting) {
+			lSearchPixelPer = 0.0005f;
+		}
+		else {
+			lSearchPixelPer = 0.003f;
+		}
 		MSCullingOcculusion::IsCullingWorld(
-			&lTargetList, mRender, this, &lTargets, 0.003f,
+			&lTargetList, mRender, this, &lTargets, lSearchPixelPer,
 			[&, this]() {
 
 
