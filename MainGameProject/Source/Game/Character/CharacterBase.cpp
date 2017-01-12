@@ -193,6 +193,11 @@ void CharacterBase::LivingIsDeadProc()
 	}
 }
 
+void CharacterBase::UpdateStatus()
+{
+	mStatus->mEnergy.AddFix(0.1f);
+}
+
 void CharacterBase::UpdateBullets()
 {
 	if (mIsBulletShotWaiting==true) {

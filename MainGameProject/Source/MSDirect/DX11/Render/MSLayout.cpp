@@ -19,7 +19,7 @@ MSView::MSView():
 	mDepthDesc.MipLevels = 1;
 	mDepthDesc.ArraySize = 1;
 	mDepthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	mDepthDesc.SampleDesc.Count = 4U;
+	mDepthDesc.SampleDesc.Count = 1U;
 	mDepthDesc.SampleDesc.Quality = 0U;
 	mDepthDesc.Usage = D3D11_USAGE_DEFAULT;
 	mDepthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;

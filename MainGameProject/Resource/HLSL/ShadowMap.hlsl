@@ -43,7 +43,7 @@ VS_OUTPUT VS(float4 Pos:POSITION, float4 Norm :NORMAL, float2 Tex : TEXCOORD) {
 	//法線の回転
 	output.Normal = mul(Norm, (float3x3)g_mW);
 	//ライト方向の正規化
-	output.Light = normalize(g_vLightDir);
+	output.Light = normalize(float4(1,1,0,0));
 	//視線ベクトル ワールド空間上での頂点から視点へ向かうベクトル
 	output.PosWorld = mul(Pos, g_mW);
 	output.EyeVector = normalize(g_vEye - output.PosWorld);

@@ -29,7 +29,6 @@ void MySceneUI::Render(MSSprite2DRender & aRender, UIBase * aParent)
 	mScoreView->Render(aRender, this);
 	mStatusFrame->Render(aRender, this);
 	mTimeView->Render(aRender, this);
-	mAttackSlot->Render(aRender, this);
 }
 
 StatusFrame * MySceneUI::GetStatusFrame()

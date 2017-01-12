@@ -61,7 +61,7 @@ namespace ChangeStates {
 		aAttakcer->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimSkill);
 		aAttakcer->GetTransform()->GetMesh()->SetLoopFlag(false);
 		aAttakcer->GetTransform()->GetMesh()->SetFrontFrame();
-		aAttakcer->SetBulletShotInterval(50);
+		aAttakcer->SetBulletShotInterval(40);
 		aAttakcer->SetBulletShotWait(true);
 	}
 

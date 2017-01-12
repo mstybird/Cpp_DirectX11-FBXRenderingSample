@@ -130,8 +130,8 @@ void MSCullingOcculusion::Initialize(ID3D11Device * pDevice, ID3D11DeviceContext
 	//カリングで使うステンシルビューの作成
 	{
 		D3D11_TEXTURE2D_DESC lDescDepth;
-		lDescDepth.Width = 640;
-		lDescDepth.Height = 480;
+		lDescDepth.Width = 480;
+		lDescDepth.Height = 320;
 		lDescDepth.MipLevels = 1;
 		lDescDepth.ArraySize = 1;
 		lDescDepth.Format = DXGI_FORMAT_D32_FLOAT;

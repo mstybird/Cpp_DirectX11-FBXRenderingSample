@@ -75,7 +75,7 @@ void Enemy::Update()
 {
 	UpdateMotion();
 	UpdateBullets();
-	
+	UpdateStatus();
 	if (mIsStopAI)return;
 
 
@@ -362,9 +362,6 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 
 		mTransform = mCollisionMesh;
 
-		/*
-		ここを最適化
-		*/
 		float lSearchPixelPer;
 		if (this->GetStatus<EnemyStatus>()->mTargetting) {
 			lSearchPixelPer = 0.0005f;
@@ -953,6 +950,15 @@ void Enemy::BetaInSightAttack()
 		mAI->ClearAI();
 	}
 
+	//途中ボールに当たった場合、回収する
+	auto lHitBall = UtlCollisionBall();
+	if (lHitBall) {
+		GetStatus()->mBall = lHitBall;
+		mField->SetBallHolder(this);
+		//回収後AIを進める
+		mAI->NextAI();
+	}
+
 }
 
 void Enemy::BetaMoveToBallHoldAlly()
@@ -1021,7 +1027,6 @@ void Enemy::BetaMoveToBallHoldAlly()
 	}
 
 	++GetStatus<EnemyStatus>()->mAllyComplianceCount;
-
 
 
 }

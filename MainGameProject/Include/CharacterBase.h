@@ -67,6 +67,9 @@ public:
 
 	void LivingIsDeadProc();
 	virtual void LivingIsRespawnWaitProc() = 0;
+
+	void UpdateStatus();
+
 protected:
 	void UpdateBullets();
 	void RenderBullets();

@@ -32,6 +32,7 @@ void Player::Update()
 	UpdateAlive();
 	UpdateMotion();
 	UpdateBullets();
+	UpdateStatus();
 	//UpdateGravity();
 
 	auto lHitTargets = UpdateCollision(true);
