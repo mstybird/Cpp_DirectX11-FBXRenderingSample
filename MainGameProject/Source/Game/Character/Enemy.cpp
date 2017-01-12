@@ -8,7 +8,6 @@
 #include"MSUtility.h"
 #include"MSCullingOcclusion.h"
 #include"MSCullingFrustum.h"
-#include"BulletNormal.h"
 #include"StatusField.h"
 #include"DXMatrix.h"
 #include"Ball.h"
@@ -19,7 +18,6 @@
 #include"BulletManager.h"
 Enemy::Enemy()
 {
-
 	mCameraLen = { 0.0f,0.0f,-0.1f };
 	mCameraOffset = { 0.0f,0.0f,0.0f };
 	//mBulletNormal = std::make_unique<BulletNormal>();

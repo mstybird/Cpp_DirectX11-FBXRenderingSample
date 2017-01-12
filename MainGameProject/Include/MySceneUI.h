@@ -6,6 +6,7 @@ class StatusFrame;
 class ScoreView;
 class BarGaugeVS;
 class TimeView;
+class AttackSlot;
 class MySceneUI:public UIBase {
 public:
 	MySceneUI();
@@ -16,8 +17,10 @@ public:
 	StatusFrame* GetStatusFrame();
 	ScoreView* GetScoreView();
 	TimeView* GetTimeView();
+	AttackSlot* GetAttackSlot();
 	std::unique_ptr<StatusFrame> mStatusFrame;
 private:
+	std::unique_ptr<AttackSlot>mAttackSlot;
 	std::unique_ptr<ScoreView>mScoreView;
 	std::unique_ptr<TimeView>mTimeView;
 };

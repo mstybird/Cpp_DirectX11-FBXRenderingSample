@@ -238,11 +238,11 @@
     <Filter Include="Game\Scene\MyScene">
       <UniqueIdentifier>{820d115e-afe2-47fb-8218-7dc058b18e7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HLSL">
-      <UniqueIdentifier>{73d7c834-ac61-4741-8214-81db6e8cf3af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Scene\StageSelect">
       <UniqueIdentifier>{ab66a1ad-be43-4d01-a300-d90f9f078a0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MSDirect\HLSL">
+      <UniqueIdentifier>{73d7c834-ac61-4741-8214-81db6e8cf3af}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -259,12 +259,6 @@
       <Filter>Game\AI\Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Bullet\BulletManager.cpp">
-      <Filter>Game\Bullet\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Bullet\BulletNormal.cpp">
-      <Filter>Game\Bullet\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Bullet\BulletObject.cpp">
       <Filter>Game\Bullet\Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Bullet\ChangeStates.cpp">
@@ -459,6 +453,16 @@
     <ClCompile Include="Source\Game\Shader\3DCollisionShader.cpp">
       <Filter>Game\Shader\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Bullet\BulletNormal.cpp">
+      <Filter>Game\Bullet\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Bullet\BulletDiffusion.cpp">
+      <Filter>Game\Bullet\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\AttackSlot.cpp" />
+    <ClCompile Include="Source\Game\UI\SlotToggle.cpp">
+      <Filter>Game\UI\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\NoUse\2DSprite.txt">
@@ -482,12 +486,6 @@
       <Filter>Game\AI\Header</Filter>
     </ClInclude>
     <ClInclude Include="Include\BulletManager.h">
-      <Filter>Game\Bullet\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\BulletNormal.h">
-      <Filter>Game\Bullet\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\BulletObject.h">
       <Filter>Game\Bullet\Header</Filter>
     </ClInclude>
     <ClInclude Include="Include\CharacterBase.h">
@@ -697,6 +695,18 @@
     <ClInclude Include="Include\3DCollisionShader.h">
       <Filter>Game\Shader\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Include\BulletNormal.h">
+      <Filter>Game\Bullet\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\BulletDiffusion.h">
+      <Filter>Game\Bullet\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\AttackSlot.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\SlotToggle.h">
+      <Filter>Game\UI\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="NatvisFile.natvis">
@@ -706,26 +716,26 @@
   <ItemGroup>
     <None Include="PropertySheet.props" />
     <None Include="Resource\HLSL\Text2D.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>MSDirect\HLSL</Filter>
     </None>
     <None Include="ClassDiagram.cd">
       <Filter>Reference\Dictionary</Filter>
     </None>
     <None Include="Resource\HLSL\Simple.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>MSDirect\HLSL</Filter>
     </None>
     <None Include="Resource\HLSL\SimpleTexture.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>MSDirect\HLSL</Filter>
     </None>
     <None Include="Resource\HLSL\Sprite2D.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>MSDirect\HLSL</Filter>
     </None>
     <None Include="Resource\HLSL\Sprite3D.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>MSDirect\HLSL</Filter>
     </None>
     <None Include="Resource\HLSL\Collision3D.hlsl" />
     <None Include="Resource\HLSL\ShadowMap.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>MSDirect\HLSL</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -7,18 +7,18 @@
 #include"MS3DRender.h"
 #include<DX11RenderResource.h>
 #include<MyScene.h>
-NBullet::~NBullet()
+BulletObjectBase::~BulletObjectBase()
 {
 }
 
 
-void NBullet::InitStatus(StatusBulletBase* aBulletStatus)
+void BulletObjectBase::InitStatus(StatusBulletBase* aBulletStatus)
 {
 	mStatus = *aBulletStatus;
 	mFrameResource.vLightDir = { 1,1,0,0 };
 }
 
-void NBullet::SetEffect(::Comfort::EfkManager * aManager, ::Comfort::EffectDatabase * aDb, const int aHitID, const int aShotID, const int aKillID)
+void BulletObjectBase::SetEffect(::Comfort::EfkManager * aManager, ::Comfort::EffectDatabase * aDb, const int aHitID, const int aShotID, const int aKillID)
 {
 
 	auto lEffect = aDb->Get(aHitID);
@@ -32,117 +32,64 @@ void NBullet::SetEffect(::Comfort::EfkManager * aManager, ::Comfort::EffectDatab
 	mKillEffect.SetEffect(lEffect);
 }
 
-void NBullet::Create(std::vector<std::unique_ptr<NBullet>>& aOutBulletList, CharacterBase * aShoter)
-{
-	printf("Create %s, From %s\n", typeid(aShoter).name(), typeid(*this).name());
-	std::unique_ptr<NBullet>bullet=std::make_unique<NBullet>();
-//	bullet->mShader = mShader;
-	//シェーダの設定
-	bullet->SetShader(mShader);
-	//リソースの初期化
-	bullet->Initialize();
-	bullet->InitStatus(&mStatus);
+void BulletObjectBase::KillChara(CharacterBase* aShoter) {
 
-	MS3DRender* lRender;
-	aShoter->GetRenderer(lRender);
-	bullet->SetRenderer(lRender);
-
-	//初期位置設定
-	auto& lShotPos = *aShoter->GetWorld()->GetMatrix();
-	//弾発射方向の確定
-	D3DXVec3TransformNormal(&bullet->mStatus.mDirection, &D3DXVECTOR3(0, 0, 1), &lShotPos);
-
-	bullet->mStatus.mDirection.Normalize();
-	bullet->SetMesh(*GetMesh());
-	bullet->SetCollisionMesh(*GetMesh());
-
-	//発射速度の設定
-	bullet->mStatus.mVelocity = mStatus.mVelocity;
-	//トランスフォームの設定
-
-	DXVector3 lSpwanPos;
-	DXVector3 lScaling;
-
-	lShotPos.GetT(lSpwanPos);
-	bullet->GetWorld()->SetT(lSpwanPos);
-	lScaling = GetWorld()->mScale;
-	bullet->GetWorld()->SetS(lScaling);
-
-	//衝突対象を登録
-	//壁を登録
-	for (auto& lCollision : *aShoter->GetCollisionTargets()) {
-		bullet->AddCollisionTarget(lCollision);
-	}
-
-
-
-	//捜索対象(ターゲットを登録)
-	for (auto&lTarget : *aShoter->GetSearchTargets()) {
-		bullet->AddCollisionTarget(lTarget);
-	}
-	//非衝突オブジェクトの追加
-	bullet->AddNoCollisionObject(aShoter->GetField()->mBall);
-
-	//レイピックの初期化
-	bullet->mRayPick->SetFramePosition(*bullet->mTransform);
-
-	//発射主の登録
-	bullet->mParentPtr = aShoter;
-
-	bullet->mHitEffect = this->mHitEffect;
-	bullet->mShotEffect = this->mShotEffect;
-	bullet->mKillEffect = this->mKillEffect;
-
-	bullet->mShotEffect.SetPosition({ lSpwanPos.x,lSpwanPos.y,lSpwanPos.z });
-	DXVector3 lRotate = aShoter->GetWorld()->mRotationCenter;
-	bullet->mShotEffect.Play();
-	bullet->mShotEffect.SetRotation({
-		lRotate.x,
-		lRotate.y,
-		lRotate.z
-	});
-	aOutBulletList.push_back(std::move(bullet));
-
-
-
-}
-
-void NBullet::ShotFirstEffect(CharacterBase * aShoter)
-{
-	mFirstEffect = this->mHitEffect;
-
-	DXMatrix mMatrix = *aShoter->GetWorld()->GetMatrix();
+	//キルエフェクト再生
 	DXVector3 lPosition;
-	DXVector3 lOffset{ 0.0f,0.0f,1.0f };
-	D3DXVec3TransformCoord(&lPosition, &lOffset, &mMatrix);
-
-	mFirstEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
-	DXVector3 lRotate = aShoter->GetWorld()->mRotationCenter;
-	mFirstEffect.Play();
-	mFirstEffect.SetRotation({
+	DXVector3 lRotate;
+	GetWorld()->GetMatrix()->GetT(lPosition);
+	lRotate = GetWorld()->mRotationCenter;
+	this->mKillEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
+	lRotate = this->GetWorld()->mRotationCenter;
+	this->mKillEffect.Play();
+	mKillEffect.SetRotation({
 		lRotate.x,
 		lRotate.y,
 		lRotate.z
 	});
+
+
+
+	//死んだキャラのステータスを取得
+	auto lStatus = aShoter->GetStatus();
+	lStatus->mLive = CharaStateFlag::DEAD;
+	lStatus->mDeadFrame = 0;
+
+	//ボールを持っていた場合、ボールをフィールドにセット
+	if (lStatus->mBall != nullptr) {
+		DXVector3 lPosition;
+		aShoter->GetWorld()->GetMatrix()->GetT(lPosition);
+		aShoter->GetField()->RespawnBall(&lPosition);
+		lStatus->mBall = nullptr;
+	}
+
+	//発射主の攻撃対象を空にする
+
+	auto parent = this->mParentPtr;
+	//this->mParentPtr->GetStatus()->mTargetChara = nullptr;
+
 }
 
-void NBullet::AddNoCollisionObject(GameObjectBase * aObject)
+
+
+void BulletObjectBase::AddNoCollisionObject(GameObjectBase * aObject)
 {
 	mNoCollisions.push_back(aObject);
 }
 
-void NBullet::ClearNocollisionList()
+void BulletObjectBase::ClearNocollisionList()
 {
 	mNoCollisions.clear();
 }
 
-void NBullet::Update()
-{
-
+void BulletObjectBase::Update() {
 	if (!mActive)return;
 
-	GetWorld()->AddT(this->mStatus.mDirection*this->mStatus.mVelocity);
-	GetWorld()->AddRC(0.0f, 3.0f, 0.0f);
+	//GetWorld()->AddT(this->mStatus.mDirection*this->mStatus.mVelocity);
+	//GetWorld()->AddRC(0.0f, 3.0f, 0.0f);
+
+	UpdateMove();
+
 	//当たった場合
 	auto lHitTargets = UpdateCollision(false);
 
@@ -158,7 +105,7 @@ void NBullet::Update()
 		}
 		if (lIsSkip)continue;
 
-
+		//ヒットエフェクト再生
 		DXVector3 lPosition;
 		GetWorld()->GetMatrix()->GetT(lPosition);
 		this->mHitEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
@@ -191,6 +138,9 @@ void NBullet::Update()
 				lChara->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimAttacked);
 				lChara->GetTransform()->GetMesh()->SetLoopFlag(false);
 				lChara->GetTransform()->GetMesh()->SetFrontFrame();
+
+				//固有処理
+				UpdateHitNoKill();
 			}
 			break;
 		}
@@ -199,47 +149,72 @@ void NBullet::Update()
 			lChara->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimDown);
 			lChara->GetTransform()->GetMesh()->SetLoopFlag(false);
 			lChara->GetTransform()->GetMesh()->SetFrontFrame();
+			//固有処理
+			UpdateHitAndKill();
 		}
 
-		//キルエフェクト再生
-		this->mKillEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
-		lRotate = this->GetWorld()->mRotationCenter;
-		this->mKillEffect.Play();
-		mKillEffect.SetRotation({
-			lRotate.x,
-			lRotate.y,
-			lRotate.z
-		});
-
-
-
-		//死んだキャラのステータスを取得
-		auto lStatus = lChara->GetStatus();
-		lStatus->mLive = CharaStateFlag::DEAD;
-		lStatus->mDeadFrame = 0;
-
-		//ボールを持っていた場合、ボールをフィールドにセット
-		if (lStatus->mBall != nullptr) {
-			DXVector3 lPosition;
-			lChara->GetWorld()->GetMatrix()->GetT(lPosition);
-			lChara->GetField()->RespawnBall(&lPosition);
-			lStatus->mBall = nullptr;
-		}
-
-		//発射主の攻撃対象を空にする
-
-		auto parent = this->mParentPtr;
-		//this->mParentPtr->GetStatus()->mTargetChara = nullptr;
+		KillChara(lChara);
 
 		break;
 	}
+
 }
 
-void NBullet::Render()
-{
+void BulletObjectBase::Render() {
 	if (!mActive)return;
 	assert(mRender);
 	mRender->SetShader(mShader);
 	mRender->Render(this);
-	//mRender->Render(this,true);
+
 }
+
+CharacterBase * BulletObjectBase::GetParentChara()
+{
+	return mParentPtr;
+}
+
+void BulletObjectBase::SetParentChara(CharacterBase * aChara)
+{
+	mParentPtr = aChara;
+}
+
+::Comfort::EfkObject * BulletObjectBase::GetEffectFirst()
+{
+	return &mFirstEffect;
+}
+
+::Comfort::EfkObject * BulletObjectBase::GetEffectShot()
+{
+	return &mShotEffect;
+}
+
+::Comfort::EfkObject * BulletObjectBase::GetEffectHit()
+{
+	return &mHitEffect;
+}
+
+::Comfort::EfkObject * BulletObjectBase::GetEffectKill()
+{
+	return &mKillEffect;
+}
+
+void BulletObjectBase::SetEffectFirst(::Comfort::EfkObject & aEffect)
+{
+	mFirstEffect = aEffect;
+}
+
+void BulletObjectBase::SetEffectShot(::Comfort::EfkObject & aEffect)
+{
+	mShotEffect = aEffect;
+}
+
+void BulletObjectBase::SetEffectHit(::Comfort::EfkObject & aEffect)
+{
+	mHitEffect = aEffect;
+}
+
+void BulletObjectBase::SetEffectKill(::Comfort::EfkObject & aEffect)
+{
+	mKillEffect = aEffect;
+}
+

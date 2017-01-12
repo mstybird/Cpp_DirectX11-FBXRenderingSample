@@ -1,16 +1,20 @@
 #pragma once
-#include"BulletObject.h"
+#include"NBullet.h"
 
-//’Êí’e
-class BulletNormal :public BulletObject {
+class BulletNormal :public BulletObjectBase {
 public:
-	BulletNormal();
 	~BulletNormal();
 
-	void Initialize()override;
-	void Create(std::vector<std::unique_ptr<BulletObject>>&aOutBulletList, CharacterBase* aShoter)override;
-	//’e‚ÌXV
-	void Update()override;
-	void Render()override;
+	virtual void Create(std::vector<std::unique_ptr<BulletObjectBase>>&aOutBulletList, CharacterBase* aShoter)override;
+	virtual void ShotFirstEffect(CharacterBase* aShoter)override;
+
+//	virtual void Update()override;
+
+	//ˆÚ“®ˆ—
+	virtual void UpdateMove()override;
+protected:
+
+private:
+
 
 };

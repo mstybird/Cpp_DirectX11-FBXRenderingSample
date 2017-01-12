@@ -6,7 +6,7 @@
 */
 class BulletObject;
 class CharacterBase;
-class NBullet;
+class BulletObjectBase;
 class BulletManager;
 namespace ChangeStates {
 	/*
@@ -19,7 +19,7 @@ namespace ChangeStates {
 
 	*/
 	//弾、当たったキャラ
-	bool Damage(NBullet* aAttackObj, CharacterBase*aDamageChara);
+	bool Damage(BulletObjectBase* aAttackObj, CharacterBase*aDamageChara);
 	//発射可能かどうか
 	//発射予定キャラ、
 	bool IsAttackDo(CharacterBase*lAttackChara, BulletManager*aBulletManager);
@@ -30,7 +30,7 @@ namespace ChangeStates {
 	void FirstBulletProc(CharacterBase*aAttakcer, BulletManager*aBulletManager);
 
 	//弾の発射
-	bool BulletShot(std::vector<std::unique_ptr<NBullet>>&aBulletList, CharacterBase*lAttakcer, BulletManager*aBulletManager);
+	bool BulletShot(std::vector<std::unique_ptr<BulletObjectBase>>&aBulletList, CharacterBase*lAttakcer, BulletManager*aBulletManager);
 
 }
 

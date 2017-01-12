@@ -7,9 +7,11 @@ class DXVector2;
 class Toggle :public UIBase {
 public:
 	Toggle();
-	~Toggle();
+	virtual ~Toggle();
 	//ボタンを追加する
 	void AddButton(Button* aButton);
+	//ボタンの参照をクリアする
+	void ClearButton();
 	//アクティブにするボタンをインデクスで指定する
 	bool SetActive(const int aIndex);
 	//ボタンの間隔を設定する
@@ -34,9 +36,9 @@ public:
 	//描画処理
 	virtual void Render(MSSprite2DRender& aRender, UIBase*aParent = nullptr)override;
 
+	virtual void OnChangeIndex(const int Direction) {};
 
-
-private:
+protected:
 
 	//パディング
 	DXVector2 mPadding;

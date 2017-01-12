@@ -1,137 +1,117 @@
 #include"BulletNormal.h"
+#include "NBullet.h"
 #include"My3DShader.h"
-#include"CharacterBase.h"
-#include"DXMath.hpp"
-#include"MS3DRender.h"
-#include"DX11RenderResource.h"
-#include"Player.h"
-#include"Enemy.h"
-#include"StatusField.h"
-#include"StatusBulletNormal.h"
 #include"ChangeStates.hxx"
-#include<DX11FBXLoader.hpp>
+#include"CharacterBase.h"
+#include<statusbulletbase.h>
+#include<DX11RenderResource.h>
+#include"StatusField.h"
+#include"MS3DRender.h"
+#include"MyScene.h"
 
-#include<cassert>
+BulletNormal::~BulletNormal() {};
 
-BulletNormal::BulletNormal()
-{
-	mStatus = std::make_unique<StatusBulletNormal>();
-	//弾のステータス設定
-	mStatus->mInterval.Set(100.0f, .0f, .0f);
-	mStatus->mAtk = 10.0f;
-	mStatus->mCost = 2;
-	mStatus->mType = BulletDamageType::NORMAL;
-}
-BulletNormal::~BulletNormal()
-{
-}
-void BulletNormal::Initialize()
-{
-	GameObjectBase::Initialize();
-	//弾の描画に使うシェーダの設定
-	mBulletShader = std::make_unique<My3DShader>();
-	mBulletShader->Init();
-	mBulletShader->InitVertex("Simple.hlsl");
-	mBulletShader->InitPixel("Simple.hlsl");
+void BulletNormal::Create(std::vector<std::unique_ptr<BulletObjectBase>>&aOutBulletList, CharacterBase* aShoter) {
+	printf("Create %s, From %s\n", typeid(aShoter).name(), typeid(*this).name());
+	std::unique_ptr<BulletNormal>bullet = std::make_unique<BulletNormal>();
+	//	bullet->mShader = mShader;
+	//シェーダの設定
+	bullet->SetShader(mShader);
+	//リソースの初期化
+	bullet->Initialize();
+	bullet->InitStatus(&mStatus);
 
-}
+	MS3DRender* lRender;
+	aShoter->GetRenderer(lRender);
+	bullet->SetRenderer(lRender);
 
-//弾の生成
-void BulletNormal::Create(std::vector<std::unique_ptr<BulletObject>>& aOutBulletList, CharacterBase* aShoter)
-{
-	printf("Create %s, From %s\n",typeid(aShoter).name(), typeid(*this).name());
-	std::unique_ptr<BulletNormal>lBullet = std::make_unique<BulletNormal>();
-	lBullet->Initialize();
 	//初期位置設定
 	auto& lShotPos = *aShoter->GetWorld()->GetMatrix();
 	//弾発射方向の確定
-	DXVector3 lDir;
-	auto v = lBullet->mDirection;
-	D3DXVec3TransformNormal(&lBullet->mDirection, &D3DXVECTOR3(0, 0, 1), &lShotPos);
-	lBullet->mDirection.Normalize();
-	lBullet->SetMesh(*mBulletMesh);
-	lBullet->SetCollisionMesh(*mBulletMesh);
-	lBullet->SetShader(mBulletShader.get());
+	
+	D3DXVec3TransformNormal(&bullet->GetStatus()->mDirection, &D3DXVECTOR3(0, 0, 1), &lShotPos);
+
+	bullet->GetStatus()->mDirection.Normalize();
+	bullet->SetMesh(*GetMesh());
+	bullet->SetCollisionMesh(*GetMesh());
+
 	//発射速度の設定
-	lBullet->mVelocity = 0.25f;
+	bullet->GetStatus()->mVelocity = GetStatus()->mVelocity;
 	//トランスフォームの設定
-	MS3DRender*lRender;
-	aShoter->GetRenderer(lRender);
-	lBullet->SetRenderer(lRender);
+
 	DXVector3 lSpwanPos;
+	DXVector3 lScaling;
+
 	lShotPos.GetT(lSpwanPos);
-	lBullet->GetWorld()->SetT(lSpwanPos);
-	lShotPos.GetS(lSpwanPos);
-	lSpwanPos = { 0.01f ,0.01f ,0.01f };
-	lBullet->GetWorld()->SetS(lSpwanPos);
+	bullet->GetWorld()->SetT(lSpwanPos);
+	lScaling = GetWorld()->mScale;
+	bullet->GetWorld()->SetS(lScaling);
+
 	//衝突対象を登録
 	//壁を登録
 	for (auto& lCollision : *aShoter->GetCollisionTargets()) {
-		lBullet->AddCollisionTarget(lCollision);
+		bullet->AddCollisionTarget(lCollision);
 	}
 
 
 
 	//捜索対象(ターゲットを登録)
 	for (auto&lTarget : *aShoter->GetSearchTargets()) {
-		lBullet->AddCollisionTarget(lTarget);
+		bullet->AddCollisionTarget(lTarget);
 	}
+	//非衝突オブジェクトの追加
+	bullet->AddNoCollisionObject(aShoter->GetField()->mBall);
 
 	//レイピックの初期化
-	lBullet->mRayPick->SetFramePosition(*lBullet->mTransform);
+	bullet->GetRayPick()->SetFramePosition(*bullet->GetTransform());
 
 	//発射主の登録
-	lBullet->mParentPtr = aShoter;
+	bullet->SetParentChara(aShoter);
+	bullet->SetEffectFirst(this->mFirstEffect);
+	bullet->SetEffectShot(this->mShotEffect);
+	bullet->SetEffectHit(this->mHitEffect);
+	bullet->SetEffectKill(this->mKillEffect);
 
-	aOutBulletList.push_back(std::move(lBullet));
-	return;
+
+	bullet->GetEffectShot()->SetPosition({ lSpwanPos.x,lSpwanPos.y,lSpwanPos.z });
+	DXVector3 lRotate = aShoter->GetWorld()->mRotationCenter;
+	bullet->GetEffectShot()->Play();
+	bullet->GetEffectShot()->SetRotation({
+		lRotate.x,
+		lRotate.y,
+		lRotate.z
+	});
+	aOutBulletList.push_back(std::move(bullet));
+
+
 }
 
-void BulletNormal::Update()
+void BulletNormal::ShotFirstEffect(CharacterBase* aShoter) {
+	mFirstEffect = this->mHitEffect;
+
+	DXMatrix mMatrix = *aShoter->GetWorld()->GetMatrix();
+	DXVector3 lPosition;
+	DXVector3 lOffset{ 0.0f,0.0f,1.0f };
+	D3DXVec3TransformCoord(&lPosition, &lOffset, &mMatrix);
+
+	mFirstEffect.SetPosition({ lPosition.x,lPosition.y,lPosition.z });
+	DXVector3 lRotate = aShoter->GetWorld()->mRotationCenter;
+	mFirstEffect.Play();
+	mFirstEffect.SetRotation({
+		lRotate.x,
+		lRotate.y,
+		lRotate.z
+	});
+}
+
+void BulletNormal::UpdateMove()
 {
-	if (!mActive)return;
-
-	GetWorld()->AddT(mDirection*mVelocity);
-	//当たった場合
-	auto lHitTargets = UpdateCollision(false);
-	for (auto&lHitTarget : lHitTargets) {
-		//弾を消すために非アクティブにする
-		SetActive(false);
-
-		//キャラクターに当たった時の処理
-		auto lChara = dynamic_cast<CharacterBase*>(lHitTarget);
-		//キャラクターでない場合は次へ
-		if (!lChara)continue;
-		//ダメージ処理
-		//auto lIsDead = ChangeStates::Damage(this, lChara);
-		//死んだらそのターゲットに死亡フラグをセット
-		//死んでなければ処理しない
-	//	if (lIsDead == false)break;
-
-		//死んだキャラのステータスを取得
-		auto lStatus = lChara->GetStatus();
-		lStatus->mLive = CharaStateFlag::DEAD;
-		//ボールを持っていた場合、ボールをフィールドにセット
-		if (lStatus->mBall != nullptr) {
-			DXVector3 lPosition;
-			lChara->GetWorld()->GetMatrix()->GetT(lPosition);
-			lChara->GetField()->RespawnBall(&lPosition);
-			lStatus->mBall = nullptr;
-		}
-
-		//発射主の攻撃対象を空にする
-
-		auto parent = this->mParentPtr;
-		//this->mParentPtr->GetStatus()->mTargetChara = nullptr;
-
-		break;
-	}
+	GetWorld()->AddT(this->mStatus.mDirection*this->mStatus.mVelocity);
+	GetWorld()->AddRC(0.0f, 3.0f, 0.0f);
 }
 
-void BulletNormal::Render()
-{
-	if (!mActive)return;
-	assert(mRender);
-	mRender->SetShader(mShader);
-	mRender->Render(this);
-}
+
+
+
+
+

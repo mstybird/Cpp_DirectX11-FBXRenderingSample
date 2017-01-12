@@ -9,6 +9,16 @@ enum class ButtonState {
 	Disable
 };
 
+struct ButtonDesc {
+	DX11TextureManager* mManager;
+	int mNormalID;
+	int mActiveID;
+	int mPushID;
+	int mDisableID;
+	DXVector2 mSize;
+};
+
+
 class Button :public UIBase {
 public:
 

@@ -17,7 +17,7 @@ class DXProjection;
 class MS3DRender;
 class BulletObject;
 struct StatusField;
-class NBullet;
+class BulletObjectBase;
 struct StatusBase;
 class BulletManager;
 class CharacterBase:public GameObjectBase {
@@ -60,7 +60,6 @@ public:
 	}
 	//リスポーン処理
 	void Respawn();
-	BulletManager* mBltManager;
 	//弾発射のウェイトフラグを設定
 	void SetBulletShotWait(bool aIsWait);
 	//弾発射のウェイとフレーム数を設定
@@ -68,14 +67,18 @@ public:
 
 	void LivingIsDeadProc();
 	virtual void LivingIsRespawnWaitProc() = 0;
-
 protected:
 	void UpdateBullets();
 	void RenderBullets();
+
+public:
+	BulletManager* mBltManager;
+
+protected:
 	//使用中のバレットのID
 	int mActiveBulletID = 0;
 	//使用可能なバレットの一覧
-	std::vector<std::unique_ptr<NBullet>> mBullets;
+	std::vector<std::unique_ptr<BulletObjectBase>> mBullets;
 	//捜索対象
 	std::vector<GameObjectBase*>mSearchTargets;
 	//フィールド情報

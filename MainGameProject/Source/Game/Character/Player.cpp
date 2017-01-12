@@ -1,7 +1,6 @@
 #include "Player.h"
 #include"MS3DRender.h"
 #include"DXCamera.h"
-#include"BulletNormal.h"
 #include"Ball.h"
 #include"StatusField.h"
 #include"MSGravity.h"

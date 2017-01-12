@@ -58,6 +58,8 @@ public:
 	//フレーム毎のリソースを取得
 	CBResource0* GetFrameResource();
 
+	MSCollisionRayPicking* GetRayPick();
+
 protected:
 	virtual std::vector<GameObjectBase*> UpdateCollision(bool pIsUpdatePosition);
 	//ラムダ用

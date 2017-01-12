@@ -4,10 +4,12 @@
 #include"BarGaugeVS.h"
 #include"ScoreView.h"
 #include"TimeView.h"
+#include"AttackSlot.h"
 MySceneUI::MySceneUI():
 	mStatusFrame{ std::make_unique<StatusFrame>() },
 	mScoreView{std::make_unique<ScoreView>()},
-	mTimeView{std::make_unique<TimeView>()}
+	mTimeView{std::make_unique<TimeView>()},
+	mAttackSlot{std::make_unique<AttackSlot>()}
 {
 }
 
@@ -27,6 +29,7 @@ void MySceneUI::Render(MSSprite2DRender & aRender, UIBase * aParent)
 	mScoreView->Render(aRender, this);
 	mStatusFrame->Render(aRender, this);
 	mTimeView->Render(aRender, this);
+	mAttackSlot->Render(aRender, this);
 }
 
 StatusFrame * MySceneUI::GetStatusFrame()
@@ -42,4 +45,9 @@ ScoreView * MySceneUI::GetScoreView()
 TimeView * MySceneUI::GetTimeView()
 {
 	return mTimeView.get();
+}
+
+AttackSlot * MySceneUI::GetAttackSlot()
+{
+	return mAttackSlot.get();;
 }

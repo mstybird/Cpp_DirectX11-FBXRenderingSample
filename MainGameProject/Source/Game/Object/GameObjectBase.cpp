@@ -174,6 +174,11 @@ CBResource0 * GameObjectBase::GetFrameResource()
 	return &mFrameResource;
 }
 
+MSCollisionRayPicking * GameObjectBase::GetRayPick()
+{
+	return mRayPick.get();
+}
+
 
 
 std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosition)

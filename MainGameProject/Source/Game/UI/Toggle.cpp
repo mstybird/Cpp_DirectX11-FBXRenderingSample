@@ -19,6 +19,11 @@ void Toggle::AddButton(Button * aButton)
 	}
 }
 
+void Toggle::ClearButton()
+{
+	mButtonArray.clear();
+}
+
 bool Toggle::SetActive(const int aIndex)
 {
 	if (mButtonArray.size() <= aIndex)return false;
@@ -61,6 +66,7 @@ int Toggle::ActiveNext()
 	++mActiveIndex;
 	mActiveIndex %= mButtonArray.size();
 	GetActiveButton()->SetActive();
+	OnChangeIndex(1);
 	return mActiveIndex;
 }
 
@@ -72,6 +78,7 @@ int Toggle::ActiveBack()
 		mActiveIndex = mButtonArray.size() - 1;
 	}
 	GetActiveButton()->SetActive();
+	OnChangeIndex(-1);
 	return mActiveIndex;
 }
 

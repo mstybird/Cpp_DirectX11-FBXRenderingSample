@@ -89,7 +89,7 @@ bool MSCullingOcculusion::IsCullingWorld(
 			//指定数以上ループした場合、強制で抜ける
 			UINT size = sizeof(UINT64);
 			//ピクセル数を取得
-			while (S_OK != sDeviceContext->GetData(sOcculusionQuery, &lDrawPixels, size,D3D11_ASYNC_GETDATA_FLAG::D3D11_ASYNC_GETDATA_DONOTFLUSH));
+			while (S_OK != sDeviceContext->GetData(sOcculusionQuery, &lDrawPixels, size,0));
 
 
 			//見えたと判定する必要なピクセル数の計算

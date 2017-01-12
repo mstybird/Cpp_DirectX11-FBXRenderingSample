@@ -13,17 +13,21 @@ class MSBase3DShader;
 
 
 //弾基底オブジェクト
-class NBullet :public GameObjectBase {
+class BulletObjectBase :public GameObjectBase {
 public:
-	virtual ~NBullet();
+	virtual ~BulletObjectBase();
 	//主に弾ごとのステータスの初期化
 	virtual void InitStatus(StatusBulletBase* aBulletStatus);
 
+	//エフェクトの登録
 	void SetEffect(::Comfort::EfkManager*aManager, ::Comfort::EffectDatabase*aDb, const int aHitID, const int aShotID,const int aKillID);
 
-	void Create(std::vector<std::unique_ptr<NBullet>>&aOutBulletList, CharacterBase* aShoter);
+	virtual void Create(std::vector<std::unique_ptr<BulletObjectBase>>&aOutBulletList, CharacterBase* aShoter) = 0;
 
-	void ShotFirstEffect(CharacterBase* aShoter);
+	//発射動作開始時に呼ばれる
+	virtual void ShotFirstEffect(CharacterBase* aShoter) = 0;
+
+	void KillChara(CharacterBase* aShoter);
 
 	StatusBulletBase* GetStatus() {
 		return &mStatus;
@@ -44,10 +48,35 @@ public:
 	virtual void UpdateStatus() {}
 
 	//弾の更新
-	virtual void Update();
-	virtual void Render();
+	virtual void Update()final;
 
-private:
+	//移動処理
+	virtual void UpdateMove() = 0;
+	//ヒットしたが倒せなかったとき
+	virtual void UpdateHitNoKill() {};
+	//ヒットしてさらに倒せた時
+	virtual void UpdateHitAndKill() {};
+
+
+	virtual void Render()final;
+
+	CharacterBase* GetParentChara();
+	void SetParentChara(CharacterBase* aChara);
+
+	//エフェクトの設定、取得関係
+
+	::Comfort::EfkObject* GetEffectFirst();
+	::Comfort::EfkObject* GetEffectShot();
+	::Comfort::EfkObject* GetEffectHit();
+	::Comfort::EfkObject* GetEffectKill();
+	void SetEffectFirst(::Comfort::EfkObject& aEffect);
+	void SetEffectShot(::Comfort::EfkObject& aEffect);
+	void SetEffectHit(::Comfort::EfkObject& aEffect);
+	void SetEffectKill(::Comfort::EfkObject& aEffect);
+
+
+
+protected:
 	//弾のステータス
 	StatusBulletBase mStatus;
 	//発射主
@@ -56,10 +85,12 @@ private:
 	//衝突しないオブジェクトリスト
 	std::vector<GameObjectBase*>mNoCollisions;
 
-	::Comfort::EfkObject mFirstEffect;
-	::Comfort::EfkObject mShotEffect;
-	::Comfort::EfkObject mHitEffect;
-	::Comfort::EfkObject mKillEffect;
+	::Comfort::EfkObject mFirstEffect;		//発射開始時のエフェクト
+	::Comfort::EfkObject mShotEffect;		//発射直後のエフェクト
+	::Comfort::EfkObject mHitEffect;		//ヒット時のエフェクト
+	::Comfort::EfkObject mKillEffect;		//倒した時のエフェクト
+
+
 
 };
 

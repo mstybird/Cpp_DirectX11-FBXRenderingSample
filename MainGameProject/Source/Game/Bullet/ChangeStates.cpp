@@ -6,7 +6,7 @@
 #include"BulletManager.h"
 #include"MyScene.h"
 namespace ChangeStates {
-	bool Damage(NBullet * aAttackObj, CharacterBase * aDamageChara)
+	bool Damage(BulletObjectBase * aAttackObj, CharacterBase * aDamageChara)
 	{
 		//ダメージ処理。
 		//死んだらtrueを返す
@@ -65,7 +65,7 @@ namespace ChangeStates {
 		aAttakcer->SetBulletShotWait(true);
 	}
 
-	bool BulletShot(std::vector<std::unique_ptr<NBullet>>& aBulletList, CharacterBase * aAttakcer, BulletManager*aBulletManager)
+	bool BulletShot(std::vector<std::unique_ptr<BulletObjectBase>>& aBulletList, CharacterBase * aAttakcer, BulletManager*aBulletManager)
 	{
 		auto lBullet = aBulletManager->GetActiveBullet(aAttakcer);
 

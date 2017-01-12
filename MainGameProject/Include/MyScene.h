@@ -23,6 +23,8 @@
 #include"StageSelectList.h"
 #include"3DCollisionShader.h"
 #include<DXAL.hpp>
+
+
 namespace ValueMyScene {
 	
 	//Effect50~99
@@ -282,6 +284,8 @@ namespace ValueMyScene {
 	}
 
 }
+
+
 class MyMSScene :public MSSceneBase {
 public:
 
@@ -361,7 +365,7 @@ private:
 	TextManager textMan;
 
 	BulletManager bltManager;
-	std::vector<std::unique_ptr<NBullet>> blts;
+	std::vector<std::unique_ptr<BulletObjectBase>> blts;
 
 	//タイムオーバー処理クラス
 	MySceneTimeOver mTimeOver;

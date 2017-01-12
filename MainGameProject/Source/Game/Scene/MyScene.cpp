@@ -2,6 +2,7 @@
 #include"BarGauge.h"
 #include<ScoreView.h>
 #include<TimeView.h>
+#include<AttackSlot.h>
 #include"MyScene.h"
 #include"Title.h"
 #include<fstream>
@@ -150,7 +151,7 @@ void MyMSScene::Update() {
 
 void MyMSScene::KeyDown(MSKEY pKey)
 {
-	if (mIsReady)return;
+	//if (mIsReady)return;
 	bool lIsRun{ false };
 
 	if (mIsTimeOver == false) {
@@ -167,6 +168,14 @@ void MyMSScene::KeyDown(MSKEY pKey)
 			break;
 		case MSKEY::CH_D:
 			lIsRun = true;
+			break;
+		case MSKEY::CH_Z:
+			bltManager.BackActiveBulletID(&mPlayer);
+			ui.GetAttackSlot()->mSlot.ActiveBack();
+			break;
+		case MSKEY::CH_X:
+			bltManager.NextActiveBulletID(&mPlayer);
+			ui.GetAttackSlot()->mSlot.ActiveNext();
 			break;
 		case MSKEY::SPACE:
 			mPlayer.AddBullet();
@@ -581,6 +590,33 @@ void MyMSScene::InitializeUI()
 		ClearTemp();
 	}
 
+
+	{
+		auto lAttackSlot = ui.GetAttackSlot();
+		lAttackSlot->SetGlobalPosition(880, 660);
+		ButtonDesc lDesc;
+		lDesc.mManager = &mTexManager;
+		lDesc.mActiveID = cScoreBarOutID;
+		lDesc.mDisableID = cScoreBarOutID;
+		lDesc.mNormalID = cScoreBarOutID;
+		lDesc.mPushID = cScoreBarOutID;
+		lDesc.mSize = { 50,50 };
+		lAttackSlot->AddSlot(lDesc);
+		lDesc.mActiveID = cScoreBarLeftID;
+		lDesc.mDisableID = cScoreBarLeftID;
+		lDesc.mNormalID = cScoreBarLeftID;
+		lDesc.mPushID = cScoreBarLeftID;
+		lAttackSlot->AddSlot(lDesc);
+		lDesc.mActiveID = cScoreBarRightID;
+		lDesc.mDisableID = cScoreBarRightID;
+		lDesc.mNormalID = cScoreBarRightID;
+		lDesc.mPushID = cScoreBarRightID;
+		lAttackSlot->AddSlot(lDesc);
+		lAttackSlot->mSlot.SetPadding(20, 0);
+	}
+
+
+
 	//時間表示座標の設定
 	{
 		auto lTimeView = ui.GetTimeView();
@@ -617,6 +653,7 @@ void MyMSScene::InitializeUI()
 		ClearTemp();
 
 	}
+
 
 }
 
@@ -826,25 +863,38 @@ void MyMSScene::InitializeFieldStatus()
 
 void MyMSScene::InitializeBulletManager()
 {
-	auto lNBulletStatus = LoadBulletStatus("Resource/Script/BulletNormal.lua", BulletUniqueID::NBullet);
+	auto lNBulletStatus = LoadBulletStatus("Resource/Script/BulletNormal.lua", BulletUniqueID::BulletNormal);
 
-	bltManager.Initialize(&lNBulletStatus);
+	bltManager.Initialize(&lNBulletStatus,&lNBulletStatus);
 	bltManager.InitEffect(&mEfkManager, &mEfkDb, ValueMyScene::Effect::cShotID, ValueMyScene::Effect::cHitID, ValueMyScene::Effect::cKillID);
+	//通常弾のメッシュの設定
 	bltManager.RegisterMesh(
 		&mdDB,
 		&mFbxScaleMap,
 		ValueMyScene::Model::cBulletDesignID,
 		ValueMyScene::Model::cBulletCollisionID,
-		BulletUniqueID::NBullet
+		BulletUniqueID::BulletNormal
 	);
+	bltManager.RegisterShader(&shader, BulletUniqueID::BulletNormal);
+	bltManager.RegisterChara(&mPlayer, BulletUniqueID::BulletNormal);
 
-	bltManager.RegisterShader(&shader, BulletUniqueID::NBullet);
-	bltManager.RegisterChara(&mPlayer, BulletUniqueID::NBullet);
+	//3way弾のメッシュの設定
+	bltManager.RegisterMesh(
+		&mdDB,
+		&mFbxScaleMap,
+		ValueMyScene::Model::cBulletDesignID,
+		ValueMyScene::Model::cBulletCollisionID,
+		BulletUniqueID::BulletDiffusion
+	);
+	bltManager.RegisterShader(&shader, BulletUniqueID::BulletDiffusion);
+	bltManager.RegisterChara(&mPlayer, BulletUniqueID::BulletDiffusion);
+
+
 
 	mPlayer.mBltManager = &bltManager;
 	for (auto&lEnemy : enemy) {
 		lEnemy->mBltManager = &bltManager;
-		bltManager.RegisterChara(lEnemy.get(), BulletUniqueID::NBullet);
+		bltManager.RegisterChara(lEnemy.get(), BulletUniqueID::BulletNormal);
 	}
 }
 

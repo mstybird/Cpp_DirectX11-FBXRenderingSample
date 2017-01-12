@@ -40,6 +40,7 @@ void CharacterBase::Initialize(StatusField&pSetStatus)
 	GameObjectBase::Initialize();
 	mFrameResource.vLightDir = { 1,0,1,0 };
 	mField = &pSetStatus;
+	
 	//ƒm[ƒ}ƒ‹’e
 //	mBulletNormal->Initialize();
 }
@@ -206,7 +207,7 @@ void CharacterBase::UpdateBullets()
 	{
 		auto lBegin = mBullets.begin();
 		auto lEnd = mBullets.end();
-		auto lRemoveFunc = [this](std::unique_ptr<NBullet>&aBullet) {
+		auto lRemoveFunc = [this](std::unique_ptr<BulletObjectBase>&aBullet) {
 			return aBullet->IsActive() == false;
 		};
 		auto lRemoveIt = std::remove_if(lBegin, lEnd, lRemoveFunc);
