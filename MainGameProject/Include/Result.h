@@ -73,6 +73,9 @@ public:
 	//アクティブなボタンのインデクスを取得する
 	int GetButtonActiveIndex();
 
+	Toggle* GetList();
+
+	void PlaySelectSE();
 private:
 	TextManager mTextMan;
 	//フレーム画像

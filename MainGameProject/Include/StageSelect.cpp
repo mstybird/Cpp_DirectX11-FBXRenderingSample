@@ -24,6 +24,16 @@ void SceneStageSelect::Initialize()
 void SceneStageSelect::Update()
 {
 	mBGM.Play();
+
+	int lHitIndex = mSelectList.GetList()->CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
+	if (lHitIndex != -1 && !mIsSceneChange) {
+		if (lHitIndex != mSelectList.GetList()->GetActiveIndex()) {
+			mSelectList.GetList()->SetActiveIndex(lHitIndex);
+			mSESelect.Stop(true);
+			mSESelect.Play();
+		}
+	}
+
 	UpdateSceneChange();
 }
 
@@ -33,16 +43,19 @@ void SceneStageSelect::KeyDown(MSKEY pKey)
 	switch (pKey)
 	{
 	case MSKEY::UP:
+	case MSKEY::CH_W:
 		mSelectList.ActiveBack();
 		mSESelect.Stop(true);
 		mSESelect.Play();
 		break;
 	case MSKEY::DOWN:
+	case MSKEY::CH_S:
 		mSelectList.ActiveNext();
 		mSESelect.Stop(true);
 		mSESelect.Play();
 		break;
 	case MSKEY::ENTER:
+	case MSKEY::SPACE:
 		mSEEnter.Stop(true);
 		mSEEnter.Play();
 		StageSelectSave();
@@ -76,20 +89,67 @@ void SceneStageSelect::KeyHold(MSKEY pKey)
 void SceneStageSelect::MouseMove(const POINT & aNowPosition, const POINT & aDiffPosition)
 {
 	mCursor.AddPosition(aDiffPosition.x, aDiffPosition.y);
+	DXVector3 lPosition = *mCursor.GetPosition();
+	auto lSize = mCursor.GetSize();
+	if (lPosition.x < 0)lPosition.x = 0;
+	if (lPosition.x >= WINDOW_WIDTH - lSize->x)lPosition.x = WINDOW_WIDTH - lSize->x;
+	if (lPosition.y < 0)lPosition.y = 0;
+	if (lPosition.y >= WINDOW_HEIGHT - lSize->y)lPosition.y = WINDOW_HEIGHT - lSize->y;
+	mCursor.SetPosition(lPosition);
 }
+
 void SceneStageSelect::MouseDown(const MouseType aType)
 {
+	if (aType != MouseType::Left)return;
 	if (mIsSceneChange)return;
 	int lHitIndex = this->mSelectList.GetList()->CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
 	if (lHitIndex != -1) {
 		if (lHitIndex == mSelectList.GetList()->GetActiveIndex()) {
+			mSelectList.GetList()->SetActiveIndex(lHitIndex);
 			mSelectList.GetList()->PushButton();
 			mButtonLastPushed = lHitIndex;
+			mSESelect.Stop(true);
+			mSESelect.Play();
 		}
 	}
 }
+
 void SceneStageSelect::MouseUp(const MouseType aType)
 {
+	MouseType t;
+	if (mIsSceneChange)return;
+	int lHitIndex = mSelectList.GetList()->CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
+	if (lHitIndex == mSelectList.GetList()->GetActiveIndex()) {
+
+		switch (aType)
+		{
+		case MouseType::Left:
+			mSEEnter.Stop(true);
+			mSEEnter.Play();
+			StageSelectSave();
+
+			mScene = std::make_unique<MyMSScene>();
+
+			mScneThread.SetFunction([&]() {mScene->Initialize(); });
+			mScneThread.Start();
+			mIsSceneChange = true;
+			break;
+		case MouseType::Center:
+			break;
+		case MouseType::Right:
+			mSEEnter.Stop(true);
+			mSEEnter.Play();
+
+			mScene = std::make_unique<SceneTitle>();
+
+			mScneThread.SetFunction([&]() {mScene->Initialize(); });
+			mScneThread.Start();
+			mIsSceneChange = true;
+			break;
+		default:
+			break;
+		}
+	}
 }
 void SceneStageSelect::Render()
 {
@@ -100,6 +160,8 @@ void SceneStageSelect::Render()
 	mSelectList.Render(m2DRender);
 
 	m2DRender.Render(mDescText);
+	m2DRender.Render(mCursor);
+
 }
 
 void SceneStageSelect::InitShader()
@@ -207,6 +269,18 @@ void SceneStageSelect::InitUI()
 
 		mSelectList.Initialize(&mLuaDb, lManager, &mTexManager, lStageList, cStagePathOffsetID);
 
+	}
+
+	//Cursor
+	{
+		mTexManager.RegistFromFile("Resource/Cursor/Cursor_Default.png", cCursorID);
+		mCursor.SetTexture(mTexManager, cCursorID);
+		POINT lMousePos;
+		GetCursorPos(&lMousePos);
+		ScreenToClient(MSDirect::GetWinHandle(), &lMousePos);
+		mCursor.SetPosition({ (float)lMousePos.x,(float)lMousePos.y });
+		mCursor.SetSize({ 17,30 });
+		mCursor.SetScale({ 1,1 });
 	}
 
 

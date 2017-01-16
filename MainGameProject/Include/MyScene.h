@@ -239,7 +239,7 @@ namespace ValueMyScene {
 		static const int cButtonToTitleActiveID = 2311;
 		static const int cButtonToTitlePushID = 2312;
 		static const int cButtonToTitleDisableID = 2313;
-
+		static const int cCursorID = 2320;
 		static const char* cFramePosition = "FramePosition";
 		static const char* cFrameSize = "FrameSize";
 		static const char* cFrameScale = "FrameScale";
@@ -360,10 +360,12 @@ private:
 	//2Dスプライト関係
 	MySprite2DShader m2DShader;
 	MSSprite2DRender m2DRender;
+	//マウスカーソル
+	MSSprite2DResource mCursor;
 
 	//UI
 	MySceneUI ui;
-
+	int mButtonLastPushed = -1;
 	//テキストマネージャ
 	TextManager textMan;
 

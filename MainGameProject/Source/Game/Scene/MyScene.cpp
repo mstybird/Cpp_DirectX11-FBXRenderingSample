@@ -136,6 +136,19 @@ void MyMSScene::Initialize()
 
 void MyMSScene::Update() {
 
+	if (mIsTimeOver == true) {
+		if (!mTimeOver.IsUpdateing()) {
+
+			int lHitIndex = mResult.GetList()->CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
+			if (lHitIndex != -1) {
+				if (lHitIndex != mResult.GetList()->GetActiveIndex()) {
+					mResult.GetList()->SetActiveIndex(lHitIndex);
+					mResult.PlaySelectSE();
+				}
+			}
+		}
+	}
+
 
 	mEfkManager.Update();
 	mField.Update();
@@ -367,8 +380,31 @@ void MyMSScene::KeyUp(MSKEY pKey)
 
 void MyMSScene::MouseMove(const POINT & aNowPosition, const POINT & aDiffPosition)
 {
-	float f = aDiffPosition.x * 0.25f;
-	mPlayer.GetWorld()->AddRC({ 0.0f,f,0.0f });
+
+	if (mIsTimeOver == true) {
+		if (!mTimeOver.IsUpdateing()) {
+			mCursor.AddPosition(aDiffPosition.x, aDiffPosition.y);
+
+			DXVector3 lPosition = *mCursor.GetPosition();
+			auto lSize = mCursor.GetSize();
+			if (lPosition.x < 0)lPosition.x = 0;
+			if (lPosition.x >= WINDOW_WIDTH - lSize->x)lPosition.x = WINDOW_WIDTH - lSize->x;
+			if (lPosition.y < 0)lPosition.y = 0;
+			if (lPosition.y >= WINDOW_HEIGHT - lSize->y)lPosition.y = WINDOW_HEIGHT - lSize->y;
+			mCursor.SetPosition(lPosition);
+		}
+		else {
+			float f = aDiffPosition.x * 0.06f;
+			mPlayer.GetWorld()->AddRC({ 0.0f,f,0.0f });
+
+		}
+	}
+	else {
+		float f = aDiffPosition.x * 0.06f;
+		mPlayer.GetWorld()->AddRC({ 0.0f,f,0.0f });
+
+	}
+
 }
 
 void MyMSScene::MouseDown(const MouseType aType)
@@ -380,10 +416,47 @@ void MyMSScene::MouseDown(const MouseType aType)
 			mPlayer.AddBullet();
 		}
 	}
+	else {
+		if (!mTimeOver.IsUpdateing()) {
+			int lHitIndex = mResult.GetList()->CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
+			if (lHitIndex != -1) {
+				if (lHitIndex == mResult.GetList()->GetActiveIndex()) {
+					mResult.GetList()->PushButton();
+					mButtonLastPushed = lHitIndex;
+				}
+			}
+		}
+	}
+
+
+
 }
 
 void MyMSScene::MouseUp(const MouseType aType)
 {
+	if (mIsTimeOver == true) {
+		if (!mTimeOver.IsUpdateing()) {
+			int lHitIndex = mResult.GetList()->CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
+			if (lHitIndex == mResult.GetList()->GetActiveIndex()) {
+				mResult.ButtonPush();
+
+				switch (mResult.GetButtonActiveIndex())
+				{
+				case 0:
+					//リトライ
+					MSDirect::SetScene(std::make_unique<MyMSScene>());
+					break;
+				case 1:
+					//タイトルへ
+					MSDirect::SetScene(std::make_unique<SceneTitle>());
+					break;
+				default:
+					break;
+				}
+
+			}
+		}
+	}
 }
 
 void MyMSScene::Render()
@@ -427,6 +500,7 @@ void MyMSScene::Render()
 		}
 		else {
 			mResult.Render(m2DRender);
+			m2DRender.Render(mCursor);
 		}
 	}
 
@@ -687,6 +761,18 @@ void MyMSScene::InitializeUI()
 
 	}
 
+	//Cursor
+	{
+		mTexManager.RegistFromFile("Resource/Cursor/Cursor_Default.png", ValueMyScene::Result::cCursorID);
+		mCursor.SetTexture(mTexManager, ValueMyScene::Result::cCursorID);
+		POINT lMousePos;
+		GetCursorPos(&lMousePos);
+		ScreenToClient(MSDirect::GetWinHandle(), &lMousePos);
+		mCursor.SetPosition({ (float)lMousePos.x,(float)lMousePos.y });
+		mCursor.SetSize({ 17,30 });
+		mCursor.SetScale({ 1,1 });
+		mCursor.SetPivot({ 0.5f,0.5f });
+	}
 
 }
 

@@ -202,3 +202,14 @@ int MySceneResult::GetButtonActiveIndex()
 {
 	return mButtonList.GetActiveIndex();
 }
+
+Toggle * MySceneResult::GetList()
+{
+	return &mButtonList;
+}
+
+void MySceneResult::PlaySelectSE()
+{
+	mSESelect.Stop(true);
+	mSESelect.Play();
+}

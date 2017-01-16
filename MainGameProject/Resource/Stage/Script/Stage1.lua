@@ -1,7 +1,7 @@
 ButtonNormalFilePath="Resource/Stage/Image/Forest_Normal.png"
 ButtonActiveFilePath="Resource/Stage/Image/Forest_Active.png"
-ButtonPushFilePath="Resource/UI/Result/LogoLose.png"
-ButtonDisableFilePath="Resource/UI/Result/LogoLose.png"
+ButtonPushFilePath="Resource/Stage/Image/Forest_Active.png"
+ButtonDisableFilePath="Resource/Stage/Image/Forest_Active.png"
 
 ModelScriptFilePath="Resource/Script/GamePlayModel.lua"
 

@@ -24,8 +24,10 @@ public:
 	DXTexture* GetTexture();
 	virtual void SetPosition(const DXVector2&pPosition);
 	virtual void SetPosition(const DXVector3&pPosition);
-	void SetRotation(const float aDegree);
-	void AddRotation(const float aDegree);
+	void SetRotationY(const float aDegree);
+	void AddRotationY(const float aDegree);
+	void SetRotationZ(const float aDegree);
+	void AddRotationZ(const float aDegree);
 	void AddPosition(const DXVector2& aPosition);
 	void AddPosition(const int aX,const int aY);
 	//ピボットを設定する
@@ -68,7 +70,7 @@ protected:
 	DXVector2 mPivot;		//中心となる位置
 	DXVector2 mSize;		//描画サイズ
 	DXVector2 mScale;		//拡大率
-	float mRotation;						//回転角度(ディグリー)
+	DXVector3 mRotation;						//回転角度(ディグリー)
 	DXVector2 mSplitPolygonX;				//ポリゴンの切り取り(水平)
 	DXVector2 mSplitPolygonY;				//ポリゴンの切り取り(垂直)
 	DXVector2 mSplitImageX;					//イマージの切り取り(水平)

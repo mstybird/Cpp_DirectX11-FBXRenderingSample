@@ -17,7 +17,7 @@ MSSpriteBaseResource::MSSpriteBaseResource():
 	mSplitImageY{ 0.0f,1.0f },
 	mMatrix{},
 	mUpdateFlag{false},
-	mRotation{0.0f}
+	mRotation{0,0,0}
 {
 }
 MSSpriteBaseResource::~MSSpriteBaseResource()
@@ -60,14 +60,24 @@ void MSSpriteBaseResource::SetPosition(const DXVector3 & pPosition)
 	mPosition = pPosition;
 }
 
-void MSSpriteBaseResource::SetRotation(const float aDegree)
+void MSSpriteBaseResource::SetRotationY(const float aDegree)
 {
-	mRotation = aDegree;
+	mRotation.y = aDegree;
 }
 
-void MSSpriteBaseResource::AddRotation(const float aDegree)
+void MSSpriteBaseResource::AddRotationY(const float aDegree)
 {
-	mRotation += aDegree;
+	mRotation.y += aDegree;
+}
+
+void MSSpriteBaseResource::SetRotationZ(const float aDegree)
+{
+	mRotation.z = aDegree;
+}
+
+void MSSpriteBaseResource::AddRotationZ(const float aDegree)
+{
+	mRotation.z += aDegree;
 }
 
 void MSSpriteBaseResource::AddPosition(const DXVector2 & aPosition)
@@ -183,10 +193,9 @@ const DXVector2* MSSpriteBaseResource::GetScale() const
 DXMatrix* MSSpriteBaseResource::GetMatrix()
 {
 	DXMatrix lTrans, lScale, lRotation;
-	
 	lTrans.Translation(mPosition);
 	lScale.Scaling({ mScale.x,mScale.y });
-	lRotation.RotationZ(mRotation, TYPE_ANGLE::DEGREE);
+	lRotation.RotationXYZ(mRotation, TYPE_ANGLE::DEGREE);
 	mMatrix = lScale*lRotation*lTrans;
 	return &mMatrix;
 }

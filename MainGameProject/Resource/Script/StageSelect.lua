@@ -36,8 +36,8 @@ ButtonScale={1.0,1.0}
 
 --StageList
 StagePathList={
-    "Resource/Script/StageSample.lua",
-    "Resource/Script/StageSample.lua"
+    "Resource/Stage/Script/Stage1.lua",
+    "Resource/Stage/Script/Stage1.lua"
     
 }
 

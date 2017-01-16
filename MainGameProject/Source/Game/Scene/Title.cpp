@@ -18,9 +18,8 @@ void SceneTitle::Initialize()
 }
 void SceneTitle::Update()
 {
-
 	int lHitIndex = mButtonList.CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
-	if (lHitIndex != -1) {
+	if (lHitIndex != -1 && !mIsSceneChange) {
 		if (lHitIndex != mButtonList.GetActiveIndex()) {
 			mButtonList.SetActiveIndex(lHitIndex);
 			mSESelect.Stop(true);
@@ -37,17 +36,20 @@ void SceneTitle::KeyDown(MSKEY pKey)
 	switch (pKey)
 	{
 	case MSKEY::UP:
-		
+	case MSKEY::CH_W:
+
 		mButtonList.ActiveBack();
 		mSESelect.Stop(true);
 		mSESelect.Play();
 		break;
 	case MSKEY::DOWN:
+	case MSKEY::CH_S:
 		mButtonList.ActiveNext();
 		mSESelect.Stop(true);
 		mSESelect.Play();
 		break;
 	case MSKEY::ENTER:
+	case MSKEY::SPACE:
 		mSEEnter.Stop(true);
 		mSEEnter.Play();
 		mButtonList.PushButton();
@@ -79,6 +81,14 @@ void SceneTitle::KeyHold(MSKEY pKey)
 void SceneTitle::MouseMove(const POINT & aNowPosition, const POINT & aDiffPosition)
 {
 	mCursor.AddPosition(aDiffPosition.x, aDiffPosition.y);
+
+	DXVector3 lPosition = *mCursor.GetPosition();
+	auto lSize = mCursor.GetSize();
+	if (lPosition.x < 0)lPosition.x = 0;
+	if (lPosition.x >= WINDOW_WIDTH - lSize->x)lPosition.x = WINDOW_WIDTH - lSize->x;
+	if (lPosition.y < 0)lPosition.y = 0;
+	if (lPosition.y >= WINDOW_HEIGHT - lSize->y)lPosition.y = WINDOW_HEIGHT - lSize->y;
+	mCursor.SetPosition(lPosition);
 }
 
 void SceneTitle::MouseDown(const MouseType aType)
@@ -296,8 +306,9 @@ void SceneTitle::InitUI()
 		GetCursorPos(&lMousePos);
 		ScreenToClient(MSDirect::GetWinHandle(), &lMousePos);
 		mCursor.SetPosition({ (float)lMousePos.x,(float)lMousePos.y });
-		mCursor.SetSize({ 22,20 });
+		mCursor.SetSize({ 17,30 });
 		mCursor.SetScale({ 1,1 });
+		mCursor.SetPivot({ 0.5f,0.5f });
 	}
 
 }
