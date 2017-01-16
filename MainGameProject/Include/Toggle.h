@@ -23,6 +23,8 @@ public:
 	int GetCount();
 	//現在アクティブなボタンのインデックスを取得する
 	int GetActiveIndex();
+	//直接IDを指定する
+	void SetActiveIndex(const int aID);
 	//現在アクティブなボタンを取得する
 	Button* GetActiveButton();
 	//次のボタンをアクティブにする
@@ -33,12 +35,19 @@ public:
 	void PushButton();
 	//アクティブなボタンを離す
 	void PopButton();
+	//トグルに登録済みのボタンと衝突判定を行い、衝突したボタンのIDを取得
+	int CollisionPoint(int aX, int aY);
+
+	
+
 	//描画処理
 	virtual void Render(MSSprite2DRender& aRender, UIBase*aParent = nullptr)override;
 
 	virtual void OnChangeIndex(const int Direction) {};
 
 protected:
+	//最後に参照した親UI
+	UIBase* mLastParent;
 
 	//パディング
 	DXVector2 mPadding;

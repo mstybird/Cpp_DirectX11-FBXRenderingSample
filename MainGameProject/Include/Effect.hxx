@@ -23,14 +23,19 @@ namespace Comfort {
 	//Effekseer一元管理用データベース
 	class EffectDatabase {
 	public:
+		//エフェクトデータベースの破棄
 		~EffectDatabase();
+		//dbの初期化
 		void Initialize(::Effekseer::Manager*&aManager);
 		//エフェクトファイルを登録する
 		bool Load(const char*aFileName, const int32_t aRegistID);
 		//登録済みエフェクト
 		::Effekseer::Effect* Get(const int32_t aID)const;
+		//エフェクトが存在するか調べる
 		bool IsExist(const int32_t aID)const;
+		//登録済みのエフェクトを削除する
 		void CleanAll();
+		//指定したIDを持つエフェクトを削除する
 		void Clean(const int32_t aID);
 
 		void Release();
@@ -41,6 +46,7 @@ namespace Comfort {
 		::Effekseer::Manager* mManagerPtr;
 	};
 
+	//エフェクト用カメラ
 	struct EffectCamera {
 		::Effekseer::Vector3D mEye;
 		::Effekseer::Vector3D mLookAt;
@@ -58,7 +64,7 @@ namespace Comfort {
 		float mFar;
 		void SetDXProjection(DXProjection*aProjection);
 		//		::Effekseer::Matrix44 GetPerspectiveFovLH();
-		::Effekseer::Matrix44 GetPerspectiveFovRH();
+		::Effekseer::Matrix44 GetPerspectiveFovLH();
 
 	};
 

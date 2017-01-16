@@ -38,12 +38,12 @@ void Comfort::EffectProjection::SetDXProjection(DXProjection * aProjection)
 	mFar = aProjection->mFar;
 
 
-	auto m1 = GetPerspectiveFovRH();
+	auto m1 = GetPerspectiveFovLH();
 	auto m2=aProjection->GetMatrix();
 
 }
 
-::Effekseer::Matrix44 Comfort::EffectProjection::GetPerspectiveFovRH()
+::Effekseer::Matrix44 Comfort::EffectProjection::GetPerspectiveFovLH()
 {
 	return ::Effekseer::Matrix44().PerspectiveFovLH(D3DXToRadian(mAngle), mAspect, mNear, mFar);
 }
@@ -221,7 +221,7 @@ void Comfort::EfkRenderer::RenderAll(EfkManager*aManager)
 void Comfort::EfkRenderer::SetProjection(EffectProjection * aProjection)
 {
 	mRenderer->SetProjectionMatrix(
-		aProjection->GetPerspectiveFovRH()
+		aProjection->GetPerspectiveFovLH()
 	);
 }
 

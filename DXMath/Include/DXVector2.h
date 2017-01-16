@@ -48,3 +48,5 @@ public:
 	DXVector2 operator/(const D3DXVECTOR2&pMulVector)const;
 	DXVector2&operator/=(const D3DXVECTOR2&pMulVector);
 };
+
+#include"DXVector2.inl"

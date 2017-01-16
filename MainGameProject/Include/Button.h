@@ -35,7 +35,9 @@ public:
 
 	void SetSize(const float&aWidth, const float&aHeight);
 	//GlobalScaleと掛け合わせたサイズの取得
-
+	DXVector2 GetSizeGlobal();
+	//拡大率を無視したサイズ
+	DXVector2 GetSizeLocal();
 	DXVector2 GetScalingSize(UIBase*aParent = nullptr);
 	//指定した状態にし、直前のステートを返す
 	ButtonState SetState(const ButtonState aState);

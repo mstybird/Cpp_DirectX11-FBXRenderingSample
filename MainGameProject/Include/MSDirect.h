@@ -3,6 +3,7 @@
 #include<D3DX11.h>
 #include<unordered_map>
 #include"MSLayout.h"
+#include<DXMath.hpp>
 class MSSceneBase;
 enum class MSKEY;
 
@@ -21,7 +22,7 @@ public:
 	static MSView* GetActiveView();
 	static MSView* SetActiveView(MSView* pView);
 	static void SetDefaultView();
-
+	static HWND GetWinHandle();
 
 	static ID3D11Device*GetDevice();
 	static ID3D11DeviceContext*GetDeviceContext();
@@ -60,6 +61,16 @@ private:
 
 	std::unordered_map<MSKEY, bool> KeyList;
 	std::unique_ptr<MSSceneBase>scene;
+	LONG sceneCounter;
 	//	MSSceneBase scene;
 	bool mIsSceneChanging = false;
+
+	//マウス初期位置
+	POINT mMouseDefaultPosition;
+	//直前フレーム位置
+	POINT mMouseBeforePosition;
+
+	//マウス現在位置
+	POINT mMouseNowPosition;
+
 };

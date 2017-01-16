@@ -147,6 +147,11 @@ void StageSelectList::PopButton()
 	mstageToggle.PopButton();
 }
 
+Toggle * StageSelectList::GetList()
+{
+	return &mstageToggle;
+}
+
 StageData * StageSelectList::GetActiveData()
 {
 	int lIndex = mstageToggle.GetActiveIndex();

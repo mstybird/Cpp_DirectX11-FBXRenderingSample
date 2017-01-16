@@ -21,6 +21,16 @@ void Button::SetSize(const float & aWidth, const float & aHeight)
 	mSize.Set(aWidth, aHeight);
 }
 
+DXVector2 Button::GetSizeGlobal()
+{
+	return mSize*mGlobalScale;
+}
+
+DXVector2 Button::GetSizeLocal()
+{
+	return mSize;
+}
+
 DXVector2 Button::GetScalingSize(UIBase * aParent)
 {
 	if (aParent != nullptr) {

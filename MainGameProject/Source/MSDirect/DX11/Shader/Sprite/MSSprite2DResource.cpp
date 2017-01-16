@@ -70,6 +70,18 @@ void MSSpriteBaseResource::AddRotation(const float aDegree)
 	mRotation += aDegree;
 }
 
+void MSSpriteBaseResource::AddPosition(const DXVector2 & aPosition)
+{
+	mPosition.x += aPosition.x;
+	mPosition.y += aPosition.y;
+}
+
+void MSSpriteBaseResource::AddPosition(const int aX, const int aY)
+{
+	mPosition.x += aX;
+	mPosition.y += aY;
+}
+
 void MSSpriteBaseResource::SetPivot(const DXVector2 & pPivot)
 {
 	if (mPivot == pPivot)return;
@@ -227,6 +239,25 @@ void MSSprite2DResource::SetPosition(const DXVector2 & pPosition)
 void MSSprite2DResource::SetPosition(const DXVector3 & pPosition)
 {
 	MSSpriteBaseResource::SetPosition({ pPosition.x,pPosition.y });
+}
+
+bool MSSprite2DResource::CollisionPoint(int aX, int aY)
+{
+	//Œ´“_‚ð0‚Æ‰¼’è‚·‚é
+	aX -= mPosition.x;
+	aY -= mPosition.y;
+
+	if (aX < mSize.x && 0 < aX&&
+		aX < mSize.y && 0 < aY) {
+		//Žw’è‚µ‚½À•W‚Í”ÍˆÍ“à‚Å‚ ‚é
+		return true;
+	}
+	return false;
+}
+
+bool MSSprite2DResource::CollisionSprite(MSSprite2DResource & aResource)
+{
+	return false;
 }
 
 void MSSprite2DResource::CreatePolygon(SpriteVertex pPolygon[4])

@@ -544,6 +544,7 @@
     <ClInclude Include="Include\DXWorld.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Include\DXVector2.inl" />
     <None Include="Include\DXVector3.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

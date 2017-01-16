@@ -73,6 +73,24 @@ void SceneStageSelect::KeyHold(MSKEY pKey)
 {
 
 }
+void SceneStageSelect::MouseMove(const POINT & aNowPosition, const POINT & aDiffPosition)
+{
+	mCursor.AddPosition(aDiffPosition.x, aDiffPosition.y);
+}
+void SceneStageSelect::MouseDown(const MouseType aType)
+{
+	if (mIsSceneChange)return;
+	int lHitIndex = this->mSelectList.GetList()->CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
+	if (lHitIndex != -1) {
+		if (lHitIndex == mSelectList.GetList()->GetActiveIndex()) {
+			mSelectList.GetList()->PushButton();
+			mButtonLastPushed = lHitIndex;
+		}
+	}
+}
+void SceneStageSelect::MouseUp(const MouseType aType)
+{
+}
 void SceneStageSelect::Render()
 {
 	

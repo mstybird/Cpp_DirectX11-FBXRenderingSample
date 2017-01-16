@@ -65,6 +65,7 @@ public:
 	void PushButton();
 	//ボタンを離す
 	void PopButton();
+	Toggle* GetList();
 	//アクティブデータの参照を取得する
 	StageData* GetActiveData();
 

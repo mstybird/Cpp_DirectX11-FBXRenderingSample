@@ -39,9 +39,9 @@ MSDirect::MSDirect() :
 	//m_pBackBuffer_TexRTV{ nullptr },
 	//m_pBackBuffer_DSTexDSV{ nullptr },
 	//m_pBackBuffer_DSTex{ nullptr },
-	m_pRasterizerState{ nullptr }
+	m_pRasterizerState{ nullptr },
+	sceneCounter{0}
 {
-
 }
 
 MSDirect::~MSDirect() {
@@ -62,8 +62,8 @@ LRESULT MSDirect::MessageProcedule(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM l
 
 
 	//1つでもキーが入力されていたらtrueを返す
-	if (scene.get() != nullptr) {
-
+	if (scene.get() != nullptr && scene->IsInitialized()) {
+		++sceneCounter;
 		switch (iMsg)
 		{
 		case WM_MOVE:
@@ -138,9 +138,60 @@ LRESULT MSDirect::MessageProcedule(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM l
 			for (auto& x : KeyList) {
 				if (x.second)scene->KeyHold(x.first);
 			}
-	
+			break;
+
+		case WM_MOUSEMOVE:
+			if (sceneCounter > 1) {
+				POINT lDiffPosition;
+				//現在座標取得
+				lDiffPosition.x = LOWORD(lParam);
+				lDiffPosition.y = HIWORD(lParam);
+				ClientToScreen(mHwnd, &lDiffPosition);
+				//直前座標との差分を計算
+				lDiffPosition.x -= mMouseBeforePosition.x;
+				lDiffPosition.y -= mMouseBeforePosition.y;
+
+				mMouseNowPosition.x += lDiffPosition.x;
+				mMouseNowPosition.y += lDiffPosition.y;
+				scene->MouseMove(mMouseNowPosition, lDiffPosition);
+
+				if (lDiffPosition.x != 0 || lDiffPosition.y != 0) {
+					mMouseBeforePosition = mMouseDefaultPosition;
+					SetCursorPos(mMouseDefaultPosition.x, mMouseDefaultPosition.y);
+
+				}
+
+			}
+
+			break;
+			//左クリック時
+		case WM_LBUTTONDOWN:
+			scene->MouseDown(MouseType::Left);
+			break;
+			//中央クリック時
+		case WM_MBUTTONDOWN:
+			scene->MouseDown(MouseType::Center);
+			break;
+			//右ボタンクリック
+		case WM_RBUTTONDOWN:
+			scene->MouseDown(MouseType::Right );
+			break;
+			//左ボタン離したとき
+		case WM_LBUTTONUP:
+			scene->MouseUp(MouseType::Left);
+			break;
+			//中央ボタン離したとき
+		case WM_MBUTTONUP:
+			scene->MouseUp(MouseType::Center);
+			break;
+			//右ボタン離したとき
+		case WM_RBUTTONUP:
+			scene->MouseUp(MouseType::Right);
 			break;
 		}
+	}
+	else {
+		sceneCounter = 0;
 	}
 
 	return DefWindowProc(hWnd, iMsg, wParam, lParam);
@@ -237,6 +288,13 @@ HRESULT MSDirect::InitD3D(HWND pHwnd)
 
 	SetDefaultView();
 
+	mMouseDefaultPosition = { WINDOW_WIDTH/2,WINDOW_HEIGHT/2 };
+	ClientToScreen(mHwnd, &mMouseDefaultPosition);
+	SetCursorPos(mMouseDefaultPosition.x, mMouseDefaultPosition.y);
+	mMouseNowPosition = mMouseBeforePosition = mMouseDefaultPosition;
+	ShowCursor(FALSE);
+	
+
 	this->KeyList = MSKeyList;
 
 	
@@ -304,6 +362,11 @@ MSView* MSDirect::SetActiveView(MSView * pView)
 void MSDirect::SetDefaultView()
 {
 	sMSDirect->mActiveView = &sMSDirect->mView;
+}
+
+HWND MSDirect::GetWinHandle()
+{
+	return sMSDirect->mHwnd;
 }
 
 ID3D11Device * MSDirect::GetDevice()

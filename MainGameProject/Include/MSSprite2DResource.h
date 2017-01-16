@@ -26,6 +26,8 @@ public:
 	virtual void SetPosition(const DXVector3&pPosition);
 	void SetRotation(const float aDegree);
 	void AddRotation(const float aDegree);
+	void AddPosition(const DXVector2& aPosition);
+	void AddPosition(const int aX,const int aY);
 	//ピボットを設定する
 	void SetPivot(const DXVector2&pPivot);
 	//ポリゴンサイズを設定する
@@ -80,7 +82,11 @@ protected:
 class MSSprite2DResource :public MSSpriteBaseResource {
 public:
 	void SetPosition(const DXVector2&pPosition)override;
-	void SetPosition(const DXVector3&pPosition)override ;
+	void SetPosition(const DXVector3&pPosition)override;
+
+	bool CollisionPoint(int aX, int aY);
+	bool CollisionSprite(MSSprite2DResource&aResource);
+
 private:
 	void CreatePolygon(SpriteVertex pPolygon[4])override;
 

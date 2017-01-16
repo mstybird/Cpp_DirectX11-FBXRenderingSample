@@ -180,11 +180,6 @@ void My3DShader::CustomRender(MS3DRender* aRender,GameObjectBase * aObject,const
 	//CreateVolume
 	{
 		mVolume.mNumVolumeVertices = 0;
-		//DXVector3 vVertex0;
-		//DXVector3 vVertex1;
-		//DXVector3 vVertex2;
-		//DXVector3 vVertex3;
-		//DXVector3 vVertex4;
 		FbxVertex vVertices[5];
 		std::vector<int>lEdges;
 		lEdges.resize(lMesh->PolygonCount * 6);

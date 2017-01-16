@@ -65,6 +65,7 @@ namespace ValueSS {
 		static const int cStageListFrameID = 30;
 		static const int cDescTextID = 30;
 		static const int cStagePathOffsetID = 500;
+		static const int cCursorID = 40;
 
 	}
 
@@ -88,6 +89,11 @@ public:
 	void Update()override;
 	void KeyDown(MSKEY pKey)override;
 	void KeyHold(MSKEY pKey)override;
+	void MouseMove(const POINT & aNowPosition, const POINT & aDiffPosition)override;
+	virtual void MouseDown(const MouseType aType)override;
+	virtual void MouseUp(const MouseType aType)override;
+
+	
 	void Render()override;
 	void Destroy() override {}
 
@@ -126,10 +132,12 @@ private:
 	MSSprite2DResource mSelectTitle;
 	//操作説明テキスト
 	MSSprite2DResource mDescText;
-
+	//マウスカーソル
+	MSSprite2DResource mCursor;
 
 	//ステージリスト
 	StageSelectList mSelectList;
+	int mButtonLastPushed = -1;
 	SoundDevice mSoundDevice;
 	SoundPlayer mBGM;
 	SoundPlayer mSESelect;

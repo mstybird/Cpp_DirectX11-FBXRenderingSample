@@ -26,10 +26,13 @@ MyMSScene::~MyMSScene()
 
 void MyMSScene::Initialize()
 {
+	//ステージデータ読み込み
 	InitializeStageData();
-
+	//フォントの読み込み
 	InitializeFont();
+	//3Dモデルの読み込み
 	InitializeModel();
+	//エフェクトの読み込み
 	InitializeEffect();
 
 
@@ -46,9 +49,11 @@ void MyMSScene::Initialize()
 	//AI読み込み
 	mLuaDb.Load("Resource/AIPlanning/EnemyTask.lua", 0, "EnemyAI");
 
+	//3D描画用シェーダの読み込み
 	shader.Init();
 	shader.InitVertex("Resource/HLSL/ShadowMap.hlsl");
 	shader.InitPixel("Resource/HLSL/ShadowMap.hlsl");
+	//2D秒が用シェーダの読み込み
 	mCollisionShader.Init();
 	mCollisionShader.InitVertex("Resource/HLSL/Collision3D.hlsl");
 	mCollisionShader.InitPixel("Resource/HLSL/Collision3D.hlsl");
@@ -58,24 +63,32 @@ void MyMSScene::Initialize()
 	mBall.SetRenderer(&render);
 	mBall.SetShader(&shader);
 	mBall.SetCollisionShader(&mCollisionShader);
-
+	//サウンド読み込み
 	InitializeSound();
+	//フィールドボールの初期化
 	InitializeBall();
+	//全キャラクター共通の初期化
 	InitializeCharaFirst();
+	//フィールド情報の初期化
 	//敵数、プレイヤーを含むチーム分けも中で初期化している
 	InitializeFieldStatus();
+	//バレットマネージャの初期化
 	InitializeBulletManager();
+	//プレイヤーの初期化
 	InitializePlayer();
+	//全敵の初期化
 	InitializeEnemy();
 
 	//UIの初期化
 	InitializeUI();
+	//時間切れ時の処理
 	InitializeTimeOver();
+	//リザルト処理
 	InitializeResult();
 
 	//enemy.push_back(make_unique<Enemy>());
 
-
+	//フィールドオブジェクトの初期化
 	mField.Initialize();
 	SetMeshResouce(&mField, ValueMyScene::Model::cFieldDesignID, ValueMyScene::Model::cFieldCollisionID);
 	mField.SetRenderer(&render);
@@ -352,9 +365,29 @@ void MyMSScene::KeyUp(MSKEY pKey)
 	}
 }
 
+void MyMSScene::MouseMove(const POINT & aNowPosition, const POINT & aDiffPosition)
+{
+	float f = aDiffPosition.x * 0.25f;
+	mPlayer.GetWorld()->AddRC({ 0.0f,f,0.0f });
+}
+
+void MyMSScene::MouseDown(const MouseType aType)
+{
+	bool lIsRun{ false };
+
+	if (mIsTimeOver == false) {
+		if (aType == MouseType::Left) {
+			mPlayer.AddBullet();
+		}
+	}
+}
+
+void MyMSScene::MouseUp(const MouseType aType)
+{
+}
+
 void MyMSScene::Render()
 {
-	//text.Create("Hello", 0, 0, 720, 960, logFont);
 
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	//画面クリア

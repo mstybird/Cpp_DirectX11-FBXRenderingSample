@@ -18,7 +18,18 @@ void SceneTitle::Initialize()
 }
 void SceneTitle::Update()
 {
+
+	int lHitIndex = mButtonList.CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
+	if (lHitIndex != -1) {
+		if (lHitIndex != mButtonList.GetActiveIndex()) {
+			mButtonList.SetActiveIndex(lHitIndex);
+			mSESelect.Stop(true);
+			mSESelect.Play();
+		}
+	}
+
 	UpdateSceneChange();
+
 }
 void SceneTitle::KeyDown(MSKEY pKey)
 {
@@ -26,6 +37,7 @@ void SceneTitle::KeyDown(MSKEY pKey)
 	switch (pKey)
 	{
 	case MSKEY::UP:
+		
 		mButtonList.ActiveBack();
 		mSESelect.Stop(true);
 		mSESelect.Play();
@@ -64,12 +76,54 @@ void SceneTitle::KeyHold(MSKEY pKey)
 {
 }
 
+void SceneTitle::MouseMove(const POINT & aNowPosition, const POINT & aDiffPosition)
+{
+	mCursor.AddPosition(aDiffPosition.x, aDiffPosition.y);
+}
+
+void SceneTitle::MouseDown(const MouseType aType)
+{
+	if (mIsSceneChange)return;
+	int lHitIndex = mButtonList.CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
+	if (lHitIndex != -1) {
+		if (lHitIndex == mButtonList.GetActiveIndex()) {
+			mButtonList.PushButton();
+			mButtonLastPushed = lHitIndex;
+		}
+	}
+}
+
+void SceneTitle::MouseUp(const MouseType aType)
+{
+	if (mIsSceneChange)return;
+	int lHitIndex = mButtonList.CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
+	if (lHitIndex == mButtonList.GetActiveIndex()) {
+		mButtonList.SetActive(lHitIndex);
+		mSEEnter.Play();
+		switch (mButtonList.GetActiveIndex())
+		{
+		case eChangeToStageSelect:
+		{
+			SceneChange();
+
+		}
+		break;
+		case eChangeToGameEnd:
+			PostQuitMessage(EXIT_SUCCESS);
+			break;
+		default:
+			break;
+		}
+
+	}
+}
 void SceneTitle::Render()
 {
 	MS3DRender::Clear({ 0.2f,0.2f,0.2f,1 });
 	m2DRender.Render(mBackground);
 	m2DRender.Render(mTitle);
 	mButtonList.Render(m2DRender);
+	m2DRender.Render(mCursor);
 }
 
 void SceneTitle::UpdateSceneChange()
@@ -85,6 +139,9 @@ void SceneTitle::UpdateSceneChange()
 			tween::TweenerParam lParam(2000, tween::ELASTIC, tween::EASE_IN);
 			lParam.addProperty(&mTitle.mPosition.y, -150);
 			mTweener.addTween(lParam);
+
+
+
 		}
 		//フォールスルー
 	case SceneTitle::SceneSequence::ChangeLoop:
@@ -230,6 +287,19 @@ void SceneTitle::InitUI()
 		mBtnExit.SetSize(lSize[0], lSize[1]);
 
 	}
+
+	//Cursor
+	{
+		mTexManager.RegistFromFile("Resource/Cursor/Cursor_Default.png", cCursorID);
+		mCursor.SetTexture(mTexManager, cCursorID);
+		POINT lMousePos;
+		GetCursorPos(&lMousePos);
+		ScreenToClient(MSDirect::GetWinHandle(), &lMousePos);
+		mCursor.SetPosition({ (float)lMousePos.x,(float)lMousePos.y });
+		mCursor.SetSize({ 22,20 });
+		mCursor.SetScale({ 1,1 });
+	}
+
 }
 
 void SceneTitle::InitSound()
@@ -252,10 +322,10 @@ void SceneTitle::InitSound()
 
 void SceneTitle::SceneChange()
 {
+	mIsSceneChange = true;
 	mScene = std::make_unique<SceneStageSelect>();
 
 	mScneThread.SetFunction([&]() {mScene->Initialize(); });
 	mScneThread.Start();
-	mIsSceneChange = true;
 
 }

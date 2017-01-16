@@ -55,6 +55,15 @@ int Toggle::GetActiveIndex()
 	return mActiveIndex;
 }
 
+void Toggle::SetActiveIndex(const int aID)
+{
+	if (0 <= aID && aID < mButtonArray.size()) {
+		GetActiveButton()->SetNormal();
+		mActiveIndex = aID;
+		GetActiveButton()->SetActive();
+	}
+}
+
 Button * Toggle::GetActiveButton()
 {
 	return mButtonArray[mActiveIndex];
@@ -90,13 +99,50 @@ void Toggle::PushButton()
 
 void Toggle::PopButton()
 {
-	GetActiveButton()->SetActive();;
+	GetActiveButton()->SetActive();
 	return;
+}
+
+int Toggle::CollisionPoint(int aX, int aY)
+{
+	StoreGlobalData();
+
+	DXVector2 lPosition = mGlobalPosition;
+	DXVector2 lScale = mGlobalScale;
+	DXVector2 lSize;
+	if (mLastParent != nullptr) {
+
+		lPosition += *mLastParent->GetGlobalPosition();
+		lScale *= *mLastParent->GetGlobalScale();
+	}
+
+	int lHitIndex = -1;
+	for (int i = 0; i < mButtonArray.size();++i) {
+		lSize = mButtonArray[i]->GetSizeGlobal()*lScale;
+		if (
+			lPosition.x < aX &&
+			aX < lPosition.x + lSize.x &&
+			lPosition.y < aY &&
+			aY < lPosition.y + lSize.y
+			) {
+			//Õ“Ë‚µ‚½ê‡
+			lHitIndex = i;
+		}
+
+		auto ButtonSize = mButtonArray[i]->GetScalingSize(this);
+		lPosition += mPadding;
+		lPosition.y += ButtonSize.y;
+	}
+
+	LoadGlobalData();
+
+	return lHitIndex;
 }
 
 void Toggle::Render(MSSprite2DRender & aRender, UIBase * aParent)
 {
-		StoreGlobalData();
+	StoreGlobalData();
+	mLastParent = aParent;
 	if (aParent != nullptr) {
 
 		mGlobalPosition += *aParent->GetGlobalPosition();

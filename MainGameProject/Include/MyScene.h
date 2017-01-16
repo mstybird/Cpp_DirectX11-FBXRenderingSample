@@ -297,6 +297,9 @@ private:
 	void KeyDown(MSKEY pKey)override;
 	void KeyHold(MSKEY pKey)override;
 	void KeyUp(MSKEY pKey)override;
+	void MouseMove(const POINT & aNowPosition, const POINT & aDiffPosition)override;
+	virtual void MouseDown(const MouseType aType)override;
+	virtual void MouseUp(const MouseType aType)override;
 	void Render()override;
 	void Destroy() override {}
 

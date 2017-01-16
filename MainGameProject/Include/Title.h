@@ -63,6 +63,7 @@ namespace ValueTitle{
 			static const int cButtonExitActiveID = 131;
 			static const int cButtonExitPushID = 132;
 			static const int cButtonExitDisableID = 133;
+			static const int cCursorID = 140;
 		}
 
 
@@ -84,6 +85,10 @@ public:
 	void Update()override;
 	void KeyDown(MSKEY pKey)override;
 	void KeyHold(MSKEY pKey)override;
+	void MouseMove(const POINT & aNowPosition, const POINT & aDiffPosition)override;
+	virtual void MouseDown(const MouseType aType)override;
+	virtual void MouseUp(const MouseType aType)override;
+
 	void Render()override;
 	void Destroy() override {}
 
@@ -127,17 +132,23 @@ private:
 	Button mBtnStart;
 	Button mBtnExit;
 	Toggle mButtonList;
+	int mButtonLastPushed = -1;
+
 	SoundDevice mSoundDevice;
 	SoundPlayer mBGM;
 	SoundPlayer mSESelect;
 	SoundPlayer mSEEnter;
 
 	bool mIsSceneChange = false;
+
 	//シーン遷移に使う遅延評価スレッド
 	MSThread mScneThread;
 	//シーン遷移に使うシーケンスフラグ
 	SceneSequence mSequence;
 	int32_t mSceneTime;
+
+	//マウスカーソル
+	MSSprite2DResource mCursor;
 
 	//遷移シーン
 	std::unique_ptr<MSSceneBase> mScene;

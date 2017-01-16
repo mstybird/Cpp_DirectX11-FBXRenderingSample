@@ -43,6 +43,7 @@ protected:
 		mHelper->PushArgment(aFirst);
 		PushArgment(aRest...);
 	}
+	
 	void PushArgment() {};
 
 	void ClearStack();

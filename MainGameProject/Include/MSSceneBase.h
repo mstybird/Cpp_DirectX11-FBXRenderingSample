@@ -1,4 +1,11 @@
 #pragma once
+#include<Windows.h>
+
+enum class MouseType {
+	Left,
+	Center,
+	Right
+};
 
 //ゲームシーン
 enum class MSKEY;
@@ -25,6 +32,9 @@ public:
 	virtual void KeyDown(MSKEY pKey) {};
 	virtual void KeyHold(MSKEY pKey) {};
 	virtual void KeyUp(MSKEY pKey) {};
+	virtual void MouseMove(const POINT & aNowPosition, const POINT & aDiffPosition) {};
+	virtual void MouseDown(const MouseType aType) {};
+	virtual void MouseUp(const MouseType aType) {};
 private:
 	//シーンが初期化されるとtrueになる
 	bool bInitializeFlag = false;
