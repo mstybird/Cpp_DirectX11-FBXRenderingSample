@@ -6,5 +6,5 @@ Interval=0.6
 IntervalRecovery=0.01
 DamageType=2
 FiringRange=20.0
-Velocity=0.5
+Velocity=1.0
 Direction={0,0,1}

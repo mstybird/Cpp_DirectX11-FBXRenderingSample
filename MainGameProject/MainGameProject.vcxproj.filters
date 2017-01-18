@@ -707,6 +707,9 @@
     <ClInclude Include="Include\SlotToggle.h">
       <Filter>Game\UI\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Include\MySprite2DTrans.h">
+      <Filter>Game\Shader\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="NatvisFile.natvis">
@@ -735,6 +738,9 @@
     </None>
     <None Include="Resource\HLSL\Collision3D.hlsl" />
     <None Include="Resource\HLSL\ShadowMap.hlsl">
+      <Filter>MSDirect\HLSL</Filter>
+    </None>
+    <None Include="Resource\HLSL\Sprite2DTrans.hlsl">
       <Filter>MSDirect\HLSL</Filter>
     </None>
   </ItemGroup>

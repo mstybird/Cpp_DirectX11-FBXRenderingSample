@@ -150,11 +150,12 @@ LRESULT MSDirect::MessageProcedule(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM l
 				//直前座標との差分を計算
 				lDiffPosition.x -= mMouseBeforePosition.x;
 				lDiffPosition.y -= mMouseBeforePosition.y;
-
+				//差分を加算
 				mMouseNowPosition.x += lDiffPosition.x;
 				mMouseNowPosition.y += lDiffPosition.y;
+				//シーン上でのマウス操作処理
 				scene->MouseMove(mMouseNowPosition, lDiffPosition);
-
+				//差があればカーソル位置を内部的にウィンドウ中央に戻す
 				if (lDiffPosition.x != 0 || lDiffPosition.y != 0) {
 					mMouseBeforePosition = mMouseDefaultPosition;
 					SetCursorPos(mMouseDefaultPosition.x, mMouseDefaultPosition.y);

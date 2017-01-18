@@ -18,6 +18,7 @@ void SceneTitle::Initialize()
 }
 void SceneTitle::Update()
 {
+	mTitle.SetPivot({ 0.5f,0.5f });
 	int lHitIndex = mButtonList.CollisionPoint(mCursor.mPosition.x, mCursor.mPosition.y);
 	if (lHitIndex != -1 && !mIsSceneChange) {
 		if (lHitIndex != mButtonList.GetActiveIndex()) {
@@ -157,10 +158,13 @@ void SceneTitle::UpdateSceneChange()
 	case SceneTitle::SceneSequence::ChangeLoop:
 	{
 		auto lNowTime = clock();
+		
 		if (mSceneTime + 2200 > lNowTime) {
 			mTweener.step(lNowTime);
+			
 		}
 		else {
+
 			mSequence = SceneSequence::ChangeEnd;
 		}
 		
@@ -279,10 +283,12 @@ void SceneTitle::InitUI()
 		std::vector<float>lPadding;
 		lManager->GetGlobal(cTogglePosition, lPosition);
 		lManager->GetGlobal(cTogglePadding, lPadding);
+		
 		mButtonList.AddButton(&mBtnStart);
 		mButtonList.AddButton(&mBtnExit);
 		mButtonList.SetGlobalPosition(lPosition[0], lPosition[1]);
 		mButtonList.SetPadding(lPadding[0], lPadding[1]);
+		
 		ClearTemp();
 	}
 
@@ -308,7 +314,7 @@ void SceneTitle::InitUI()
 		mCursor.SetPosition({ (float)lMousePos.x,(float)lMousePos.y });
 		mCursor.SetSize({ 17,30 });
 		mCursor.SetScale({ 1,1 });
-		mCursor.SetPivot({ 0.5f,0.5f });
+		mCursor.SetPivot({ 0.0f,0.0f });
 	}
 
 }

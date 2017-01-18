@@ -8,6 +8,8 @@ cbuffer global
 	matrix g_W : packoffset(c0); //ワールドから射影までの変換行列
 	float g_ViewPortWidth : packoffset(c4);//ビューポート（スクリーン）横サイズ
 	float g_ViewPortHeight : packoffset(c5);//ビューポート（スクリーン）縦サイズ
+	float g_Transparent : packoffset(c6);	//透過率
+
 };
 //構造体
 struct PS_INPUT
@@ -36,5 +38,7 @@ PS_INPUT VS( float4 Pos : POSITION ,float2 UV : TEXCOORD)
 //ピクセルシェーダー
 float4 PS( PS_INPUT Input ) : SV_Target
 {
-	return g_Texture.Sample( g_Sampler, Input.UV );
+	float4 color= g_Texture.Sample(g_Sampler, Input.UV);
+	color.a *= g_Transparent;
+	return color;
 }

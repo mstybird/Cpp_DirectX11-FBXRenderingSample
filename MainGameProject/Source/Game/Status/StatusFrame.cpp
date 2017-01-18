@@ -113,8 +113,13 @@ void StatusFrame::SetEPTextOffset(const float aWidth, const float aHeight)
 
 void StatusFrame::UpdateStatus(StatusBase * aStatus)
 {
-	mHpBar->SetParam(aStatus->mHp);
-	mEpBar->SetParam(aStatus->mEnergy);
+	mHpBar->SetParam(aStatus->mHp, true);
+	mEpBar->SetParam(aStatus->mEnergy, true);
+	mHpBar->Update();
+	mEpBar->Update();
+
+	
+
 	std::ostringstream sout;
 	sout << "HP:" << std::setfill('0') << std::setw(2) << (int)aStatus->mHp.GetNow() << "/" << std::setfill('0') << std::setw(2) << (int)aStatus->mHp.GetMax();
 	mHpText = mTextMan.Create(sout.str());
@@ -130,5 +135,7 @@ void StatusFrame::UpdateStatus(StatusBase * aStatus)
 	auto lEPTextPos = (mGlobalPosition + *mEpBar->GetGlobalPosition())*lEPBarScale + mEpTextPos;
 	mHpText->SetPosition(lHPTextPos);
 	mEpText->SetPosition(lEPTextPos);
+
+	
 
 }

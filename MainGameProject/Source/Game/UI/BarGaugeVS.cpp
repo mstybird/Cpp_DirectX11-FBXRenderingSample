@@ -38,15 +38,25 @@ void BarGaugeVS::SetOffset(const DXVector2 & aOffset)
 	mGaugeOffset = aOffset;
 }
 
-void BarGaugeVS::SetParam(const float & aLeftParam, const float & aRightParam)
+void BarGaugeVS::SetParam(const float & aLeftParam, const float & aRightParam, bool aIsAnimation)
 {
 	mStatusLeft = aLeftParam;
 	mStatusRight = aRightParam;
+	if (!aIsAnimation) {
+		mScreenScoreLeft = aLeftParam;
+		mScreenScoreRight = aRightParam;
+	}
 }
 
 void BarGaugeVS::Update()
 {
-
+	DXVector2 lNow, lTarget;
+	DXVector2 lResult;
+	lNow = { mScreenScoreLeft,mScreenScoreRight };
+	lTarget = { mStatusLeft,mStatusRight };
+	D3DXVec2Lerp(&lResult, &lNow, &lTarget, 0.1f);
+	mScreenScoreLeft = lResult.x;
+	mScreenScoreRight = lResult.y;
 }
 
 void BarGaugeVS::Render(MSSprite2DRender & aRender, UIBase * aParent)
@@ -79,14 +89,14 @@ void BarGaugeVS::Render(MSSprite2DRender & aRender, UIBase * aParent)
 	mGaugeRightImg.SetScale(lGaugeScale);
 
 	//左右合計スコア
-	auto totalScore = mStatusLeft + mStatusRight;
+	auto totalScore = mScreenScoreLeft + mScreenScoreRight;
 	float left{ 0 };
 	float right{ 0 };
 
 	if (totalScore != 0) {
 		//左ゲージ幅
-		left = mStatusLeft / totalScore;
-		right = mStatusRight / totalScore;
+		left = mScreenScoreLeft / totalScore;
+		right = mScreenScoreRight / totalScore;
 	}
 
 	//右から左へ

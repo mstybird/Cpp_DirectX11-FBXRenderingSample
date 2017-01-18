@@ -83,4 +83,6 @@ private:
 
 	//ボタンのサイズ
 	DXVector2 mSize;
+	//ボタンのピボット
+	DXVector2 mPivot;
 };

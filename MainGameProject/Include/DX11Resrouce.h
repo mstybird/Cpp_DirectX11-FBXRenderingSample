@@ -13,7 +13,7 @@
 //定数定義
 #define WINDOW_WIDTH 960 //ウィンドウ幅
 #define WINDOW_HEIGHT 720 //ウィンドウ高さ
-#define APP_NAME "DirectX11 Program"
+#define APP_NAME "Struggle"
 
 #define _CRTDBG_MAP_ALLOC #include <stdlib.h> #include <crtdbg.h>
 #define ALIGN16 _declspec(align(16))

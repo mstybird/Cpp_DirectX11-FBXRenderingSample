@@ -364,7 +364,7 @@ std::vector<GameObjectBase*> Enemy::IsCulling()
 
 		float lSearchPixelPer;
 		if (this->GetStatus<EnemyStatus>()->mTargetting) {
-			lSearchPixelPer = 0.0005f;
+			lSearchPixelPer = 0.00001f;
 		}
 		else {
 			lSearchPixelPer = 0.003f;

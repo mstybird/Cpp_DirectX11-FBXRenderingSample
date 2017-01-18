@@ -79,12 +79,14 @@ void ScoreView::UpdateScore(float aLeft, float aRight)
 	sout << std::setw(4) << std::right << (int)(aLeft+0.5f) << " / " << std::setw(4) << std::left << (int)(aRight + 0.5f);
 	mScoreText = mTextMan.Create(sout.str());
 
+	bool lIsAnimation = true;
 	if (aLeft == 0 && aRight == 0) {
 		aLeft = 1;
 		aRight = 1;
+		lIsAnimation = false;
 	}
-	mScoreBar->SetParam(aLeft, aRight);
-
+	mScoreBar->SetParam(aLeft, aRight,lIsAnimation);
+	mScoreBar->Update();
 
 }
 

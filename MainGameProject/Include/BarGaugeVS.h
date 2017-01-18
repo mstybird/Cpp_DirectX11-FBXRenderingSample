@@ -33,7 +33,7 @@ public:
 	void SetOffset(const DXVector2&aOffset);
 
 	//ゲージ用のステータスを設定する
-	void SetParam(const float&aLeftParam, const float&aRightParam);
+	void SetParam(const float&aLeftParam, const float&aRightParam,bool aIsAnimation);
 
 	//設定された値でリソースを更新する
 	virtual void Update()override;
@@ -54,6 +54,10 @@ private:
 	float mStatusLeft;
 	//ゲージスコア(右)
 	float mStatusRight;
+
+	float mScreenScoreLeft;
+	float mScreenScoreRight;
+
 
 	//ゲージ全体のサイズ
 	DXVector2 mGaugeSize;

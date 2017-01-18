@@ -29,7 +29,7 @@ public:
 	void SetOffset(const DXVector2&aOffset);
 	
 	//ゲージ用のステータスを設定する
-	void SetParam(MSProgress&aParam);
+	void SetParam(MSProgress&aParam,bool aIsAnimation);
 
 	//設定された値でリソースを更新する
 	virtual void Update()override;
@@ -51,6 +51,8 @@ private:
 
 	//ゲージステータス用
 	MSProgress mResource;
+	//ゲージステータス描画用
+	MSProgress mScreenResource;
 	//ゲージ全体のサイズ
 	DXVector2 mGaugeSize;
 	//ゲージの中身サイズ(外枠に対するスケール)

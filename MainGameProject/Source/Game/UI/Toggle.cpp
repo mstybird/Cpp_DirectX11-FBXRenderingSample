@@ -1,7 +1,8 @@
 #include "Toggle.h"
 #include"Button.h"
 Toggle::Toggle():
-	mActiveIndex{-1}
+	mActiveIndex{-1},
+	mPivot{0,0}
 {
 }
 
@@ -137,6 +138,15 @@ int Toggle::CollisionPoint(int aX, int aY)
 	LoadGlobalData();
 
 	return lHitIndex;
+}
+
+void Toggle::SetPivot(int aX, int aY)
+{
+	mPivot.x = aX;
+	mPivot.y = aY;
+	//for (auto lButton : mButtonArray) {
+	//	lButton->
+	//}
 }
 
 void Toggle::Render(MSSprite2DRender & aRender, UIBase * aParent)

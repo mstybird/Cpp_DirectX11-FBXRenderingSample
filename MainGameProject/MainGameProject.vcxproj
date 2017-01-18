@@ -118,6 +118,7 @@
     <ClInclude Include="Include\GameObjectBase.h" />
     <ClInclude Include="Include\MSLayout.h" />
     <ClInclude Include="Include\MSLight.h" />
+    <ClInclude Include="Include\MySprite2DTrans.h" />
     <ClInclude Include="Include\Result.h" />
     <ClInclude Include="Include\ScoreView.h" />
     <ClInclude Include="Include\SlotToggle.h" />
@@ -220,6 +221,7 @@
     <None Include="Resource\HLSL\Sprite2D.hlsl">
       <FileType>Document</FileType>
     </None>
+    <None Include="Resource\HLSL\Sprite2DTrans.hlsl" />
     <None Include="Resource\HLSL\Sprite3D.hlsl">
       <FileType>Document</FileType>
     </None>

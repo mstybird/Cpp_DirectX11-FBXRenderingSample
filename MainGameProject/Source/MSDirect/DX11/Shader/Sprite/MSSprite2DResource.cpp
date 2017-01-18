@@ -4,6 +4,18 @@
 #include"DX11TextureManager.hpp"
 #include"MSBase2DSpriteShader.h"
 #include<cassert>
+
+float Clamp(float lNow, float lMin, float lMax) {
+	if (lNow > lMax) {
+		return lMax;
+	}
+	else if (lNow < lMin) {
+		return lMin;
+	}
+	return lNow;
+}
+
+
 ID3D11Device* MSSpriteBaseResource::sDevice{ nullptr };
 MSSpriteBaseResource::MSSpriteBaseResource():
 	mVertexBuffer{ nullptr },
@@ -17,7 +29,8 @@ MSSpriteBaseResource::MSSpriteBaseResource():
 	mSplitImageY{ 0.0f,1.0f },
 	mMatrix{},
 	mUpdateFlag{false},
-	mRotation{0,0,0}
+	mRotation{0,0,0},
+	mTransparent{1.0f}
 {
 }
 MSSpriteBaseResource::~MSSpriteBaseResource()
@@ -90,6 +103,23 @@ void MSSpriteBaseResource::AddPosition(const int aX, const int aY)
 {
 	mPosition.x += aX;
 	mPosition.y += aY;
+}
+
+void MSSpriteBaseResource::SetTransparent(const float rate)
+{
+	mTransparent = rate;
+	mTransparent = Clamp(mTransparent, 0.0f, 1.0f);
+}
+
+void MSSpriteBaseResource::AddTransparent(const float rate)
+{
+	mTransparent += rate;
+	mTransparent = Clamp(mTransparent, 0.0f, 1.0f);
+}
+
+float MSSpriteBaseResource::GetTransparent()
+{
+	return mTransparent;
 }
 
 void MSSpriteBaseResource::SetPivot(const DXVector2 & pPivot)
@@ -193,10 +223,24 @@ const DXVector2* MSSpriteBaseResource::GetScale() const
 DXMatrix* MSSpriteBaseResource::GetMatrix()
 {
 	DXMatrix lTrans, lScale, lRotation;
+	DXMatrix lPivotStart;
+	DXMatrix lPivotEnd;
+
+	if (mPivot.x > 0.0f) {
+		int a = 10;
+	}
+
+	DXVector2 lTemp = mSize*mScale*mPivot*-1;
+
+	lPivotStart.Translation(lTemp);
+	lTemp *= -1;
 	lTrans.Translation(mPosition);
 	lScale.Scaling({ mScale.x,mScale.y });
 	lRotation.RotationXYZ(mRotation, TYPE_ANGLE::DEGREE);
-	mMatrix = lScale*lRotation*lTrans;
+	mMatrix = lRotation*lScale*lTrans;
+	//mMatrix._41 += lTemp.x + mPosition.x;
+	//mMatrix._42 += lTemp.y + mPosition.y;
+
 	return &mMatrix;
 }
 

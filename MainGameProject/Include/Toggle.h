@@ -37,7 +37,8 @@ public:
 	void PopButton();
 	//トグルに登録済みのボタンと衝突判定を行い、衝突したボタンのIDを取得
 	int CollisionPoint(int aX, int aY);
-
+	//ピボットの設定
+	void SetPivot(int aX, int aY);
 	
 
 	//描画処理
@@ -51,7 +52,8 @@ protected:
 
 	//パディング
 	DXVector2 mPadding;
-
+	//ピボット
+	DXVector2 mPivot;
 	//ボタンの参照リスト
 	std::vector<Button*>mButtonArray;
 	//アクティブインデクス

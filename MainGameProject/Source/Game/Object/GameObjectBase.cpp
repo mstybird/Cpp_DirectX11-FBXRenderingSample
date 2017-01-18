@@ -183,6 +183,10 @@ MSCollisionRayPicking * GameObjectBase::GetRayPick()
 
 std::vector<GameObjectBase*> GameObjectBase::UpdateCollision(bool pIsUpdatePosition)
 {
+	//キャラクターだった場合
+	{
+		
+	}
 	std::vector<GameObjectBase*>lHitTargets{};
 	DXVector3 lResult;
 	/*

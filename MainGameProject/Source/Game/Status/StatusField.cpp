@@ -190,6 +190,7 @@ void StatusField::Respawn(CharacterBase * aSpawnChara)
 	aSpawnChara->GetTransform()->GetMesh()->SetAnimation(ValueMyScene::Chara::cAnimIdle);
 	aSpawnChara->GetTransform()->GetMesh()->SetLoopFlag(true);
 	aSpawnChara->GetTransform()->GetMesh()->SetFrontFrame();
+	aSpawnChara->GetRayPick()->SetFramePosition(lPosition);
 	
 }
 void StatusField::RegisterTeamMember(CharacterBase * aRegistMember, eTeamType aType)

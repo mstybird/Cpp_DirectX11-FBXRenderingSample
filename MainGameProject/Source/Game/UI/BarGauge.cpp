@@ -4,6 +4,7 @@
 BarGauge::BarGauge()
 {
 	mInImage.SetPivot({ 0.5f,0.5f });
+	
 }
 BarGauge::~BarGauge()
 {
@@ -37,29 +38,31 @@ void BarGauge::SetOffset(const DXVector2&aOffset)
 	mGaugeOffset = aOffset;
 }
 
-void BarGauge::SetParam(MSProgress & aParam)
+void BarGauge::SetParam(MSProgress & aParam, bool aIsAnimation)
 {
-	mResource = aParam;
+	auto v = mScreenResource.GetNowPer();
+	if (isnan(v)) {
+		mResource = aParam;
+		mScreenResource = aParam;
+	}
+	else {
+		mResource = aParam;
+		if (!aIsAnimation) {
+			mScreenResource = aParam;
+		}
+	}
+
 }
 
 void BarGauge::Update()
 {
-	//外枠のサイズと位置を設定
-	mOutImage.SetSize(mGaugeSize);
-	mOutImage.SetPosition(mGlobalPosition);
-	
-	//中身のサイズと拡大率、オフセットを設定
-	auto mInPos = mGlobalPosition;
-	mInPos += (mGaugeSize / 2);
-	mInImage.SetSize(mGaugeSize);
-	mInImage.SetPosition(mInPos);
 
-	mInImage.SetScale(mGaugeScale);
+	DXVector2 lNow = { mScreenResource.GetNowPer() ,0 };
+	DXVector2 lTarget = { mResource.GetNowPer() ,0 };
+	DXVector2 lResult;
+	D3DXVec2Lerp(&lResult, &lNow, &lTarget, 0.1f);
 
-	//右から左に減ると仮定
-	mInImage.SetSplitSizeX(
-	{ 0, mResource.GetNowPer() }
-	);
+	mScreenResource.SetNowPer(lResult.x);
 }
 
 void BarGauge::Render(MSSprite2DRender& aRender, UIBase*aParent)
@@ -84,7 +87,7 @@ void BarGauge::Render(MSSprite2DRender& aRender, UIBase*aParent)
 	mInImage.SetScale(lGaugeScale);
 	//右から左に減ると仮定
 	mInImage.SetSplitSizeX(
-	{ 0, mResource.GetNowPer() }
+	{ 0, mScreenResource.GetNowPer() }
 	);
 	if (aParent != nullptr) {
 		LoadGlobalData();

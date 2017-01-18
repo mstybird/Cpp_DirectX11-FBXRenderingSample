@@ -6,7 +6,7 @@ BackgroundScale={1.0,1.0}
 BackgroundTexturePath="Resource/UI/Title/BackgroundImage.png"
 
 --Title
-TitlePosition={277,95}
+TitlePosition={480,160}
 TitleSize={405,130}
 TitleScale={1.0,1.0}
 TitleTexturePath="Resource/UI/Title/Title.png"

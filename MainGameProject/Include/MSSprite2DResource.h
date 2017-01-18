@@ -30,6 +30,10 @@ public:
 	void AddRotationZ(const float aDegree);
 	void AddPosition(const DXVector2& aPosition);
 	void AddPosition(const int aX,const int aY);
+	//透過率を設定
+	void SetTransparent(const float rate);
+	void AddTransparent(const float rate);
+	float GetTransparent();
 	//ピボットを設定する
 	void SetPivot(const DXVector2&pPivot);
 	//ポリゴンサイズを設定する
@@ -77,6 +81,7 @@ protected:
 	DXVector2 mSplitImageY;					//イマージの切り取り(垂直)
 	DXMatrix mMatrix;		//位置、拡大率を合成する用の行列
 	bool mUpdateFlag;	//ポリゴン再生成が必要な変更があった場合にtrueとなる
+	float mTransparent;	//透過率
 	static ID3D11Device* sDevice;
 };
 

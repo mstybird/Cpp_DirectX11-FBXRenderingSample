@@ -21,7 +21,7 @@ void MySprite2DShader::SetConstantBuffer(MSSpriteBaseResource&pResource, D3D11_V
 		D3DXMatrixTranspose(&cb.mW, &cb.mW);
 		cb.ViewPortWidth = pViewPort.Width;
 		cb.ViewPortHeight = pViewPort.Height;
-
+		cb.Transparent = pResource.GetTransparent();
 		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
 		sDeviceContext->Unmap(mConstantBuffer, 0);
 	}
